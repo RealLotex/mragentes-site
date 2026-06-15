@@ -12,24 +12,14 @@
         {{ .Content }}
     </div>
     {{ else }}
-    <!-- Listado de notas del blog -->
+    <!-- Listado de notas del blog con imagen de fondo -->
     <div class="notas-list">
         {{ $paginator := .Paginate (where .RegularPages "Section" "notas") }}
-        {{ range $paginator.Pages }}
-        <article class="nota-card">
-            <div class="date">{{ .Date | time.Format "2 Jan 2006" }}</div>
-            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-            <div class="excerpt">{{ .Summary | plainify | truncate 200 }}</div>
-            {{ with .Params.tags }}
-            <div class="tags">
-                {{ range . }}
-                <span class="tag">{{ . }}</span>
-                {{ end }}
-            </div>
+        <div class="nota-card-grid">
+            {{ range $paginator.Pages }}
+            {{ partial "nota-card.html" . }}
             {{ end }}
-            <a href="{{ .RelPermalink }}" class="read-more">Seguir leyendo →</a>
-        </article>
-        {{ end }}
+        </div>
 
         {{ if gt $paginator.TotalPages 1 }}
         <div class="pagination">

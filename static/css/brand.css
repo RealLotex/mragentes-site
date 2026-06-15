@@ -370,13 +370,19 @@ strong {
   gap: 1.5rem;
 }
 
-.card-grid-4col {
-  grid-template-columns: repeat(4, 1fr);
+.card-grid-3col {
+  grid-template-columns: repeat(3, 1fr);
 }
 
-@media (max-width: 1100px) {
-  .card-grid-4col {
+@media (max-width: 900px) {
+  .card-grid-3col {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .card-grid-3col {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -579,7 +585,114 @@ strong {
   }
 }
 
-/* ========== NOTA CARDS ========== */
+/* ========== NOTA CARDS (con imagen de fondo) ========== */
+.nota-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.nota-card-img {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--gray-800);
+  min-height: 320px;
+  transition: var(--transition);
+}
+
+.nota-card-img:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.nota-card-img-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  position: relative;
+  text-decoration: none;
+}
+
+.nota-card-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.75) 100%);
+  transition: var(--transition);
+}
+
+.nota-card-img:hover .nota-card-img-overlay {
+  background: linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.65) 100%);
+}
+
+.nota-card-img-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem 1.5rem 1.5rem;
+  z-index: 2;
+}
+
+.nota-card-img-date {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.7);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.nota-card-img-content h3 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 0.75rem;
+  line-height: 1.25;
+}
+
+.nota-card-img-readmore {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--brand-light);
+  transition: var(--transition);
+}
+
+.nota-card-img:hover .nota-card-img-readmore {
+  color: var(--white);
+}
+
+/* Fallback si la nota no tiene imagen */
+.nota-card-img:not([style*="background-image"]) {
+  background: linear-gradient(135deg, var(--brand) 0%, var(--secondary) 100%);
+}
+
+.nota-card-img:not([style*="background-image"]) .nota-card-img-overlay {
+  background: none;
+}
+
+@media (max-width: 900px) {
+  .nota-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .nota-card-grid {
+    grid-template-columns: 1fr;
+  }
+  .nota-card-img {
+    min-height: 260px;
+  }
+  .nota-card-img-link {
+    min-height: 260px;
+  }
+}
+
+/* ========== NOTA CARDS (legacy) ========== */
 .nota-card {
   background: var(--white);
   border: 1px solid var(--gray-200);

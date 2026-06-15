@@ -1,9 +1,8 @@
 {{ define "main" }}
-    <!-- HERO (fuera del main-content para fondo full-width) -->
+    <!-- HERO -->
     <section class="hero">
         <div class="hero-bg"></div>
         <div class="hero-content">
-            <img src="{{ "images/mragentes.png" | absURL }}" alt="MR Agentes" class="hero-logo" width="120" height="120">
             <h1>Automatización e <span class="highlight">IA</span><br>para tu negocio</h1>
             <p class="subtitle">En Ciudad de Gálvez, Santa Fe, transformamos procesos con tecnología inteligente para que vos te enfoques en lo que importa: hacer crecer tu empresa.</p>
             <div class="btn-group">
@@ -23,14 +22,9 @@
             <h2>Últimas notas</h2>
             <p>Contenido fresco sobre automatización, IA y cómo aplicarlas en tu negocio.</p>
         </div>
-        <div class="card-grid">
+        <div class="nota-card-grid">
             {{ range $latest }}
-            <article class="nota-card">
-                <div class="date">{{ .Date | time.Format "2 Jan 2006" }}</div>
-                <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-                <div class="excerpt">{{ .Summary | plainify | truncate 150 }}</div>
-                <a href="{{ .RelPermalink }}" class="read-more">Seguir leyendo →</a>
-            </article>
+            {{ partial "nota-card.html" . }}
             {{ end }}
         </div>
         <div class="text-center mt-2">
@@ -39,18 +33,13 @@
     </section>
     {{ end }}
 
-    <!-- IMAGEN DECORATIVA -->
-    <div class="section-image-wrapper">
-        <img src="/images/stock/automation.jpg" alt="Automatización" class="stock-section-image">
-    </div>
-
     <!-- SERVICIOS DESTACADOS -->
     <section class="section">
         <div class="section-title">
             <h2>Qué hacemos</h2>
             <p>Soluciones de automatización e IA diseñadas para potenciar cada área de tu negocio.</p>
         </div>
-        <div class="card-grid card-grid-4col">
+        <div class="card-grid card-grid-3col">
             <div class="card">
                 <div class="card-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -71,13 +60,6 @@
                 </div>
                 <h3>Análisis de datos</h3>
                 <p>Transformá datos en decisiones. Dashboards, reporting automatizado y predicciones con machine learning.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                </div>
-                <h3>Integraciones</h3>
-                <p>Conectá tus herramientas favoritas: CRM, e-commerce, redes sociales, WhatsApp y más en un flujo único.</p>
             </div>
         </div>
     </section>
