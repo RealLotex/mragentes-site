@@ -1,0 +1,24 @@
+/* =========================================
+   MR AGENTES — Scroll Animations
+   Estilo Inconcert: fade-in + translateY
+   ========================================= */
+
+.scroll-hidden {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.scroll-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children inside grids */
+.card-grid .scroll-hidden:nth-child(2) { transition-delay: 0.1s; }
+.card-grid .scroll-hidden:nth-child(3) { transition-delay: 0.2s; }
+.card-grid .scroll-hidden:nth-child(4) { transition-delay: 0.3s; }
+
+.stats-grid .scroll-hidden:nth-child(2) { transition-delay: 0.1s; }
+.stats-grid .scroll-hidden:nth-child(3) { transition-delay: 0.2s; }
+.stats-grid .scroll-hidden:nth-child(4) { transition-delay: 0.3s; }
