@@ -1,7 +1,8 @@
 ---
 title: "Nosotros"
 description: "Conocé quiénes somos y cómo podemos ayudarte a transformar tu negocio con inteligencia artificial desde Ciudad de Gálvez, Santa Fe."
-image: "/images/stock/team-tech.jpg"
+image: "/images/stock/marcos-rosich.jpg"
+image_alt: "Marcos Rosich programando"
 ---
 
 ## Nuestra historia
