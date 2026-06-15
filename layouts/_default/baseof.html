@@ -23,6 +23,9 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="/css/brand.css">
+
+    <!-- Scroll Animations -->
+    <link rel="stylesheet" href="/css/scroll.css">
 </head>
 <body>
     {{ partial "header.html" . }}
@@ -32,8 +35,8 @@
     {{ partial "footer.html" . }}
 
     <script>
-        // Mobile menu toggle
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
             const toggle = document.querySelector('.menu-toggle');
             const nav = document.querySelector('.nav-links');
             if (toggle && nav) {
@@ -43,5 +46,6 @@
             }
         });
     </script>
+    <script src="/js/scroll-animations.js"></script>
 </body>
 </html>
