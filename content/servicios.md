@@ -1,84 +1,69 @@
 ---
 title: "Servicios"
-description: "Soluciones de automatizaci&oacute;n e inteligencia artificial dise&ntilde;adas para potenciar tu negocio."
+description: "Soluciones de automatización e inteligencia artificial diseñadas para potenciar tu negocio."
 ---
 
-Ofrecemos un conjunto de servicios modulares que se adaptan a las necesidades de tu negocio. Pod&eacute;s contratarlos de forma individual o combinarlos para una transformaci&oacute;n integral.
+Ofrecemos un conjunto de servicios modulares que se adaptan a las necesidades de tu negocio. Podés contratarlos de forma individual o combinarlos para una transformación integral.
 
 ---
 
-## 🤖 Automatizaci&oacute;n de procesos
+## Automatización de procesos
 
-Elimin&aacute; las tareas repetitivas que consumen horas de tu equipo. Dise&ntilde;amos bots inteligentes que trabajan las 24 horas del d&iacute;a.
+Eliminá las tareas repetitivas que consumen horas de tu equipo. Diseñamos bots inteligentes que trabajan las 24 horas del día.
 
-**¿Qu&eacute; podemos automatizar?**
+**¿Qué podemos automatizar?**
 
-- **Facturaci&oacute;n y cobranzas:** Emisi&oacute;n autom&aacute;tica de facturas, seguimiento de pagos y recordatorios.
-- **Atenci&oacute;n al cliente:** Respuestas autom&aacute;ticas a consultas frecuentes, derivaci&oacute;n inteligente a humanos.
-- **Procesamiento de documentos:** Extracci&oacute;n de datos de PDFs, formularios, correos electr&oacute;nicos.
-- **Reporting:** Generaci&oacute;n de informes peri&oacute;dicos sin intervenci&oacute;n manual.
+- **Facturación y cobranzas:** Emisión automática de facturas, seguimiento de pagos y recordatorios.
+- **Atención al cliente:** Respuestas automáticas a consultas frecuentes, derivación inteligente a humanos.
+- **Procesamiento de documentos:** Extracción de datos de PDFs, formularios, correos electrónicos.
+- **Reporting:** Generación de informes periódicos sin intervención manual.
 
 <div class="features-grid">
     <div class="feature-item">
-        <h4>⏱ Hasta 80% menos tiempo</h4>
+        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Hasta 80% menos tiempo</h4>
         <p>En tareas que antes tomaban horas, ahora toman minutos.</p>
     </div>
     <div class="feature-item">
-        <h4>📉 Reducci&oacute;n de errores</h4>
+        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Reducción de errores</h4>
         <p>Los bots no se equivocan ni se saltan pasos.</p>
     </div>
     <div class="feature-item">
-        <h4>💰 ROI medible</h4>
+        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> ROI medible</h4>
         <p>Resultados concretos desde el primer mes.</p>
     </div>
 </div>
 
 ---
 
-## 🧠 Asistentes con IA
+## Asistentes con IA
 
-Chatbots y asistentes virtuales que entienden lenguaje natural, aprenden de cada interacci&oacute;n y se integran con tus sistemas existentes.
+Chatbots y asistentes virtuales que entienden lenguaje natural, aprenden de cada interacción y se integran con tus sistemas existentes.
 
-**Caracter&iacute;sticas:**
+**Características:**
 
 - Conversaciones naturales con IA generativa
-- Integraci&oacute;n con WhatsApp, web, Messenger
-- Base de conocimiento personalizada con la informaci&oacute;n de tu negocio
+- Integración con WhatsApp, web, Messenger
+- Base de conocimiento personalizada con la información de tu negocio
 - Escalamiento inteligente a un operador humano cuando sea necesario
-- Analytics: med&iacute; consultas, satisfacci&oacute;n, temas frecuentes
+- Analytics: medí consultas, satisfacción, temas frecuentes
 
 ---
 
-## 📊 An&aacute;lisis de datos e informes
+## Análisis de datos e informes
 
-Convert&iacute; datos dispersos en decisiones claras. Centralizamos tu informaci&oacute;n y generamos dashboards interactivos.
+Convertí datos dispersos en decisiones claras. Centralizamos tu información y generamos dashboards interactivos.
 
-**¿C&oacute;mo funciona?**
+**¿Cómo funciona?**
 
 1. Conectamos tus fuentes de datos (CRM, ERP, Excel, APIs)
-2. Limpiamos y organizamos la informaci&oacute;n
-3. Construimos dashboards con las m&eacute;tricas que importan
-4. Programamos alertas y reportes autom&aacute;ticos
+2. Limpiamos y organizamos la información
+3. Construimos dashboards con las métricas que importan
+4. Programamos alertas y reportes automáticos
 
 ---
 
-## 🔗 Integraciones personalizadas
+## Proyectos llave en mano
 
-Conect&aacute; todas tus herramientas en un flujo &uacute;nico. Si tus sistemas no hablan entre s&iacute;, nosotros les ense&ntilde;amos.
-
-**Integraciones comunes:**
-
-- CRM (HubSpot, Salesforce, Zoho)
-- E-commerce (MercadoShops, WooCommerce, Tiendanube)
-- Redes sociales (Instagram, Facebook, LinkedIn)
-- Mensajer&iacute;a (WhatsApp Business API, Telegram)
-- Pagos (Mercado Pago, Paypal)
-- Contabilidad y facturaci&oacute;n
-
----
-
-## 🚀 Proyectos llave en mano
-
-¿No sab&eacute;s por d&oacute;nde empezar? Te hacemos un diagn&oacute;stico gratuito de tu negocio y te proponemos un plan de automatizaci&oacute;n integral.
+¿No sabés por dónde empezar? Te hacemos un diagnóstico gratuito de tu negocio y te proponemos un plan de automatización integral.
 
 {{< cta >}}
