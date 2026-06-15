@@ -8,7 +8,7 @@
 <main class="main-content">
     <article class="content-page">
         {{ if .Params.image }}
-        <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}" class="content-header-image">
+        <img src="{{ .Params.image | relURL }}" alt="{{ if .Params.image_alt }}{{ .Params.image_alt }}{{ else }}{{ .Title }}{{ end }}" class="content-header-image">
         {{ end }}
 
         {{ if and (eq .Section "notas") .Date }}
