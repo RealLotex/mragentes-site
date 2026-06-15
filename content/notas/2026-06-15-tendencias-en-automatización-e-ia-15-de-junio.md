@@ -1,7 +1,7 @@
 ---
 title: "Tendencias en automatización e IA — 15 de junio"
 date: 2026-06-15
-description: "Nota de MR Agentes sobre automatizaci&oacute;n e inteligencia artificial."
+description: "Nota de MR Agentes sobre automatización e inteligencia artificial."
 image: "/images/stock/automation.jpg"
 tags:
   - tendencias
