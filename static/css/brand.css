@@ -370,6 +370,16 @@ strong {
   gap: 1.5rem;
 }
 
+.card-grid-4col {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1100px) {
+  .card-grid-4col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .card {
   background: var(--white);
   border: 1px solid var(--gray-200);
@@ -483,6 +493,16 @@ strong {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.5rem;
   text-align: center;
+}
+
+.stats-grid-5col {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+@media (max-width: 900px) {
+  .stats-grid-5col {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .stat-item {
