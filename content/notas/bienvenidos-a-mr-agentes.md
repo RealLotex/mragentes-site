@@ -1,24 +1,24 @@
 ---
 title: "Bienvenidos a MR Agentes"
 date: 2026-06-14
-description: "Damos inicio a nuestro blog con una presentaci&oacute;n de qui&eacute;nes somos y qu&eacute; vamos a compartir ac&iacute;."
+description: "Damos inicio a nuestro blog con una presentación de quiénes somos y qué vamos a compartir aquí."
 tags: ["bienvenida", "presentacion", "nosotros"]
 ---
 
 ## Hola, bienvenidos
 
-Este es nuestro primer post en el blog de **MR Agentes**. Ac&aacute; vamos a compartir contenido sobre automatizaci&oacute;n, inteligencia artificial, casos de &eacute;xito, tips pr&aacute;cticos y todo lo que necesit&aacute;s saber para llevar tu negocio al pr&oacute;ximo nivel.
+Este es nuestro primer post en el blog de **MR Agentes**. Acá vamos a compartir contenido sobre automatización, inteligencia artificial, casos de éxito, tips prácticos y todo lo que necesitás saber para llevar tu negocio al próximo nivel.
 
-## ¿Qu&eacute; vas a encontrar ac&aacute;?
+## ¿Qué vas a encontrar acá?
 
-- **Gu&iacute;as pr&aacute;cticas** — C&oacute;mo implementar automatizaci&oacute;n en &aacute;reas espec&iacute;ficas de tu negocio
-- **Casos de &eacute;xito** — Ejemplos reales de clientes que transformaron sus procesos
-- **Tendencias** — Lo &uacute;ltimo en IA, machine learning y automatizaci&oacute;n
-- **Tips semanales** — Consejos accionables que pod&eacute;s aplicar hoy
+- **Guías prácticas** — Cómo implementar automatización en áreas específicas de tu negocio
+- **Casos de éxito** — Ejemplos reales de clientes que transformaron sus procesos
+- **Tendencias** — Lo último en IA, machine learning y automatización
+- **Tips semanales** — Consejos accionables que podés aplicar hoy
 
 ## Nuestro enfoque
 
-Creemos firmemente que la tecnolog&iacute;a deber&iacute;a adaptarse a las personas y no al rev&eacute;s. Por eso cada soluci&oacute;n que dise&ntilde;amos empieza con una conversaci&oacute;n para entender tu realidad.
+Creemos firmemente que la tecnología debería adaptarse a las personas y no al revés. Por eso cada solución que diseñamos empieza con una conversación para entender tu realidad.
 
 > *"No se trata de reemplazar personas, sino de potenciarlas con herramientas inteligentes."*
 
