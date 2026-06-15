@@ -7,7 +7,7 @@ Estamos listos para escucharte. Contanos qué necesitás y te armamos una soluci
 
 <div class="contact-grid">
     <div>
-        <form class="contact-form" action="https://formspree.io/f/xxxxxx" method="POST" target="_blank">
+        <form class="contact-form" action="https://formspree.io/f/mbllvzdk" method="POST" target="_blank">
             <label for="nombre">Nombre *</label>
             <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre">
 
@@ -39,13 +39,12 @@ Estamos listos para escucharte. Contanos qué necesitás y te armamos una soluci
         <h3>También podés contactarnos por:</h3>
 
         <div class="contact-channel">
-            <div class="contact-channel">
             <div class="contact-channel-icon">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </div>
             <div class="contact-channel-text">
                 <div class="label">WhatsApp</div>
-                <div class="value"><a href="https://wa.me/5493425123456" target="_blank" rel="noopener">342 512-3456</a></div>
+                <div class="value"><a href="https://wa.me/5493404502729" target="_blank" rel="noopener">3404 50-2729</a></div>
             </div>
         </div>
 
