@@ -11,10 +11,10 @@ defaultContentLanguage = "es"
   brandDark = "#1a1a1a"
   description = "Automatizaci&oacute;n e inteligencia artificial para potenciar tu negocio"
   logo = "/images/mragentes.png"
-  instagram = "https://instagram.com/mr.agentes"
-  facebook = "https://facebook.com/mragentes"
+  instagram = "https://www.instagram.com/mragentes"
+  facebook = "https://www.facebook.com/mragentes"
   whatsapp = "5491123456789"
-  email = "hola@mragentes.com.ar"
+  email = "marcos@mragentes.com.ar"
 
 # Menú de navegación
 [[menu.main]]
