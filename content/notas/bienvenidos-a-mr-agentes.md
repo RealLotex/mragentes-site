@@ -8,7 +8,7 @@ tags: ["bienvenida", "presentacion", "nosotros"]
 
 ## Hola, bienvenidos
 
-Este es nuestro primer post en el blog de **MR Agentes**. Acá vamos a compartir contenido sobre automatización, inteligencia artificial, casos de éxito, tips prácticos y todo lo que necesitás saber para llevar tu negocio al próximo nivel.
+Este es nuestro primer post en el blog de **MR Agentes**. Desde Ciudad de Gálvez, Santa Fe, vamos a compartir contenido sobre automatización, inteligencia artificial, casos de éxito, tips prácticos y todo lo que necesitás saber para llevar tu negocio al próximo nivel.
 
 ## ¿Qué vas a encontrar acá?
 

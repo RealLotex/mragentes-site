@@ -1,16 +1,16 @@
 ---
 title: "Nosotros"
-description: "Conocé quiénes somos y cómo podemos ayudarte a transformar tu negocio con inteligencia artificial."
+description: "Conocé quiénes somos y cómo podemos ayudarte a transformar tu negocio con inteligencia artificial desde Ciudad de Gálvez, Santa Fe."
 image: "/images/stock/team-tech.jpg"
 ---
 
 ## Nuestra historia
 
-MR Agentes nace con una visión clara: **hacer que la inteligencia artificial y la automatización sean accesibles para todos los negocios**. No importa si sos un emprendedor, una pyme o una empresa en crecimiento — creemos que la tecnología no debería ser un privilegio, sino una herramienta al alcance de cualquiera que quiera crecer.
+MR Agentes nace en **Ciudad de Gálvez, Provincia de Santa Fe**, con una visión clara: **hacer que la inteligencia artificial y la automatización sean accesibles para todos los negocios de la región**. No importa si sos un emprendedor, una pyme o una empresa en crecimiento en Santa Fe — creemos que la tecnología no debería ser un privilegio, sino una herramienta al alcance de cualquiera que quiera crecer, sin importar dónde esté.
 
 ## Nuestra misión
 
-Transformar procesos empresariales a través de soluciones inteligentes que ahorren tiempo, reduzcan costos y potencien resultados. Trabajamos codo a codo con nuestros clientes para entender sus desafíos y diseñar herramientas que realmente resuelvan problemas.
+Transformar procesos empresariales a través de soluciones inteligentes que ahorren tiempo, reduzcan costos y potencien resultados. Trabajamos codo a codo con nuestros clientes de Santa Fe y toda la provincia para entender sus desafíos y diseñar herramientas que realmente resuelvan problemas.
 
 ## Nuestros valores
 
@@ -38,6 +38,8 @@ Transformar procesos empresariales a través de soluciones inteligentes que ahor
 Porque entendemos que detrás de cada negocio hay personas. No somos una consultora fría que tira tecnología sobre los problemas — **somos un equipo que se sienta con vos, entiende tu día a día, y construye la herramienta que realmente necesitás**.
 
 Trabajamos con tecnologías de última generación: inteligencia artificial, automatización robótica de procesos, machine learning, chatbots conversacionales e integraciones API. Pero lo más importante es que **todo esto lo ponemos al servicio de tus objetivos concretos**.
+
+Además, al estar radicados en Ciudad de Gálvez, conocemos de cerca la realidad de los negocios santafesinos. Entendemos los desafíos locales y podemos acompañarte de forma presencial cuando lo necesites.
 
 ## Seguinos en redes
 

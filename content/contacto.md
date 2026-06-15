@@ -1,9 +1,9 @@
 ---
 title: "Contacto"
-description: "Dejanos tu consulta y te respondemos a la brevedad. Sin compromiso."
+description: "Dejanos tu consulta y te respondemos a la brevedad. Sin compromiso. Estamos en Ciudad de Gálvez, Santa Fe."
 ---
 
-Estamos listos para escucharte. Contanos qué necesitás y te armamos una solución a medida.
+Estamos listos para escucharte. Contanos qué necesitás y te armamos una solución a medida. Trabajamos de forma presencial en Ciudad de Gálvez y online en toda la provincia de Santa Fe.
 
 <div class="contact-grid">
     <div>
@@ -45,7 +45,17 @@ Estamos listos para escucharte. Contanos qué necesitás y te armamos una soluci
             </div>
             <div class="contact-channel-text">
                 <div class="label">WhatsApp</div>
-                <div class="value"><a href="https://wa.me/5491123456789" target="_blank" rel="noopener">11 2345-6789</a></div>
+                <div class="value"><a href="https://wa.me/5493425123456" target="_blank" rel="noopener">342 512-3456</a></div>
+            </div>
+        </div>
+
+        <div class="contact-channel">
+            <div class="contact-channel-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="contact-channel-text">
+                <div class="label">Dirección</div>
+                <div class="value">Ciudad de Gálvez, Provincia de Santa Fe</div>
             </div>
         </div>
 
