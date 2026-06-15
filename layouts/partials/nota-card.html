@@ -1,0 +1,10 @@
+<article class="nota-card-img" {{ if .Params.image }}style="background-image: url('{{ .Params.image | relURL }}');"{{ end }}>
+    <a href="{{ .RelPermalink }}" class="nota-card-img-link">
+        <div class="nota-card-img-overlay"></div>
+        <div class="nota-card-img-content">
+            <div class="nota-card-img-date">{{ .Date | time.Format "2 Jan 2006" }}</div>
+            <h3>{{ .Title }}</h3>
+            <span class="nota-card-img-readmore">Seguir leyendo →</span>
+        </div>
+    </a>
+</article>
