@@ -22,6 +22,6 @@ Creemos firmemente que la tecnolog&iacute;a deber&iacute;a adaptarse a las perso
 
 > *"No se trata de reemplazar personas, sino de potenciarlas con herramientas inteligentes."*
 
-## ¿Quer&eacute;s recibir nuestras notas?
+## ¿Querés recibir nuestras notas?
 
-Seguinos en [Instagram](https://instagram.com/mr.agentes) y [Facebook](https://facebook.com/mragentes) para no perderte ninguna actualizaci&oacute;n. Y si ten&eacute;s alg&uacute;n tema del que te gustar&iacute;a que escribamos, [contactanos]({{ "contacto" | absURL }}) y lo tenemos en cuenta.
+Seguinos en [Instagram](https://www.instagram.com/mragentes) y [Facebook](https://www.facebook.com/mragentes) para no perderte ninguna actualización. Y si tenés algún tema del que te gustaría que escribamos, <a href="/contacto/">contactanos</a> y lo tenemos en cuenta.
