@@ -1,11 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nosotros on MR Agentes</title><link>https://mragentes.com.ar/tags/nosotros/</link><description>Recent content in Nosotros on MR Agentes</description><generator>Hugo</generator><language>es-AR</language><lastBuildDate>Sun, 14 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://mragentes.com.ar/tags/nosotros/index.xml" rel="self" type="application/rss+xml"/><item><title>Bienvenidos a MR Agentes</title><link>https://mragentes.com.ar/notas/bienvenidos-a-mr-agentes/</link><pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate><guid>https://mragentes.com.ar/notas/bienvenidos-a-mr-agentes/</guid><description>&lt;h2 id="hola-bienvenidos">Hola, bienvenidos&lt;/h2>
-&lt;p>Este es nuestro primer post en el blog de &lt;strong>MR Agentes&lt;/strong>. Acá vamos a compartir contenido sobre automatización, inteligencia artificial, casos de éxito, tips prácticos y todo lo que necesitás saber para llevar tu negocio al próximo nivel.&lt;/p>
-&lt;h2 id="qué-vas-a-encontrar-acá">¿Qué vas a encontrar acá?&lt;/h2>
-&lt;ul>
-&lt;li>&lt;strong>Guías prácticas&lt;/strong> — Cómo implementar automatización en áreas específicas de tu negocio&lt;/li>
-&lt;li>&lt;strong>Casos de éxito&lt;/strong> — Ejemplos reales de clientes que transformaron sus procesos&lt;/li>
-&lt;li>&lt;strong>Tendencias&lt;/strong> — Lo último en IA, machine learning y automatización&lt;/li>
-&lt;li>&lt;strong>Tips semanales&lt;/strong> — Consejos accionables que podés aplicar hoy&lt;/li>
-&lt;/ul>
-&lt;h2 id="nuestro-enfoque">Nuestro enfoque&lt;/h2>
-&lt;p>Creemos firmemente que la tecnología debería adaptarse a las personas y no al revés. Por eso cada solución que diseñamos empieza con una conversación para entender tu realidad.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nosotros on MR Agentes</title>
+    <link>https://mragentes.com.ar/tags/nosotros/</link>
+    <description>Recent content in Nosotros on MR Agentes</description>
+    <generator>Hugo</generator>
+    <language>es-AR</language>
+    <lastBuildDate>Sun, 14 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://mragentes.com.ar/tags/nosotros/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bienvenidos a MR Agentes</title>
+      <link>https://mragentes.com.ar/notas/bienvenidos-a-mr-agentes/</link>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://mragentes.com.ar/notas/bienvenidos-a-mr-agentes/</guid>
+      <description>&lt;h2 id=&#34;hola-bienvenidos&#34;&gt;Hola, bienvenidos&lt;/h2&gt;&#xA;&lt;p&gt;Este es nuestro primer post en el blog de &lt;strong&gt;MR Agentes&lt;/strong&gt;. Desde Ciudad de Gálvez, Santa Fe, vamos a compartir contenido sobre automatización, inteligencia artificial, casos de éxito, tips prácticos y todo lo que necesitás saber para llevar tu negocio al próximo nivel.&lt;/p&gt;&#xA;&lt;h2 id=&#34;qué-vas-a-encontrar-acá&#34;&gt;¿Qué vas a encontrar acá?&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Guías prácticas&lt;/strong&gt; — Cómo implementar automatización en áreas específicas de tu negocio&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Casos de éxito&lt;/strong&gt; — Ejemplos reales de clientes que transformaron sus procesos&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Tendencias&lt;/strong&gt; — Lo último en IA, machine learning y automatización&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Tips semanales&lt;/strong&gt; — Consejos accionables que podés aplicar hoy&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;nuestro-enfoque&#34;&gt;Nuestro enfoque&lt;/h2&gt;&#xA;&lt;p&gt;Creemos firmemente que la tecnología debería adaptarse a las personas y no al revés. Por eso cada solución que diseñamos empieza con una conversación para entender tu realidad.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
