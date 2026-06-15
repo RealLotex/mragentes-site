@@ -7,11 +7,17 @@
 
 <main class="main-content">
     <article class="content-page">
+        {{ if .Params.image }}
+        <div class="nota-featured-image">
+            <img src="{{ .Params.image | relURL }}" alt="{{ .Title }}">
+        </div>
+        {{ end }}
+
         {{ if and (eq .Section "notas") .Date }}
-        <div style="color: var(--gray-600); font-weight: 600; margin-bottom: 1.5rem;">
-            {{ .Date | time.Format "2 de January de 2006" }}
+        <div class="nota-meta">
+            <span class="nota-meta-date">{{ .Date | time.Format "2 de January de 2006" }}</span>
             {{ with .Params.tags }}
-            <div class="tags" style="margin-top: 0.5rem;">
+            <div class="tags">
                 {{ range . }}
                 <span class="tag">{{ . }}</span>
                 {{ end }}

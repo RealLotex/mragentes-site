@@ -1,6 +1,7 @@
 ---
 title: "Nosotros"
 description: "Conocé quiénes somos y cómo podemos ayudarte a transformar tu negocio con inteligencia artificial."
+image: "/images/stock/team-tech.jpg"
 ---
 
 ## Nuestra historia

@@ -2,6 +2,7 @@
 title: "Bienvenidos a MR Agentes"
 date: 2026-06-14
 description: "Damos inicio a nuestro blog con una presentación de quiénes somos y qué vamos a compartir aquí."
+image: "/images/stock/ai-brain.jpg"
 tags: ["bienvenida", "presentacion", "nosotros"]
 ---
 

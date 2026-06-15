@@ -533,6 +533,52 @@ strong {
   font-weight: 600;
 }
 
+/* ========== FEATURED IMAGE ========== */
+.nota-featured-image {
+  margin-bottom: 2rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.nota-featured-image img {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+.nota-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.nota-meta-date {
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  font-weight: 600;
+}
+
+/* ========== STOCK IMAGES ========== */
+.stock-section-image {
+  width: 100%;
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+  object-fit: cover;
+  max-height: 300px;
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 768px) {
+  .stock-section-image {
+    max-height: 200px;
+  }
+}
+
 /* ========== NOTA CARDS ========== */
 .nota-card {
   background: var(--white);
