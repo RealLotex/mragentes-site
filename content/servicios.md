@@ -1,6 +1,7 @@
 ---
 title: "Servicios"
 description: "Soluciones de automatización e inteligencia artificial diseñadas para potenciar tu negocio."
+image: "/images/stock/digital-world.jpg"
 ---
 
 Ofrecemos un conjunto de servicios modulares que se adaptan a las necesidades de tu negocio. Podés contratarlos de forma individual o combinarlos para una transformación integral.
