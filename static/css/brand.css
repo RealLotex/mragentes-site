@@ -44,7 +44,8 @@ body {
   font-family: var(--font);
   color: var(--dark);
   line-height: 1.6;
-  background: var(--white);
+  background: linear-gradient(180deg, #f0f9ff 0%, var(--white) 40%, var(--white) 100%);
+  background-attachment: fixed;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -193,9 +194,16 @@ strong {
 /* ========== HERO SECTION ========== */
 .hero {
   text-align: center;
-  padding: 4rem 1rem 3rem;
+  padding: 4rem 1rem 2rem;
   position: relative;
   overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(37,150,190,0.06) 0%, rgba(139,92,246,0.04) 50%, transparent 100%);
+  pointer-events: none;
 }
 
 .hero::before {
@@ -203,22 +211,22 @@ strong {
   position: absolute;
   top: -100px;
   right: -100px;
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(37,150,190,0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(37,150,190,0.10) 0%, transparent 70%);
   pointer-events: none;
 }
 
 .hero::after {
   content: '';
   position: absolute;
-  bottom: -80px;
-  left: -80px;
-  width: 300px;
-  height: 300px;
+  bottom: -120px;
+  left: -120px;
+  width: 400px;
+  height: 400px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -752,6 +760,19 @@ strong {
 .cta-section .btn:hover {
   background: var(--gray-100);
   transform: translateY(-2px);
+}
+
+.section-notas-top {
+  padding: 0.5rem 0 2rem;
+}
+
+.section-notas-top .section-title {
+  margin-bottom: 1.5rem;
+}
+
+.section-notas-top .nota-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
 }
 
 /* ========== HIGHLIGHTS / STATS ========== */

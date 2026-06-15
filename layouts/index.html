@@ -2,6 +2,7 @@
 <main class="main-content">
     <!-- HERO -->
     <section class="hero">
+        <div class="hero-bg"></div>
         <img src="{{ "images/mragentes.png" | absURL }}" alt="MR Agentes" class="hero-logo" width="120" height="120">
         <h1>Automatización e <span class="highlight">IA</span><br>para tu negocio</h1>
         <p class="subtitle">Transformamos procesos con tecnología inteligente para que vos te enfoques en lo que importa: hacer crecer tu empresa.</p>
@@ -10,6 +11,31 @@
             <a href="{{ "contacto" | absURL }}" class="btn btn-secondary">Contactanos</a>
         </div>
     </section>
+
+    <!-- ÚLTIMAS NOTAS -->
+    {{ $notas := where .Site.RegularPages "Section" "notas" }}
+    {{ $latest := $notas | first 3 }}
+    {{ if $latest }}
+    <section class="section section-notas-top">
+        <div class="section-title">
+            <h2>Últimas notas</h2>
+            <p>Contenido fresco sobre automatización, IA y cómo aplicarlas en tu negocio.</p>
+        </div>
+        <div class="card-grid">
+            {{ range $latest }}
+            <article class="nota-card">
+                <div class="date">{{ .Date | time.Format "2 Jan 2006" }}</div>
+                <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+                <div class="excerpt">{{ .Summary | plainify | truncate 150 }}</div>
+                <a href="{{ .RelPermalink }}" class="read-more">Seguir leyendo →</a>
+            </article>
+            {{ end }}
+        </div>
+        <div class="text-center mt-2">
+            <a href="{{ "notas" | absURL }}" class="btn btn-secondary">Ver todas las notas</a>
+        </div>
+    </section>
+    {{ end }}
 
     <!-- SERVICIOS DESTACADOS -->
     <section class="section">
@@ -26,22 +52,22 @@
             <div class="card">
                 <div class="card-icon">🧠</div>
                 <h3>Asistentes con IA</h3>
-                <p>Chatbots y asistentes virtuales que entienden consultas, resuelven problemas y aprenden con cada interacci&oacute;n.</p>
+                <p>Chatbots y asistentes virtuales que entienden consultas, resuelven problemas y aprenden con cada interacción.</p>
             </div>
             <div class="card">
                 <div class="card-icon">📊</div>
-                <h3>An&aacute;lisis de datos</h3>
-                <p>Transform&aacute; datos en decisiones. Dashboards, reporting automatizado y predicciones con machine learning.</p>
+                <h3>Análisis de datos</h3>
+                <p>Transformá datos en decisiones. Dashboards, reporting automatizado y predicciones con machine learning.</p>
             </div>
             <div class="card">
                 <div class="card-icon">🚀</div>
                 <h3>Integraciones</h3>
-                <p>Conect&aacute; tus herramientas favoritas: CRM, e-commerce, redes sociales, WhatsApp y m&aacute;s en un flujo &uacute;nico.</p>
+                <p>Conectá tus herramientas favoritas: CRM, e-commerce, redes sociales, WhatsApp y más en un flujo único.</p>
             </div>
         </div>
     </section>
 
-    <!-- ESTADÍSTICAS DESTACADAS -->
+    <!-- ESTADÍSTICAS -->
     <section class="section">
         <div class="stats-grid">
             <div class="stat-item">
@@ -63,37 +89,10 @@
         </div>
     </section>
 
-    <!-- ÚLTIMAS NOTAS -->
-    {{ $notas := where .Site.RegularPages "Section" "notas" }}
-    {{ $latest := $notas | first 3 }}
-    {{ if $latest }}
-    <section class="section">
-        <div class="section-title">
-            <h2>Últimas notas</h2>
-            <p>Contenido fresco sobre automatizaci&oacute;n, IA y c&oacute;mo aplicarlas en tu negocio.</p>
-        </div>
-
-        <div class="card-grid">
-            {{ range $latest }}
-            <article class="nota-card">
-                <div class="date">{{ .Date | time.Format "2 Jan 2006" }}</div>
-                <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-                <div class="excerpt">{{ .Summary | plainify | truncate 150 }}</div>
-                <a href="{{ .RelPermalink }}" class="read-more">Seguir leyendo →</a>
-            </article>
-            {{ end }}
-        </div>
-
-        <div class="text-center mt-2">
-            <a href="{{ "notas" | absURL }}" class="btn btn-secondary">Ver todas las notas</a>
-        </div>
-    </section>
-    {{ end }}
-
     <!-- CTA -->
     <section class="cta-section">
         <h2>¿Listo para automatizar tu negocio?</h2>
-        <p>Contanos qu&eacute; necesit&aacute;s y te armamos una soluci&oacute;n a medida. Sin compromiso.</p>
+        <p>Contanos qué necesitás y te armamos una solución a medida. Sin compromiso.</p>
         <a href="{{ "contacto" | absURL }}" class="btn">Hablamos →</a>
     </section>
 </main>
