@@ -1,1 +1,33 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tags on MR Agentes</title><link>https://mragentes.com.ar/tags/</link><description>Recent content in Tags on MR Agentes</description><generator>Hugo</generator><language>es-AR</language><lastBuildDate>Sun, 14 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://mragentes.com.ar/tags/index.xml" rel="self" type="application/rss+xml"/><item><title>Bienvenida</title><link>https://mragentes.com.ar/tags/bienvenida/</link><pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate><guid>https://mragentes.com.ar/tags/bienvenida/</guid><description/></item><item><title>Nosotros</title><link>https://mragentes.com.ar/tags/nosotros/</link><pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate><guid>https://mragentes.com.ar/tags/nosotros/</guid><description/></item><item><title>Presentacion</title><link>https://mragentes.com.ar/tags/presentacion/</link><pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate><guid>https://mragentes.com.ar/tags/presentacion/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on MR Agentes</title>
+    <link>https://mragentes.com.ar/tags/</link>
+    <description>Recent content in Tags on MR Agentes</description>
+    <generator>Hugo</generator>
+    <language>es-AR</language>
+    <lastBuildDate>Sun, 14 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://mragentes.com.ar/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bienvenida</title>
+      <link>https://mragentes.com.ar/tags/bienvenida/</link>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://mragentes.com.ar/tags/bienvenida/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Nosotros</title>
+      <link>https://mragentes.com.ar/tags/nosotros/</link>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://mragentes.com.ar/tags/nosotros/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Presentacion</title>
+      <link>https://mragentes.com.ar/tags/presentacion/</link>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://mragentes.com.ar/tags/presentacion/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

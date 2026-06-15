@@ -1,96 +1,40 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>MR Agentes</title><link>https://mragentes.com.ar/</link><description>Recent content on MR Agentes</description><generator>Hugo</generator><language>es-AR</language><lastBuildDate>Sun, 14 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://mragentes.com.ar/index.xml" rel="self" type="application/rss+xml"/><item><title>Bienvenidos a MR Agentes</title><link>https://mragentes.com.ar/notas/bienvenidos-a-mr-agentes/</link><pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate><guid>https://mragentes.com.ar/notas/bienvenidos-a-mr-agentes/</guid><description>&lt;h2 id="hola-bienvenidos">Hola, bienvenidos&lt;/h2>
-&lt;p>Este es nuestro primer post en el blog de &lt;strong>MR Agentes&lt;/strong>. Acá vamos a compartir contenido sobre automatización, inteligencia artificial, casos de éxito, tips prácticos y todo lo que necesitás saber para llevar tu negocio al próximo nivel.&lt;/p>
-&lt;h2 id="qué-vas-a-encontrar-acá">¿Qué vas a encontrar acá?&lt;/h2>
-&lt;ul>
-&lt;li>&lt;strong>Guías prácticas&lt;/strong> — Cómo implementar automatización en áreas específicas de tu negocio&lt;/li>
-&lt;li>&lt;strong>Casos de éxito&lt;/strong> — Ejemplos reales de clientes que transformaron sus procesos&lt;/li>
-&lt;li>&lt;strong>Tendencias&lt;/strong> — Lo último en IA, machine learning y automatización&lt;/li>
-&lt;li>&lt;strong>Tips semanales&lt;/strong> — Consejos accionables que podés aplicar hoy&lt;/li>
-&lt;/ul>
-&lt;h2 id="nuestro-enfoque">Nuestro enfoque&lt;/h2>
-&lt;p>Creemos firmemente que la tecnología debería adaptarse a las personas y no al revés. Por eso cada solución que diseñamos empieza con una conversación para entender tu realidad.&lt;/p></description></item><item><title>Contacto</title><link>https://mragentes.com.ar/contacto/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mragentes.com.ar/contacto/</guid><description>&lt;p>Estamos listos para escucharte. Contanos qué necesitás y te armamos una solución a medida.&lt;/p>
-&lt;div class="contact-grid">
- &lt;div>
- &lt;form class="contact-form" action="https://formspree.io/f/xxxxxx" method="POST" target="_blank">
- &lt;label for="nombre">Nombre *&lt;/label>
- &lt;input type="text" id="nombre" name="nombre" required placeholder="Tu nombre">
-&lt;pre>&lt;code> &amp;lt;label for=&amp;quot;email&amp;quot;&amp;gt;Email *&amp;lt;/label&amp;gt;
- &amp;lt;input type=&amp;quot;email&amp;quot; id=&amp;quot;email&amp;quot; name=&amp;quot;email&amp;quot; required placeholder=&amp;quot;tu@email.com&amp;quot;&amp;gt;
-
- &amp;lt;label for=&amp;quot;telefono&amp;quot;&amp;gt;Tel&amp;amp;eacute;fono&amp;lt;/label&amp;gt;
- &amp;lt;input type=&amp;quot;tel&amp;quot; id=&amp;quot;telefono&amp;quot; name=&amp;quot;telefono&amp;quot; placeholder=&amp;quot;11 1234-5678&amp;quot;&amp;gt;
-
- &amp;lt;label for=&amp;quot;servicio&amp;quot;&amp;gt;¿Qu&amp;amp;eacute; servicio te interesa?&amp;lt;/label&amp;gt;
- &amp;lt;select id=&amp;quot;servicio&amp;quot; name=&amp;quot;servicio&amp;quot;&amp;gt;
- &amp;lt;option value=&amp;quot;&amp;quot;&amp;gt;Seleccion&amp;amp;aacute; una opci&amp;amp;oacute;n&amp;lt;/option&amp;gt;
- &amp;lt;option value=&amp;quot;automatizacion&amp;quot;&amp;gt;Automatizaci&amp;amp;oacute;n de procesos&amp;lt;/option&amp;gt;
- &amp;lt;option value=&amp;quot;asistente&amp;quot;&amp;gt;Asistente con IA&amp;lt;/option&amp;gt;
- &amp;lt;option value=&amp;quot;datos&amp;quot;&amp;gt;An&amp;amp;aacute;lisis de datos&amp;lt;/option&amp;gt;
- &amp;lt;option value=&amp;quot;integracion&amp;quot;&amp;gt;Integraciones&amp;lt;/option&amp;gt;
- &amp;lt;option value=&amp;quot;llave-en-mano&amp;quot;&amp;gt;Proyecto llave en mano&amp;lt;/option&amp;gt;
- &amp;lt;option value=&amp;quot;otro&amp;quot;&amp;gt;Otro&amp;lt;/option&amp;gt;
- &amp;lt;/select&amp;gt;
-
- &amp;lt;label for=&amp;quot;mensaje&amp;quot;&amp;gt;Mensaje *&amp;lt;/label&amp;gt;
- &amp;lt;textarea id=&amp;quot;mensaje&amp;quot; name=&amp;quot;mensaje&amp;quot; required placeholder=&amp;quot;Contanos en qu&amp;amp;eacute; podemos ayudarte...&amp;quot;&amp;gt;&amp;lt;/textarea&amp;gt;
-
- &amp;lt;button type=&amp;quot;submit&amp;quot; class=&amp;quot;btn btn-primary&amp;quot;&amp;gt;Enviar mensaje&amp;lt;/button&amp;gt;
- &amp;lt;/form&amp;gt;
-&amp;lt;/div&amp;gt;
-
-&amp;lt;div class=&amp;quot;contact-info&amp;quot;&amp;gt;
- &amp;lt;h3&amp;gt;Tambi&amp;amp;eacute;n pod&amp;amp;eacute;s contactarnos por:&amp;lt;/h3&amp;gt;
-
- &amp;lt;div class=&amp;quot;contact-channel&amp;quot;&amp;gt;
- &amp;lt;div class=&amp;quot;contact-channel-icon&amp;quot;&amp;gt;📱&amp;lt;/div&amp;gt;
- &amp;lt;div class=&amp;quot;contact-channel-text&amp;quot;&amp;gt;
- &amp;lt;div class=&amp;quot;label&amp;quot;&amp;gt;WhatsApp&amp;lt;/div&amp;gt;
- &amp;lt;div class=&amp;quot;value&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;https://wa.me/5491123456789&amp;quot; target=&amp;quot;_blank&amp;quot; rel=&amp;quot;noopener&amp;quot;&amp;gt;11 2345-6789&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;
- &amp;lt;/div&amp;gt;
- &amp;lt;/div&amp;gt;
-
- &amp;lt;div class=&amp;quot;contact-channel&amp;quot;&amp;gt;
- &amp;lt;div class=&amp;quot;contact-channel-icon&amp;quot;&amp;gt;📧&amp;lt;/div&amp;gt;
- &amp;lt;div class=&amp;quot;contact-channel-text&amp;quot;&amp;gt;
- &amp;lt;div class=&amp;quot;label&amp;quot;&amp;gt;Email&amp;lt;/div&amp;gt;
- &amp;lt;div class=&amp;quot;value&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;mailto:hola@mragentes.com.ar&amp;quot;&amp;gt;hola@mragentes.com.ar&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;
- &amp;lt;/div&amp;gt;
- &amp;lt;/div&amp;gt;
-
- &amp;lt;div class=&amp;quot;contact-channel&amp;quot;&amp;gt;
- &amp;lt;div class=&amp;quot;contact-channel-icon&amp;quot;&amp;gt;📸&amp;lt;/div&amp;gt;
- &amp;lt;div class=&amp;quot;contact-channel-text&amp;quot;&amp;gt;
- &amp;lt;div class=&amp;quot;label&amp;quot;&amp;gt;Instagram&amp;lt;/div&amp;gt;
- &amp;lt;div class=&amp;quot;value&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;https://instagram.com/mr.agentes&amp;quot; target=&amp;quot;_blank&amp;quot; rel=&amp;quot;noopener&amp;quot;&amp;gt;@mr.agentes&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;
- &amp;lt;/div&amp;gt;
- &amp;lt;/div&amp;gt;
-
- &amp;lt;div class=&amp;quot;contact-channel&amp;quot;&amp;gt;
- &amp;lt;div class=&amp;quot;contact-channel-icon&amp;quot;&amp;gt;👍&amp;lt;/div&amp;gt;
- &amp;lt;div class=&amp;quot;contact-channel-text&amp;quot;&amp;gt;
- &amp;lt;div class=&amp;quot;label&amp;quot;&amp;gt;Facebook&amp;lt;/div&amp;gt;
- &amp;lt;div class=&amp;quot;value&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;https://facebook.com/mragentes&amp;quot; target=&amp;quot;_blank&amp;quot; rel=&amp;quot;noopener&amp;quot;&amp;gt;MR Agentes&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;
- &amp;lt;/div&amp;gt;
- &amp;lt;/div&amp;gt;
-&amp;lt;/div&amp;gt;
-&lt;/code>&lt;/pre>
-&lt;/div>
-&lt;blockquote>
-&lt;p>&lt;strong>Nota:&lt;/strong> El formulario de contacto usa el servicio Formspree para enviar los mensajes. Si preferís no usarlo, escribinos directamente por WhatsApp o email. Vamos a actualizar este formulario con un sistema propio pronto.&lt;/p></description></item><item><title>Nosotros</title><link>https://mragentes.com.ar/nosotros/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mragentes.com.ar/nosotros/</guid><description>&lt;h2 id="nuestra-historia">Nuestra historia&lt;/h2>
-&lt;p>MR Agentes nace con una visión clara: &lt;strong>hacer que la inteligencia artificial y la automatización sean accesibles para todos los negocios&lt;/strong>. No importa si sos un emprendedor, una pyme o una empresa en crecimiento — creemos que la tecnología no debería ser un privilegio, sino una herramienta al alcance de cualquiera que quiera crecer.&lt;/p>
-&lt;h2 id="nuestra-misión">Nuestra misión&lt;/h2>
-&lt;p>Transformar procesos empresariales a través de soluciones inteligentes que ahorren tiempo, reduzcan costos y potencien resultados. Trabajamos codo a codo con nuestros clientes para entender sus desafíos y diseñar herramientas que realmente resuelvan problemas.&lt;/p></description></item><item><title>Servicios</title><link>https://mragentes.com.ar/servicios/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mragentes.com.ar/servicios/</guid><description>&lt;p>Ofrecemos un conjunto de servicios modulares que se adaptan a las necesidades de tu negocio. Podés contratarlos de forma individual o combinarlos para una transformación integral.&lt;/p>
-&lt;hr>
-&lt;h2 id="-automatización-de-procesos">🤖 Automatización de procesos&lt;/h2>
-&lt;p>Eliminá las tareas repetitivas que consumen horas de tu equipo. Diseñamos bots inteligentes que trabajan las 24 horas del día.&lt;/p>
-&lt;p>&lt;strong>¿Qué podemos automatizar?&lt;/strong>&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>Facturación y cobranzas:&lt;/strong> Emisión automática de facturas, seguimiento de pagos y recordatorios.&lt;/li>
-&lt;li>&lt;strong>Atención al cliente:&lt;/strong> Respuestas automáticas a consultas frecuentes, derivación inteligente a humanos.&lt;/li>
-&lt;li>&lt;strong>Procesamiento de documentos:&lt;/strong> Extracción de datos de PDFs, formularios, correos electrónicos.&lt;/li>
-&lt;li>&lt;strong>Reporting:&lt;/strong> Generación de informes periódicos sin intervención manual.&lt;/li>
-&lt;/ul>
-&lt;div class="features-grid">
- &lt;div class="feature-item">
- &lt;h4>⏱ Hasta 80% menos tiempo&lt;/h4>
- &lt;p>En tareas que antes tomaban horas, ahora toman minutos.&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MR Agentes</title>
+    <link>https://mragentes.com.ar/</link>
+    <description>Recent content on MR Agentes</description>
+    <generator>Hugo</generator>
+    <language>es-AR</language>
+    <lastBuildDate>Sun, 14 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://mragentes.com.ar/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bienvenidos a MR Agentes</title>
+      <link>https://mragentes.com.ar/notas/bienvenidos-a-mr-agentes/</link>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
+      <guid>https://mragentes.com.ar/notas/bienvenidos-a-mr-agentes/</guid>
+      <description>&lt;h2 id=&#34;hola-bienvenidos&#34;&gt;Hola, bienvenidos&lt;/h2&gt;&#xA;&lt;p&gt;Este es nuestro primer post en el blog de &lt;strong&gt;MR Agentes&lt;/strong&gt;. Desde Ciudad de Gálvez, Santa Fe, vamos a compartir contenido sobre automatización, inteligencia artificial, casos de éxito, tips prácticos y todo lo que necesitás saber para llevar tu negocio al próximo nivel.&lt;/p&gt;&#xA;&lt;h2 id=&#34;qué-vas-a-encontrar-acá&#34;&gt;¿Qué vas a encontrar acá?&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Guías prácticas&lt;/strong&gt; — Cómo implementar automatización en áreas específicas de tu negocio&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Casos de éxito&lt;/strong&gt; — Ejemplos reales de clientes que transformaron sus procesos&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Tendencias&lt;/strong&gt; — Lo último en IA, machine learning y automatización&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Tips semanales&lt;/strong&gt; — Consejos accionables que podés aplicar hoy&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;nuestro-enfoque&#34;&gt;Nuestro enfoque&lt;/h2&gt;&#xA;&lt;p&gt;Creemos firmemente que la tecnología debería adaptarse a las personas y no al revés. Por eso cada solución que diseñamos empieza con una conversación para entender tu realidad.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Contacto</title>
+      <link>https://mragentes.com.ar/contacto/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://mragentes.com.ar/contacto/</guid>
+      <description>&lt;p&gt;Estamos listos para escucharte. Contanos qué necesitás y te armamos una solución a medida. Trabajamos de forma presencial en Ciudad de Gálvez y online en toda la provincia de Santa Fe.&lt;/p&gt;&#xA;&lt;div class=&#34;contact-grid&#34;&gt;&#xA;    &lt;div&gt;&#xA;        &lt;form class=&#34;contact-form&#34; action=&#34;https://formspree.io/f/mbllvzdk&#34; method=&#34;POST&#34; target=&#34;_blank&#34;&gt;&#xA;            &lt;label for=&#34;nombre&#34;&gt;Nombre *&lt;/label&gt;&#xA;            &lt;input type=&#34;text&#34; id=&#34;nombre&#34; name=&#34;nombre&#34; required placeholder=&#34;Tu nombre&#34;&gt;&#xA;&#xA;            &lt;label for=&#34;email&#34;&gt;Email *&lt;/label&gt;&#xA;            &lt;input type=&#34;email&#34; id=&#34;email&#34; name=&#34;email&#34; required placeholder=&#34;tu@email.com&#34;&gt;&#xA;&#xA;            &lt;label for=&#34;telefono&#34;&gt;Teléfono&lt;/label&gt;&#xA;            &lt;input type=&#34;tel&#34; id=&#34;telefono&#34; name=&#34;telefono&#34; placeholder=&#34;11 1234-5678&#34;&gt;&#xA;&#xA;            &lt;label for=&#34;servicio&#34;&gt;¿Qué servicio te interesa?&lt;/label&gt;&#xA;            &lt;select id=&#34;servicio&#34; name=&#34;servicio&#34;&gt;&#xA;                &lt;option value=&#34;&#34;&gt;Seleccioná una opción&lt;/option&gt;&#xA;                &lt;option value=&#34;automatizacion&#34;&gt;Automatización de procesos&lt;/option&gt;&#xA;                &lt;option value=&#34;asistente&#34;&gt;Asistente con IA&lt;/option&gt;&#xA;                &lt;option value=&#34;datos&#34;&gt;Análisis de datos&lt;/option&gt;&#xA;                &lt;option value=&#34;integracion&#34;&gt;Integraciones&lt;/option&gt;&#xA;                &lt;option value=&#34;llave-en-mano&#34;&gt;Proyecto llave en mano&lt;/option&gt;&#xA;                &lt;option value=&#34;otro&#34;&gt;Otro&lt;/option&gt;&#xA;            &lt;/select&gt;&#xA;&#xA;            &lt;label for=&#34;mensaje&#34;&gt;Mensaje *&lt;/label&gt;&#xA;            &lt;textarea id=&#34;mensaje&#34; name=&#34;mensaje&#34; required placeholder=&#34;Contanos en qué podemos ayudarte...&#34;&gt;&lt;/textarea&gt;&#xA;&#xA;            &lt;button type=&#34;submit&#34; class=&#34;btn btn-primary&#34;&gt;Enviar mensaje&lt;/button&gt;&#xA;        &lt;/form&gt;&#xA;    &lt;/div&gt;&#xA;&#xA;    &lt;div class=&#34;contact-info&#34;&gt;&#xA;        &lt;h3&gt;También podés contactarnos por:&lt;/h3&gt;&#xA;&#xA;        &lt;div class=&#34;contact-channel&#34;&gt;&#xA;            &lt;div class=&#34;contact-channel-icon&#34;&gt;&#xA;                &lt;svg width=&#34;22&#34; height=&#34;22&#34; viewBox=&#34;0 0 24 24&#34; fill=&#34;none&#34; stroke=&#34;currentColor&#34; stroke-width=&#34;2&#34; stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34;&gt;&lt;path d=&#34;M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z&#34;/&gt;&lt;/svg&gt;&#xA;            &lt;/div&gt;&#xA;            &lt;div class=&#34;contact-channel-text&#34;&gt;&#xA;                &lt;div class=&#34;label&#34;&gt;WhatsApp&lt;/div&gt;&#xA;                &lt;div class=&#34;value&#34;&gt;&lt;a href=&#34;https://wa.me/5493404502729&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;3404 50-2729&lt;/a&gt;&lt;/div&gt;&#xA;            &lt;/div&gt;&#xA;        &lt;/div&gt;&#xA;&#xA;        &lt;div class=&#34;contact-channel&#34;&gt;&#xA;            &lt;div class=&#34;contact-channel-icon&#34;&gt;&#xA;                &lt;svg width=&#34;22&#34; height=&#34;22&#34; viewBox=&#34;0 0 24 24&#34; fill=&#34;none&#34; stroke=&#34;currentColor&#34; stroke-width=&#34;2&#34; stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34;&gt;&lt;path d=&#34;M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z&#34;/&gt;&lt;circle cx=&#34;12&#34; cy=&#34;10&#34; r=&#34;3&#34;/&gt;&lt;/svg&gt;&#xA;            &lt;/div&gt;&#xA;            &lt;div class=&#34;contact-channel-text&#34;&gt;&#xA;                &lt;div class=&#34;label&#34;&gt;Dirección&lt;/div&gt;&#xA;                &lt;div class=&#34;value&#34;&gt;Ciudad de Gálvez, Provincia de Santa Fe&lt;/div&gt;&#xA;            &lt;/div&gt;&#xA;        &lt;/div&gt;&#xA;&#xA;        &lt;div class=&#34;contact-channel&#34;&gt;&#xA;            &lt;div class=&#34;contact-channel-icon&#34;&gt;&#xA;                &lt;svg width=&#34;22&#34; height=&#34;22&#34; viewBox=&#34;0 0 24 24&#34; fill=&#34;none&#34; stroke=&#34;currentColor&#34; stroke-width=&#34;2&#34; stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34;&gt;&lt;path d=&#34;M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z&#34;/&gt;&lt;polyline points=&#34;22,6 12,13 2,6&#34;/&gt;&lt;/svg&gt;&#xA;            &lt;/div&gt;&#xA;            &lt;div class=&#34;contact-channel-text&#34;&gt;&#xA;                &lt;div class=&#34;label&#34;&gt;Email&lt;/div&gt;&#xA;                &lt;div class=&#34;value&#34;&gt;&lt;a href=&#34;mailto:marcos@mragentes.com.ar&#34;&gt;marcos@mragentes.com.ar&lt;/a&gt;&lt;/div&gt;&#xA;            &lt;/div&gt;&#xA;        &lt;/div&gt;&#xA;&#xA;        &lt;div class=&#34;contact-channel&#34;&gt;&#xA;            &lt;div class=&#34;contact-channel-icon&#34;&gt;&#xA;                &lt;svg width=&#34;22&#34; height=&#34;22&#34; viewBox=&#34;0 0 24 24&#34; fill=&#34;none&#34; stroke=&#34;currentColor&#34; stroke-width=&#34;2&#34; stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34;&gt;&lt;rect x=&#34;2&#34; y=&#34;2&#34; width=&#34;20&#34; height=&#34;20&#34; rx=&#34;5&#34; ry=&#34;5&#34;/&gt;&lt;path d=&#34;M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z&#34;/&gt;&lt;line x1=&#34;17.5&#34; y1=&#34;6.5&#34; x2=&#34;17.51&#34; y2=&#34;6.5&#34;/&gt;&lt;/svg&gt;&#xA;            &lt;/div&gt;&#xA;            &lt;div class=&#34;contact-channel-text&#34;&gt;&#xA;                &lt;div class=&#34;label&#34;&gt;Instagram&lt;/div&gt;&#xA;                &lt;div class=&#34;value&#34;&gt;&lt;a href=&#34;https://www.instagram.com/mragentes&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@mragentes&lt;/a&gt;&lt;/div&gt;&#xA;            &lt;/div&gt;&#xA;        &lt;/div&gt;&#xA;&#xA;        &lt;div class=&#34;contact-channel&#34;&gt;&#xA;            &lt;div class=&#34;contact-channel-icon&#34;&gt;&#xA;                &lt;svg width=&#34;22&#34; height=&#34;22&#34; viewBox=&#34;0 0 24 24&#34; fill=&#34;none&#34; stroke=&#34;currentColor&#34; stroke-width=&#34;2&#34; stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34;&gt;&lt;path d=&#34;M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z&#34;/&gt;&lt;/svg&gt;&#xA;            &lt;/div&gt;&#xA;            &lt;div class=&#34;contact-channel-text&#34;&gt;&#xA;                &lt;div class=&#34;label&#34;&gt;Facebook&lt;/div&gt;&#xA;                &lt;div class=&#34;value&#34;&gt;&lt;a href=&#34;https://www.facebook.com/mragentes&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;MR Agentes&lt;/a&gt;&lt;/div&gt;&#xA;            &lt;/div&gt;&#xA;        &lt;/div&gt;&#xA;    &lt;/div&gt;&#xA;&lt;/div&gt;&#xA;&#xA;&lt;p&gt;&lt;strong&gt;Nota:&lt;/strong&gt; El formulario de contacto usa el servicio Formspree para enviar los mensajes. Si preferís no usarlo, escribinos directamente por WhatsApp o email.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Nosotros</title>
+      <link>https://mragentes.com.ar/nosotros/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://mragentes.com.ar/nosotros/</guid>
+      <description>&lt;h2 id=&#34;nuestra-historia&#34;&gt;Nuestra historia&lt;/h2&gt;&#xA;&lt;p&gt;MR Agentes nace en &lt;strong&gt;Ciudad de Gálvez, Provincia de Santa Fe&lt;/strong&gt;, con una visión clara: &lt;strong&gt;hacer que la inteligencia artificial y la automatización sean accesibles para todos los negocios de la región&lt;/strong&gt;. No importa si sos un emprendedor, una pyme o una empresa en crecimiento en Santa Fe — creemos que la tecnología no debería ser un privilegio, sino una herramienta al alcance de cualquiera que quiera crecer, sin importar dónde esté.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Servicios</title>
+      <link>https://mragentes.com.ar/servicios/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://mragentes.com.ar/servicios/</guid>
+      <description>&lt;p&gt;Ofrecemos un conjunto de servicios modulares que se adaptan a las necesidades de tu negocio. Podés contratarlos de forma individual o combinarlos para una transformación integral.&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;h2 id=&#34;automatización-de-procesos&#34;&gt;Automatización de procesos&lt;/h2&gt;&#xA;&lt;p&gt;Eliminá las tareas repetitivas que consumen horas de tu equipo. Diseñamos bots inteligentes que trabajan las 24 horas del día.&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;¿Qué podemos automatizar?&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Facturación y cobranzas:&lt;/strong&gt; Emisión automática de facturas, seguimiento de pagos y recordatorios.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Atención al cliente:&lt;/strong&gt; Respuestas automáticas a consultas frecuentes, derivación inteligente a humanos.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Procesamiento de documentos:&lt;/strong&gt; Extracción de datos de PDFs, formularios, correos electrónicos.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Reporting:&lt;/strong&gt; Generación de informes periódicos sin intervención manual.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;div class=&#34;features-grid&#34;&gt;&#xA;    &lt;div class=&#34;feature-item&#34;&gt;&#xA;        &lt;h4&gt;&lt;svg width=&#34;18&#34; height=&#34;18&#34; viewBox=&#34;0 0 24 24&#34; fill=&#34;none&#34; stroke=&#34;currentColor&#34; stroke-width=&#34;2&#34; stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; style=&#34;margin-right:6px;vertical-align:-2px&#34;&gt;&lt;circle cx=&#34;12&#34; cy=&#34;12&#34; r=&#34;10&#34;/&gt;&lt;polyline points=&#34;12 6 12 12 16 14&#34;/&gt;&lt;/svg&gt; Hasta 80% menos tiempo&lt;/h4&gt;&#xA;        &lt;p&gt;En tareas que antes tomaban horas, ahora toman minutos.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
