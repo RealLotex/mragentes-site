@@ -539,20 +539,15 @@ strong {
   font-weight: 600;
 }
 
-/* ========== FEATURED IMAGE ========== */
-.nota-featured-image {
-  margin-bottom: 2rem;
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-}
-
-.nota-featured-image img {
+/* ========== HEADER IMAGE (imagen directa sin contenedor) ========== */
+.content-header-image {
   width: 100%;
   height: auto;
   max-height: 400px;
   object-fit: cover;
   display: block;
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
 }
 
 .nota-meta {
@@ -635,6 +630,7 @@ strong {
   right: 0;
   padding: 2rem 1.5rem 1.5rem;
   z-index: 2;
+  color: var(--white);
 }
 
 .nota-card-img-date {
@@ -657,12 +653,12 @@ strong {
 .nota-card-img-readmore {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--brand-light);
+  color: var(--white);
   transition: var(--transition);
 }
 
 .nota-card-img:hover .nota-card-img-readmore {
-  color: var(--white);
+  color: var(--brand-light);
 }
 
 /* Fallback si la nota no tiene imagen */
@@ -814,7 +810,7 @@ strong {
   color: var(--gray-600);
 }
 
-.content-page img {
+.content-page img:not(.content-header-image) {
   border-radius: var(--radius);
   margin: 1.5rem 0;
 }
