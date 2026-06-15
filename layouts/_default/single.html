@@ -1,0 +1,26 @@
+{{ define "main" }}
+<!-- Page Header -->
+<section class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{ if .Description }}<p>{{ .Description }}</p>{{ end }}
+</section>
+
+<main class="main-content">
+    <article class="content-page">
+        {{ if and (eq .Section "notas") .Date }}
+        <div style="color: var(--gray-600); font-weight: 600; margin-bottom: 1.5rem;">
+            {{ .Date | time.Format "2 de January de 2006" }}
+            {{ with .Params.tags }}
+            <div class="tags" style="margin-top: 0.5rem;">
+                {{ range . }}
+                <span class="tag">{{ . }}</span>
+                {{ end }}
+            </div>
+            {{ end }}
+        </div>
+        {{ end }}
+
+        {{ .Content }}
+    </article>
+</main>
+{{ end }}

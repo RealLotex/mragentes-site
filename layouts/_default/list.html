@@ -1,0 +1,50 @@
+{{ define "main" }}
+<!-- Page Header -->
+<section class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{ if .Description }}<p>{{ .Description }}</p>{{ end }}
+</section>
+
+<main class="main-content">
+    <!-- Si es una página de lista normal (nosotros, servicios, contacto), mostrar contenido -->
+    {{ if ne .Section "notas" }}
+    <div class="content-page">
+        {{ .Content }}
+    </div>
+    {{ else }}
+    <!-- Listado de notas del blog -->
+    <div class="notas-list">
+        {{ $paginator := .Paginate (where .RegularPages "Section" "notas") }}
+        {{ range $paginator.Pages }}
+        <article class="nota-card">
+            <div class="date">{{ .Date | time.Format "2 Jan 2006" }}</div>
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            <div class="excerpt">{{ .Summary | plainify | truncate 200 }}</div>
+            {{ with .Params.tags }}
+            <div class="tags">
+                {{ range . }}
+                <span class="tag">{{ . }}</span>
+                {{ end }}
+            </div>
+            {{ end }}
+            <a href="{{ .RelPermalink }}" class="read-more">Seguir leyendo →</a>
+        </article>
+        {{ end }}
+
+        {{ if gt $paginator.TotalPages 1 }}
+        <div class="pagination">
+            {{ if $paginator.HasPrev }}
+            <a href="{{ $paginator.Prev.URL }}">← Anterior</a>
+            {{ end }}
+            {{ range $paginator.Pagers }}
+            <a href="{{ .URL }}" class="{{ if eq . $paginator }}active{{ end }}">{{ .PageNumber }}</a>
+            {{ end }}
+            {{ if $paginator.HasNext }}
+            <a href="{{ $paginator.Next.URL }}">Siguiente →</a>
+            {{ end }}
+        </div>
+        {{ end }}
+    </div>
+    {{ end }}
+</main>
+{{ end }}

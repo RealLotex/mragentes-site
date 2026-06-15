@@ -1,0 +1,28 @@
+<header class="site-header">
+    <div class="header-inner">
+        <a href="{{ "" | absURL }}" class="logo-link">
+            <img src="{{ "images/mragentes.png" | absURL }}" alt="MR Agentes" class="logo-img" width="48" height="48">
+            <span class="logo-text">MR <span>Agentes</span></span>
+        </a>
+
+        <button class="menu-toggle" aria-label="Menú">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <ul class="nav-links">
+            {{ $current := .RelPermalink }}
+            {{ $pages := .Site.Menus.main }}
+            {{ range .Site.Menus.main }}
+            <li>
+                <a href="{{ .URL | absURL }}"
+                   class="{{ if eq $current .URL }}active{{ end }}"
+                   {{ if .Params.external }}target="_blank" rel="noopener"{{ end }}>
+                    {{ .Name }}
+                </a>
+            </li>
+            {{ end }}
+        </ul>
+    </div>
+</header>
