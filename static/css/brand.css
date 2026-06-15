@@ -197,13 +197,22 @@ strong {
   padding: 4rem 1rem 2rem;
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(37,150,190,0.06) 0%, rgba(139,92,246,0.04) 50%, transparent 100%);
+  background: linear-gradient(135deg, rgba(37,150,190,0.08) 0%, rgba(139,92,246,0.06) 50%, transparent 100%);
   pointer-events: none;
+}
+
+.hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .hero::before {
