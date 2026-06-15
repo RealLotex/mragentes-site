@@ -470,10 +470,11 @@ def create_nota(title, body, tags, image):
     filepath = os.path.join(CONTENT_DIR, filename)
 
     tags_yaml = "\n".join([f"  - {t}" for t in tags])
+    description = "Nota de MR Agentes sobre automatización e inteligencia artificial."
     content = f"""---
 title: "{title}"
 date: {today.isoformat()}
-description: "Nota de MR Agentes sobre automatizaci&oacute;n e inteligencia artificial."
+description: "{description}"
 image: "{STOCK_IMAGES_DIR}{image}"
 tags:
 {tags_yaml}
