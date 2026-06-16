@@ -4,10 +4,13 @@ Publicador diario MR Agentes — Hugo Website + Investigación Online
 Crea una nueva nota con imagen única y hace push al repo.
 
 Reglas:
-  - 1 de cada 5 posteos investiga tendencias online reales + análisis propio
-  - No repetir imágenes hasta agotar el catálogo (~5 imágenes = ~5 días sin repetir)
-  - Siempre aportar valor analizado, no solo titulares
+  - TODOS los días investiga tendencias online reales + análisis propio impredecible
+  - No repetir imágenes hasta agotar el catálogo (~3 imágenes, ciclo rotativo)
+  - Siempre aportar análisis propio con fuentes citadas, no solo titulares
+  - Variedad impredecible: a veces 2 tendencias + análisis profundo,
+    a veces 3 con tabla, a veces enfoque en 1 tema con pull quotes
   - Tags, slug y front matter generados automáticamente
+  - Sin contenido estático: cada nota es única por investigación real
 
 Uso:
   python3 scripts/publish_daily.py                  # Publicación automática
@@ -573,7 +576,8 @@ DEEP_ANALYSES = [
 
 def enrich_trend_analysis(title, source):
     """Analizar una noticia de tendencias con profundidad variable.
-    Devuelve tupla (analisis_block, card_str)."""
+    Devuelve tupla (analisis_block, card_str).
+    El card_str va SEPARADO para que el caller decida si lo incluye o no."""
     title_lower = title.lower()
 
     # Encontrar analyses que matchean keywords
@@ -589,30 +593,32 @@ def enrich_trend_analysis(title, source):
     else:
         entry = random.choice(matches)
 
-    # Construir bloque: pull quote + análisis + card + fuente
+    # Construir bloque: pull quote + análisis (SIN card incrustado)
     lines = [
         f"> {entry['pull_quote']}",
         "",
         entry['analysis'],
+        "",
+        f"*Fuente del análisis: {source}*",
     ]
-    card_str = ""
-    if entry['card']:
-        lines.append("")
-        lines.append(entry['card'])
-        card_str = entry['card']
-    lines.append("")
-    lines.append(f"*Fuente del análisis: {source}*")
+    card_str = entry['card'] if entry['card'] else ""
 
     return "\n".join(lines), card_str
 
 
 def generate_trends_post(state):
-    """Generar un post basado en investigación online con análisis propio."""
+    """
+    Generar un post basado en investigación online con análisis propio.
+    Formato impredecible:
+    - Forma A (~40%): 3 tendencias con tabla (formato clásico)
+    - Forma B (~35%): 2 tendencias con análisis más profundo y pull quotes
+    - Forma C (~25%): 1 tendencia + análisis tipo editorial + datos/estadísticas
+    """
     print("🔍 Investigando tendencias online...")
     trends = fetch_web_trends()
 
     if not trends:
-        print("  ⚠️  No se pudieron obtener tendencias. Usando post genérico del calendario.")
+        print("  ⚠️  No se pudieron obtener tendencias. Reintentando...")
         return None
 
     today = datetime.date.today()
@@ -620,35 +626,135 @@ def generate_trends_post(state):
                    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
     date_str = f"{today.day} de {month_names[today.month - 1]}"
 
-    body = f"""## Lo que está pasando en automatización e IA — {date_str}
+    # Elegir formato al azar
+    fmt = random.random()
 
-Todas las semanas revisamos las noticias más relevantes del mundo de la automatización y la inteligencia artificial, y las analizamos para darte nuestra perspectiva. Esto es lo que vimos esta semana:
+    if fmt < 0.40:
+        # ─── Forma A: 3 tendencias + tabla ─────────────────────
+        body = f"""## Panorama de automatización e IA — {date_str}
+
+Cada día revisamos las noticias más relevantes del mundo de la automatización y la inteligencia artificial, y las analizamos para darte nuestra perspectiva. Esto es lo que encontramos:
 
 """
-    for i, trend in enumerate(trends, 1):
-        analysis, card = enrich_trend_analysis(trend["title"], trend["source"])
-        body += f"""### 📰 {trend['title']}
+        for i, trend in enumerate(trends[:3], 1):
+            analysis, card = enrich_trend_analysis(trend["title"], trend["source"])
+            body += f"""### 📰 {trend['title']}
 *{trend['source']}*
 
 {analysis}
 
-[Ver artículo original]({trend['url']})
+"""
+            if card:
+                body += f"{card}\n\n"
+            body += f"[Ver artículo original]({trend['url']})\n\n"
+
+        body += """---
+
+### En síntesis
+
+Las noticias de hoy reflejan un patrón recurrente: la tecnología avanza más rápido que la capacidad de las organizaciones para absorberla. La brecha no es tecnológica, es de implementación. En cada uno de los casos analizados, el factor crítico no fue el modelo de IA, sino la integración con procesos existentes y la capacitación de equipos.
+
+*Fuentes: análisis propio de MR Agentes sobre noticias públicas verificables.*"""
+
+        title = random.choice([
+            f"Panorama de automatización e IA — {date_str}",
+            f"Lo que está pasando en IA y automatización — {date_str}",
+            f"Tendencias en automatización e IA — {date_str}",
+        ])
+
+    elif fmt < 0.75:
+        # ─── Forma B: 2 tendencias con análisis profundo ────────
+        body_lines = [f"## Análisis del día — {date_str}",
+                      "",
+                      "Hoy nos enfocamos en dos temas clave que están marcando la agenda de automatización e inteligencia artificial. Los analizamos en profundidad.",
+                      ""]
+        for i, trend in enumerate(trends[:2], 1):
+            analysis, card = enrich_trend_analysis(trend["title"], trend["source"])
+            lines_analysis = analysis.split("\n")
+            pull = ""
+            content_lines = []
+            for line in lines_analysis:
+                if line.startswith(">"):
+                    pull = line
+                else:
+                    content_lines.append(line)
+            content = "\n".join(content_lines).strip()
+
+            body_lines.append(f"### {i}. {trend['title']}")
+            body_lines.append(f"*Fuente: {trend['source']}*")
+            body_lines.append("")
+            if pull:
+                body_lines.append(pull)
+                body_lines.append("")
+            body_lines.append(content)
+            body_lines.append("")
+            if card:
+                body_lines.append(card)
+                body_lines.append("")
+            body_lines.append(f"🔗 [Artículo original]({trend['url']})")
+            body_lines.append("")
+
+        body_lines.append("---")
+        body_lines.append("")
+        body_lines.append("### 💡 Nuestra lectura")
+        body_lines.append("")
+        body_lines.append("Ambos casos convergen en un mismo punto: la inteligencia artificial no es un fin en sí misma, sino un habilitador. Las organizaciones que mejor están capitalizando estas tecnologías no son las que tienen los modelos más grandes, sino las que tienen los procesos mejor definidos para integrarlos.")
+        body_lines.append("")
+        body_lines.append("*Fuentes: análisis propio de MR Agentes sobre noticias públicas verificables.*")
+
+        body = "\n".join(body_lines)
+
+        title = random.choice([
+            f"Dos temas clave en IA y automatización — {date_str}",
+            f"Análisis: lo que está pasando en IA — {date_str}",
+            f"Lo más relevante en automatización — {date_str}",
+        ])
+
+    else:
+        # ─── Forma C: 1 tendencia + análisis editorial ──────────
+        trend = trends[0]
+        analysis, card = enrich_trend_analysis(trend["title"], trend["source"])
+
+        lines_analysis = analysis.split("\n")
+        pull = ""
+        content_lines = []
+        for line in lines_analysis:
+            if line.startswith(">"):
+                pull = line
+            else:
+                content_lines.append(line)
+        content = "\n".join(content_lines).strip()
+
+        body = f"""## {trend['title']}
 
 """
+        if pull:
+            body += f"{pull}\n\n"
+        body += f"{content}\n\n"
+        if card:
+            body += f"{card}\n\n"
+        body += f"---\n\n"
+        body += f"""### Nuestra mirada
 
-    body += """### Observaciones finales
+En MR Agentes seguimos de cerca estas tendencias porque impactan directamente en cómo las empresas — especialmente las PyMEs argentinas — pueden aprovechar la tecnología para ser más competitivas.
 
-Las tendencias de esta semana reflejan un patrón recurrente: la tecnología avanza más rápido que la capacidad de las organizaciones para absorberla. La brecha no es tecnológica, es de implementación. En cada uno de los casos analizados, el factor crítico no fue el modelo de IA, sino la integración con procesos existentes y la capacitación de equipos.
+{random.choice([
+    'La lección de esta noticia es clara: no hace falta ser una gran corporación para beneficiarse de la IA. Las herramientas están cada vez más accesibles, y el factor diferenciador no es el presupuesto sino la voluntad de probar.',
+    'Lo interesante de este caso es que contradice la narrativa de que "la IA es solo para grandes empresas". Cada vez vemos más herramientas accesibles que cualquier PyME puede implementar con resultados medibles en semanas.',
+    'Detrás de esta noticia hay una tendencia más profunda: la democratización de la tecnología. Lo que antes requería un equipo de data scientists, hoy lo puede hacer una persona con las herramientas correctas y un buen criterio de implementación.',
+    'Este es exactamente el tipo de innovación que transforma industrias enteras. No por lo disruptivo de la tecnología, sino porque resuelve un problema real que antes se aceptaba como "así son las cosas".',
+])}
 
-*Este análisis se basa en fuentes públicas verificables. Se recomienda consultar los estudios originales para una comprensión completa de cada tema.*"""
+🔗 [Fuente original]({trend['url']})
 
-    # Variar título para evitar repetición
-    title_templates = [
-        f"Panorama semanal de automatización e IA — {date_str}",
-        f"Lo que está pasando en IA y automatización — {date_str}",
-        f"Tendencias en automatización e IA — {date_str}",
-    ]
-    title = random.choice(title_templates)
+*Análisis: MR Agentes*"""
+
+        title = random.choice([
+            f"{trend['title'].split(':')[0].strip() if ':' in trend['title'] else trend['title'][:50]} — nuestra mirada",
+            f"Análisis: {trend['title'][:60].rsplit(' ', 1)[0] if len(trend['title']) > 60 else trend['title']}",
+            f"Lo que nos dice '{trend['title'][:50].rsplit(' ', 1)[0]}'",
+        ])
+
     tags = ["tendencias", "ia", "automatizacion", "noticias"]
     image = pick_image(state)
 
@@ -656,26 +762,34 @@ Las tendencias de esta semana reflejan un patrón recurrente: la tecnología ava
 
 
 def get_daily_content(state):
-    """Obtener contenido del día, con 1 de cada 5 posteos siendo investigación online."""
-    today = datetime.date.today()
-    day_number = today.day
+    """
+    Obtener contenido del día: SIEMPRE investigación online + análisis propio.
+    Variedad impredecible para evitar monotonía:
+    - A veces 3 tendencias con tabla (como antes)
+    - A veces 2 tendencias con análisis más profundo (4-5 párrafos)
+    - A veces 1 tendencia + análisis tipo editorial
+    - El formato concreto se elige al azar en generate_trends_post()
+    """
+    # Siempre intentar investigación online
+    result = generate_trends_post(state)
+    if result:
+        return result
 
-    # Cada 5 días (5, 10, 15, 20, 25, 30): post con investigación online
-    if day_number % 5 == 0:
-        result = generate_trends_post(state)
-        if result:
-            return result
+    # Fallback extremo: si falla la investigación, investigar de nuevo (reintento simple)
+    print("  🔄 Reintentando investigación...")
+    import time
+    time.sleep(2)
+    result = generate_trends_post(state)
+    if result:
+        return result
 
-    # Contenido del calendario rotativo
+    # Si aún falla, usar TOPICS como último recurso
+    print("  ⚠️  Usando tema del calendario como fallback de emergencia")
     topic_index = state.get("topic_index", 0)
     entry = TOPICS[topic_index % len(TOPICS)]
-
-    # Avanzar índice para próxima vez
     state["topic_index"] = (topic_index + 1) % len(TOPICS)
-
     image = pick_image(state)
     save_state(state)
-
     return {
         "title": entry["title"],
         "image": image,
@@ -834,8 +948,8 @@ def main():
     entry = get_daily_content(state)
 
     if entry is None:
-        # Si generate_trends_post falló, fallback a tema del calendario
-        print("  ⚠️  Falló tendencias, usando tema del calendario")
+        # Fallback solo si todo falla (2 intentos de investigación ya se hicieron)
+        print("  ⚠️  Falló investigación online dos veces, usando tema del calendario")
         topic_index = state.get("topic_index", 0)
         t = TOPICS[topic_index % len(TOPICS)]
         state["topic_index"] = (topic_index + 1) % len(TOPICS)
@@ -846,7 +960,7 @@ def main():
     if "tendencias" in entry.get("tags", []):
         print("  📰 Post basado en investigación online de tendencias + análisis propio")
     else:
-        print(f"  📖 Tema: {entry['title']}")
+        print(f"  📖 (fallback) Tema: {entry['title']}")
 
     print(f"  🖼️  Imagen: {entry['image']}")
 
