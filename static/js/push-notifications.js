@@ -5,7 +5,7 @@
   const _VK = (function(){
     var m = document.querySelector('meta[name="vapid-key"]');
     if(m) return m.content;
-    return atob('QkZmN3EwaWhnYXhaZGhwalN2RElSdGZDSUttZ25sZG9fTDBadndMWWhOX3lhOXlLRVlzMFd6SlJteWxxWVBMMDM4R0ctSWR4Yk1uS2dLMEFRSWMyaDhJ');
+    return atob('Qk91NUhLTGpIVlRPZ29OZlNvbkl1YndIY0o5clh1OXVzc05VMVRZZHdrYnNMUFpqX1k2eElxc3NKTHBsQ21RZGtyNE5rTzdiM2RzZGc2a2d4cEoydXJj');
   })();
 
   function urlBase64ToUint8Array(b64) {
