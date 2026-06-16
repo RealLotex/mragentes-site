@@ -1,8 +1,9 @@
-// MR Agentes — Push Notifications v1.0
+// MR Agentes — Push Notifications v2.0
 (function () {
   'use strict';
 
-  const VAPID_PUBLIC_KEY = 'BFf7q0ihgaxZdhpjSvDIRtfCIKmgnldo_L0ZvwLYhN_ya9yKEYs0WzJRmylqYPL038GG-IdxbMnKgK0AQIc2h8I';
+  const VAPID_PUBLIC_KEY = 'BFf7q0…2h8I';
+  const TOAST_SEEN_KEY = 'mragentes_push_toast_dismissed';
 
   function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -41,7 +42,6 @@
     }
 
     try {
-      // Verificar si ya está suscripto
       let subscription = await registration.pushManager.getSubscription();
       if (subscription) {
         console.log('[Push] Ya suscripto');
@@ -55,7 +55,6 @@
 
       console.log('[Push] Suscripto exitosamente');
 
-      // Enviar suscripción a nuestro endpoint
       await fetch('/api/subscribe/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -74,7 +73,6 @@
       const subscription = await registration.pushManager.getSubscription();
       if (subscription) {
         await subscription.unsubscribe();
-        // Notificar al servidor
         await fetch('/api/unsubscribe/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -87,50 +85,101 @@
     }
   }
 
-  async function updateSubscriptionStatus(registration) {
-    const statusEl = document.getElementById('push-status');
+  async function updateButton(registration) {
     const btn = document.getElementById('push-toggle-btn');
-    if (!btn || !statusEl) return;
+    if (!btn) return;
 
     const subscription = await registration.pushManager.getSubscription();
+
     if (subscription) {
       btn.textContent = '🔔 Desactivar notificaciones';
       btn.classList.add('active');
-      statusEl.textContent = 'Notificaciones activadas';
-      statusEl.className = 'push-status active';
     } else {
       btn.textContent = '🔕 Activar notificaciones';
       btn.classList.remove('active');
-      statusEl.textContent = 'Notificaciones desactivadas';
-      statusEl.className = 'push-status';
     }
   }
 
-  // Inicialización
-  document.addEventListener('DOMContentLoaded', async () => {
-    const btn = document.getElementById('push-toggle-btn');
-    if (!btn) return; // No hay botón en esta página
+  // === TOAST ===
+  function showToast(registration) {
+    // No mostrar si ya lo vió y lo cerró, o si ya está suscripto
+    if (localStorage.getItem(TOAST_SEEN_KEY) === 'true') return;
 
+    const toast = document.createElement('div');
+    toast.className = 'push-toast';
+    toast.innerHTML = `
+      <div class="push-toast-content">
+        <p>Tu competencia ya está usando IA. Permití las notificaciones para recuperar terreno.</p>
+        <div class="push-toast-actions">
+          <button class="push-toast-btn">Activar notificaciones</button>
+          <button class="push-toast-close">✕</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(toast);
+
+    // Trigger animación
+    requestAnimationFrame(() => {
+      toast.classList.add('visible');
+    });
+
+    const toastBtn = toast.querySelector('.push-toast-btn');
+    const closeBtn = toast.querySelector('.push-toast-close');
+
+    toastBtn.addEventListener('click', async () => {
+      const sub = await subscribeUser(registration);
+      if (sub) {
+        toast.classList.remove('visible');
+        setTimeout(() => toast.remove(), 400);
+        localStorage.setItem(TOAST_SEEN_KEY, 'true');
+        updateButton(registration);
+        // También actualiza botón del footer si existe
+      } else {
+        // Si el usuario negó permiso en el navegador, mostrar estado
+        toastBtn.textContent = 'Permiso denegado — revisá tu navegador';
+        toastBtn.disabled = true;
+      }
+    });
+
+    closeBtn.addEventListener('click', () => {
+      localStorage.setItem(TOAST_SEEN_KEY, 'true');
+      toast.classList.remove('visible');
+      setTimeout(() => toast.remove(), 400);
+    });
+  }
+
+  // === INIT ===
+  document.addEventListener('DOMContentLoaded', async () => {
     const registration = await registerSW();
-    if (!registration) {
-      btn.style.display = 'none';
-      return;
+    if (!registration) return;
+
+    // Actualizar botón del footer si existe
+    updateButton(registration);
+
+    // Toggle del botón footer
+    const btn = document.getElementById('push-toggle-btn');
+    if (btn) {
+      btn.addEventListener('click', async () => {
+        const sub = await registration.pushManager.getSubscription();
+        if (sub) {
+          await unsubscribeUser(registration);
+          // Si desuscribe, resetea el toast para que pueda verlo si quiere
+          localStorage.removeItem(TOAST_SEEN_KEY);
+        } else {
+          await subscribeUser(registration);
+          if (await registration.pushManager.getSubscription()) {
+            localStorage.setItem(TOAST_SEEN_KEY, 'true');
+          }
+        }
+        updateButton(registration);
+      });
     }
 
-    await updateSubscriptionStatus(registration);
-
-    btn.addEventListener('click', async () => {
-      const subscription = await registration.pushManager.getSubscription();
-      if (subscription) {
-        await unsubscribeUser(registration);
-      } else {
-        await subscribeUser(registration);
-      }
-      await updateSubscriptionStatus(registration);
-    });
+    // Mostrar toast si corresponde
+    showToast(registration);
   });
 
-  // Exportar funciones para uso desde la consola
   window.__pushNotifications = {
     subscribe: async () => {
       const reg = await navigator.serviceWorker.ready;

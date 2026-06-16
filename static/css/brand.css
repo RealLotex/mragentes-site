@@ -1158,16 +1158,97 @@ strong {
   color: var(--brand-light);
 }
 
-.push-status {
-  display: block;
-  font-size: 0.75rem;
-  margin-top: 0.4rem;
-  color: rgba(255,255,255,0.35);
+/* ========== PUSH TOAST ========== */
+.push-toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  max-width: 400px;
+  width: calc(100% - 2rem);
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.14);
+  transform: translateX(calc(100% + 2rem));
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  will-change: transform, opacity;
+}
+
+.push-toast.visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.push-toast-content {
+  padding: 1.25rem 1.5rem;
+}
+
+.push-toast-content p {
+  font-size: 0.9rem;
+  color: var(--gray-800);
+  margin: 0 0 1rem;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.push-toast-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.push-toast-btn {
+  flex: 1;
+  background: var(--brand);
+  color: var(--white);
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 50px;
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
   transition: var(--transition);
 }
 
-.push-status.active {
-  color: #4ade80;
+.push-toast-btn:hover {
+  background: var(--brand-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(37,150,190,0.25);
+}
+
+.push-toast-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.push-toast-close {
+  background: transparent;
+  border: none;
+  color: var(--gray-500);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition: var(--transition);
+  line-height: 1;
+}
+
+.push-toast-close:hover {
+  color: var(--gray-800);
+  background: var(--gray-100);
+}
+
+@media (max-width: 480px) {
+  .push-toast {
+    right: 1rem;
+    bottom: 1rem;
+    width: calc(100% - 2rem);
+    max-width: none;
+  }
 }
 
 .pagination .active {
