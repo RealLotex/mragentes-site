@@ -1,0 +1,15 @@
+[Unit]
+Description=MR Agentes Push Notification Server
+After=network.target
+
+[Service]
+Type=simple
+User=openclaw
+WorkingDirectory=/home/openclaw/.openclaw/workspace/mragentes-web
+ExecStart=/usr/bin/python3 /home/openclaw/.openclaw/workspace/mragentes-web/scripts/push_server.py --port 8081
+Restart=on-failure
+RestartSec=10
+Environment="PUSH_API_TOKEN=mragentes-push-2026"
+
+[Install]
+WantedBy=multi-user.target

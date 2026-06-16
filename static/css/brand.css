@@ -1127,6 +1127,49 @@ strong {
   border-color: var(--brand);
 }
 
+/* ========== PUSH NOTIFICATIONS ========== */
+.push-controls {
+  margin-top: 0.75rem;
+}
+
+.push-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.8);
+  padding: 0.6rem 1.25rem;
+  border-radius: 50px;
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+  text-align: center;
+}
+
+.push-btn:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: var(--brand-light);
+}
+
+.push-btn.active {
+  background: rgba(37, 150, 190, 0.2);
+  border-color: var(--brand);
+  color: var(--brand-light);
+}
+
+.push-status {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0.4rem;
+  color: rgba(255,255,255,0.35);
+  transition: var(--transition);
+}
+
+.push-status.active {
+  color: #4ade80;
+}
+
 .pagination .active {
   background: var(--brand);
   color: var(--white);
