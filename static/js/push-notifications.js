@@ -291,6 +291,28 @@
     if (!sub) {
       showToast(registration);
     }
+
+    // Escuchar mensajes del SW sobre nuevas notas
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (event.data && event.data.type === 'NEW_NOTA') {
+        const nota = event.data.payload;
+        // Mostrar notificación local si está suscripto
+        if (sub) {
+          registration.showNotification(nota.title || 'Nueva nota de MR Agentes', {
+            body: 'Acabamos de publicar una nueva nota.',
+            icon: '/images/favicon.png',
+            badge: '/images/favicon.png',
+            data: { url: nota.url || '/' },
+            actions: [
+              { action: 'open', title: 'Leer nota' },
+              { action: 'close', title: 'Cerrar' },
+            ],
+            tag: 'new-nota',
+            renotify: true,
+          });
+        }
+      }
+    });
   });
 
   window.__pushNotifications = {

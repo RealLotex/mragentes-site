@@ -859,6 +859,12 @@ def main():
         print(f"🏁 Dry run - archivo creado sin push: {filepath}")
         return
 
+    # Generar index.json para SW
+    print("📋 Generando index.json para service worker...")
+    gen_index = os.path.join(BASE_DIR, "scripts", "generate_notas_index.py")
+    if os.path.exists(gen_index):
+        subprocess.run([sys.executable, gen_index])
+
     # Commit y push
     print("⬆️  Pusheando a GitHub...")
     success = git_commit_push(filepath, entry["title"])
