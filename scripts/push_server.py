@@ -27,13 +27,27 @@ from pathlib import Path
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SUBSCRIPTIONS_FILE = os.path.join(BASE_DIR, "scripts", "push_subscriptions.json")
+CONFIG_FILE = os.path.join(BASE_DIR, "scripts", "config.local.json")
 
-# VAPID keys
-VAPID_PUBLIC_KEY = "BFf7q0ihgaxZdhpjSvDIRtfCIKmgnldo_L0ZvwLYhN_ya9yKEYs0WzJRmylqYPL038GG-IdxbMnKgK0AQIc2h8I"
-VAPID_PRIVATE_KEY = "IJLKGd3UyQRnXwvU84T40oZBsp7WhpJ-hvq0DSP_ywg"
+# VAPID keys y token desde archivo local (no versionado)
+def _load_config():
+    default = {
+        "vapidPublicKey": "",
+        "vapidPrivateKey": "",
+        "pushApiToken": "",
+    }
+    if os.path.exists(CONFIG_FILE):
+        try:
+            with open(CONFIG_FILE) as f:
+                return {**default, **json.load(f)}
+        except (json.JSONDecodeError, OSError):
+            pass
+    return default
 
-# Token simple para autenticar /api/send/
-API_TOKEN = os.environ.get("PUSH_API_TOKEN", "mragentes-push-2026")
+_config = _load_config()
+VAPID_PUBLIC_KEY = _config.get("vapidPublicKey", "")
+VAPID_PRIVATE_KEY = _config.get("vapidPrivateKey", "")
+API_TOKEN = _config.get("pushApiToken", "") or os.environ.get("PUSH_API_TOKEN", "")
 
 
 def load_subscriptions():
@@ -137,6 +151,13 @@ class PushHandler(http.server.BaseHTTPRequestHandler):
         if length > 0:
             return self.rfile.read(length).decode()
         return ""
+
+    def do_GET(self):
+        path = urllib.parse.urlparse(self.path).path
+        if path == "/api/vapid-key/":
+            self._send_json(200, {"publicKey": VAPID_PUBLIC_KEY})
+        else:
+            self._send_json(404, {"error": "Not found"})
 
     def do_POST(self):
         path = urllib.parse.urlparse(self.path).path
