@@ -57,6 +57,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 img {
@@ -319,6 +321,7 @@ strong {
   margin: 0 auto;
   padding: 2rem 2rem 5rem;
   width: 100%;
+  overflow-x: hidden;
 }
 
 /* ========== SECTIONS ========== */
@@ -757,6 +760,7 @@ strong {
   color: var(--white);
   padding: 4rem 2rem;
   text-align: center;
+  overflow-x: hidden;
 }
 
 .page-header h1 {
@@ -778,7 +782,13 @@ strong {
   max-width: 800px;
   margin: 0 auto;
   line-height: 1.85;
-  overflow-x: auto;
+  overflow-x: hidden;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.content-page > * {
+  max-width: 100%;
 }
 
 .content-page h2 {
@@ -909,6 +919,7 @@ strong {
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: start;
+  max-width: 100%;
 }
 
 .contact-form {
@@ -1302,7 +1313,7 @@ strong {
   }
 
   .hero h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
 
   .hero .subtitle {
