@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  const VAPID_PUBLIC_KEY = '***';
+  const VAPID_PUBLIC_KEY = 'BFf7q0ihgaxZdhpjSvDIRtfCIKmgnldo_L0ZvwLYhN_ya9yKEYs0WzJRmylqYPL038GG-IdxbMnKgK0AQIc2h8I';
 
   function urlBase64ToUint8Array(b64) {
     const pad = '='.repeat((4 - (b64.length % 4)) % 4);
