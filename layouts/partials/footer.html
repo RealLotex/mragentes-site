@@ -31,6 +31,15 @@
                 <li><a href="https://wa.me/{{ .Site.Params.whatsapp }}" target="_blank" rel="noopener">WhatsApp</a></li>
                 <li><a href="{{ "contacto" | absURL }}">Formulario de contacto</a></li>
             </ul>
+
+            <h4 style="margin-top:1.5rem;">Notificaciones</h4>
+            <div class="push-controls">
+                <button id="push-toggle-btn" class="push-btn">🔕 Activar notificaciones</button>
+                <span id="push-status" class="push-status"></span>
+            </div>
+            <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:0.5rem;">
+                Recibí una notificación cuando publiquemos una nueva nota.
+            </p>
         </div>
     </div>
 
