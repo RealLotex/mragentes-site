@@ -161,7 +161,7 @@
     if (isDenied) {
       toast.innerHTML = `
         <div class="push-toast-content">
-          <p>Tu competencia ya está usando IA.<br>Permití las notificaciones para recuperar terreno.</p>
+          <p>Tu competencia ya usa IA. <br> Permití las notificaciones y no te quedes atrás.</p>
           <div class="push-toast-actions" style="flex-direction:column;align-items:stretch;gap:0.5rem;">
             <button class="push-toast-btn">Ver cómo activarlas</button>
             <button class="push-toast-close" style="align-self:center;">✕ Cerrar</button>
@@ -171,7 +171,7 @@
     } else {
       toast.innerHTML = `
         <div class="push-toast-content">
-          <p>Tu competencia ya está usando IA.<br>Permití las notificaciones para recuperar terreno.</p>
+          <p>Tu competencia ya usa IA. <br> Permití las notificaciones y no te quedes atrás.</p>
           <div class="push-toast-actions">
             <button class="push-toast-btn">Activar notificaciones</button>
             <button class="push-toast-close">✕</button>
