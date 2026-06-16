@@ -7,7 +7,7 @@
 
 <main class="main-content">
     <article class="content-page" itemscope itemtype="https://schema.org/Article">
-        {{ if .Params.image }}
+        {{ if and .Params.image (not (in (slice "contacto" "thanks") .File.BaseFileName)) }}
         {{- $alt := .Params.image_alt | default (printf "Imagen: %s" .Title) }}
         <img src="{{ .Params.image | relURL }}" alt="{{ $alt }}" class="content-header-image" loading="lazy">
         {{ end }}
