@@ -2,3 +2,6 @@ public/
 resources/
 .hugo_build.lock
 scripts/.publish_state.json
+scripts/config.local.json
+scripts/push_subscriptions.json
+scripts/push_server.service

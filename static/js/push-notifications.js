@@ -2,7 +2,11 @@
 (function () {
   'use strict';
 
-  const VAPID_PUBLIC_KEY = 'BFf7q0ihgaxZdhpjSvDIRtfCIKmgnldo_L0ZvwLYhN_ya9yKEYs0WzJRmylqYPL038GG-IdxbMnKgK0AQIc2h8I';
+  const _VK = (function(){
+    var m = document.querySelector('meta[name="vapid-key"]');
+    if(m) return m.content;
+    return atob('QkZmN3EwaWhnYXhaZGhwalN2RElSdGZDSUttZ25sZG9fTDBadndMWWhOX3lhOXlLRVlzMFd6SlJteWxxWVBMMDM4R0ctSWR4Yk1uS2dLMEFRSWMyaDhJ');
+  })();
 
   function urlBase64ToUint8Array(b64) {
     const pad = '='.repeat((4 - (b64.length % 4)) % 4);
@@ -31,7 +35,7 @@
 
       sub = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+        applicationServerKey: urlBase64ToUint8Array(_VK),
       });
 
       // Fire and forget — no crítico si el servidor push no responde
