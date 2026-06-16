@@ -2,10 +2,16 @@
 (function () {
   'use strict';
 
+  // URL del Worker de Cloudflare (configurable vía meta tag)
+  const PUSH_API_URL = (function(){
+    var m = document.querySelector('meta[name="push-api-url"]');
+    return m ? m.content : '';
+  })();
+
   const _VK = (function(){
     var m = document.querySelector('meta[name="vapid-key"]');
     if(m) return m.content;
-    return atob('Qk91NUhLTGpIVlRPZ29OZlNvbkl1YndIY0o5clh1OXVzc05VMVRZZHdrYnNMUFpqX1k2eElxc3NKTHBsQ21RZGtyNE5rTzdiM2RzZGc2a2d4cEoydXJj');
+    return atob('QkNhbm1xNjh3TXN2VnVEVy1EVlFPMzQ5VWoxSHZQN0Q2cWRIYzlvQzhMODlDUThKRWRkV2Y2T24xcFdqa01ZdUhxTUtfamNrZHA2VTg4QzZoOXM0VmJr');
   })();
 
   function urlBase64ToUint8Array(b64) {
@@ -39,7 +45,8 @@
       });
 
       // Fire and forget — no crítico si el servidor push no responde
-      fetch('/api/subscribe/', {
+      if (!PUSH_API_URL) return;
+      fetch(PUSH_API_URL + '/api/subscribe/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sub),
@@ -59,7 +66,8 @@
       const sub = await registration.pushManager.getSubscription();
       if (sub) {
         await sub.unsubscribe();
-        fetch('/api/unsubscribe/', {
+        if (!PUSH_API_URL) return;
+      fetch(PUSH_API_URL + '/api/unsubscribe/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ endpoint: sub.endpoint }),

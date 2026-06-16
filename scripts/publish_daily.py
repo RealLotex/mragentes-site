@@ -770,11 +770,14 @@ def _generate_description(title, tags, body):
     return desc.strip()[:157].rsplit(' ', 1)[0] + '.'
 
 
-def _send_push_notification(title, filepath, port):
-    """Envía notificación push a suscriptores tras publicar."""
+def _send_push_notification(title, filepath, worker_url):
+    """Envía notificación push a suscriptores via Cloudflare Worker."""
+    if not worker_url:
+        print("  ℹ️  Push no configurado (PUSH_WORKER_URL vacío)")
+        return
+
     slug = os.path.splitext(os.path.basename(filepath))[0]
     url = f"https://mragentes.com.ar/notas/{slug}/"
-    body = f"Nueva nota: {title}"
     try:
         import urllib.request
         payload = json.dumps({
@@ -784,16 +787,16 @@ def _send_push_notification(title, filepath, port):
             "url": url,
         }).encode()
         req = urllib.request.Request(
-            f"http://localhost:{port}/api/send/",
+            f"{worker_url}/api/send/",
             data=payload,
             headers={"Content-Type": "application/json"},
             method="POST",
         )
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=15) as resp:
             result = json.loads(resp.read())
             print(f"  🔔 Notificación push enviada a {result.get('sent', 0)} suscriptores")
     except Exception as e:
-        print(f"  ⚠️  Push notification no enviada (servidor push caído?): {e}")
+        print(f"  ⚠️  Push notification no enviada: {e}")
 
 
 def _generate_image_alt(image_filename):
@@ -811,7 +814,7 @@ def main():
     parser = argparse.ArgumentParser(description="Publicar nota diaria en MR Agentes website")
     parser.add_argument("--dry-run", action="store_true", help="Solo crear el archivo, sin git push")
     parser.add_argument("--force", action="store_true", help="Forzar publicación aunque ya exista nota hoy")
-    parser.add_argument("--push-port", type=int, default=8081, help="Puerto del servidor push")
+    parser.add_argument("--push-worker", type=str, default="", help="URL del Cloudflare Worker para push")
     args = parser.parse_args()
 
     # Cargar estado persistente
@@ -872,7 +875,7 @@ def main():
     if success:
         print(f"🎉 Nota publicada exitosamente: {entry['title']}")
         # Enviar notificación push
-        _send_push_notification(entry["title"], filepath, args.push_port)
+        _send_push_notification(entry["title"], filepath, args.push_worker)
     else:
         print(f"⚠️  Nota creada localmente pero hubo error al pushear: {filepath}")
 
