@@ -895,7 +895,7 @@ def _send_push_notification(title, filepath, worker_url):
     try:
         import urllib.request
         payload = json.dumps({
-            "token": "mragentes-push-2026",
+            "token": "***",
             "title": title,
             "body": "Acabamos de publicar una nueva nota en MR Agentes.",
             "url": url,
