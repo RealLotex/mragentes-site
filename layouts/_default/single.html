@@ -6,14 +6,15 @@
 </section>
 
 <main class="main-content">
-    <article class="content-page">
+    <article class="content-page" itemscope itemtype="https://schema.org/Article">
         {{ if .Params.image }}
-        <img src="{{ .Params.image | relURL }}" alt="{{ if .Params.image_alt }}{{ .Params.image_alt }}{{ else }}{{ .Title }}{{ end }}" class="content-header-image">
+        {{- $alt := .Params.image_alt | default (printf "Imagen: %s" .Title) }}
+        <img src="{{ .Params.image | relURL }}" alt="{{ $alt }}" class="content-header-image" loading="lazy">
         {{ end }}
 
         {{ if and (eq .Section "notas") .Date }}
         <div class="nota-meta">
-            <span class="nota-meta-date">{{ .Date | time.Format "2 de January de 2006" }}</span>
+            <time class="nota-meta-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "2 de January de 2006" }}</time>
             {{ with .Params.tags }}
             <div class="tags">
                 {{ range . }}

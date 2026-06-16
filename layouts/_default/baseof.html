@@ -3,31 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+
+    {{- $description := .Description | default .Summary | default .Site.Params.description }}
+    <meta name="description" content="{{ $description }}">
     <meta name="theme-color" content="#2596be">
     <meta name="geo.region" content="AR-S">
     <meta name="geo.placename" content="Ciudad de Gálvez, Santa Fe">
+    <meta name="author" content="MR Agentes">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ .Permalink }}">
 
     <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
 
     <!-- Open Graph -->
     <meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}">
-    <meta property="og:description" content="{{ if .Description }}{{ .Description }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    <meta property="og:description" content="{{ $description }}">
     <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
     <meta property="og:url" content="{{ .Permalink }}">
     <meta property="og:site_name" content="{{ .Site.Title }}">
+    <meta property="og:locale" content="es_AR">
+    {{- with .Params.image | default "/images/mragentes.png" }}
+    <meta property="og:image" content="{{ . | absURL }}">
+    <meta property="og:image:alt" content="{{ $.Title }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    {{- end }}
 
     {{ with .Site.Params.instagram }}<meta property="og:see_also" content="{{ . }}">{{ end }}
     {{ with .Site.Params.facebook }}<meta property="og:see_also" content="{{ . }}">{{ end }}
 
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}">
+    <meta name="twitter:description" content="{{ $description }}">
+    {{- with .Params.image | default "/images/mragentes.png" }}
+    <meta name="twitter:image" content="{{ . | absURL }}">
+    {{- end }}
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ "images/mragentes.png" | absURL }}">
+    <link rel="apple-touch-icon" href="{{ "images/mragentes.png" | absURL }}">
 
     <!-- Styles -->
     <link rel="stylesheet" href="/css/brand.css">
+    <link rel="stylesheet" href="/css/scroll.css">
 
     <!-- Scroll Animations -->
-    <link rel="stylesheet" href="/css/scroll.css">
+    <script src="/js/scroll-animations.js" defer></script>
+
+    {{- if .IsHome }}
+    <!-- Schema.org: Organization + LocalBusiness (Homepage) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "MR Agentes",
+        "description": "Automatización e inteligencia artificial para potenciar tu negocio. Soluciones modernas, resultados reales.",
+        "url": "{{ .Site.BaseURL }}",
+        "logo": "{{ "images/mragentes.png" | absURL }}",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Ciudad de Gálvez",
+            "addressRegion": "Santa Fe",
+            "addressCountry": "AR"
+        },
+        "contactPoint": [
+            {
+                "@type": "ContactPoint",
+                "telephone": "+54-3404-502729",
+                "contactType": "customer service",
+                "email": "marcos@mragentes.com.ar",
+                "availableLanguage": ["Spanish"]
+            }
+        ],
+        "sameAs": [
+            "{{ .Site.Params.instagram }}",
+            "{{ .Site.Params.facebook }}"
+        ]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "MR Agentes",
+        "description": "Servicios de automatización e inteligencia artificial para empresas en Santa Fe.",
+        "url": "{{ .Site.BaseURL }}",
+        "telephone": "+54-3404-502729",
+        "email": "marcos@mragentes.com.ar",
+        "areaServed": [
+            {
+                "@type": "City",
+                "name": "Ciudad de Gálvez"
+            },
+            {
+                "@type": "State",
+                "name": "Santa Fe"
+            }
+        ],
+        "priceRange": "$$"
+    }
+    </script>
+    {{- else if eq .Section "notas" }}
+    <!-- Schema.org: Article (Notas) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "{{ .Title }}",
+        "description": "{{ $description }}",
+        "author": {
+            "@type": "Organization",
+            "name": "MR Agentes"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "MR Agentes",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "{{ "images/mragentes.png" | absURL }}"
+            }
+        },
+        "datePublished": "{{ .Date.Format "2006-01-02T15:04:05-03:00" }}",
+        "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05-03:00" | default (.Date.Format "2006-01-02T15:04:05-03:00") }}",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "{{ .Permalink }}"
+        },
+        "url": "{{ .Permalink }}",
+        {{- with .Params.image }}
+        "image": {
+            "@type": "ImageObject",
+            "url": "{{ . | absURL }}"
+        },
+        {{- end }}
+        "keywords": "{{- with .Params.tags }}{{ delimit . ", " }}{{ end }}"
+    }
+    </script>
+    {{- end }}
+
+    <!-- BreadcrumbList Schema -->
+    {{- if not .IsHome }}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Inicio",
+                "item": "{{ .Site.BaseURL }}"
+            }
+            {{- if .Section }}
+            ,{
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{{ humanize .Section }}",
+                "item": "{{ .Site.BaseURL }}{{ .Section }}/"
+            }
+            {{- end }}
+            {{- if not .IsSection }}
+            ,{
+                "@type": "ListItem",
+                "position": {{ if .Section }}3{{ else }}2{{ end }},
+                "name": "{{ .Title }}",
+                "item": "{{ .Permalink }}"
+            }
+            {{- end }}
+        ]
+    }
+    </script>
+    {{- end }}
 </head>
 <body>
     {{ partial "header.html" . }}
@@ -48,6 +197,5 @@
             }
         });
     </script>
-    <script src="/js/scroll-animations.js"></script>
 </body>
 </html>

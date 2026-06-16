@@ -692,12 +692,14 @@ def create_nota(title, body, tags, image):
     filepath = os.path.join(CONTENT_DIR, filename)
 
     tags_yaml = "\n".join([f"  - {t}" for t in tags])
-    description = "Nota de MR Agentes sobre automatización e inteligencia artificial."
+    description = _generate_description(title, tags, body)
+    image_alt = _generate_image_alt(image)
     content = f"""---
 title: "{title}"
 date: {today.isoformat()}
 description: "{description}"
 image: "{STOCK_IMAGES_DIR}{image}"
+image_alt: "{image_alt}"
 tags:
 {tags_yaml}
 ---
@@ -736,6 +738,46 @@ def git_commit_push(filepath, title):
         err = e.stderr.decode() if isinstance(e.stderr, bytes) else str(e.stderr)
         print(f"❌ Error en git: {err}")
         return False
+
+
+def _generate_description(title, tags, body):
+    """Generar meta description rica en SEO a partir del título y contenido.
+    Máximo 155 caracteres para evitar truncamiento en Google."""
+    import html
+    clean = re.sub(r'<[^>]+>', '', body)
+    clean = re.sub(r'[#*>\[\]()|:]+', '', clean)
+    # Tomar primeros ~150 caracteres significativos
+    words = clean.split()
+    desc_words = []
+    char_count = 0
+    for w in words:
+        if char_count + len(w) + 1 > 152:
+            break
+        desc_words.append(w)
+        char_count += len(w) + 1
+
+    desc = ' '.join(desc_words).strip()
+    if len(desc) < 50 or len(desc) > 158:
+        # Fallback por título + tags
+        tag_str = ', '.join(tags)
+        prefix = f"{title}. " if len(title) < 80 else ""
+        desc = f"{prefix}Nota de MR Agentes sobre {tag_str}. Automatización e IA para tu negocio en Santa Fe."
+        # Asegurar límite
+        if len(desc) > 155:
+            desc = desc[:152].rsplit(' ', 1)[0] + '.'
+    if not desc.endswith('.') and not desc.endswith('?'):
+        desc += '.'
+    return desc.strip()[:157].rsplit(' ', 1)[0] + '.'
+
+
+def _generate_image_alt(image_filename):
+    """Generar alt text descriptivo para cada imagen de stock."""
+    alts = {
+        "automation.jpg": "Representación visual de automatización empresarial con engranajes y tecnología digital",
+        "data-analytics.jpg": "Análisis de datos y dashboards con gráficos y métricas empresariales",
+        "digital-world.jpg": "Mundo digital y conectividad global representando transformación tecnológica",
+    }
+    return alts.get(image_filename, "Imagen ilustrativa de automatización e inteligencia artificial")
 
 
 def main():

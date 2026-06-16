@@ -1,0 +1,5 @@
+# robots.txt - MR Agentes
+User-agent: *
+Allow: /
+
+Sitemap: https://mragentes.com.ar/sitemap.xml

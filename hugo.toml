@@ -54,7 +54,14 @@ defaultContentLanguage = "es"
 [markup.goldmark.renderer]
   unsafe = true
 
+[markup.goldmark.parser]
+  autoHeadingID = true
+  autoHeadingIDType = "github"
 
+[sitemap]
+  changefreq = "weekly"
+  priority = 0.8
+  filename = "sitemap.xml"
 
 [pagination]
   pagerSize = 6
