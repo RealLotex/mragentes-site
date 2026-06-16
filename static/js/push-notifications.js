@@ -109,7 +109,7 @@
     toast.className = 'push-toast';
     toast.innerHTML = `
       <div class="push-toast-content">
-        <p>Tu competencia ya está usando IA. Permití las notificaciones para recuperar terreno.</p>
+        <p>Tu competencia ya está usando IA.<br>Permití las notificaciones para recuperar terreno.</p>
         <div class="push-toast-actions">
           <button class="push-toast-btn">Activar notificaciones</button>
           <button class="push-toast-close">✕</button>

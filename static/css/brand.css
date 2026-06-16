@@ -1242,11 +1242,12 @@ strong {
   background: var(--gray-100);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .push-toast {
     right: 1rem;
     bottom: 1rem;
-    width: calc(100% - 2rem);
+    left: 1rem;
+    width: auto;
     max-width: none;
   }
 }
