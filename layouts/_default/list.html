@@ -12,27 +12,24 @@
         {{ .Content }}
     </div>
     {{ else }}
-    <!-- Listado de notas con buscador, filtro por tags y grid -->
+    <!-- Listado de notas con buscador + selector de tags tipo destinatarios -->
     <div class="notas-list">
         {{ $paginator := .Paginate (where .RegularPages "Section" "notas") }}
 
-        <!-- Search bar -->
-        <div class="notas-search-bar">
-            <div class="search-input-wrapper">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="notas-search" class="search-input" placeholder="Buscar notas por título, tag o contenido..." autocomplete="off">
-            </div>
-        </div>
+        <!-- Smart tag search: input + suggestions + selected tag chips -->
+        <div class="smart-search" id="smart-search">
+            <!-- Selected tag chips container -->
+            <div class="smart-search-chips" id="search-tag-chips"></div>
 
-        <!-- Tag filter chips -->
-        <div class="notas-tag-filter">
-            <button class="tag-filter-chip active" data-tag="all">Todas</button>
-            {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
-            {{ $tagPage := $.Site.GetPage (printf "/tags/%s" $name) }}
-            <a href="{{ $tagPage.RelPermalink }}" class="tag-filter-chip" data-tag="{{ $name }}">
-                {{ $name }}
-            </a>
-            {{ end }}
+            <!-- Input row -->
+            <div class="smart-search-input-row">
+                <span class="smart-search-icon">🔍</span>
+                <input type="text" id="smart-search-input" class="smart-search-input"
+                       placeholder="Buscar por título o agregá tags (ej: noticias, ia)..." autocomplete="off">
+            </div>
+
+            <!-- Suggestions dropdown -->
+            <div class="smart-search-suggestions" id="smart-search-suggestions"></div>
         </div>
 
         <div class="nota-card-grid" id="nota-card-grid">
@@ -58,62 +55,187 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('notas-search');
-        const filterChips = document.querySelectorAll('.tag-filter-chip');
-        const cardGrid = document.getElementById('nota-card-grid');
+        /* ============================
+           SMART TAG SEARCH — estilo selector de destinatarios
+           ============================ */
 
-        if (!searchInput || !cardGrid) return;
+        var ALL_TAGS = [
+            {{- range $name, $taxonomy := .Site.Taxonomies.tags }}
+            { slug: '{{ $name }}', label: '{{ $name | humanize }}', count: {{ len $taxonomy.Pages }} },
+            {{- end }}
+        ];
 
-        // Store original cards and their tags
-        const cards = Array.from(cardGrid.querySelectorAll('.nota-card-img'));
-        const allTagsData = new Map();
+        var input = document.getElementById('smart-search-input');
+        var chipsContainer = document.getElementById('search-tag-chips');
+        var suggestions = document.getElementById('smart-search-suggestions');
+        var cardGrid = document.getElementById('nota-card-grid');
 
-        cards.forEach(function(card) {
-            const tagsEl = card.querySelector('.nota-card-tags');
-            const tags = tagsEl ? Array.from(tagsEl.querySelectorAll('.tag')).map(function(t) { return t.textContent.trim().toLowerCase(); }) : [];
-            allTagsData.set(card, tags);
+        // Precompute card titles and tags from data-* attributes (no visual tags in cards)
+        var cards = Array.from(cardGrid.querySelectorAll('.nota-card-img'));
+        var cardMeta = cards.map(function(c) {
+            return {
+                el: c,
+                title: (c.querySelector('h3')?.textContent || '').toLowerCase(),
+                tags: (c.dataset.searchTags || '').toLowerCase().split('|').filter(Boolean)
+            };
         });
 
+        // Selected tags state
+        var selectedTags = [];
+
+        /** Normalize a string for matching: remove accents, dashes→spaces, lowercase */
+        function normalize(s) {
+            return s.toLowerCase()
+                .replace(/-/g, ' ')
+                .replace(/[áäàâ]/g, 'a').replace(/[éëèê]/g, 'e')
+                .replace(/[íïìî]/g, 'i').replace(/[óöòô]/g, 'o')
+                .replace(/[úüùû]/g, 'u').replace(/ñ/g, 'n')
+                .replace(/[^a-z0-9\s]/g, '');
+        }
+
+        /** Get normalized version of tag slug for matching */
+        function tagNormalized(tag) {
+            return normalize(tag.slug);
+        }
+
+        /** Render selected tag chips */
+        function renderChips() {
+            chipsContainer.innerHTML = '';
+            selectedTags.forEach(function(tag) {
+                var chip = document.createElement('span');
+                chip.className = 'smart-tag-chip';
+                chip.innerHTML = '<span class="smart-tag-chip-label">' + tag.label + '</span>' +
+                    '<button class="smart-tag-chip-remove" data-tag="' + tag.slug.replace(/"/g, '&quot;') + '" aria-label="Quitar tag">✕</button>';
+                chip.querySelector('.smart-tag-chip-remove').addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    removeTag(tag.slug);
+                });
+                chipsContainer.appendChild(chip);
+            });
+            filterCards();
+        }
+
+        /** Add a tag */
+        function addTag(tag) {
+            if (selectedTags.some(function(t) { return t.slug === tag.slug; })) return;
+            selectedTags.push(tag);
+            input.value = '';
+            hideSuggestions();
+            renderChips();
+            input.focus();
+        }
+
+        /** Remove a tag by slug */
+        function removeTag(slug) {
+            selectedTags = selectedTags.filter(function(t) { return t.slug !== slug; });
+            renderChips();
+            input.focus();
+        }
+
+        /** Hide suggestions dropdown */
+        function hideSuggestions() {
+            suggestions.classList.remove('visible');
+        }
+
+        /** Show suggestions dropdown with given items */
+        function showSuggestions(items) {
+            suggestions.innerHTML = '';
+            if (!items.length) {
+                hideSuggestions();
+                return;
+            }
+            items.forEach(function(item) {
+                var div = document.createElement('div');
+                div.className = 'smart-search-suggestion';
+                div.innerHTML = '<span class="suggestion-label">' + item.label + '</span>' +
+                    '<span class="suggestion-count">' + item.count + '</span>';
+                div.addEventListener('click', function() { addTag(item); });
+                suggestions.appendChild(div);
+            });
+            suggestions.classList.add('visible');
+        }
+
+        /** Get available tags (not already selected) that match a query */
+        function suggestTags(query) {
+            var nq = normalize(query);
+            if (!nq) return [];
+            return ALL_TAGS.filter(function(t) {
+                if (selectedTags.some(function(st) { return st.slug === t.slug; })) return false;
+                return tagNormalized(t).indexOf(nq) !== -1;
+            }).slice(0, 8);
+        }
+
+        /** Compute which card tags match: union of selected tags */
+        function getActiveTagSlugs() {
+            return selectedTags.map(function(t) { return t.slug; });
+        }
+
+        /** Filter cards based on selected tags + text input */
         function filterCards() {
-            const query = searchInput.value.toLowerCase().trim();
-            const activeChip = document.querySelector('.tag-filter-chip.active');
-            const selectedTag = activeChip ? activeChip.dataset.tag : 'all';
+            var query = normalize(input.value);
+            var activeSlugs = getActiveTagSlugs();
 
-            cards.forEach(function(card) {
-                const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
-                const cardTags = allTagsData.get(card) || [];
+            cardMeta.forEach(function(meta) {
+                // Tag filter: all selected tags must match (AND intersection)
+                var matchesTags = activeSlugs.length === 0 ||
+                    activeSlugs.every(function(slug) { return meta.tags.indexOf(slug) !== -1; });
 
-                // Tag filter
-                const matchesTag = selectedTag === 'all' || cardTags.includes(selectedTag);
+                // Free text: match against title (normalized)
+                var matchesText = !query || meta.title.indexOf(query) !== -1;
 
-                // Search filter
-                const matchesSearch = !query ||
-                    title.includes(query) ||
-                    cardTags.some(function(t) { return t.includes(query); });
-
-                card.style.display = (matchesTag && matchesSearch) ? '' : 'none';
+                meta.el.style.display = (matchesTags && matchesText) ? '' : 'none';
             });
         }
 
-        // Search input with debounce
-        let searchTimeout;
-        searchInput.addEventListener('input', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(filterCards, 200);
+        /* --- Event handlers --- */
+
+        // Input: show suggestions + filter text
+        var suggestionTimeout;
+        input.addEventListener('input', function() {
+            var val = input.value;
+            var matches = suggestTags(val);
+            if (matches.length > 0) {
+                showSuggestions(matches);
+            } else {
+                hideSuggestions();
+            }
+            clearTimeout(suggestionTimeout);
+            suggestionTimeout = setTimeout(filterCards, 200);
         });
 
-        // Tag filter: "Todas" button stays client-side, others navigate to tag page
-        filterChips.forEach(function(chip) {
-            chip.addEventListener('click', function(e) {
-                if (this.dataset.tag === 'all') {
+        // Enter: if there's exactly one suggestion, add it as tag;
+        // otherwise do text-only filter
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                var visible = suggestions.querySelectorAll('.smart-search-suggestion');
+                if (visible.length === 1) {
                     e.preventDefault();
-                    filterChips.forEach(function(c) { c.classList.remove('active'); });
-                    this.classList.add('active');
-                    filterCards();
-                    searchInput.focus();
+                    // The suggestion div stores the tag object in a click handler closure;
+                    // we can't retrieve it directly, but we know the matching query
+                    var val = input.value.trim();
+                    var nq = normalize(val);
+                    var match = ALL_TAGS.find(function(t) { return tagNormalized(t).indexOf(nq) !== -1; });
+                    if (match) addTag(match);
+                } else if (visible.length === 0 && input.value.trim()) {
+                    // Just filter by text — already handled
                 }
-            });
+            }
+            // Backspace on empty input removes last selected tag
+            if (e.key === 'Backspace' && !input.value && selectedTags.length > 0) {
+                removeTag(selectedTags[selectedTags.length - 1].slug);
+            }
         });
+
+        // Click outside closes suggestions
+        document.addEventListener('click', function(e) {
+            var container = document.getElementById('smart-search');
+            if (!container.contains(e.target)) {
+                hideSuggestions();
+            }
+        });
+
+        // Initial: hide suggestions
+        hideSuggestions();
     });
     </script>
     {{ end }}
