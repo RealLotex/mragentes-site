@@ -70,19 +70,6 @@
         var suggestions = document.getElementById('smart-search-suggestions');
         var cardGrid = document.getElementById('nota-card-grid');
 
-        // Precompute card titles and tags from data-* attributes (no visual tags in cards)
-        var cards = Array.from(cardGrid.querySelectorAll('.nota-card-img'));
-        var cardMeta = cards.map(function(c) {
-            return {
-                el: c,
-                title: (c.querySelector('h3')?.textContent || '').toLowerCase(),
-                tags: (c.dataset.searchTags || '').toLowerCase().split('|').filter(Boolean)
-            };
-        });
-
-        // Selected tags state
-        var selectedTags = [];
-
         /** Normalize a string for matching: remove accents, dashes→spaces, lowercase */
         function normalize(s) {
             return s.toLowerCase()
@@ -92,6 +79,19 @@
                 .replace(/[úüùû]/g, 'u').replace(/ñ/g, 'n')
                 .replace(/[^a-z0-9\s]/g, '');
         }
+
+        // Precompute card metadata with normalized title for accent-insensitive search
+        var cards = Array.from(cardGrid.querySelectorAll('.nota-card-img'));
+        var cardMeta = cards.map(function(c) {
+            return {
+                el: c,
+                title: normalize(c.querySelector('h3')?.textContent || ''),
+                tags: (c.dataset.searchTags || '').toLowerCase().split('|').filter(Boolean)
+            };
+        });
+
+        // Selected tags state
+        var selectedTags = [];
 
         /** Get normalized version of tag slug for matching */
         function tagNormalized(tag) {
@@ -203,22 +203,20 @@
             suggestionTimeout = setTimeout(filterCards, 200);
         });
 
-        // Enter: if there's exactly one suggestion, add it as tag;
-        // otherwise do text-only filter
+        // Enter: if there's text and exactly one suggestion, add it as tag;
+        // if suggestions are visible but no text, do nothing
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
+                var val = input.value.trim();
+                if (!val) return; // nothing typed → do nothing
                 var visible = suggestions.querySelectorAll('.smart-search-suggestion');
                 if (visible.length === 1) {
                     e.preventDefault();
-                    // The suggestion div stores the tag object in a click handler closure;
-                    // we can't retrieve it directly, but we know the matching query
-                    var val = input.value.trim();
                     var nq = normalize(val);
                     var match = ALL_TAGS.find(function(t) { return tagNormalized(t).indexOf(nq) !== -1; });
                     if (match) addTag(match);
-                } else if (visible.length === 0 && input.value.trim()) {
-                    // Just filter by text — already handled
                 }
+                // else: just filter by text — already handled by input event
             }
             // Backspace on empty input removes last selected tag
             if (e.key === 'Backspace' && !input.value && selectedTags.length > 0) {
