@@ -5,25 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {{- $description := .Description | default .Summary | default .Site.Params.description }}
-    <meta name="description" content="{{ $description }}">
+    {{- $title := printf "%s | %s" .Title .Site.Title | default .Site.Title }}
+
+    <meta name="description" content="{{ $description | plainify | truncate 155 }}">
     <meta name="theme-color" content="#2596be">
     <meta name="geo.region" content="AR-S">
     <meta name="geo.placename" content="Ciudad de Gálvez, Santa Fe">
     <meta name="author" content="MR Agentes">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="generator" content="MR Agentes CMS">
+
+    <!-- Push Notifications -->
     <meta name="vapid-key" content="BFGo1CVPwPDvjg-P6drE18gKe8m00LZDVUPxO7DRfRX9zLYqco57y-V0hDsot9rINydYxOmCkK-_TijpFNeM6x0">
     <meta name="push-api-url" content="https://mragentes-push.rosichmarcos.workers.dev">
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ "manifest.json" | absURL }}">
-
-    <!-- Canonical URL -->
     <link rel="canonical" href="{{ .Permalink }}">
 
-    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+    <!-- RSS Feed para que Google / ChatGPT / Gemini detecten contenido nuevo -->
+    <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} — Notas" href="{{ "/notas/index.xml" | absURL }}">
+    <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="{{ "/index.xml" | absURL }}">
+
+    <title>{{ $title }}</title>
 
     <!-- Open Graph -->
-    <meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}">
-    <meta property="og:description" content="{{ $description }}">
+    <meta property="og:title" content="{{ $title }}">
+    <meta property="og:description" content="{{ $description | plainify | truncate 155 }}">
     <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
     <meta property="og:url" content="{{ .Permalink }}">
     <meta property="og:site_name" content="{{ .Site.Title }}">
@@ -34,16 +42,22 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     {{- end }}
-
+    {{ if .IsPage }}<meta property="article:author" content="MR Agentes">
+    <meta property="article:publisher" content="MR Agentes">{{ end }}
+    {{- with .Params.tags }}{{ range . }}<meta property="article:tag" content="{{ . }}">{{ end }}{{ end }}
+    {{- with .Date }}<meta property="article:published_time" content="{{ .Format "2006-01-02T15:04:05-03:00" }}">{{ end }}
     {{ with .Site.Params.instagram }}<meta property="og:see_also" content="{{ . }}">{{ end }}
     {{ with .Site.Params.facebook }}<meta property="og:see_also" content="{{ . }}">{{ end }}
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}">
-    <meta name="twitter:description" content="{{ $description }}">
+    <meta name="twitter:site" content="@mragentes">
+    <meta name="twitter:title" content="{{ $title }}">
+    <meta name="twitter:description" content="{{ $description | plainify | truncate 155 }}">
+    <meta name="twitter:creator" content="@mragentes">
     {{- with .Params.image | default "/images/mragentes.png" }}
     <meta name="twitter:image" content="{{ . | absURL }}">
+    <meta name="twitter:image:alt" content="{{ $.Title }}">
     {{- end }}
 
     <!-- Favicon -->
@@ -51,7 +65,6 @@
     <link rel="icon" type="image/png" sizes="3000x3000" href="{{ "images/favicon.png" | absURL }}">
     <link rel="apple-touch-icon" sizes="3000x3000" href="{{ "images/favicon.png" | absURL }}">
 
-    <!-- Push Notifications -->
     <link rel="preconnect" href="https://mragentes.com.ar">
 
     <!-- Styles -->
@@ -60,8 +73,6 @@
 
     <!-- Scroll Animations -->
     <script src="/js/scroll-animations.js" defer></script>
-
-    <!-- Push Notifications -->
     <script src="/js/push-notifications.js" defer></script>
 
     {{- if .IsHome }}
@@ -70,25 +81,29 @@
     {
         "@context": "https://schema.org",
         "@type": "Organization",
+        "@id": "{{ .Site.BaseURL }}#organization",
         "name": "MR Agentes",
         "description": "Automatización e inteligencia artificial para potenciar tu negocio. Soluciones modernas, resultados reales.",
         "url": "{{ .Site.BaseURL }}",
-        "logo": "{{ "images/mragentes.png" | absURL }}",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ "images/mragentes.png" | absURL }}",
+            "width": 3000,
+            "height": 3000
+        },
         "address": {
             "@type": "PostalAddress",
             "addressLocality": "Ciudad de Gálvez",
             "addressRegion": "Santa Fe",
             "addressCountry": "AR"
         },
-        "contactPoint": [
-            {
-                "@type": "ContactPoint",
-                "telephone": "+54-3404-502729",
-                "contactType": "customer service",
-                "email": "marcos@mragentes.com.ar",
-                "availableLanguage": ["Spanish"]
-            }
-        ],
+        "contactPoint": [{
+            "@type": "ContactPoint",
+            "telephone": "+54-3404-502729",
+            "contactType": "customer service",
+            "email": "marcos@mragentes.com.ar",
+            "availableLanguage": ["Spanish"]
+        }],
         "sameAs": [
             "{{ .Site.Params.instagram }}",
             "{{ .Site.Params.facebook }}"
@@ -100,43 +115,37 @@
     {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
+        "@id": "{{ .Site.BaseURL }}#localbusiness",
         "name": "MR Agentes",
         "description": "Servicios de automatización e inteligencia artificial para empresas en Santa Fe.",
         "url": "{{ .Site.BaseURL }}",
         "telephone": "+54-3404-502729",
         "email": "marcos@mragentes.com.ar",
+        "parentOrganization": { "@id": "{{ .Site.BaseURL }}#organization" },
         "areaServed": [
-            {
-                "@type": "City",
-                "name": "Ciudad de Gálvez"
-            },
-            {
-                "@type": "State",
-                "name": "Santa Fe"
-            }
+            { "@type": "City", "name": "Ciudad de Gálvez" },
+            { "@type": "State", "name": "Santa Fe" }
         ],
         "priceRange": "$$"
     }
     </script>
     {{- else if eq .Section "notas" }}
-    <!-- Schema.org: Article (Notas) -->
+    <!-- Schema.org: Article (Notas) — enriquecido para Google AI / ChatGPT -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "Article",
+        "@id": "{{ .Permalink }}#article",
         "headline": "{{ .Title }}",
-        "description": "{{ $description }}",
+        "description": "{{ $description | plainify | truncate 155 }}",
         "author": {
             "@type": "Organization",
+            "@id": "{{ .Site.BaseURL }}#organization",
             "name": "MR Agentes"
         },
         "publisher": {
             "@type": "Organization",
-            "name": "MR Agentes",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "{{ "images/mragentes.png" | absURL }}"
-            }
+            "@id": "{{ .Site.BaseURL }}#organization"
         },
         "datePublished": "{{ .Date.Format "2006-01-02T15:04:05-03:00" }}",
         "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05-03:00" | default (.Date.Format "2006-01-02T15:04:05-03:00") }}",
@@ -148,20 +157,28 @@
         {{- with .Params.image }}
         "image": {
             "@type": "ImageObject",
-            "url": "{{ . | absURL }}"
+            "url": "{{ . | absURL }}",
+            "width": 1200,
+            "height": 630
         },
         {{- end }}
-        "keywords": "{{- with .Params.tags }}{{ delimit . ", " }}{{ end }}"
+        {{- with .Params.tags }}
+        "keywords": "{{ delimit . ", " }}",
+        {{- end }}
+        "articleSection": "Automatización e IA",
+        "inLanguage": "es-AR",
+        "isAccessibleForFree": true
     }
     </script>
     {{- end }}
 
-    <!-- BreadcrumbList Schema -->
+    <!-- BreadcrumbList Schema (corregido: sin duplicados, @id por página) -->
     {{- if not .IsHome }}
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
+        "@id": "{{ .Permalink }}#breadcrumb",
         "itemListElement": [
             {
                 "@type": "ListItem",
@@ -189,6 +206,23 @@
     }
     </script>
     {{- end }}
+
+    <!-- WebSite Schema para Google SGE / AI Overview -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": "{{ .Site.BaseURL }}#website",
+        "name": "MR Agentes",
+        "description": "{{ .Site.Params.description }}",
+        "url": "{{ .Site.BaseURL }}",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ .Site.BaseURL }}search/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
 </head>
 <body>
     {{ partial "header.html" . }}
@@ -199,7 +233,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu toggle
             const toggle = document.querySelector('.menu-toggle');
             const nav = document.querySelector('.nav-links');
             if (toggle && nav) {
@@ -209,5 +242,12 @@
             }
         });
     </script>
+
+    <!-- Pasamos las tags de cada nota como JSON para search (si es página de notas) -->
+    {{- if eq .Section "notas" }}
+    <script type="application/json" id="page-tags-json">
+    {{- with .Params.tags }}{{ . | jsonify }}{{ else }}[]{{ end }}
+    </script>
+    {{- end }}
 </body>
 </html>

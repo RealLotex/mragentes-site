@@ -58,6 +58,10 @@ defaultContentLanguage = "es"
   autoHeadingID = true
   autoHeadingIDType = "github"
 
+[markup.goldmark.parser.attribute]
+  block = true
+  title = true
+
 [sitemap]
   changefreq = "weekly"
   priority = 0.8
@@ -65,3 +69,16 @@ defaultContentLanguage = "es"
 
 [pagination]
   pagerSize = 6
+
+[outputFormats]
+  [outputFormats.RSS]
+    mediatype = "application/rss+xml"
+    baseName = "feed"
+
+[caches]
+  [caches.getjson]
+    dir = ":resourceDir/_getjson"
+    maxAge = "30m"
+
+[build]
+  writeStats = false
