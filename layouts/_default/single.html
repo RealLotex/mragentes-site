@@ -18,7 +18,12 @@
             {{ with .Params.tags }}
             <div class="tags">
                 {{ range . }}
-                <span class="tag">{{ . }}</span>
+                {{ $tag := . }}
+                {{ with $.Site.GetPage (printf "/tags/%s" $tag) }}
+                <a href="{{ .RelPermalink }}" class="tag tag-link">{{ $tag }}</a>
+                {{ else }}
+                <span class="tag">{{ $tag }}</span>
+                {{ end }}
                 {{ end }}
             </div>
             {{ end }}

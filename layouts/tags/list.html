@@ -1,0 +1,36 @@
+{{ define "main" }}
+<!-- Page Header -->
+<section class="page-header">
+    <h1>Tags</h1>
+    <p>Explorá nuestras notas por categoría</p>
+</section>
+
+<main class="main-content">
+    <div class="tag-cloud">
+        {{ $tags := .Site.Taxonomies.tags }}
+        {{ $minCount := 100 }}
+        {{ $maxCount := 0 }}
+        {{ range $tag, $pages := $tags }}
+            {{ $count := len $pages }}
+            {{ if lt $count $minCount }}{{ $minCount = $count }}{{ end }}
+            {{ if gt $count $maxCount }}{{ $maxCount = $count }}{{ end }}
+        {{ end }}
+
+        {{ $range := sub $maxCount $minCount }}
+        {{ if eq $range 0 }}{{ $range = 1 }}{{ end }}
+
+        <div class="tags-cloud-list">
+            {{ range $tag, $pages := $tags }}
+                {{ $count := len $pages }}
+                {{ $weight := div (mul (sub $count $minCount) 9) $range }}
+                {{ $weight = add $weight 1 }}
+                {{ $fontSize := add 0.875 (mul $weight 0.125) }}
+                <a href="{{ "/tags/" | relURL }}{{ $tag | urlize }}/" class="tag-cloud-item" style="font-size: {{ $fontSize }}rem;" title="{{ $count }} nota{{ if ne $count 1 }}s{{ end }}">
+                    {{ $tag }}
+                    <span class="tag-count">{{ $count }}</span>
+                </a>
+            {{ end }}
+        </div>
+    </div>
+</main>
+{{ end }}
