@@ -1489,6 +1489,48 @@ strong {
     width: auto;
     max-width: none;
   }
+
+  /* Smart search mobile */
+  .smart-search {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .smart-search-input-row {
+    padding: 0.1rem 1rem 0.1rem 0.85rem;
+  }
+
+  .smart-search-input {
+    padding: 0.75rem 0;
+    font-size: 0.95rem;
+  }
+
+  .smart-search-suggestions {
+    left: 0;
+    right: 0;
+    border-radius: var(--radius-sm);
+  }
+
+  .smart-search-suggestion {
+    padding: 0.65rem 0.9rem;
+  }
+
+  /* Tag cloud mobile */
+  .tags-cloud-list {
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+  }
+
+  .tag-cloud-item {
+    padding: 0.3rem 0.85rem;
+  }
+
+  /* Tag term nav mobile */
+  .tag-term-nav {
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
 }
 
 .pagination .active {

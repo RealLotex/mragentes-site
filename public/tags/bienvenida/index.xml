@@ -1,19 +1,2 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Bienvenida on MR Agentes</title>
-    <link>https://mragentes.com.ar/tags/bienvenida/</link>
-    <description>Recent content in Bienvenida on MR Agentes</description>
-    <generator>Hugo</generator>
-    <language>es-AR</language>
-    <lastBuildDate>Sun, 14 Jun 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://mragentes.com.ar/tags/bienvenida/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Bienvenidos a MR Agentes</title>
-      <link>https://mragentes.com.ar/notas/bienvenidos-a-mr-agentes/</link>
-      <pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate>
-      <guid>https://mragentes.com.ar/notas/bienvenidos-a-mr-agentes/</guid>
-      <description>Hola, bienvenidos Este es nuestro primer post en el blog de MR Agentes. Desde Ciudad de Gálvez, Santa Fe, vamos a compartir contenido sobre automatización, inteligencia artificial, casos de éxito, tips prácticos y todo lo que necesitás saber para llevar tu negocio al próximo nivel.&#xA;¿Qué vas a encontrar acá? Guías prácticas — Cómo implementar automatización en áreas específicas de tu negocio Casos de éxito — Ejemplos reales de clientes que transformaron sus procesos Tendencias — Lo último en IA, machine learning y automatización Tips semanales — Consejos accionables que podés aplicar hoy Nuestro enfoque Creemos firmemente que la tecnología debería adaptarse a las personas y no al revés.</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Bienvenida on MR Agentes</title><link>https://mragentes.com.ar/tags/bienvenida/</link><description>Recent content in Bienvenida on MR Agentes</description><generator>Hugo</generator><language>es-AR</language><lastBuildDate>Sun, 14 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://mragentes.com.ar/tags/bienvenida/index.xml" rel="self" type="application/rss+xml"/><item><title>Bienvenidos a MR Agentes</title><link>https://mragentes.com.ar/notas/bienvenidos-a-mr-agentes/</link><pubDate>Sun, 14 Jun 2026 00:00:00 +0000</pubDate><guid>https://mragentes.com.ar/notas/bienvenidos-a-mr-agentes/</guid><description>Hola, bienvenidos Este es nuestro primer post en el blog de MR Agentes. Desde Ciudad de Gálvez, Santa Fe, vamos a compartir contenido sobre automatización, inteligencia artificial, casos de éxito, tips prácticos y todo lo que necesitás saber para llevar tu negocio al próximo nivel.
+¿Qué vas a encontrar acá? Guías prácticas — Cómo implementar automatización en áreas específicas de tu negocio Casos de éxito — Ejemplos reales de clientes que transformaron sus procesos Tendencias — Lo último en IA, machine learning y automatización Tips semanales — Consejos accionables que podés aplicar hoy Nuestro enfoque Creemos firmemente que la tecnología debería adaptarse a las personas y no al revés.</description></item></channel></rss>
