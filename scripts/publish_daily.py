@@ -736,9 +736,11 @@ Las noticias de hoy reflejan un patrón recurrente: la tecnología avanza más r
 *Fuentes: análisis propio de MR Agentes sobre noticias públicas verificables.*"""
 
         title = random.choice([
-            f"Panorama de automatización e IA — {date_str}",
-            f"Lo que está pasando en IA y automatización — {date_str}",
-            f"Tendencias en automatización e IA — {date_str}",
+            "Panorama de automatización e IA",
+            "Lo que está pasando en IA y automatización",
+            "Tendencias en automatización e IA",
+            "Automatización e IA: panorama actual",
+            "Lo más relevante en automatización e IA",
         ])
 
     elif fmt < 0.75:
@@ -784,9 +786,10 @@ Las noticias de hoy reflejan un patrón recurrente: la tecnología avanza más r
         body = "\n".join(body_lines)
 
         title = random.choice([
-            f"Dos temas clave en IA y automatización — {date_str}",
-            f"Análisis: lo que está pasando en IA — {date_str}",
-            f"Lo más relevante en automatización — {date_str}",
+            "Dos temas clave en IA y automatización",
+            "Análisis: lo que está pasando en IA",
+            "Lo más relevante en automatización",
+            "Tendencias que marcan la agenda de IA",
         ])
 
     else:
