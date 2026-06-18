@@ -1,7 +1,7 @@
 ---
 title: "De asistentes a empleados autónomos — nuestra mirada"
 date: 2026-06-17
-description: "De asistentes a empleados autónomos la tecnología que ya hace el trabajo pesado por ti - Infobae Un agente no ejecuta delibera. Esa diferencia,."
+description: "De asistentes a empleados autónomos — la tecnología que ya hace el trabajo pesado por ti. Un agente no ejecuta: delibera. Esa diferencia cambia la arquitectura del software empresarial."
 image: "/images/stock/pexels-8438918.jpg"
 image_alt: "Hombre pensando frente a un tablero de ajedrez con un brazo robótico, simbolizando la competencia entre inteligencia humana y artificial"
 tags:
