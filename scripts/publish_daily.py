@@ -35,13 +35,28 @@ STATE_FILE = os.path.join(BASE_DIR, "scripts", ".publish_state.json")
 
 # Imágenes de stock disponibles
 STOCK_IMAGES = [
+    # Imágenes originales
     "automation.jpg",
     "data-analytics.jpg",
     "digital-world.jpg",
+    "ai-brain.jpg",
+    # Imágenes nuevas de Pexels batch 2026-06-18
+    "pexels-8386440.jpg",  # Concepto IA abstracto
+    "pexels-8438918.jpg",  # Ajedrez humano vs robot
+    "pexels-1181373.jpg",  # Programando en Python
+    "pexels-1181390.jpg",  # Tableta/productividad
+    "pexels-1181401.jpg",  # Código + reunión
+    "pexels-1181408.jpg",  # Reunión corporativa diversa
+    "pexels-1181671.jpg",  # Libro Python
+    "pexels-1181672.jpg",  # Mujer leyendo libro Python
+    "pexels-1181354.jpg",  # Tech
+    "pexels-1181304.jpg",  # Tech
+    "pexels-1181267.jpg",  # Tech
+    "pexels-1181675.jpg",  # Tech
+    "pexels-8566472.jpg",  # Tech
+    "pexels-8441272.jpg",  # Lifestyle cafetería
 ]
 
-# Agrego auto-resize feature: si hay más imágenes en el futuro, se agregan acá.
-# La imagen ai-brain.jpg NO está porque se usó en bienvenidos-a-mr-agentes.md.
 # Cuando todas las imágenes se hayan usado, se reinicia el ciclo.
 
 TOPICS = [
@@ -275,11 +290,75 @@ def save_state(state):
         json.dump(state, f, indent=2)
 
 
+PEXELS_API_URL = "https://images.pexels.com/photos/{photo_id}/pexels-photo-{photo_id}.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+
+# IDs de fotos populares de tecnología/IA/negocios en Pexels (nuevas para cada fetch)
+PEXELS_PHOTO_IDS = [
+    8386440, 8566472, 8438918, 8441272,
+    1181675, 1181354, 1181373, 1181390, 1181408, 1181304, 1181267, 1181401, 1181671, 1181672,
+]
+
+
+def fetch_new_stock_images(count=3):
+    """Descargar imágenes nuevas de Pexels y agregarlas al catálogo.
+    Retorna lista de nombres de archivo agregados."""
+    import subprocess, os
+    added = []
+    target_dir = os.path.join(BASE_DIR, "static", "images", "stock")
+    os.makedirs(target_dir, exist_ok=True)
+
+    # IDs que ya tenemos en disco
+    existing_ids = set()
+    for fname in os.listdir(target_dir):
+        m = re.match(r'pexels-(\d+)\.jpg', fname)
+        if m:
+            existing_ids.add(int(m.group(1)))
+
+    # IDs que NO tenemos todavía
+    fresh_ids = [pid for pid in PEXELS_PHOTO_IDS if pid not in existing_ids]
+    if not fresh_ids:
+        # Si ya tenemos todos, buscar algunos random nuevos — buscar en la web o usar más IDs
+        return added
+
+    # Descargar hasta count nuevas imágenes
+    for photo_id in fresh_ids[:count]:
+        url = PEXELS_API_URL.format(photo_id=photo_id)
+        outfile = os.path.join(target_dir, f"pexels-{photo_id}.jpg")
+        try:
+            result = subprocess.run(
+                ["curl", "-sL", "-o", outfile, "-w", "%{http_code}", url],
+                capture_output=True, text=True, timeout=15
+            )
+            if result.stdout.strip() == "200" and os.path.getsize(outfile) > 5000:
+                fname = f"pexels-{photo_id}.jpg"
+                added.append(fname)
+                print(f"  📷 Imagen nueva descargada: {fname}")
+            else:
+                if os.path.exists(outfile):
+                    os.remove(outfile)
+        except Exception as e:
+            print(f"  ⚠️  Error descargando {photo_id}: {e}")
+            if os.path.exists(outfile):
+                os.remove(outfile)
+
+    return added
+
+
 def pick_image(state):
-    """Elegir imagen de stock sin repetir hasta agotar el catálogo."""
+    """Elegir imagen de stock sin repetir hasta agotar el catálogo.
+    Automáticamente busca nuevas imágenes si el catálogo se está agotando."""
     available = [img for img in STOCK_IMAGES if img not in state.get("used_images", [])]
 
-    # Si todas se usaron, reiniciar ciclo
+    # Si quedan pocas imágenes disponibles, buscar más de Pexels
+    if len(available) <= 2:
+        print("  📷 Quedan pocas imágenes sin usar. Buscando nuevas en Pexels...")
+        new_images = fetch_new_stock_images(count=3)
+        for img in new_images:
+            if img not in STOCK_IMAGES:
+                STOCK_IMAGES.append(img)
+        # Recalcular disponibles
+        available = [img for img in STOCK_IMAGES if img not in state.get("used_images", [])]
+
     if not available:
         state["used_images"] = []
         available = list(STOCK_IMAGES)
@@ -855,47 +934,49 @@ def git_commit_push(filepath, title):
 
 
 def _generate_description(title, tags, body):
-    """Generar meta description rica en SEO a partir del título y contenido.
-    Máximo 155 caracteres para evitar truncamiento en Google."""
-    import html
-    clean = re.sub(r'<[^>]+>', '', body)
-    clean = re.sub(r'[#*>\[\]()|:]+', '', clean)
-    # Tomar primeros ~150 caracteres significativos
-    words = clean.split()
-    desc_words = []
-    char_count = 0
-    for w in words:
-        if char_count + len(w) + 1 > 152:
-            break
-        desc_words.append(w)
-        char_count += len(w) + 1
-
-    desc = ' '.join(desc_words).strip()
-    if len(desc) < 50 or len(desc) > 158:
-        # Fallback por título + tags
-        tag_str = ', '.join(tags)
-        prefix = f"{title}. " if len(title) < 80 else ""
-        desc = f"{prefix}Nota de MR Agentes sobre {tag_str}. Automatización e IA para tu negocio en Santa Fe."
-        # Asegurar límite
-        if len(desc) > 155:
-            desc = desc[:152].rsplit(' ', 1)[0] + '.'
+    """Generar meta description coherente a partir del título y tema.
+    Máximo 155 caracteres. NO usa el body crudo (tiene markdown, citas, URLs)."""
+    # Usar título + tags como base, siempre coherente
+    tag_str = ', '.join(tags)
+    # Limpiar el título: tomar hasta el primer "—" o "-" o la primera oración
+    title_clean = title.split('—')[0].split('-')[0].strip().rstrip(',').strip()
+    if len(title_clean) > 70:
+        title_clean = title_clean[:67].rsplit(' ', 1)[0] + '...'
+    desc = f"{title_clean}. Nota de MR Agentes sobre {tag_str}."
+    if len(desc) > 155:
+        desc = desc[:152].rsplit(' ', 1)[0] + '.'
     if not desc.endswith('.') and not desc.endswith('?'):
         desc += '.'
     return desc.strip()[:157].rsplit(' ', 1)[0] + '.'
 
 
-def _send_push_notification(title, filepath, worker_url):
+def _send_push_notification(title, filepath, worker_url=None):
     """Envía notificación push a suscriptores via Cloudflare Worker."""
-    if not worker_url:
-        print("  ℹ️  Push no configurado (PUSH_WORKER_URL vacío)")
+    # Cargar config local para el token y worker URL
+    config = {}
+    config_file = os.path.join(BASE_DIR, "scripts", "config.local.json")
+    if os.path.exists(config_file):
+        try:
+            with open(config_file) as f:
+                config = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    worker_url = worker_url or config.get("pushWorkerUrl", "")
+    api_token = config.get("pushApiToken", "") or os.environ.get("PUSH_API_TOKEN", "")
+
+    if not worker_url or not api_token:
+        print("  ℹ️  Push no configurado (falta pushWorkerUrl o pushApiToken)")
         return
 
     slug = os.path.splitext(os.path.basename(filepath))[0]
     url = f"https://mragentes.com.ar/notas/{slug}/"
+
+    print(f"  🔔 Enviando notificación push via {worker_url}/api/send/...")
     try:
         import urllib.request
         payload = json.dumps({
-            "token": "***",
+            "token": api_token,
             "title": title,
             "body": "Acabamos de publicar una nueva nota en MR Agentes.",
             "url": url,
@@ -908,17 +989,43 @@ def _send_push_notification(title, filepath, worker_url):
         )
         with urllib.request.urlopen(req, timeout=15) as resp:
             result = json.loads(resp.read())
-            print(f"  🔔 Notificación push enviada a {result.get('sent', 0)} suscriptores")
+            sent = result.get('sent', 0)
+            failed = result.get('failed', 0)
+            removed = result.get('removed', 0)
+            errors = result.get('errors', [])
+            print(f"  🔔 Push: {sent} enviadas, {failed} fallidas, {removed} removidas")
+            if errors:
+                for e in errors[:2]:
+                    print(f"    ⚠️  Error: {e.get('status', '?')} - {e.get('detail', e.get('error', '?'))[:100]}")
+            if sent == 0 and failed > 0 and removed == 0:
+                print("    ❌ Todas las entregas fallaron — puede haber problema de VAPID keys o suscripciones vencidas")
     except Exception as e:
-        print(f"  ⚠️  Push notification no enviada: {e}")
+        print(f"  ⚠️  Push notification HTTP error: {e}")
 
 
 def _generate_image_alt(image_filename):
     """Generar alt text descriptivo para cada imagen de stock."""
     alts = {
+        # Originales
         "automation.jpg": "Representación visual de automatización empresarial con engranajes y tecnología digital",
         "data-analytics.jpg": "Análisis de datos y dashboards con gráficos y métricas empresariales",
         "digital-world.jpg": "Mundo digital y conectividad global representando transformación tecnológica",
+        "ai-brain.jpg": "Cerebro digital conceptual representando inteligencia artificial y machine learning",
+        # Pexels batch 2026-06-18
+        "pexels-8386440.jpg": "Concepto abstracto de inteligencia artificial y redes neuronales digitales",
+        "pexels-8438918.jpg": "Hombre pensando frente a tablero de ajedrez con brazo robótico, humano vs IA",
+        "pexels-1181373.jpg": "Persona programando en Python en laptop, desarrollo de software",
+        "pexels-1181390.jpg": "Persona usando tableta con teclado portátil, tecnología y productividad",
+        "pexels-1181401.jpg": "Equipo de trabajo con código en pantalla, reunión tecnológica",
+        "pexels-1181408.jpg": "Reunión de equipo diverso en sala de conferencias moderna",
+        "pexels-1181671.jpg": "Libro técnico de Python en manos de programador",
+        "pexels-1181672.jpg": "Mujer joven leyendo libro de programación Python",
+        "pexels-1181354.jpg": "Entorno tecnológico y digital contemporáneo",
+        "pexels-1181304.jpg": "Tecnología e innovación digital",
+        "pexels-1181267.jpg": "Espacio tecnológico moderno",
+        "pexels-1181675.jpg": "Entorno de trabajo tecnológico",
+        "pexels-8566472.jpg": "Tecnología y computación moderna",
+        "pexels-8441272.jpg": "Cafetería y estilo de vida urbano",
     }
     return alts.get(image_filename, "Imagen ilustrativa de automatización e inteligencia artificial")
 
