@@ -924,32 +924,15 @@ strong {
   transform: translateY(-1px);
 }
 
-/* Tags on nota cards (inside overlay) */
-.nota-card-tags {
-  display: flex;
-  gap: 0.35rem;
-  flex-wrap: wrap;
-  margin: 0.5rem 0 0.75rem;
-}
-
-.nota-card-tags .tag {
-  background: rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.7rem;
-  padding: 0.15rem 0.65rem;
-  backdrop-filter: blur(4px);
-  pointer-events: none;
-}
-
-/* Search bar on /notas/ */
-.notas-search-bar {
+/* ========== SMART TAG SEARCH (estilo selector de destinatarios) ========== */
+.smart-search {
   max-width: 700px;
-  margin: 0 auto 1.5rem;
+  margin: 0 auto 2rem;
   position: relative;
-  z-index: 10;
+  z-index: 100;
 }
 
-.search-input-wrapper {
+.smart-search-input-row {
   display: flex;
   align-items: center;
   background: var(--white);
@@ -960,68 +943,134 @@ strong {
   box-shadow: var(--shadow-xs);
 }
 
-.search-input-wrapper:focus-within {
+.smart-search-input-row:focus-within {
   border-color: var(--brand);
   box-shadow: 0 0 0 4px rgba(37, 150, 190, 0.12);
 }
 
-.search-icon {
-  font-size: 1.2rem;
-  margin-right: 0.75rem;
-  opacity: 0.5;
+.smart-search-icon {
+  font-size: 1.1rem;
+  margin-right: 0.6rem;
+  opacity: 0.4;
+  flex-shrink: 0;
 }
 
-.search-input {
+.smart-search-input {
   flex: 1;
-  padding: 1rem 0;
+  padding: 0.9rem 0;
   border: none;
   outline: none;
   font-family: var(--font);
   font-size: 1rem;
   color: var(--gray-900);
   background: transparent;
+  min-width: 0;
 }
 
-.search-input::placeholder {
+.smart-search-input::placeholder {
   color: var(--gray-300);
 }
 
-/* Tag filter chips on /notas/ */
-.notas-tag-filter {
+/* Selected tag chips */
+.smart-search-chips {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
   flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
+  min-height: 0;
 }
 
-.tag-filter-chip {
-  display: inline-block;
-  padding: 0.45rem 1.1rem;
+.smart-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--brand);
+  color: var(--white);
+  padding: 0.3rem 0.5rem 0.3rem 0.85rem;
   border-radius: 50px;
-  font-family: var(--font);
   font-size: 0.8rem;
   font-weight: 600;
-  border: 1.5px solid var(--gray-200);
-  background: var(--white);
-  color: var(--gray-600);
+  animation: chip-in 0.2s ease-out;
+}
+
+@keyframes chip-in {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.smart-tag-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: rgba(255,255,255,0.2);
+  color: var(--white);
+  border-radius: 50%;
+  font-size: 0.65rem;
   cursor: pointer;
   transition: var(--transition);
-  text-decoration: none;
-  line-height: 1.4;
+  padding: 0;
+  line-height: 1;
 }
 
-.tag-filter-chip:hover {
-  border-color: var(--brand);
-  color: var(--brand);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-xs);
+.smart-tag-chip-remove:hover {
+  background: rgba(255,255,255,0.35);
 }
 
-.tag-filter-chip.active {
-  background: var(--brand);
-  border-color: var(--brand);
+/* Suggestions dropdown */
+.smart-search-suggestions {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  z-index: 200;
+}
+
+.smart-search-suggestions.visible {
+  display: block;
+}
+
+.smart-search-suggestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1.1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.smart-search-suggestion:last-child {
+  border-bottom: none;
+}
+
+.smart-search-suggestion:hover {
+  background: rgba(37, 150, 190, 0.06);
+}
+
+.suggestion-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--gray-800);
+}
+
+.suggestion-count {
+  font-size: 0.7rem;
+  font-weight: 700;
   color: var(--white);
+  background: var(--brand);
+  padding: 0.1rem 0.5rem;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
 }
 
 /* Tag cloud on /tags/ */
