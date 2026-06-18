@@ -1,0 +1,22 @@
+{{ define "main" }}
+<!-- Page Header -->
+<section class="page-header">
+    <h1>#{{ .Title }}</h1>
+    <p>{{ len .Pages }} nota{{ if ne (len .Pages) 1 }}s{{ end }} con esta etiqueta</p>
+</section>
+
+<main class="main-content">
+    <div class="tag-term-nav">
+        <a href="{{ "/tags/" | relURL }}" class="back-link">← Todas las tags</a>
+        <a href="{{ "/notas/" | relURL }}" class="back-link">← Todas las notas</a>
+    </div>
+
+    <div class="notas-list">
+        <div class="nota-card-grid">
+            {{ range .Pages }}
+            {{ partial "nota-card.html" . }}
+            {{ end }}
+        </div>
+    </div>
+</main>
+{{ end }}

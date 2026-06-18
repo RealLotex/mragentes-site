@@ -12,10 +12,30 @@
         {{ .Content }}
     </div>
     {{ else }}
-    <!-- Listado de notas del blog con imagen de fondo -->
+    <!-- Listado de notas con buscador, filtro por tags y grid -->
     <div class="notas-list">
         {{ $paginator := .Paginate (where .RegularPages "Section" "notas") }}
-        <div class="nota-card-grid">
+
+        <!-- Search bar -->
+        <div class="notas-search-bar">
+            <div class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="notas-search" class="search-input" placeholder="Buscar notas por título, tag o contenido..." autocomplete="off">
+            </div>
+        </div>
+
+        <!-- Tag filter chips -->
+        <div class="notas-tag-filter">
+            <button class="tag-filter-chip active" data-tag="all">Todas</button>
+            {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+            {{ $tagPage := $.Site.GetPage (printf "/tags/%s" $name) }}
+            <a href="{{ $tagPage.RelPermalink }}" class="tag-filter-chip" data-tag="{{ $name }}">
+                {{ $name }}
+            </a>
+            {{ end }}
+        </div>
+
+        <div class="nota-card-grid" id="nota-card-grid">
             {{ range $paginator.Pages }}
             {{ partial "nota-card.html" . }}
             {{ end }}
@@ -35,6 +55,67 @@
         </div>
         {{ end }}
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('notas-search');
+        const filterChips = document.querySelectorAll('.tag-filter-chip');
+        const cardGrid = document.getElementById('nota-card-grid');
+
+        if (!searchInput || !cardGrid) return;
+
+        // Store original cards and their tags
+        const cards = Array.from(cardGrid.querySelectorAll('.nota-card-img'));
+        const allTagsData = new Map();
+
+        cards.forEach(function(card) {
+            const tagsEl = card.querySelector('.nota-card-tags');
+            const tags = tagsEl ? Array.from(tagsEl.querySelectorAll('.tag')).map(function(t) { return t.textContent.trim().toLowerCase(); }) : [];
+            allTagsData.set(card, tags);
+        });
+
+        function filterCards() {
+            const query = searchInput.value.toLowerCase().trim();
+            const activeChip = document.querySelector('.tag-filter-chip.active');
+            const selectedTag = activeChip ? activeChip.dataset.tag : 'all';
+
+            cards.forEach(function(card) {
+                const title = card.querySelector('h3')?.textContent?.toLowerCase() || '';
+                const cardTags = allTagsData.get(card) || [];
+
+                // Tag filter
+                const matchesTag = selectedTag === 'all' || cardTags.includes(selectedTag);
+
+                // Search filter
+                const matchesSearch = !query ||
+                    title.includes(query) ||
+                    cardTags.some(function(t) { return t.includes(query); });
+
+                card.style.display = (matchesTag && matchesSearch) ? '' : 'none';
+            });
+        }
+
+        // Search input with debounce
+        let searchTimeout;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(filterCards, 200);
+        });
+
+        // Tag filter: "Todas" button stays client-side, others navigate to tag page
+        filterChips.forEach(function(chip) {
+            chip.addEventListener('click', function(e) {
+                if (this.dataset.tag === 'all') {
+                    e.preventDefault();
+                    filterChips.forEach(function(c) { c.classList.remove('active'); });
+                    this.classList.add('active');
+                    filterCards();
+                    searchInput.focus();
+                }
+            });
+        });
+    });
+    </script>
     {{ end }}
 </main>
 {{ end }}

@@ -5,6 +5,13 @@
         <div class="nota-card-img-content">
             <div class="nota-card-img-date">{{ .Date | time.Format "2 Jan 2006" }}</div>
             <h3>{{ .Title }}</h3>
+            {{- with .Params.tags }}
+            <div class="nota-card-tags">
+                {{- range . }}
+                <span class="tag">{{ . }}</span>
+                {{- end }}
+            </div>
+            {{- end }}
             <span class="nota-card-img-readmore">Seguir leyendo →</span>
         </div>
     </a>
