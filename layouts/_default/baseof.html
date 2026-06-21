@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {{- $description := .Description | default .Summary | default .Site.Params.description }}
-    {{- $title := printf "%s | %s" .Title .Site.Title | default .Site.Title }}
+    {{- $title := .Site.Title }}
+    {{- if .IsHome }}
+      {{- $title = printf "%s | La automatización con IA llegó a Gálvez" .Site.Title }}
+    {{- else if .Title }}
+      {{- $title = printf "%s | %s" .Title .Site.Title }}
+    {{- end }}
 
     <meta name="description" content="{{ $description | plainify | truncate 155 }}">
     <meta name="theme-color" content="#2596be">
