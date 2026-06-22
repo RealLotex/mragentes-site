@@ -18,6 +18,8 @@
     <meta name="geo.placename" content="Ciudad de Gálvez, Santa Fe">
     <meta name="author" content="MR Agentes">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot-news" content="index, follow">
     <meta name="generator" content="MR Agentes CMS">
 
     <!-- Push Notifications -->
@@ -27,6 +29,8 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ "manifest.json" | absURL }}">
     <link rel="canonical" href="{{ .Permalink }}">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ "/sitemap.xml" | absURL }}">
+    <link rel="search" type="application/opensearchdescription+xml" title="{{ .Site.Title }}" href="{{ "/opensearch.xml" | absURL }}">
 
     <!-- RSS Feed para que Google / ChatGPT / Gemini detecten contenido nuevo -->
     <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} — Notas" href="{{ "/notas/index.xml" | absURL }}">

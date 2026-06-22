@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>MR Agentes</ShortName>
+  <Description>Buscar en MR Agentes - Automatización e IA</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="128" height="128" type="image/png">https://mragentes.com.ar/images/favicon_v2.png</Image>
+  <Url type="text/html" template="https://mragentes.com.ar/search/?q={searchTerms}"/>
+</OpenSearchDescription>
