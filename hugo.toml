@@ -73,7 +73,7 @@ defaultContentLanguage = "es"
 [outputFormats]
   [outputFormats.RSS]
     mediatype = "application/rss+xml"
-    baseName = "feed"
+    baseName = "index"
 
 [caches]
   [caches.getjson]

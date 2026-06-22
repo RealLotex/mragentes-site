@@ -1,5 +1,53 @@
 # robots.txt - MR Agentes
+
+# Permitir todos los crawlers
 User-agent: *
 Allow: /
+Crawl-delay: 5
+
+# ChatGPT / OpenAI
+User-agent: GPTBot
+Allow: /
+Crawl-delay: 3
+
+User-agent: ChatGPT-User
+Allow: /
+Crawl-delay: 3
+
+# Google AI / Gemini
+User-agent: Google-Extended
+Allow: /
+Crawl-delay: 3
+
+# Apple / Applebot (Gemini en Safari)
+User-agent: Applebot
+Allow: /
+Crawl-delay: 3
+
+# Common Crawl (usado por algunos AI datasets)
+User-agent: CCBot
+Allow: /
+Crawl-delay: 5
+
+# Clarity (Microsoft)
+User-agent: ClaritySeeker
+Allow: /
+Crawl-delay: 5
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+Crawl-delay: 5
+
+# Anthropic / Claude
+User-agent: ClaudeBot
+Allow: /
+Crawl-delay: 5
+
+# Meta AI
+User-agent: MetaBot
+Allow: /
+Crawl-delay: 5
 
 Sitemap: https://mragentes.com.ar/sitemap.xml
+Sitemap: https://mragentes.com.ar/notas/feed.xml
