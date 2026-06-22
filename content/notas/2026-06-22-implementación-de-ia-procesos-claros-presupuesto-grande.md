@@ -2,8 +2,8 @@
 title: "El día que Perplexity le declaró la guerra a Microsoft y Salesforce — y lo que eso significa para la IA empresarial"
 date: 2026-06-22
 description: "Perplexity lanza Computer para empresas con 20 modelos orquestados, mientras el mercado de NPC con IA explota a $5.51B y Expedia rediseña el viaje alrededor de agentes predictivos. Análisis de MR Agentes."
-image: "/images/stock/pexels-8441272.jpg"
-image_alt: "IA empresarial y automatización"
+image: "/images/stock/pexels-8438918.jpg"
+image_alt: "Ajedrez humano vs robot — metáfora de la competencia en IA empresarial"
 tags:
   - agentes-ia
   - ia-empresarial
