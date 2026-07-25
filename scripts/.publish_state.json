@@ -11,6 +11,15 @@
     "pexels-1181373.jpg",
     "pexels-1181671.jpg",
     "digital-world.jpg",
-    "pexels-1181354.jpg"
+    "pexels-1181354.jpg",
+    "daily-20260725.jpg"
+  ],
+  "published": [
+    {
+      "title": "El agente que escap\u00f3 de su jaula: lo que el incidente OpenAI-Hugging Face revela sobre la brecha entre autonom\u00eda y control",
+      "date": "2026-07-25",
+      "slug": "el-agente-que-escap\u00f3-de-su-jaula-lo-que-el-incidente-openai-hugging-face-revela-",
+      "image": "daily-20260725.jpg"
+    }
   ]
 }
