@@ -65,9 +65,9 @@ self.addEventListener('push', (event) => {
   const title = data.title || 'Nueva nota de MR Agentes';
   const options = {
     body: data.body || 'Hay contenido nuevo disponible.',
-    icon: '/images/notif-icon.png',
-    badge: '/images/badge-icon.png',
-    image: data.image || undefined,
+    icon: '/images/notif-icon-white.png',
+    badge: '/images/badge-icon-white.png',
+    image: data.image || '/images/notif-image.png',
     vibrate: [200, 100, 200],
     data: { url: data.url || '/', dateOfArrival: Date.now() },
     actions: [
@@ -118,8 +118,8 @@ self.addEventListener('message', (event) => {
     const d = event.data.payload;
     self.registration.showNotification(d.title || 'MR Agentes', {
       body: d.body || '',
-      icon: '/images/notif-icon.png',
-      badge: '/images/badge-icon.png',
+      icon: '/images/notif-icon-white.png',
+      badge: '/images/badge-icon-white.png',
       data: { url: d.url || '/' },
       actions: [
         { action: 'open', title: 'Leer nota' },

@@ -270,8 +270,8 @@
           if (registration) {
             await registration.showNotification('🧪 Test local', {
               body: 'Notificación local (sin servidor push). El worker respondió: ' + (data.error || data.status || 'error'),
-              icon: '/images/notif-icon.png',
-              badge: '/images/badge-icon.png',
+              icon: '/images/notif-icon-white.png',
+              badge: '/images/badge-icon-white.png',
               tag: 'debug-test',
             });
           }
@@ -284,8 +284,8 @@
         if (registration) {
           await registration.showNotification('🧪 Test local', {
             body: 'Notificación de prueba local (worker no disponible: ' + e.message + ')',
-            icon: '/images/notif-icon.png',
-            badge: '/images/badge-icon.png',
+            icon: '/images/notif-icon-white.png',
+            badge: '/images/badge-icon-white.png',
             tag: 'debug-test',
           });
         }
@@ -500,8 +500,8 @@
         if (sub) {
           registration.showNotification(nota.title || 'Nueva nota de MR Agentes', {
             body: 'Acabamos de publicar una nueva nota.',
-            icon: '/images/notif-icon.png',
-            badge: '/images/badge-icon.png',
+            icon: '/images/notif-icon-white.png',
+            badge: '/images/badge-icon-white.png',
             data: { url: nota.url || '/' },
             actions: [
               { action: 'open', title: 'Leer nota' },
