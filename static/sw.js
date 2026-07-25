@@ -1,6 +1,6 @@
 // MR Agentes — Service Worker v2.1
 // Mejoras: mejor manejo de push events, logging, skipWaiting + claim inmediato
-const CACHE = 'mragentes-v3';
+const CACHE = 'mragentes-v4';
 const NOTA_LIST_URL = 'https://mragentes.com.ar/notas/index.json';
 
 self.addEventListener('install', (event) => {
@@ -23,8 +23,16 @@ self.addEventListener('activate', (event) => {
   console.log('[SW] Activado v2.1');
   event.waitUntil(
     (async () => {
+      // Limpiar caches viejos
+      const cacheNames = await caches.keys();
+      await Promise.all(
+        cacheNames.filter(name => name !== CACHE).map(name => {
+          console.log('[SW] Eliminando cache viejo:', name);
+          return caches.delete(name);
+        })
+      );
       await clients.claim();
-      console.log('[SW] Clientes reclamados');
+      console.log('[SW] Clientes reclamados, cache actual:', CACHE);
       // Verificar contenido nuevo al activarse
       await checkForNewContent();
     })()
