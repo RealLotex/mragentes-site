@@ -1,7 +1,7 @@
 ---
-title: "US$350M por seguridad de agentes, US$18M a los 27 años y un argentino de US$9.300M: el tridente que prueba que la IA ya no es promesa"
+title: "El problema de los 350 millones de dólares que tu empresa todavía no vio"
 date: 2026-07-24
-description: "Cisco paga hasta US$350M por Astrix Security, Vambe levanta US$18M a los 27, y Vercel alcanza los US$9.300M de valuación: tres señales de que la economía de los agentes de IA ya está en producción — y quienes no tengan protocolos de control están jugando con fuego."
+description: "Cisco pagó US$350M por seguridad de agentes IA, Vambe levantó US$18M a los 27 años y Vercel vale US$9.300M. La infraestructura de agentes ya está en producción."
 image: "/images/stock/pexels-1181354.jpg"
 image_alt: "Infraestructura de agentes de IA en producción"
 tags:
