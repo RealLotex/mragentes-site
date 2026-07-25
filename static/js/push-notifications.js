@@ -192,28 +192,61 @@
     if (!DEBUG) return;
 
     const { browser, isMobile, isIOS, isSafari, isPWA } = getDeviceInfo();
-    const panel = document.createElement('div');
-    panel.id = 'push-debug-panel';
-    panel.style.cssText = 'position:fixed;bottom:16px;right:16px;background:#1a1a1a;color:#fff;padding:12px 16px;border-radius:8px;font-size:12px;font-family:monospace;z-index:99999;max-width:320px;box-shadow:0 4px 12px rgba(0,0,0,.3);';
-    panel.innerHTML = [
-      '<strong>🔔 Push Debug</strong>',
-      'Browser: ' + browser + (isMobile ? ' 📱' : ' 🖥️'),
-      'iOS: ' + isIOS + ' | Safari: ' + isSafari + ' | PWA: ' + isPWA,
-      'Permission: ' + Notification.permission,
-      'SW: ' + (registration ? '✅ ' + registration.scope : '❌'),
-      'Subscribed: ' + (sub ? '✅ ' + sub.endpoint.slice(0, 50) + '…' : '❌'),
-      'Worker URL: ' + (PUSH_API_URL || '❌ no configurada'),
-      '<button id="push-debug-test" style="margin-top:8px;padding:4px 8px;background:#2596be;color:#fff;border:none;border-radius:4px;cursor:pointer;">🧪 Enviar test push</button>',
-      '<button id="push-debug-close" style="margin-left:4px;padding:4px 8px;background:#555;color:#fff;border:none;border-radius:4px;cursor:pointer;">✕</button>',
-    ].join('<br>');
-    document.body.appendChild(panel);
 
-    document.getElementById('push-debug-close').addEventListener('click', () => panel.remove());
+    // Top banner — impossible to miss
+    const banner = document.createElement('div');
+    banner.id = 'push-debug-banner';
+    banner.style.cssText = [
+      'position:fixed;top:0;left:0;right:0;z-index:99999',
+      'background:#1a1a1a;color:#fff;padding:12px 20px',
+      'font-size:13px;font-family:monospace',
+      'display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px',
+      'box-shadow:0 2px 12px rgba(0,0,0,.5)',
+      'border-bottom:3px solid #2596be',
+      'line-height:1.4',
+    ].join(';');
+
+    const statusColor = sub ? '#4caf50' : '#ff9800';
+    const statusText = sub ? '✅ SUSCRIPTO' : '⚠️ NO SUSCRIPTO';
+
+    banner.innerHTML = [
+      '<span style="font-weight:bold;font-size:15px;">🔔 Push Debug</span>',
+      '<span style="color:' + statusColor + ';font-weight:bold;">' + statusText + '</span>',
+      '<span>' + browser + (isMobile ? ' 📱' : ' 🖥️') + '</span>',
+      '<span>Permiso: <b>' + Notification.permission + '</b></span>',
+      '<span>SW: ' + (registration ? '✅' : '❌') + '</span>',
+      sub ? '<span style="font-size:11px;opacity:.7;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + sub.endpoint.slice(0, 60) + '…</span>' : '',
+      '<span style="margin-left:auto;display:flex;gap:6px;">',
+      '  <button id="push-debug-test" style="padding:5px 10px;background:#2596be;color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:bold;">🧪 Test Push</button>',
+      '  <button id="push-debug-close" style="padding:5px 10px;background:#555;color:#fff;border:none;border-radius:4px;cursor:pointer;">✕ Cerrar</button>',
+      '</span>',
+    ].join('');
+
+    // Push body down so banner doesn't overlap
+    banner.style.top = '0';
+    document.body.style.marginTop = '0';
+    document.body.insertBefore(banner, document.body.firstChild);
+
+    // Adjust body padding
+    const updatePadding = () => {
+      document.body.style.paddingTop = banner.offsetHeight + 'px';
+    };
+    updatePadding();
+    window.addEventListener('resize', updatePadding);
+
+    document.getElementById('push-debug-close').addEventListener('click', () => {
+      banner.remove();
+      document.body.style.paddingTop = '';
+    });
+
     document.getElementById('push-debug-test').addEventListener('click', async () => {
       if (!sub) {
-        alert('No estás suscripto. Suscribite primero.');
+        alert('❌ No estás suscripto. Tocá "Activar notificaciones" en el footer primero.');
         return;
       }
+      const btn = document.getElementById('push-debug-test');
+      btn.textContent = '⏳ Enviando…';
+      btn.disabled = true;
       try {
         const res = await fetch(PUSH_API_URL + '/api/send/one/', {
           method: 'POST',
@@ -226,10 +259,19 @@
           }),
         });
         const data = await res.json();
-        alert('Test enviado: ' + JSON.stringify(data, null, 2));
+        btn.textContent = data.status === 'sent' ? '✅ Enviado!' : '❌ Falló';
+        btn.style.background = data.status === 'sent' ? '#4caf50' : '#f44336';
+        log('Test push result:', data);
       } catch (e) {
-        alert('Error: ' + e.message);
+        btn.textContent = '❌ Error';
+        btn.style.background = '#f44336';
+        err('Test push error:', e);
       }
+      setTimeout(() => {
+        btn.textContent = '🧪 Test Push';
+        btn.style.background = '#2596be';
+        btn.disabled = false;
+      }, 3000);
     });
   }
 
@@ -434,8 +476,8 @@
         if (sub) {
           registration.showNotification(nota.title || 'Nueva nota de MR Agentes', {
             body: 'Acabamos de publicar una nueva nota.',
-            icon: '/images/favicon.png',
-            badge: '/images/favicon.png',
+            icon: '/images/notif-icon.png',
+            badge: '/images/badge-icon.png',
             data: { url: nota.url || '/' },
             actions: [
               { action: 'open', title: 'Leer nota' },
