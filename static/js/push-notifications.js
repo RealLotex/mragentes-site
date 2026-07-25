@@ -259,13 +259,37 @@
           }),
         });
         const data = await res.json();
-        btn.textContent = data.status === 'sent' ? '✅ Enviado!' : '❌ Falló';
-        btn.style.background = data.status === 'sent' ? '#4caf50' : '#f44336';
-        log('Test push result:', data);
+        if (data.status === 'sent') {
+          btn.textContent = '✅ Enviado!';
+          btn.style.background = '#4caf50';
+          log('Test push enviado:', data);
+        } else {
+          btn.textContent = '⚠️ Local test';
+          btn.style.background = '#ff9800';
+          // Fallback: show notification locally
+          if (registration) {
+            await registration.showNotification('🧪 Test local', {
+              body: 'Notificación local (sin servidor push). El worker respondió: ' + (data.error || data.status || 'error'),
+              icon: '/images/notif-icon.png',
+              badge: '/images/badge-icon.png',
+              tag: 'debug-test',
+            });
+          }
+          log('Test push fallback local:', data);
+        }
       } catch (e) {
-        btn.textContent = '❌ Error';
-        btn.style.background = '#f44336';
-        err('Test push error:', e);
+        btn.textContent = '⚠️ Local test';
+        btn.style.background = '#ff9800';
+        // Fallback: show notification locally
+        if (registration) {
+          await registration.showNotification('🧪 Test local', {
+            body: 'Notificación de prueba local (worker no disponible: ' + e.message + ')',
+            icon: '/images/notif-icon.png',
+            badge: '/images/badge-icon.png',
+            tag: 'debug-test',
+          });
+        }
+        log('Test push fallback local por error:', e.message);
       }
       setTimeout(() => {
         btn.textContent = '🧪 Test Push';
