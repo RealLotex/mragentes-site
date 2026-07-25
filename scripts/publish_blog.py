@@ -177,15 +177,22 @@ def send_push_notification(title, filepath):
         print("  ℹ️  Push notification no configurada")
         return
 
-    slug = os.path.splitext(os.path.basename(filepath))[0]
+    # Generate URL from title slug (Hugo-compatible), NOT from filename
+    slug = slugify(title)
     url = f"https://mragentes.com.ar/notas/{slug}/"
+    
+    # Short title: max 7 words
+    words = title.split()
+    short_title = ' '.join(words[:7])
+    if len(words) > 7:
+        short_title += '…'
 
     try:
         import urllib.request
         payload = json.dumps({
             "token": api_token,
-            "title": title,
-            "body": "Nueva nota publicada en MR Agentes.",
+            "title": short_title,
+            "body": "Accedé para leer esta nota en nuestra web.",
             "url": url,
         }).encode()
         req = urllib.request.Request(
