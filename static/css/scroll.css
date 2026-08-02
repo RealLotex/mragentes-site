@@ -1,20 +1,21 @@
 /* =========================================
-   MR AGENTES — Scroll reveals v3
-   Clip-path reveal (no fade-translate genérico)
+   MR AGENTES — Scroll reveals v4 (Renacimiento)
+   Clip-path reveal suave
    ========================================= */
 
 .reveal {
-  clip-path: inset(0 0 100% 0);
-  opacity: 1;
-  transition: clip-path 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: clip-path;
+  clip-path: inset(0 0 6% 0);
+  opacity: 0.4;
+  transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+  will-change: clip-path, opacity;
 }
 
 .reveal-in {
   clip-path: inset(0 0 0% 0);
+  opacity: 1;
 }
 
-/* Stagger: los hijos de un grid que se revela entran en cascada */
+/* Stagger en grids */
 .card-grid.reveal-in .card:nth-child(1),
 .nota-card-grid.reveal-in .nota-card-img:nth-child(1) {
   transition-delay: 0.05s;
@@ -30,10 +31,10 @@
   transition-delay: 0.19s;
 }
 
-/* Respetar reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     clip-path: none;
+    opacity: 1;
     transition: none;
   }
 }
