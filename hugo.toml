@@ -6,9 +6,9 @@ defaultContentLanguage = "es"
 
 # Brand config
 [params]
-  brandColor = "#6b5433"
+  brandColor = "#000000"
   brandSecondary = "#b08d4f"
-  brandDark = "#2e271c"
+  brandDark = "#000000"
   description = "Automatización e inteligencia artificial para potenciar tu negocio en Santa Fe"
   location = "Ciudad de Gálvez, Provincia de Santa Fe"
   region = "Santa Fe"

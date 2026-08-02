@@ -1,5 +1,5 @@
 {{ define "main" }}
-    <!-- HERO — portada de cuaderno, centrada -->
+    <!-- HERO -->
     <section class="hero">
         <div class="hero-grid"></div>
         <div class="hero-content">
@@ -10,178 +10,142 @@
                     <circle class="seal-ring" cx="54" cy="54" r="44"/>
                     <circle class="seal-ring--inner" cx="54" cy="54" r="37"/>
                     <path id="seal-path" d="M54,54 m -32,0 a 32,32 0 1,1 64,0 a 32,32 0 1,1 -64,0" fill="none"/>
-                    <text class="seal-text"><textPath href="#seal-path">MR AGENTES · AUTOMATIZACIÓN · IA ·</textPath></text>
+                    <text class="seal-text"><textPath href="#seal-path">MR AGENTES · AUTOMATIZACION · IA ·</textPath></text>
                     <text class="seal-center" x="54" y="61" text-anchor="middle">MA</text>
                     <path d="M54 44 l2.2 4.6 5 0.7 -3.6 3.5 0.9 5 -4.5 -2.4 -4.5 2.4 0.9 -5 -3.6 -3.5 5 -0.7 z" class="seal-star"/>
                 </svg>
             </div>
 
-            <span class="eyebrow eyebrow--center">Il quaderno di MR Agentes</span>
-            <h1>Tu negocio, trabajando <span class="gold">en piloto automático</span></h1>
-            <p class="subtitle">Automatización e inteligencia artificial para pymes de la región. Procesos que se ejecutan solos, agentes que responden a tus clientes y datos que deciden por vos — con el cuidado de un artesano y la precisión de un ingeniero.</p>
+            <span class="eyebrow eyebrow--center">MR AGENTES — GÁLVEZ, SANTA FE</span>
+            <h1>Tu negocio, trabajando <span class="gold" id="rotate-word">solo</span></h1>
+            <p class="subtitle">Automatización e inteligencia artificial para pymes de la región. Procesos que se ejecutan solos, agentes que responden a tus clientes y datos que deciden por vos.</p>
             <div class="btn-group">
-                <a href="{{ "contacto" | absURL }}" class="btn btn-primary">Iniciar un proyecto
+                <a href="{{ "contacto" | absURL }}" class="btn btn-primary">Contacto
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </a>
-                <a href="{{ "servicios" | absURL }}" class="btn btn-secondary">Ver servicios</a>
+                <a href="{{ "servicios" | absURL }}" class="btn btn-secondary">Servicios</a>
             </div>
-            <p class="hero-note hand">Ingenio aplicado, obra medida.</p>
         </div>
     </section>
 
     <!-- IMAGEN FULL-BLEED — La creación de Adán -->
-    <div class="fullbleed-wrap">
-        <img src="/creationofadam.png" alt="Detalle de La creación de Adán, Miguel Ángel — el instante entre dos dedos, como la chispa de la automatización" loading="eager">
-    </div>
-
-    <!-- MARQUEE — cinta de inscripciones -->
-    <div class="marquee">
-        <div class="marquee-track">
-            <div class="marquee-item">
-                <span>Automatización de procesos</span><span class="sep">✦</span>
-                <span>Agentes con IA</span><span class="sep">✦</span>
-                <span>Chatbots 24/7</span><span class="sep">✦</span>
-                <span>Integraciones</span><span class="sep">✦</span>
-                <span>Dashboards</span><span class="sep">✦</span>
-                <span>Facturación automática</span><span class="sep">✦</span>
-                <span>Atención al cliente</span><span class="sep">✦</span>
-            </div>
-            <div class="marquee-item">
-                <span>Automatización de procesos</span><span class="sep">✦</span>
-                <span>Agentes con IA</span><span class="sep">✦</span>
-                <span>Chatbots 24/7</span><span class="sep">✦</span>
-                <span>Integraciones</span><span class="sep">✦</span>
-                <span>Dashboards</span><span class="sep">✦</span>
-                <span>Facturación automática</span><span class="sep">✦</span>
-                <span>Atención al cliente</span><span class="sep">✦</span>
-            </div>
-        </div>
+    <div class="fullbleed-wrap texture-stone">
+        <img src="/creationofadam.png" alt="Detalle de La creación de Adán, Miguel Ángel — el instante entre dos dedos" loading="eager">
     </div>
 
 <main class="main-content">
-    <!-- SERVICIOS — láminas del cuaderno -->
+    <!-- SERVICIOS -->
     <section class="section">
         <div class="section-title">
-            <span class="eyebrow">Los oficios</span>
-            <h2>No vendemos promesas. Vendemos procesos que funcionan.</h2>
-            <p>Cada servicio se implementa, se mide y se ajusta con datos reales de tu operación.</p>
+            <span class="eyebrow">Servicios</span>
+            <h2>Qué hacemos</h2>
+            <p>Servicios de automatización e inteligencia artificial implementados, medidos y ajustados con datos reales de tu operación.</p>
         </div>
         <div class="card-grid card-grid-3col">
             <div class="card">
-                <span class="card-num">I. — Processi</span>
+                <span class="card-num">Nº 01</span>
                 <h3>Automatización de procesos</h3>
-                <p>Eliminá tareas repetitivas: facturación, carga de datos, reportes, mails. Máquinas que trabajan 24/7 sin errores ni días libres.</p>
-                <span class="card-note hand">la mano que no se cansa</span>
+                <p>Facturación, carga de datos, reportes y envío de correos. Tareas repetitivas ejecutadas por máquinas, sin errores ni interrupciones.</p>
                 <span class="card-tag">n8n · Make · Zapier</span>
             </div>
             <div class="card">
-                <span class="card-num">II. — Agenti</span>
+                <span class="card-num">Nº 02</span>
                 <h3>Agentes con IA</h3>
-                <p>Asistentes que entienden consultas, resuelven problemas y escalan al humano cuando hace falta. Entrenados con TU información.</p>
-                <span class="card-note hand">el aprendiz incansable</span>
+                <p>Asistentes que responden consultas, resuelven problemas y escalan a una persona cuando hace falta. Entrenados con la información del cliente.</p>
                 <span class="card-tag">OpenAI · WhatsApp API</span>
             </div>
             <div class="card">
-                <span class="card-num">III. — Misure</span>
+                <span class="card-num">Nº 03</span>
                 <h3>Datos que deciden</h3>
-                <p>Dashboards, reporting automático y predicciones. Dejá de adivinar: mirá los números en tiempo real y actuá antes que el problema.</p>
-                <span class="card-note hand">toda obra se mide</span>
+                <p>Dashboards, reportes automáticos y predicciones. Información en tiempo real para tomar decisiones antes de que aparezca el problema.</p>
                 <span class="card-tag">Dashboards · Reporting</span>
             </div>
         </div>
     </section>
 
-    <!-- DIAGRAMA — la máquina (reemplaza terminal) -->
+    <!-- FOLIO — proyectos posibles -->
     <section class="section">
         <div class="section-title section-title--center">
-            <span class="eyebrow eyebrow--center">Lo studio</span>
-            <h2>Así trabaja tu agente</h2>
-            <p>Lo que pasa mientras vos dormís, dibujado como un mecanismo.</p>
+            <span class="eyebrow eyebrow--center">Proyectos</span>
+            <h2>Qué se puede construir</h2>
+            <p>Ejemplos concretos de lo que se puede construir con estas herramientas.</p>
         </div>
-        <div class="diagram-wrap">
-            <div class="diagram-figure" aria-hidden="true">
-                <svg viewBox="0 0 420 260">
-                    <!-- Ejes de construcción -->
-                    <line x1="30" y1="130" x2="390" y2="130" class="gear-line--light"/>
-                    <line x1="120" y1="20" x2="120" y2="240" class="gear-line--light"/>
-                    <line x1="300" y1="20" x2="300" y2="240" class="gear-line--light"/>
-                    <!-- Engranaje grande izquierdo -->
-                    <g>
-                        <circle cx="120" cy="130" r="62" class="gear-line"/>
-                        <circle cx="120" cy="130" r="52" class="gear-line"/>
-                        <circle cx="120" cy="130" r="10" class="gear-line"/>
-                        <circle cx="120" cy="130" r="3.5" class="gear-dot"/>
-                        <line x1="120" y1="68" x2="120" y2="192" class="gear-line"/>
-                        <line x1="58" y1="130" x2="182" y2="130" class="gear-line"/>
-                        <line x1="76" y1="86" x2="164" y2="174" class="gear-line"/>
-                        <line x1="164" y1="86" x2="76" y2="174" class="gear-line"/>
-                        <!-- Dientes -->
-                        <g class="gear-line">
-                            <path d="M120 62 l6 12 -12 0 z"/>
-                            <path d="M120 198 l6 -12 -12 0 z"/>
-                            <path d="M52 130 l12 6 0 -12 z"/>
-                            <path d="M188 130 l-12 6 0 -12 z"/>
-                            <path d="M72 82 l12 6 -6 -10 z"/>
-                            <path d="M168 178 l-12 -6 6 10 z"/>
-                            <path d="M168 82 l-12 6 6 -10 z"/>
-                            <path d="M72 178 l12 -6 -6 10 z"/>
-                        </g>
-                    </g>
-                    <!-- Engranaje mediano derecho -->
-                    <g>
-                        <circle cx="300" cy="130" r="44" class="gear-line"/>
-                        <circle cx="300" cy="130" r="35" class="gear-line"/>
-                        <circle cx="300" cy="130" r="8" class="gear-line"/>
-                        <circle cx="300" cy="130" r="3" class="gear-dot"/>
-                        <line x1="300" y1="86" x2="300" y2="174" class="gear-line"/>
-                        <line x1="256" y1="130" x2="344" y2="130" class="gear-line"/>
-                        <g class="gear-line">
-                            <path d="M300 80 l5 9 -10 0 z"/>
-                            <path d="M300 180 l5 -9 -10 0 z"/>
-                            <path d="M250 130 l9 5 0 -10 z"/>
-                            <path d="M350 130 l-9 5 0 -10 z"/>
-                        </g>
-                    </g>
-                    <!-- Punto de contacto (la chispa) -->
-                    <circle cx="210" cy="130" r="6" class="gear-line"/>
-                    <circle cx="210" cy="130" r="2" class="gear-dot"/>
-                    <!-- Flecha de flujo -->
-                    <path d="M170 108 Q 210 96 250 108" class="gear-line--light"/>
-                    <path d="M250 108 l -10 -4 2 9 z" class="gear-line" fill="var(--ink)"/>
-                    <!-- Nota manuscrita en SVG no; va en HTML -->
-                </svg>
+        <div class="folio">
+            <div class="folio-head">
+                <h3>Cuaderno de proyectos</h3>
+                <span class="folio-ref">Notas de trabajo</span>
             </div>
-            <p class="diagram-note hand">gli ingranaggi girano, il lavoro si fa</p>
-            <p class="diagram-caption">Fig. I — El mecanismo del agente: consultas entran, respuestas salen, el humano solo supervisa.</p>
+            <ul class="folio-list">
+                <li class="folio-item">
+                    <span class="folio-num">n.1</span>
+                    <div>
+                        <h4>Atención al cliente por WhatsApp</h4>
+                        <p>Respuestas automáticas a consultas frecuentes, con escalado a una persona cuando la consulta lo requiere.</p>
+                    </div>
+                </li>
+                <li class="folio-item">
+                    <span class="folio-num">n.2</span>
+                    <div>
+                        <h4>Facturación y comprobantes</h4>
+                        <p>Emisión y envío automático de facturas y comprobantes, sin carga manual.</p>
+                    </div>
+                </li>
+                <li class="folio-item">
+                    <span class="folio-num">n.3</span>
+                    <div>
+                        <h4>Reportes periódicos</h4>
+                        <p>Resumen de ventas y métricas enviado por email o WhatsApp con la frecuencia que defina el cliente.</p>
+                    </div>
+                </li>
+                <li class="folio-item">
+                    <span class="folio-num">n.4</span>
+                    <div>
+                        <h4>Sincronización de datos</h4>
+                        <p>Planillas, CRMs y sistemas conectados entre sí, eliminando la carga manual duplicada.</p>
+                    </div>
+                </li>
+                <li class="folio-item">
+                    <span class="folio-num">n.5</span>
+                    <div>
+                        <h4>Chatbot para web</h4>
+                        <p>Resolución de consultas frecuentes en el sitio, usando la documentación y la información del cliente.</p>
+                    </div>
+                </li>
+            </ul>
         </div>
     </section>
 
-    <!-- PROPORCIONES — hechos, sin números inventados -->
+    <!-- DATOS -->
     <section class="section">
         <div class="section-title section-title--center">
-            <span class="eyebrow eyebrow--center">Le misure</span>
-            <h2>Lo que podés esperar</h2>
+            <span class="eyebrow eyebrow--center">Datos</span>
+            <h2>Información</h2>
         </div>
-        <div class="stats-grid stats-grid-5col">
-            <div class="stat-item">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">Operación automática de tus agentes</div>
+        <div class="facts-grid">
+            <div class="fact-item">
+                <span class="fact-label">Cobertura</span>
+                <div class="fact-value">Gálvez</div>
+                <div class="fact-desc">Atención presencial y online en toda la provincia de Santa Fe.</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-number">&lt;10s</div>
-                <div class="stat-label">Respuesta promedio de un agente bien configurado</div>
+            <div class="fact-item">
+                <span class="fact-label">Canales</span>
+                <div class="fact-value">WhatsApp, email</div>
+                <div class="fact-desc">Formulario de contacto en el sitio.</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-number">50+</div>
-                <div class="stat-label">Integraciones disponibles (n8n, Make, APIs, CRMs)</div>
+            <div class="fact-item">
+                <span class="fact-label">Tecnologías</span>
+                <div class="fact-value">n8n, Make</div>
+                <div class="fact-desc">OpenAI, WhatsApp API y otras integraciones según el proyecto.</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-number">100%</div>
-                <div class="stat-label">Entrenado con tu información, no genérico</div>
+            <div class="fact-item">
+                <span class="fact-label">Modalidad</span>
+                <div class="fact-value">A medida</div>
+                <div class="fact-desc">Proyectos llave en mano, adaptados a cada operación.</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-number">1:1</div>
-                <div class="stat-label">Acompañamiento directo, sin call centers</div>
+            <div class="fact-item">
+                <span class="fact-label">Acompañamiento</span>
+                <div class="fact-value">Directo</div>
+                <div class="fact-desc">Trato directo con el responsable, sin intermediarios.</div>
             </div>
         </div>
     </section>
@@ -192,9 +156,9 @@
     {{ if $latest }}
     <section class="section section-notas-top">
         <div class="section-title">
-            <span class="eyebrow">Del cuaderno</span>
+            <span class="eyebrow">Notas</span>
             <h2>Últimas notas</h2>
-            <p>Contenido fresco sobre automatización, IA y cómo aplicarlas en tu negocio.</p>
+            <p>Contenido sobre automatización e inteligencia artificial.</p>
         </div>
         <div class="nota-card-grid">
             {{ range $latest }}
@@ -209,10 +173,10 @@
 
     <!-- CTA -->
     <section class="cta-section">
-        <span class="eyebrow eyebrow--center">¿Cominciamo?</span>
-        <h2>¿Listo para que tu negocio trabaje solo?</h2>
-        <p>Contanos qué hacés hoy a mano y te mostramos cómo automatizarlo. Sin compromiso.</p>
-        <a href="{{ "contacto" | absURL }}" class="btn btn-primary">Hablamos
+        <span class="eyebrow eyebrow--center">Contacto</span>
+        <h2>Consultas y proyectos</h2>
+        <p>WhatsApp, email o formulario de contacto. Respuesta directa, sin intermediarios.</p>
+        <a href="{{ "contacto" | absURL }}" class="btn btn-primary">Contactar
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </a>
     </section>
