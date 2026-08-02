@@ -1,25 +1,163 @@
 {{ define "main" }}
-    <!-- HERO -->
+    <!-- HERO — editorial, con orbe 3D -->
     <section class="hero">
         <div class="hero-bg"></div>
         <div class="hero-content">
-            <img src="/images/mragentes.png" alt="MR Agentes" class="hero-logo">
-            <h1>La automatización con <span class="highlight">IA</span><br>llegó a Gálvez</h1>
-            <p class="subtitle">En Ciudad de Gálvez, Santa Fe, transformamos procesos con tecnología inteligente para que vos te enfoques en lo que importa: hacer crecer tu empresa.</p>
-            <div class="btn-group">
-                <a href="{{ "servicios" | absURL }}" class="btn btn-primary">Nuestros servicios</a>
-                <a href="{{ "contacto" | absURL }}" class="btn btn-secondary">Contactanos</a>
+            <div class="hero-left">
+                <span class="eyebrow">MR AGENTES — GÁLVEZ, SANTA FE</span>
+                <h1>Tu negocio, trabajando <span class="rotate-word" id="rotate-word">solo</span></h1>
+                <p class="subtitle">Automatización e inteligencia artificial para pymes de la región. Procesos que se ejecutan solos, agentes que responden a tus clientes y datos que deciden por vos.</p>
+                <div class="btn-group" style="justify-content:flex-start;">
+                    <a href="{{ "contacto" | absURL }}" class="btn btn-primary">Iniciar un proyecto
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                    <a href="{{ "servicios" | absURL }}" class="btn btn-secondary">Ver servicios</a>
+                </div>
+                <div class="hero-badges">
+                    <span class="hero-badge"><span class="dot"></span> Sistemas activos 24/7</span>
+                    <span class="hero-badge"><span class="dot"></span> Sin fábricas de humo</span>
+                    <span class="hero-badge"><span class="dot"></span> Soporte local</span>
+                </div>
+            </div>
+            <div class="hero-right" aria-hidden="true">
+                <div class="orb-scene">
+                    <div class="orb-glow"></div>
+                    <div class="orb-ring orb-ring--z"></div>
+                    <div class="orb-ring orb-ring--y"></div>
+                    <div class="orb-ring orb-ring--x"></div>
+                    <div class="orb-core"></div>
+                </div>
+                <span class="orb-chip orb-chip--1">workflow:activo</span>
+                <span class="orb-chip orb-chip--2">agente:online</span>
+                <span class="orb-chip orb-chip--3">+38 tareas/hoy</span>
+            </div>
+        </div>
+
+        <!-- MARQUEE -->
+        <div class="marquee">
+            <div class="marquee-track">
+                <div class="marquee-item">
+                    <span>Automatización de procesos</span><span class="sep">✦</span>
+                    <span>Agentes con IA</span><span class="sep">✦</span>
+                    <span>Chatbots 24/7</span><span class="sep">✦</span>
+                    <span>Integraciones</span><span class="sep">✦</span>
+                    <span>Dashboards</span><span class="sep">✦</span>
+                    <span>Facturación automática</span><span class="sep">✦</span>
+                    <span>Atención al cliente</span><span class="sep">✦</span>
+                </div>
+                <div class="marquee-item">
+                    <span>Automatización de procesos</span><span class="sep">✦</span>
+                    <span>Agentes con IA</span><span class="sep">✦</span>
+                    <span>Chatbots 24/7</span><span class="sep">✦</span>
+                    <span>Integraciones</span><span class="sep">✦</span>
+                    <span>Dashboards</span><span class="sep">✦</span>
+                    <span>Facturación automática</span><span class="sep">✦</span>
+                    <span>Atención al cliente</span><span class="sep">✦</span>
+                </div>
             </div>
         </div>
     </section>
 
 <main class="main-content">
+    <!-- SERVICIOS -->
+    <section class="section">
+        <div class="section-title">
+            <span class="eyebrow">Qué hacemos</span>
+            <h2>No vendemos promesas. Vendemos procesos que funcionan.</h2>
+            <p>Cada servicio se implementa, se mide y se ajusta con datos reales de tu operación.</p>
+        </div>
+        <div class="card-grid card-grid-3col">
+            <div class="card">
+                <span class="card-num">01 / PROCESOS</span>
+                <h3>Automatización de procesos</h3>
+                <p>Eliminá tareas repetitivas: facturación, carga de datos, reportes, mails. Bots que trabajan 24/7 sin errores ni días libres.</p>
+                <span class="card-tag">n8n · Make · Zapier</span>
+            </div>
+            <div class="card">
+                <span class="card-num">02 / AGENTES</span>
+                <h3>Agentes con IA</h3>
+                <p>Chatbots y asistentes que entienden consultas, resuelven problemas y escalan al humano cuando hace falta. Entrenados con TU información.</p>
+                <span class="card-tag">OpenAI · WhatsApp API</span>
+            </div>
+            <div class="card">
+                <span class="card-num">03 / DATOS</span>
+                <h3>Datos que deciden</h3>
+                <p>Dashboards, reporting automático y predicciones. Dejá de adivinar: mirá los números en tiempo real y actuá antes que el problema.</p>
+                <span class="card-tag">Dashboards · Reporting</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- TERMINAL — cómo trabaja un agente -->
+    <section class="section">
+        <div class="section-title section-title--center">
+            <span class="eyebrow eyebrow--center">Así trabaja tu agente</span>
+            <h2>Un día en la terminal</h2>
+            <p>Esto es lo que pasa mientras vos dormís.</p>
+        </div>
+        <div class="terminal-wrap">
+            <div class="terminal">
+                <div class="terminal-bar">
+                    <span class="terminal-dot terminal-dot--r"></span>
+                    <span class="terminal-dot terminal-dot--y"></span>
+                    <span class="terminal-dot terminal-dot--g"></span>
+                    <span class="terminal-title">mr-agente — zsh</span>
+                </div>
+                <div class="terminal-body">
+                    <div class="line"><span class="prompt">$</span> <span class="cmd">mr-agente deploy --workflow atencion-cliente</span></div>
+                    <div class="line"><span class="ok">✓</span> <span class="info">agente conectado a WhatsApp Business API</span></div>
+                    <div class="line"><span class="ok">✓</span> <span class="info">base de conocimiento cargada: 14 documentos</span></div>
+                    <div class="line"><span class="ok">✓</span> <span class="info">respuestas automáticas activas — 24/7</span></div>
+                    <div class="line">&nbsp;</div>
+                    <div class="line"><span class="prompt">$</span> <span class="cmd">mr-agente run --task "resumir consultas de hoy"</span></div>
+                    <div class="line"><span class="accent">→</span> <span class="info">38 consultas resueltas · 4 escaladas a humano</span></div>
+                    <div class="line"><span class="accent">→</span> <span class="info">tiempo medio de respuesta: 4s</span></div>
+                    <div class="line">&nbsp;</div>
+                    <div class="line"><span class="prompt">$</span> <span class="cmd">mr-agente report --daily</span></div>
+                    <div class="line"><span class="ok">✓</span> <span class="info">reporte enviado a tu WhatsApp <span class="dim">— 23:59hs</span></span></div>
+                    <div class="line"><span class="prompt">$</span> <span class="accent">▍</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HECHOS REALES — sin números inventados -->
+    <section class="section">
+        <div class="section-title section-title--center">
+            <span class="eyebrow eyebrow--center">Hechos, no humo</span>
+            <h2>Lo que podés esperar</h2>
+        </div>
+        <div class="stats-grid stats-grid-5col">
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Operación automática de tus agentes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">&lt;10s</div>
+                <div class="stat-label">Respuesta promedio de un agente bien configurado</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Integraciones disponibles (n8n, Make, APIs, CRMs)</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Entrenado con tu información, no genérico</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1:1</div>
+                <div class="stat-label">Acompañamiento directo, sin call centers</div>
+            </div>
+        </div>
+    </section>
+
     <!-- ÚLTIMAS NOTAS -->
     {{ $notas := where .Site.RegularPages "Section" "notas" }}
     {{ $latest := $notas | first 3 }}
     {{ if $latest }}
     <section class="section section-notas-top">
         <div class="section-title">
+            <span class="eyebrow">Del blog</span>
             <h2>Últimas notas</h2>
             <p>Contenido fresco sobre automatización, IA y cómo aplicarlas en tu negocio.</p>
         </div>
@@ -34,68 +172,14 @@
     </section>
     {{ end }}
 
-    <!-- SERVICIOS DESTACADOS -->
-    <section class="section">
-        <div class="section-title">
-            <h2>Qué hacemos</h2>
-            <p>Soluciones de automatización e IA diseñadas para potenciar cada área de tu negocio.</p>
-        </div>
-        <div class="card-grid card-grid-3col">
-            <div class="card">
-                <div class="card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                </div>
-                <h3>Automatización de procesos</h3>
-                <p>Eliminá tareas repetitivas con bots inteligentes que trabajan 24/7 por vos. Desde facturación hasta atención al cliente.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 7.07 17.07A10 10 0 0 1 4.93 4.93 10 10 0 0 1 12 2z"/><path d="M8 12h8"/><path d="M12 8v8"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
-                </div>
-                <h3>Asistentes con IA</h3>
-                <p>Chatbots y asistentes virtuales que entienden consultas, resuelven problemas y aprenden con cada interacción.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                </div>
-                <h3>Análisis de datos</h3>
-                <p>Transformá datos en decisiones. Dashboards, reporting automatizado y predicciones con machine learning.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ESTADÍSTICAS -->
-    <section class="section">
-        <div class="stats-grid stats-grid-5col">
-            <div class="stat-item">
-                <div class="stat-number">5k</div>
-                <div class="stat-label">Horas de trabajo ahorradas</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">100%</div>
-                <div class="stat-label">Clientes satisfechos</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">Soporte automatizado</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">3×</div>
-                <div class="stat-label">Productividad promedio</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">+50</div>
-                <div class="stat-label">Integraciones disponibles</div>
-            </div>
-        </div>
-    </section>
-
     <!-- CTA -->
     <section class="cta-section">
-        <h2>¿Listo para automatizar tu negocio?</h2>
-        <p>Contanos qué necesitás y te armamos una solución a medida. Sin compromiso.</p>
-        <a href="{{ "contacto" | absURL }}" class="btn">Hablamos →</a>
+        <span class="eyebrow eyebrow--center">¿Empezamos?</span>
+        <h2>¿Listo para que tu negocio trabaje solo?</h2>
+        <p>Contanos qué hacés hoy a mano y te mostramos cómo automatizarlo. Sin compromiso.</p>
+        <a href="{{ "contacto" | absURL }}" class="btn btn-primary">Hablamos
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
     </section>
 </main>
 {{ end }}
