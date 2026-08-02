@@ -1,5 +1,9 @@
 # PLAN — MR Agentes Website con Hugo + GitHub Pages
 
+## Estado: Rediseño v3 desplegado (2026-08-02)
+Dark industrial, acento naranja (#ff6b2c), Space Grotesk + IBM Plex Mono + Instrument Sans.
+Cero gradientes violeta, cero Inter, cero stats falsas. Inspirado en resend.com / lu.ma / spline.
+
 ## Objetivo
 Sitio web estático MR Agentes con Hugo, deploy automático a GitHub Pages,
 publicación diaria de contenido sincronizado con Instagram.

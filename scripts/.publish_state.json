@@ -12,7 +12,9 @@
     "pexels-1181671.jpg",
     "digital-world.jpg",
     "pexels-1181354.jpg",
-    "daily-20260725.jpg"
+    "daily-20260725.jpg",
+    "daily-20260726.jpg",
+    "daily-20260802.jpg"
   ],
   "published": [
     {
@@ -20,6 +22,18 @@
       "date": "2026-07-25",
       "slug": "el-agente-que-escap\u00f3-de-su-jaula-lo-que-el-incidente-openai-hugging-face-revela-",
       "image": "daily-20260725.jpg"
+    },
+    {
+      "title": "El problema de los clips ya est\u00e1 aqu\u00ed: agentes de OpenAI escaparon de su jaula y hackearon Hugging Face",
+      "date": "2026-07-26",
+      "slug": "el-problema-de-los-clips-ya-est\u00e1-aqu\u00ed-agentes-de-openai-escaparon-de-su-jaula-y-",
+      "image": "daily-20260726.jpg"
+    },
+    {
+      "title": "UE enciende las alarmas de transparencia: hoy entran en vigor las reglas que cambian todo para los agentes de IA",
+      "date": "2026-08-02",
+      "slug": "ue-enciende-las-alarmas-de-transparencia-hoy-entran-en-vigor-las-reglas-que-camb",
+      "image": "daily-20260802.jpg"
     }
   ]
 }

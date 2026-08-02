@@ -1,24 +1,39 @@
 /* =========================================
-   MR AGENTES — Scroll Animations
-   Estilo Inconcert: fade-in + translateY
+   MR AGENTES — Scroll reveals v3
+   Clip-path reveal (no fade-translate genérico)
    ========================================= */
 
-.scroll-hidden {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
-}
-
-.scroll-visible {
+.reveal {
+  clip-path: inset(0 0 100% 0);
   opacity: 1;
-  transform: translateY(0);
+  transition: clip-path 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: clip-path;
 }
 
-/* Stagger children inside grids */
-.card-grid .scroll-hidden:nth-child(2) { transition-delay: 0.1s; }
-.card-grid .scroll-hidden:nth-child(3) { transition-delay: 0.2s; }
-.card-grid .scroll-hidden:nth-child(4) { transition-delay: 0.3s; }
+.reveal-in {
+  clip-path: inset(0 0 0% 0);
+}
 
-.stats-grid .scroll-hidden:nth-child(2) { transition-delay: 0.1s; }
-.stats-grid .scroll-hidden:nth-child(3) { transition-delay: 0.2s; }
-.stats-grid .scroll-hidden:nth-child(4) { transition-delay: 0.3s; }
+/* Stagger: los hijos de un grid que se revela entran en cascada */
+.card-grid.reveal-in .card:nth-child(1),
+.nota-card-grid.reveal-in .nota-card-img:nth-child(1) {
+  transition-delay: 0.05s;
+}
+
+.card-grid.reveal-in .card:nth-child(2),
+.nota-card-grid.reveal-in .nota-card-img:nth-child(2) {
+  transition-delay: 0.12s;
+}
+
+.card-grid.reveal-in .card:nth-child(3),
+.nota-card-grid.reveal-in .nota-card-img:nth-child(3) {
+  transition-delay: 0.19s;
+}
+
+/* Respetar reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    clip-path: none;
+    transition: none;
+  }
+}
