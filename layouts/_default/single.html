@@ -6,10 +6,12 @@
 </section>
 
 {{ if .Params.model3d }}
-<!-- Modelo 3D sticky de fondo (igual que la homepage): el modelo queda fijo
-     y el texto scrollea por encima; rota con el progreso de scroll. -->
+{{ $isContacto := eq .File.BaseFileName "contacto" }}
+{{ $layoutClass := cond $isContacto "section-3d--full" "section-3d--static" }}
+<!-- Modelo 3D: texto y modelo uno al lado del otro (--static) para páginas de
+     contenido; el formulario de contacto (--full) usa el modelo como fondo. -->
 <main class="main-content">
-<section class="section section-3d section-3d--right">
+<section class="section section-3d {{ $layoutClass }} section-3d--right">
     {{ partial "model3d.html" (dict "src" .Params.model3d "label" "Modelo 3D") }}
     <div class="section-3d-content">
         <article class="content-page" itemscope itemtype="https://schema.org/Article">
