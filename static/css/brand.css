@@ -1988,10 +1988,9 @@ strong {
   min-height: 100vh;
 }
 
-/* Stage: sticky dentro de su columna — el modelo queda pegado (centrado
-   verticalmente en su columna) mientras el contenido de la sección
-   scrollea al lado. El sticky occige la columna completa para darle
-   recorrido cuando la sección es más alta que el viewport. */
+/* Stage: sticky dentro de su columna — el modelo queda pegado en su columna
+   mientras el contenido de la sección scrollea al lado. Contenido y modelo
+   arrancan desde el top margin de la sección para quedar alineados. */
 .section-3d-stage {
   position: sticky;
   top: 0;
@@ -2000,11 +1999,17 @@ strong {
   z-index: 0;
   pointer-events: none;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
-/* Si el modelo falia/404, el contenido ocupa la columna del stage en vez de
-   colapsar a 0px — el contenido restante centra en la grilla. */
+
+.section-3d--left .section-3d-stage { grid-column: 1; }
+.section-3d--left .section-3d-content { grid-column: 2; }
+.section-3d--right .section-3d-stage { grid-column: 2; }
+.section-3d--right .section-3d-content { grid-column: 1; }
+
+/* Si el modelo 404/sin WebGL: el contenido ocupa toda la grilla en vez de
+   colapsar la columna del stage. */
 .section-3d-stage[style*="display: none"] {
   display: none !important;
 }
@@ -2015,14 +2020,6 @@ strong {
   margin: 0 auto;
   max-width: 820px;
   width: 100%;
-}
-
-.section-3d--right .section-3d-stage {
-  margin-left: 0;
-}
-
-.section-3d--left .section-3d-stage {
-  margin-right: 0;
 }
 
 /* Opacidad del modelo — por defecto 0.5 en desktop */
@@ -2038,19 +2035,22 @@ strong {
   height: 100% !important;
 }
 
-/* Contenido: layout horizontal — modelo al costado, texto en columna al otro */
+/* Contenido: layout horizontal — modelo al costado, texto en columna al otro.
+   Alineado con el modelo desde el top de la sección (mismo start del grid). */
 .section-3d-content {
   position: relative;
   z-index: 2;
   width: 100%;
   max-width: 640px;
-  padding: 2rem;
+  padding: 0 2rem 2rem;
   /* Panel blur (estilo card) — ya no tapa el modelo */
   background: rgba(242, 234, 214, 0.72);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
+  margin-top: 0;
+  align-self: start;
 }
 
 .section-3d--right .section-3d-content {

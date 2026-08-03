@@ -136,16 +136,16 @@
       group.add(model);
       group.updateMatrixWorld(true);
 
-      // Escala fit: modelo completo visible (90% del alto del stage)
+      // Escala fit: modelo completo visible — el doble de grande (1.8x del alto)
       box = new THREE.Box3().setFromObject(group);
       var size = new THREE.Vector3();
       box.getSize(size);
       var maxDim = Math.max(size.x, size.y, size.z) || 1;
       var dist = camera.position.length();
       var vHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-      var fitH = (2 * dist * vHalf * 0.9) / maxDim;
+      var fitH = (2 * dist * vHalf * 1.8) / maxDim;
       var hFov = 2 * Math.atan(vHalf * camera.aspect);
-      var fitW = (2 * dist * Math.tan(hFov / 2) * 0.9) / maxDim;
+      var fitW = (2 * dist * Math.tan(hFov / 2) * 1.8) / maxDim;
       group.scale.setScalar(Math.min(fitH, fitW));
 
       if (skeleton) skeleton.style.display = 'none';
