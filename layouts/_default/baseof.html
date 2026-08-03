@@ -77,14 +77,14 @@
     <link rel="preconnect" href="https://mragentes.com.ar">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="/css/brand.css?v=11">
-    <link rel="stylesheet" href="/css/scroll.css?v=11">
+    <link rel="stylesheet" href="/css/brand.css?v=12">
+    <link rel="stylesheet" href="/css/scroll.css?v=12">
 
     <!-- Scroll Animations -->
-    <script src="/js/scroll-animations.js?v=11" defer></script>
-    <script src="/js/main.js?v=11" defer></script>
-    <script src="/js/model3d.js?v=11" defer></script>
-    <script src="/js/push-notifications.js?v=11" defer></script>
+    <script src="/js/scroll-animations.js?v=12" defer></script>
+    <script src="/js/main.js?v=12" defer></script>
+    <script src="/js/model3d.js?v=12" defer></script>
+    <script src="/js/push-notifications.js?v=12" defer></script>
 
     {{- if .IsHome }}
     <!-- Schema.org: Organization + LocalBusiness (Homepage) -->
@@ -243,15 +243,7 @@
     {{ partial "footer.html" . }}
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggle = document.querySelector('.menu-toggle');
-            const nav = document.querySelector('.nav-links');
-            if (toggle && nav) {
-                toggle.addEventListener('click', function() {
-                    nav.classList.toggle('open');
-                });
-            }
-        });
+        /* Nav siempre en flujo (igual desktop y mobile): sin toggle de menú */
     </script>
 
     <!-- Pasamos las tags de cada nota como JSON para search (si es página de notas) -->

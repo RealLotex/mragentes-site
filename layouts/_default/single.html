@@ -6,12 +6,13 @@
 </section>
 
 {{ if .Params.model3d }}
-<!-- Con modelo 3D de fondo: variante estática (sin sticky) para contenido largo -->
+<!-- Modelo 3D sticky de fondo (igual que la homepage): el modelo queda fijo
+     y el texto scrollea por encima; rota con el progreso de scroll. -->
 <main class="main-content">
-<section class="section section-3d section-3d--right section-3d--static {{ if eq .File.BaseFileName "contacto" }}section-3d--full{{ end }}">
+<section class="section section-3d section-3d--right">
     {{ partial "model3d.html" (dict "src" .Params.model3d "label" "Modelo 3D") }}
     <div class="section-3d-content">
-        <article class="content-page" itemscope itemtype="https://schema.org/Article" style="max-width:100%;">
+        <article class="content-page" itemscope itemtype="https://schema.org/Article">
             {{ if and .Params.image (not (in (slice "contacto" "thanks") .File.BaseFileName)) }}
             {{- $alt := .Params.image_alt | default (printf "Imagen: %s" .Title) }}
             <img src="{{ .Params.image | relURL }}" alt="{{ $alt }}" class="content-header-image" loading="lazy">
