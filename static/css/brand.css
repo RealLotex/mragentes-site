@@ -2085,12 +2085,13 @@ strong {
   margin-bottom: 2.5rem;
 }
 
-/* Si el modelo no existe (404/sin WebGL): contenido a ancho completo */
+/* Si el modelo no existe (404/sin WebGL): contenido a ancho completo.
+   NUNCA quitar el padding del content: rompe el layout (visto en la home
+   cuando un modelo falla). Se mantiene el ancho completo pero con padding. */
 .section-3d:has(.section-3d-stage[style*="display: none"]) .section-3d-content {
   width: 100%;
   max-width: 820px;
   margin: 0 auto;
-  padding: 0;
 }
 
 /* Skeleton loader — mientras descarga el modelo */
