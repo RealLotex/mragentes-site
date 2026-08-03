@@ -11,13 +11,6 @@
     <div class="content-page">
         {{ .Content }}
     </div>
-
-    {{ if .Params.model3d }}
-    <div class="section-with-model mt-3">
-        <div></div>
-        {{ partial "model3d.html" (dict "src" .Params.model3d "label" "Modelo 3D") }}
-    </div>
-    {{ end }}
     {{ else }}
     <!-- Listado de notas con buscador + selector de tags tipo destinatarios -->
     <div class="notas-list">
