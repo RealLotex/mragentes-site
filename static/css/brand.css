@@ -1975,19 +1975,23 @@ strong {
   }
 }
 
-/* ========== MODELOS 3D — fondo sticky de sección ========== */
-/* El modelo queda pegado (sticky) centrado verticalmente mientras el texto
-   de la sección scrollea por encima; rota con el progreso de scroll. */
+/* ========== MODELOS 3D — modelo al costado (desktop) / fondo (mobile) ========== */
+/* Contenedor: grid de 2 columnas para presentar el modelo al costado del
+   texto en desktop; en mobile pasa a bloque y el modelo vuelve a ser fondo. */
 .section-3d {
   position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 2rem;
+  padding: 2.5rem 0;
   min-height: 100vh;
 }
 
-/* Stage: fondo de pantalla completa (100%) — sin recuadro visible */
+/* Stage: ocupa su columna — sin recuadro visible */
 .section-3d-stage {
-  position: sticky;
-  top: 0;
-  height: 100vh;
+  position: relative;
+  height: 80vh;
   width: 100%;
   z-index: 0;
   pointer-events: none;
@@ -2001,6 +2005,7 @@ strong {
   margin-right: 0;
 }
 
+/* Opacidad del modelo — por defecto 0.5 en desktop */
 .model3d-stage-canvas {
   position: absolute;
   inset: 0;
@@ -2013,26 +2018,35 @@ strong {
   height: 100% !important;
 }
 
-/* Contenido: centrado (max-width) sobre el modelo de fondo */
+/* Contenido: layout horizontal — modelo al costado, texto en columna al otro */
 .section-3d-content {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 720px;
-  margin: -100vh auto 0;
-  padding: 5vh 0 7vh;
-  /* Degradado de pergamino MUY sutil para legibilidad sin tapar el modelo */
-  background: linear-gradient(
-    180deg,
-    rgba(242, 234, 214, 0) 0%,
-    rgba(242, 234, 214, 0.45) 14%,
-    rgba(242, 234, 214, 0.45) 86%,
-    rgba(242, 234, 214, 0) 100%
-  );
+  max-width: 640px;
+  padding: 2rem;
+  /* Panel blur (estilo card) — ya no tapa el modelo */
+  background: rgba(242, 234, 214, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+}
+
+.section-3d--right .section-3d-content {
+  grid-column: 1;
+}
+
+.section-3d--right .section-3d-stage {
+  grid-column: 2;
 }
 
 .section-3d--left .section-3d-content {
-  margin-left: auto;
+  grid-column: 2;
+}
+
+.section-3d--left .section-3d-stage {
+  grid-column: 1;
 }
 
 .section-3d-content .section-title {
@@ -2117,7 +2131,11 @@ strong {
     min-height: 100vh;
   }
 
-  /* En mobile el modelo TAMBIÉN es fondo sticky: full-width, el texto scrollea encima */
+  /* En mobile el modelo es fondo sticky: full-width, el texto scrollea encima */
+  .section-3d {
+    display: block;
+  }
+
   .section-3d-stage {
     position: sticky;
     top: 0;
@@ -2126,18 +2144,17 @@ strong {
     margin: 0 !important;
   }
 
+  /* Modelo al 30% de opacidad en mobile */
+  .model3d-stage-canvas {
+    opacity: 0.3;
+  }
+
   .section-3d-content {
     width: 100%;
     margin: -100vh 0 0 !important;
-    padding: 5vh 0 7vh;
-    /* Degradado de pergamino MUY sutil para legibilidad sin tapar el modelo */
-    background: linear-gradient(
-      180deg,
-      rgba(242, 234, 214, 0) 0%,
-      rgba(242, 234, 214, 0.42) 16%,
-      rgba(242, 234, 214, 0.42) 84%,
-      rgba(242, 234, 214, 0) 100%
-    );
+    padding: 2rem;
+    background: none;
+    border: none;
   }
 }
 
