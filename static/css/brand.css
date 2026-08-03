@@ -64,7 +64,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
 }
 
@@ -472,7 +472,7 @@ strong {
   margin: 0 auto;
   padding: 2rem 1.75rem 5rem;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ========== SECTIONS ========== */
@@ -1016,7 +1016,7 @@ strong {
   max-width: 760px;
   margin: 0 auto;
   line-height: 1.9;
-  overflow-x: hidden;
+  overflow-x: clip;
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
@@ -1985,29 +1985,30 @@ strong {
   }
 }
 
-/* ========== MODELOS 3D — fondo de sección ========== */
+/* ========== MODELOS 3D — fondo sticky de sección ========== */
+/* El modelo queda pegado (sticky) centrado verticalmente mientras el texto
+   de la sección scrollea por encima; rota con el progreso de scroll. */
 .section-3d {
   position: relative;
-  overflow: hidden;
-  min-height: 560px;
+  min-height: 100vh;
 }
 
-/* Stage: 2/3 del ancho, absoluto, parte del fondo */
+/* Stage sticky: ocupa 100vh y se ancla al viewport hasta el fin de la sección */
 .section-3d-stage {
-  position: absolute;
+  position: sticky;
   top: 0;
-  bottom: 0;
+  height: 100vh;
   width: 66.66%;
   z-index: 0;
   pointer-events: none;
 }
 
 .section-3d--right .section-3d-stage {
-  right: 0;
+  margin-left: auto;
 }
 
 .section-3d--left .section-3d-stage {
-  left: 0;
+  margin-right: auto;
 }
 
 .model3d-stage-canvas {
@@ -2022,11 +2023,13 @@ strong {
   height: 100% !important;
 }
 
-/* Contenido: mitad del ancho, superpuesto levemente al modelo */
+/* Contenido: mitad del ancho, superpuesto al stage (margen negativo) */
 .section-3d-content {
   position: relative;
   z-index: 2;
   width: 50%;
+  margin-top: -100vh;
+  padding: 6vh 0 12vh;
 }
 
 .section-3d--left .section-3d-content {
@@ -2042,6 +2045,7 @@ strong {
   width: 100%;
   max-width: 820px;
   margin: 0 auto;
+  padding: 0;
 }
 
 /* Skeleton loader — mientras descarga el modelo */
@@ -2117,15 +2121,15 @@ strong {
   /* En mobile: modelo como banda superior, contenido a ancho completo */
   .section-3d-stage {
     position: relative;
-    width: 100%;
-    height: 320px;
     top: auto;
-    bottom: auto;
-    margin-bottom: 1.5rem;
+    height: 320px;
+    width: 100%;
+    margin: 0 0 1.5rem !important;
   }
 
   .section-3d-content {
     width: 100%;
-    margin-left: 0 !important;
+    margin: 0 !important;
+    padding: 0;
   }
 }

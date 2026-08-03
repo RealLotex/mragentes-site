@@ -1,13 +1,12 @@
 /* =========================================
-   MR AGENTES — model3d.js v8
-   Modelos 3D de fondo de sección
-   - Estáticos en posición: solo rotan (no suben/bajan al scrollear)
-   - Rotación por scroll: horizontal 0→360°, vertical -45°→+45°
-   - Sin turntable
-   - Tilt sutil hacia el puntero (interactividad)
-   - Escala: modelo completo visible (no zoomed), centrado en su origen
-   - Opacidad 50%, máxima resolución
-   - Mobile: degradación automática si FPS < 24
+   MR AGENTES — model3d.js v9
+   Modelos 3D sticky de fondo de sección
+   - El modelo queda fijo (sticky) centrado verticalmente mientras scrolleás
+     el texto de la sección; solo rota con el progreso de scroll
+   - Horizontal 0→360°, vertical -45°→+45° (por scroll, sin turntable)
+   - Origen centrado en el MODELO (no en el group): rota sobre el centro real
+   - Escala: modelo completo visible, opacidad 50%, máxima resolución
+   - Mobile: banda 320px, degradación automática si FPS < 24
    ========================================= */
 
 (function () {
@@ -86,7 +85,7 @@
     stage.appendChild(wrapper);
 
     var w = stage.clientWidth || 600;
-    var h = stage.clientHeight || 480;
+    var h = stage.clientHeight || 600;
 
     var renderer;
     try {
@@ -124,19 +123,21 @@
     var loader = new GLTFLoader();
     loader.load(src, function (gltf) {
       var model = gltf.scene;
-      group.add(model);
 
-      // Recalcular matrices para bbox correcto (modelos con nodos anidados)
-      group.updateMatrixWorld(true);
-
-      // Centrar el ORIGEN en el centro geométrico del modelo:
-      // se rota alrededor del centro real, no de un origen arbitrario
-      var box = new THREE.Box3().setFromObject(group);
+      // --- FIX ORIGEN: centrar el MODELO, no el group ---
+      // (aplicar posición y luego escalar el group multiplicaba el offset
+      //  por el scale y los modelos con origen desplazado quedaban fuera)
+      model.updateMatrixWorld(true);
+      var box = new THREE.Box3().setFromObject(model);
       var center = new THREE.Vector3();
       box.getCenter(center);
-      group.position.set(-center.x, -center.y, -center.z);
+      model.position.sub(center);
 
-      // Escala: el modelo COMPLETO entra en el encuadre (sin zoom excesivo)
+      group.add(model);
+      group.updateMatrixWorld(true);
+
+      // Escala fit: modelo completo visible (90% del alto del stage)
+      box = new THREE.Box3().setFromObject(group);
       var size = new THREE.Vector3();
       box.getSize(size);
       var maxDim = Math.max(size.x, size.y, size.z) || 1;
@@ -145,8 +146,7 @@
       var fitH = (2 * dist * vHalf * 0.9) / maxDim;
       var hFov = 2 * Math.atan(vHalf * camera.aspect);
       var fitW = (2 * dist * Math.tan(hFov / 2) * 0.9) / maxDim;
-      var scale = Math.min(fitH, fitW);
-      group.scale.setScalar(scale);
+      group.scale.setScalar(Math.min(fitH, fitW));
 
       if (skeleton) skeleton.style.display = 'none';
     }, undefined, function (err) {
@@ -157,14 +157,17 @@
     // Opacidad 50%
     wrapper.style.opacity = '0.5';
 
-    // ---------- Progreso de scroll (0 abajo → 1 arriba) ----------
+    // ---------- Progreso de scroll (basado en la SECCIÓN, no en el stage) ----------
+    // Con sticky el stage queda fijo; el progreso se calcula sobre el recorrido
+    // completo de la sección: 0 al entrar, 1 al salir.
     var progress = 0;
     var currentP = 0;
     function updateScroll() {
-      var r = stage.getBoundingClientRect();
+      var r = section.getBoundingClientRect();
       var vh = window.innerHeight;
-      var center = r.top + r.height / 2;
-      progress = Math.max(0, Math.min(1, 1 - center / vh));
+      var total = r.height + vh;
+      var done = vh - r.top;
+      progress = Math.max(0, Math.min(1, done / total));
     }
     updateScroll();
     window.addEventListener('scroll', updateScroll, { passive: true });
@@ -197,7 +200,7 @@
         visible = entry.isIntersecting;
       });
     }, { threshold: 0.02 });
-    ro.observe(stage);
+    ro.observe(section);
 
     // ---------- Loop ----------
     var frames = 0, acc = 0, degraded = false;
@@ -226,7 +229,7 @@
       tiltY += (tiltTargetY - tiltY) * 0.08;
       tiltX += (tiltTargetX - tiltX) * 0.08;
 
-      // Horizontal: 0→360° a lo largo del scroll. Vertical: -45°→+45°.
+      // Horizontal: 0→360° a lo largo de la sección. Vertical: -45°→+45°.
       var rotY = currentP * Math.PI * 2 + tiltY;
       var rotX = clamp((currentP - 0.5) * (Math.PI / 2) + tiltX, -Math.PI / 4, Math.PI / 4);
 

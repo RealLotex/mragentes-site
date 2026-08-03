@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ---------- Reveal con clip-path ---------- */
-  var revealEls = document.querySelectorAll('.section, .card, .feature-item, .fact-item, .stat-item, .nota-card, .nota-card-img, .contact-channel, .cta-section, .folio');
+  var revealEls = document.querySelectorAll('.section:not(.section-3d), .card, .feature-item, .fact-item, .stat-item, .nota-card, .nota-card-img, .contact-channel, .cta-section, .folio');
   if ('IntersectionObserver' in window) {
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
