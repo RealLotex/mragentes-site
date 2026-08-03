@@ -1,12 +1,12 @@
 /* =========================================
-   MR AGENTES — model3d.js v10
+   MR AGENTES — model3d.js v11
    Modelos 3D sticky de fondo de sección
    - El modelo queda fijo (sticky) en su posición relativa a la vista mientras
-     scrolleás: su centro queda ANCLADO y solo rota con el progreso de scroll
-   - Rotación SOLO horizontal 0°→-360° (rotY). Sin inclinación vertical por
-     scroll: así el modelo no parece subir/bajar con el texto (solo leve tilt
-     del puntero en rotX).
-   - Fit por ESFERA ()radius) circunscripta: el modelo nunca se recorta por los
+     scrolleás: su centro queda ANCLADO y rota con el progreso de scroll
+   - Dos ejes de rotación por scroll: horizontal 0°→-360° (rotY) y vertical
+     -45°→+45° (rotX). Se compensa la traslación vertical (group.position.y =
+     sin(rotX)) para que el modelo no parezca subir/bajar con el texto.
+   - Fit por ESFERA ()circunscripta: el modelo nunca se recorta por los
      límites del canvas, sin importar cómo rote ni la orientación del modelo.
    - Escala: usa todo el espacio disponible (0.98 del frustum), opacidad 50%
    - Mobile: banda 320px, degradación automática si FPS < 24
@@ -223,6 +223,10 @@
     }
 
     // ---------- Pausa fuera de viewport ----------
+    function clamp(v, min, max) {
+      return Math.max(min, Math.min(max, v));
+    }
+
     var visible = true;
     var ro = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -259,16 +263,22 @@
       tiltX += (tiltTargetX - tiltX) * 0.08;
 
       // Rotación INVERTIDA (sentido contrario al scroll):
-      // 0→-360° horizontal a lo largo de la sección. La rotación es SOLO
-      // horizontal (rotY): el centro del modelo queda anclado y no se desplaza
-      // verticalmente con el scroll (así el modelo "queda en su lugar" mientras
-      // el texto sube). El tilt vertical (rotX) se limita a un leve gesto del
-      // puntero, no al scroll, para evitar que el modelo parezca subir/bajar.
+      // - horizontal: 0→-360° (rotY) a lo largo de la sección
+      // - vertical: -45°→+45° (rotX)
+      // Para que el modelo PAREZCA quieto en su lugar (sticky) mientras rota
+      // en dos ejes, compensamos la traslación vertical: rotar en X desplaza
+      // el centro aparente del modelo hacia arriba/abajo dentro del canvas.
+      // Movemos el group en Y con la señal contraria según el radio real del
+      // modelo (modelRadius * escala), de modo que el centro visual quede
+      // anclado aunque rote y no parece "subir o bajar" con el texto.
       var rotY = -currentP * Math.PI * 2 + tiltY;
-      var rotX = tiltX;
+      var rotX = clamp(-(currentP - 0.5) * (Math.PI / 2) + tiltX, -Math.PI / 4, Math.PI / 4);
 
       group.rotation.y = rotY;
       group.rotation.x = rotX;
+      // Compensación vertical: contrarrresta el corrimiento de la rotación en X
+      // para mantener el centro del modelo fijo respecto al viewport.
+      group.position.y = Math.sin(rotX);
 
       renderer.render(scene, camera);
     }
