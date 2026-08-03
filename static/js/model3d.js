@@ -113,8 +113,8 @@
     wrapper.appendChild(renderer.domElement);
 
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(35, w / h, 0.1, 100);
-    camera.position.set(0, 0.6, 3.4);
+    var camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+    camera.position.set(0, 0.55, 3.2);
     camera.lookAt(0, 0, 0);
 
     // Luces
@@ -133,21 +133,26 @@
     var loader = new GLTFLoader();
     loader.load(src, function (gltf) {
       var model = gltf.scene;
-      // Centrar y escalar al tamaño del panel
-      var box = new THREE.Box3().setFromObject(model);
-      var size = new THREE.Vector3();
-      box.getSize(size);
-      var maxDim = Math.max(size.x, size.y, size.z);
-      var target = LOW_QUALITY ? 1.7 : 2.0;
-      var scale = target / maxDim;
-      model.scale.setScalar(scale);
 
+      // Centrar el modelo en su origen ANTES de escalar
+      var box = new THREE.Box3().setFromObject(model);
       var center = new THREE.Vector3();
       box.getCenter(center);
       model.position.sub(center);
 
+      // Escala basada en el frustum de la cámara: el modelo ocupa ~75% del alto
+      // del panel sin importar las unidades del GLB (Sketchfab usa cm/mm).
+      var size = new THREE.Vector3();
+      box.getSize(size);
+      var maxDim = Math.max(size.x, size.y, size.z);
+      var dist = camera.position.distanceTo(new THREE.Vector3(0, 0, 0));
+      var fovHeight = 2 * dist * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+      var fill = LOW_QUALITY ? 0.7 : 0.78;
+      var scale = (fovHeight * fill) / maxDim;
+      model.scale.setScalar(scale);
+
       group.add(model);
-      group.position.y = -0.15;
+      group.position.y = -0.1;
 
       // Quitar skeleton
       if (skeleton) skeleton.style.display = 'none';
