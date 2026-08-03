@@ -43,7 +43,8 @@
       loader.textContent = `
         import * as THREE from 'three';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-        window.__THREE__ = { THREE: THREE, GLTFLoader: GLTFLoader };
+        import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+        window.__THREE__ = { THREE: THREE, GLTFLoader: GLTFLoader, DRACOLoader: DRACOLoader };
         window.dispatchEvent(new CustomEvent('three-ready'));
       `;
       document.head.appendChild(loader);
@@ -169,6 +170,13 @@
     }
 
     var loader = new GLTFLoader();
+    // --- DRACO (compresión de malla) — los modelos optimizados usan
+    // KHR_draco_mesh_compression. Sin DRACOLoader el GLTFLoader falla con
+    // "No DRACOLoader instance provided". Se registra con el decoder desde CDN.
+    var dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/');
+    dracoLoader.preload();
+    loader.setDRACOLoader(dracoLoader);
     loader.load(src, function (gltf) {
       var model = gltf.scene;
 
