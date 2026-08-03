@@ -2220,13 +2220,17 @@ strong {
 }
 
 /* Columna con el modelo: sticky dentro de su columna, pegado al top mientras
-   el texto scrollea a su lado. El modelo se centra verticalmente en el canvas. */
+   el texto scrollea a su lado. El modelo se centra verticalmente en el canvas.
+   align-self:start es CLAVE: evita que el grid estire el item a toda la altura
+   del track (si se estira, sticky no tiene espacio y el modelo scrollea con el
+   texto). */
 .section-3d--static .section-3d-stage {
   position: sticky;
   top: 0;
   height: 100vh;
   width: 100%;
   margin: 0;
+  align-self: start;
   align-items: center;
 }
 

@@ -1,11 +1,14 @@
 /* =========================================
-   MR AGENTES — model3d.js v9
+   MR AGENTES — model3d.js v10
    Modelos 3D sticky de fondo de sección
-   - El modelo queda fijo (sticky) centrado verticalmente mientras scrolleás
-     el texto de la sección; solo rota con el progreso de scroll
-   - Horizontal 0→360°, vertical -45°→+45° (por scroll, sin turntable)
-   - Origen centrado en el MODELO (no en el group): rota sobre el centro real
-   - Escala: modelo completo visible, opacidad 50%, máxima resolución
+   - El modelo queda fijo (sticky) en su posición relativa a la vista mientras
+     scrolleás: su centro queda ANCLADO y solo rota con el progreso de scroll
+   - Rotación SOLO horizontal 0°→-360° (rotY). Sin inclinación vertical por
+     scroll: así el modelo no parece subir/bajar con el texto (solo leve tilt
+     del puntero en rotX).
+   - Fit por ESFERA ()radius) circunscripta: el modelo nunca se recorta por los
+     límites del canvas, sin importar cómo rote ni la orientación del modelo.
+   - Escala: usa todo el espacio disponible (0.98 del frustum), opacidad 50%
    - Mobile: banda 320px, degradación automática si FPS < 24
    ========================================= */
 
@@ -120,12 +123,20 @@
     var group = new THREE.Group();
     scene.add(group);
 
-    // Escala de referencia del modelo (en unidades del modelo, antes de escalar)
-    var refMaxDim = 1;
+    // Opacidad 50%
+    wrapper.style.opacity = '0.5';
+
     var modelLoaded = false;
 
-    // Función para que el modelo SIEMPRE quepa entero en el canvas:
-    // recalcula la escala según el aspect actual (evita el crop al redimensionar).
+    // Radio de la ESFERA circunscripta del modelo (sin escala). Acá guardamos
+    // el radio real, no la dimensión máxima del box: la esfera garantiza que el
+    // modelo NUNCA se recorte sin importar cómo rote (el box alineado a ejes
+    // crece al girar y causaba crop).
+    var modelRadius = 1;
+
+    // --- Reescala del canvas según el stage real (no el del init) ---
+    // El objetivo es ocupar TODO el espacio disponible del stage (evita que
+    // quede chico o recortado por las dimensiones capturadas temprano).
     function refit() {
       if (!modelLoaded) return;
       var cw = stage.clientWidth || w;
@@ -136,13 +147,13 @@
       camera.updateProjectionMatrix();
       renderer.setSize(w, h, false);
 
-      // Escala para que el diámetro del modelo quepa en el menor de los dos
-      // ejes del frustum (garantiza que se vea COMPLETO, sin recortar).
+      // Escala la esfera del modelo para que quepa en el cono de visión, con un
+      // factor generoso (0.98) para usar casi todo el canvas sin recortar.
       var dist = camera.position.length();
       var vHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-      var fitH = (2 * dist * vHalf * 0.9) / refMaxDim;
+      var fitH = (2 * dist * vHalf * 0.98) / modelRadius;
       var hFov = 2 * Math.atan(vHalf * camera.aspect);
-      var fitW = (2 * dist * Math.tan(hFov / 2) * 0.9) / refMaxDim;
+      var fitW = (2 * dist * Math.tan(hFov / 2) * 0.98) / modelRadius;
       group.scale.setScalar(Math.min(fitH, fitW));
     }
 
@@ -160,11 +171,12 @@
       group.add(model);
       group.updateMatrixWorld(true);
 
-      // Guardar el tamaño máximo del modelo (sin escala) para el refit
+      // Guardar el radio de la esfera circunscripta (usado por refit).
       box = new THREE.Box3().setFromObject(group);
       var size = new THREE.Vector3();
       box.getSize(size);
-      refMaxDim = Math.max(size.x, size.y, size.z) || 1;
+      var half = size.length() / 2; // media diagonal => radio de la esfera
+      modelRadius = Math.max(0.001, half);
 
       modelLoaded = true;
       refit();
@@ -210,10 +222,6 @@
       });
     }
 
-    function clamp(v, min, max) {
-      return Math.max(min, Math.min(max, v));
-    }
-
     // ---------- Pausa fuera de viewport ----------
     var visible = true;
     var ro = new IntersectionObserver(function (entries) {
@@ -251,9 +259,13 @@
       tiltX += (tiltTargetX - tiltX) * 0.08;
 
       // Rotación INVERTIDA (sentido contrario al scroll):
-      // horizontal: 0→-360° a lo largo de la sección. Vertical: -45°→+45° invertido.
+      // 0→-360° horizontal a lo largo de la sección. La rotación es SOLO
+      // horizontal (rotY): el centro del modelo queda anclado y no se desplaza
+      // verticalmente con el scroll (así el modelo "queda en su lugar" mientras
+      // el texto sube). El tilt vertical (rotX) se limita a un leve gesto del
+      // puntero, no al scroll, para evitar que el modelo parezca subir/bajar.
       var rotY = -currentP * Math.PI * 2 + tiltY;
-      var rotX = clamp(-(currentP - 0.5) * (Math.PI / 2) + tiltX, -Math.PI / 4, Math.PI / 4);
+      var rotX = tiltX;
 
       group.rotation.y = rotY;
       group.rotation.x = rotX;
