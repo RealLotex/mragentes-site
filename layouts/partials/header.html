@@ -1,16 +1,5 @@
 <header class="site-header">
     <div class="header-inner">
-        <a href="{{ "" | absURL }}" class="logo-link" aria-label="Ir al inicio">
-            <img src="{{ "images/mragentes.png" | absURL }}" alt="MR Agentes - Automatización e IA" class="logo-img" width="48" height="48">
-            <span class="logo-text">MR <span>Agentes</span></span>
-        </a>
-
-        <button class="menu-toggle" aria-label="Abrir menú de navegación">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-
         <nav class="nav-links" aria-label="Navegación principal">
             {{ $current := .RelPermalink }}
             {{ range .Site.Menus.main }}
@@ -20,7 +9,6 @@
                 {{ .Name }}
             </a>
             {{ end }}
-            <a href="{{ "contacto" | absURL }}" class="btn btn-primary nav-cta">Contacto</a>
         </nav>
     </div>
 </header>

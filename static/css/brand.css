@@ -64,7 +64,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow-x: clip;
   width: 100%;
 }
 
@@ -178,8 +178,7 @@ strong {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--black);
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 1000;
   height: var(--header-h);
 }
@@ -191,44 +190,16 @@ strong {
   height: var(--header-h);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 
-.logo-link {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  border-bottom: none;
-}
-
-.logo-img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  border-radius: 50%;
-  border: 1.5px solid var(--black);
-  padding: 3px;
-  background: var(--paper);
-}
-
-.logo-text {
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--black);
-  letter-spacing: 0.02em;
-}
-
-.logo-text span {
-  color: var(--sepia);
-}
-
-/* Navigation */
+/* Navigation centrada */
 .nav-links {
   display: flex;
   list-style: none;
-  gap: 0.1rem;
+  gap: 0.4rem;
   align-items: center;
+  justify-content: center;
 }
 
 .nav-links a {
@@ -291,26 +262,7 @@ strong {
   box-shadow: var(--shadow-sm);
 }
 
-/* Mobile menu toggle */
-.menu-toggle {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: 1.5px solid var(--black);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  padding: 8px;
-}
-
-.menu-toggle span {
-  display: block;
-  width: 20px;
-  height: 2px;
-  background: var(--black);
-  border-radius: 1px;
-  transition: var(--transition);
-}
+/* (Nav siempre visible en flujo, igual en desktop y mobile: sin menú hamburguesa) */
 
 /* ========== BUTTONS — negro puro, rectos ========== */
 .btn {
@@ -375,7 +327,7 @@ strong {
 /* ========== HERO ========== */
 .hero {
   position: relative;
-  padding: 6rem 1rem 4rem;
+  padding: calc(6rem + 150px) 1rem 5rem;
   overflow: hidden;
   width: 100%;
   text-align: center;
@@ -429,56 +381,7 @@ strong {
   z-index: 2;
 }
 
-/* Sello circular */
-.hero-seal {
-  margin: 0 auto 2.2rem;
-  width: 108px;
-  height: 108px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.hero-seal svg {
-  width: 100%;
-  height: 100%;
-}
-
-.hero-seal .seal-ring {
-  fill: none;
-  stroke: var(--black);
-  stroke-width: 1.4;
-  opacity: 0.85;
-}
-
-.hero-seal .seal-ring--inner {
-  fill: none;
-  stroke: var(--gold);
-  stroke-width: 0.9;
-  stroke-dasharray: 3 4;
-  opacity: 0.9;
-}
-
-.hero-seal .seal-star {
-  fill: var(--gold);
-  opacity: 0.9;
-}
-
-.hero-seal .seal-text {
-  font-family: var(--font-mono);
-  font-size: 7.5px;
-  letter-spacing: 0.28em;
-  fill: var(--black);
-  text-transform: uppercase;
-}
-
-.hero-seal .seal-center {
-  font-family: var(--font-display);
-  font-size: 30px;
-  font-weight: 700;
-  fill: var(--black);
-}
 
 .hero .eyebrow {
   margin-bottom: 1.6rem;
@@ -491,21 +394,26 @@ strong {
   margin-right: auto;
 }
 
-/* Palabra que rota — marcada en sepia */
+/* Palabra que rota — en línea propia, altura fija para no mover el hero */
 .hero h1 .gold {
+  display: block;
   color: var(--sepia);
-  display: inline-block;
+  min-height: 1.35em;
+  line-height: 1.3;
   position: relative;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .hero h1 .gold::after {
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -0.05em;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0.05em;
+  width: 60%;
   height: 2px;
-  background: linear-gradient(90deg, var(--gold), transparent 85%);
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
 
 .hero .btn-group .btn {
@@ -544,20 +452,20 @@ strong {
   margin: 0 auto;
   padding: 2rem 1.75rem 5rem;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ========== SECTIONS ========== */
 .section {
-  padding: 5rem 0;
+  padding: 2.5rem 0;
 }
 
 .section:first-child {
-  padding-top: 3rem;
+  padding-top: 1.5rem;
 }
 
 .section-title {
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
   max-width: 720px;
 }
 
@@ -620,7 +528,9 @@ strong {
 }
 
 .card {
-  background: var(--paper-2);
+  background: rgba(242, 234, 214, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
   padding: 2rem 1.8rem;
@@ -647,7 +557,7 @@ strong {
   border-color: var(--black);
   box-shadow: var(--shadow-md);
   transform: translateY(-4px);
-  background: var(--paper);
+  background: rgba(242, 234, 214, 0.92);
 }
 
 .card:hover::before {
@@ -687,81 +597,40 @@ strong {
   border-radius: var(--radius-sm);
 }
 
-/* ========== FOLIO — cuaderno de proyectos ========== */
+/* ========== FOLIO — proyectos directos ========== */
 .folio {
   max-width: 820px;
   margin: 0 auto;
-  background: var(--paper);
+  background: rgba(242, 234, 214, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1.5px solid var(--black);
   border-radius: var(--radius);
   box-shadow: var(--shadow-md);
   position: relative;
-  padding: 2.4rem 2.6rem 1.6rem;
-  overflow: hidden;
-}
-
-/* Renglones de cuaderno */
-.folio::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    transparent 0 38px,
-    rgba(0, 0, 0, 0.10) 38px 39px
-  );
-}
-
-/* Margen vertical dorado, como cuaderno clásico */
-.folio::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 2.2rem;
-  width: 1px;
-  background: rgba(168, 132, 60, 0.5);
-  pointer-events: none;
-}
-
-.folio-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  border-bottom: 1.5px solid var(--black);
-  padding-bottom: 0.7rem;
-  margin-bottom: 1.4rem;
-  position: relative;
-}
-
-.folio-head h3 {
-  font-size: 1.5rem;
-}
-
-.folio-head .folio-ref {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
-  color: var(--sepia);
-  text-transform: uppercase;
+  padding: 2.2rem 2.4rem;
 }
 
 .folio-list {
   list-style: none;
-  position: relative;
 }
 
 .folio-item {
   display: grid;
   grid-template-columns: 56px 1fr;
   gap: 1rem;
-  padding: 0.85rem 0;
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.22);
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
   align-items: baseline;
+}
+
+.folio-item:first-child {
+  padding-top: 0;
 }
 
 .folio-item:last-child {
   border-bottom: none;
+  padding-bottom: 0;
 }
 
 .folio-num {
@@ -1131,7 +1000,7 @@ strong {
   max-width: 760px;
   margin: 0 auto;
   line-height: 1.9;
-  overflow-x: hidden;
+  overflow-x: clip;
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
@@ -1607,7 +1476,9 @@ strong {
   align-items: center;
   gap: 1rem;
   padding: 1.05rem 1.1rem;
-  background: var(--paper-2);
+  background: rgba(233, 221, 194, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
   margin-bottom: 0.9rem;
@@ -1616,7 +1487,7 @@ strong {
 
 .contact-channel:hover {
   border-color: var(--black);
-  background: var(--paper);
+  background: rgba(242, 234, 214, 0.92);
   box-shadow: var(--shadow-sm);
   transform: translateX(3px);
 }
@@ -1670,12 +1541,14 @@ strong {
 
 /* ========== CTA — institucional ========== */
 .cta-section {
-  background: var(--paper-2);
+  background: rgba(233, 221, 194, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   border: 1.5px solid var(--black);
   border-radius: var(--radius-lg);
   text-align: center;
   padding: 4.5rem 2rem;
-  margin: 3rem 0;
+  margin: 1.5rem 0;
   position: relative;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -1823,7 +1696,7 @@ strong {
   object-fit: contain;
   background: var(--paper);
   border: 1.5px solid var(--black);
-  border-radius: 50%;
+  border-radius: var(--radius-sm);
   padding: 4px;
   margin-bottom: 0.6rem;
 }
@@ -2024,50 +1897,52 @@ strong {
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
+  /* El header crece con el contenido: sin altura fija para que el nav
+     (envuelto en 2 filas en mobile) se vea completo y centrado */
+  .site-header {
+    height: auto;
+  }
+
   .header-inner {
-    padding: 0 1.25rem;
+    padding: 0.9rem 1.25rem;
+    height: auto;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
   }
 
-  .menu-toggle {
-    display: flex;
-  }
-
+  /* Nav siempre en flujo (como desktop): sin menú hamburguesa ni dropdown */
   .nav-links {
-    position: absolute;
-    top: var(--header-h);
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    align-items: stretch;
-    background: rgba(242, 234, 214, 0.98);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--black);
-    padding: 1rem 1.25rem;
-    gap: 0.25rem;
-    display: none;
-  }
-
-  .nav-links.open {
-    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem;
+    background: none;
+    backdrop-filter: none;
+    border-bottom: none;
+    padding: 0;
   }
 
   .nav-links a {
-    padding: 0.75rem 0.9rem;
-    font-size: 0.95rem;
+    padding: 0.3rem 0.65rem;
+    font-size: 1.2rem;
+    line-height: 1.35;
   }
 
   .nav-links a::after {
-    display: none;
+    display: block;
   }
 
   .nav-cta {
-    margin-left: 0;
-    margin-top: 0.5rem;
+    margin-left: 0.3rem;
+    margin-top: 0;
   }
 
   .nav-links a.btn.nav-cta {
-    width: 100%;
+    width: auto;
     text-align: center;
+    padding: 0.3rem 0.9rem;
+    font-size: 1.2rem;
   }
 
   .hero {
@@ -2075,15 +1950,11 @@ strong {
   }
 
   .section {
-    padding: 3.5rem 0;
+    padding: 1.75rem 0;
   }
 
   .folio {
-    padding: 1.8rem 1.5rem 1.2rem;
-  }
-
-  .folio::after {
-    left: 1.1rem;
+    padding: 1.6rem 1.3rem;
   }
 
   .folio-item {
@@ -2101,5 +1972,366 @@ strong {
   }
   html {
     scroll-behavior: auto;
+  }
+}
+
+/* ========== MODELOS 3D — modelo al costado (desktop) / fondo (mobile) ========== */
+/* Contenedor: grid de 2 columnas para presentar el modelo al costado del
+   texto en desktop; en mobile pasa a bloque y el modelo vuelve a ser fondo. */
+.section-3d {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 2rem;
+  padding: 2.5rem 0;
+  min-height: 100vh;
+}
+
+/* Stage: sticky dentro de su columna — el modelo queda pegado en su columna
+   mientras el contenido de la sección scrollea al lado. Contenido y modelo
+   arrancan desde el top margin de la sección para quedar alineados. */
+.section-3d-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  z-index: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.section-3d--left .section-3d-stage { grid-column: 1; }
+.section-3d--left .section-3d-content { grid-column: 2; }
+.section-3d--right .section-3d-stage { grid-column: 2; }
+.section-3d--right .section-3d-content { grid-column: 1; }
+
+/* Si el modelo 404/sin WebGL: el contenido ocupa toda la grilla en vez de
+   colapsar la columna del stage. */
+.section-3d-stage[style*="display: none"] {
+  display: none !important;
+}
+.section-3d:has(.section-3d-stage[style*="display: none"]) {
+  grid-template-columns: 1fr;
+}
+.section-3d:has(.section-3d-stage[style*="display: none"]) .section-3d-content {
+  margin: 0 auto;
+  max-width: 820px;
+  width: 100%;
+}
+
+/* Fallback del variante sticky (grid): si el modelo no carga, el contenido
+   pasa a ancho completo en vez de quedarse en su mitad de la grilla. */
+.section-3d--static:has(.section-3d-stage[style*="display: none"]) {
+  grid-template-columns: 1fr;
+}
+.section-3d--static:has(.section-3d-stage[style*="display: none"]) .section-3d-content {
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+  grid-column: 1;
+}
+
+/* Opacidad del modelo — por defecto 0.5 en desktop */
+.model3d-stage-canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+}
+
+.model3d-stage-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Contenido: layout horizontal — modelo al costado, texto en columna al otro.
+   Alineado con el modelo desde el top de la sección (mismo start del grid). */
+.section-3d-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 640px;
+  padding: 2rem;
+  /* Panel blur (estilo card) — ya no tapa el modelo */
+  background: rgba(242, 234, 214, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  margin-top: 0;
+  align-self: start;
+}
+
+.section-3d--right .section-3d-content {
+  grid-column: 1;
+}
+
+.section-3d--right .section-3d-stage {
+  grid-column: 2;
+}
+
+.section-3d--left .section-3d-content {
+  grid-column: 2;
+}
+
+.section-3d--left .section-3d-stage {
+  grid-column: 1;
+}
+
+.section-3d-content .section-title {
+  margin-bottom: 2.5rem;
+}
+
+/* Si el modelo no existe (404/sin WebGL): contenido a ancho completo */
+.section-3d:has(.section-3d-stage[style*="display: none"]) .section-3d-content {
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* Skeleton loader — mientras descarga el modelo */
+.model3d-skeleton {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  /* Fondo sutil para que el placeholder se lea sobre el contenido */
+  background: rgba(242, 234, 214, 0.35);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.model3d-skeleton::before {
+  content: '';
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 3px solid var(--line);
+  border-top-color: var(--gold);
+  animation: skeleton-spin 1s linear infinite;
+}
+
+@keyframes skeleton-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Líneas shimmer — placeholder de texto animado */
+.skeleton-line {
+  width: 70%;
+  height: 10px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--paper-3) 25%, var(--paper) 50%, var(--paper-3) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s linear infinite;
+}
+
+.skeleton-line.short {
+  width: 45%;
+}
+
+/* Círculo punteado pulsante */
+.skeleton-circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 1px dashed rgba(0,0,0,0.25);
+  animation: skeleton-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { transform: scale(0.94); opacity: 0.45; }
+  50% { transform: scale(1.02); opacity: 1; }
+}
+
+@keyframes skeleton-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.skeleton-text {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sepia);
+  animation: skeleton-fade 1.8s ease-in-out infinite;
+}
+
+@keyframes skeleton-fade {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 900px) {
+  .section-3d {
+    min-height: 100vh;
+  }
+
+  /* En mobile el modelo es fondo sticky: full-width, el texto scrollea encima */
+  .section-3d {
+    display: block;
+  }
+
+  .section-3d-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    margin: 0 !important;
+  }
+
+  /* Modelo al 30% de opacidad en mobile */
+  .model3d-stage-canvas {
+    opacity: 0.3;
+  }
+
+  .section-3d-content {
+    width: 100%;
+    margin: -100vh 0 0 !important;
+    padding: 2rem;
+    background: none;
+    border: none;
+  }
+}
+
+/* Variante sticky (texto | modelo lado a lado): el modelo queda en su columna
+   del grid y es position:sticky, así se queda fijo a la pantalla mientras el
+   texto (columna más alta) scrollea a su lado; el modelo gira según el
+   progreso de scroll. Al terminar el texto, la sección finaliza y el modelo
+   se suelta naturalmente al llegar la siguiente sección.
+   La diferencia con el modo anterior: el modelo es una COLUMNA del grid (no
+   un fondo absoluto), por eso queda SIEMPRE al costado del texto. */
+.section-3d--static {
+  min-height: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 2rem;
+  padding: 2.5rem 0;
+}
+
+/* Columna con el modelo: sticky dentro de su columna, pegado al top mientras
+   el texto scrollea a su lado. El modelo se centra verticalmente en el canvas.
+   align-self:start es CLAVE: evita que el grid estire el item a toda la altura
+   del track (si se estira, sticky no tiene espacio y el modelo scrollea con el
+   texto). */
+.section-3d--static .section-3d-stage {
+  position: sticky;
+  top: 0;
+  height: min(82vh, 640px);
+  width: 100%;
+  margin: 0;
+  align-self: start;
+  align-items: center;
+}
+
+/* Orden de las columnas según el lado del contenido */
+.section-3d--static.section-3d--right .section-3d-stage { grid-column: 2; }
+.section-3d--static.section-3d--right .section-3d-content { grid-column: 1; }
+.section-3d--static.section-3d--left .section-3d-stage { grid-column: 1; }
+.section-3d--static.section-3d--left .section-3d-content { grid-column: 2; }
+
+.section-3d--static .section-3d-content {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 2rem;
+  background: rgba(242, 234, 214, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  align-self: start;
+  /* Ancla el contenido a la fila 1 del grid. Sin esto, cuando el contenido
+     en la columna 1 es alto (cards/folio), cae ~640px debajo del modelo
+     sticky (quedando "muy abajo"). grid-row:1 lo mantiene arriba, alineado
+     con el stage, y NO rompe el flujo (a diferencia de top:-N que dejaba
+     hueco al fondo). */
+  grid-row: 1;
+}
+
+/* El canvas del modelo centra el modelo dentro del stage. */
+.section-3d--static .model3d-stage-canvas {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Variante full-width (contacto): el modelo funciona como FONDO de toda la
+   sección (absoluto, cubre el área), el contenido va a ancho completo por
+   encima, sin panel. Se usa para el formulario de contacto que necesita
+   espacio horizontal y se ve mejor con el modelo atrás que a un costado. */
+.section-3d--full {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.section-3d--full .section-3d-stage {
+  position: absolute;
+  inset: 0;
+  height: auto;
+  width: 100%;
+  margin: 0;
+}
+
+.section-3d--full .section-3d-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 3rem 0 4rem;
+  background: none;
+  border: none;
+}
+
+.section-3d--full .model3d-stage-canvas {
+  opacity: 0.3;
+}
+
+@media (max-width: 900px) {
+  .section-3d--full .section-3d-stage {
+    position: absolute;
+    height: auto;
+    width: 100%;
+    inset: 0;
+  }
+
+  .section-3d--full .section-3d-content {
+    width: 100%;
+    margin: 0 !important;
+    padding: 3rem 0;
+  }
+
+  .section-3d--static {
+    display: block;
+  }
+
+  .section-3d--static .section-3d-stage {
+    position: relative;
+    height: 45vh;
+    width: 100%;
+    top: auto;
+    bottom: auto;
+    margin: 0 !important;
+  }
+
+  .section-3d--static .section-3d-content {
+    width: 100%;
+    margin: 0 !important;
+    padding: 2rem 0;
   }
 }

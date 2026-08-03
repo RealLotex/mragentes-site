@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ---------- Rotador de palabra (h1) ---------- */
   var rotator = document.getElementById('rotate-word');
   if (rotator) {
-    var words = ['solo', '24/7', 'en automático', 'sin supervisión', 'en segundo plano'];
+    var words = ['en piloto automático', 'mientras dormís', 'sin intervención', 'de principio a fin', 'con precisión', 'en segundo plano', 'las 24 horas', 'sin supervisión', 'de forma autónoma', 'en automático'];
     var wordIdx = 0;
     var charIdx = 0;
     var deleting = false;
@@ -21,27 +21,27 @@ document.addEventListener('DOMContentLoaded', function () {
         rotator.textContent = word.slice(0, charIdx);
         if (charIdx === word.length) {
           deleting = true;
-          setTimeout(tick, 1700);
+          setTimeout(tick, 2000);
           return;
         }
-        setTimeout(tick, 60);
+        setTimeout(tick, 55);
       } else {
         charIdx--;
         rotator.textContent = word.slice(0, charIdx);
         if (charIdx === 0) {
           deleting = false;
           wordIdx = (wordIdx + 1) % words.length;
-          setTimeout(tick, 350);
+          setTimeout(tick, 400);
           return;
         }
-        setTimeout(tick, 26);
+        setTimeout(tick, 24);
       }
     }
     tick();
   }
 
   /* ---------- Reveal con clip-path ---------- */
-  var revealEls = document.querySelectorAll('.section, .card, .feature-item, .fact-item, .stat-item, .nota-card, .nota-card-img, .contact-channel, .cta-section, .folio');
+  var revealEls = document.querySelectorAll('.section:not(.section-3d), .card, .feature-item, .fact-item, .stat-item, .nota-card, .nota-card-img, .contact-channel, .cta-section, .folio');
   if ('IntersectionObserver' in window) {
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
@@ -63,14 +63,5 @@ document.addEventListener('DOMContentLoaded', function () {
         el.classList.add('reveal-in');
       });
     }, 2500);
-  }
-
-  /* ---------- Menu mobile ---------- */
-  var toggle = document.querySelector('.menu-toggle');
-  var nav = document.querySelector('.nav-links');
-  if (toggle && nav) {
-    toggle.addEventListener('click', function () {
-      nav.classList.toggle('open');
-    });
   }
 });
