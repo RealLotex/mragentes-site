@@ -418,10 +418,11 @@ strong {
 .hero h1 .gold {
   display: block;
   color: var(--sepia);
-  min-height: 1.25em;
-  line-height: 1.25;
+  min-height: 1.35em;
+  line-height: 1.3;
   position: relative;
-  white-space: nowrap;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .hero h1 .gold::after {

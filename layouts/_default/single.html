@@ -7,6 +7,7 @@
 
 {{ if .Params.model3d }}
 <!-- Con modelo 3D de fondo: contenido en 50%, modelo en 2/3 -->
+<main class="main-content">
 <section class="section section-3d section-3d--right">
     {{ partial "model3d.html" (dict "src" .Params.model3d "label" "Modelo 3D") }}
     <div class="section-3d-content">
@@ -38,6 +39,7 @@
         </article>
     </div>
 </section>
+</main>
 {{ else }}
 <main class="main-content">
     <article class="content-page" itemscope itemtype="https://schema.org/Article">
