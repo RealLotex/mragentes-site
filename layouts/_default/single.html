@@ -32,5 +32,12 @@
 
         {{ .Content }}
     </article>
+
+    {{ if .Params.model3d }}
+    <div class="section-with-model mt-3">
+        <div></div>
+        {{ partial "model3d.html" (dict "src" .Params.model3d "label" "Modelo 3D") }}
+    </div>
+    {{ end }}
 </main>
 {{ end }}
