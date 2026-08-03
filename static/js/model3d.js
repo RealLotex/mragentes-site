@@ -150,9 +150,14 @@
     // stage, para que el modelo fluya fuera de los bordes del elemento.
     function refit() {
       if (!modelLoaded) return;
-      var el = wrapper && wrapper.clientWidth ? wrapper : stage;
-      var cw = el.clientWidth || w;
-      var ch = el.clientHeight || h;
+      // El wrapper (con inset negativo) es la referencia ideal, pero si el stage
+      // está oculto o colapsado (clientWidth 0) usamos el viewport/sección como
+      // fallback para que el canvas nunca quede en 0x0. Así el modelo siempre
+      // tiene espacio aunque el layout aún no pintó.
+      var el = (wrapper && wrapper.clientWidth) ? wrapper : stage;
+      var cw = el.clientWidth || section.clientWidth || window.innerWidth;
+      var ch = el.clientHeight || section.clientHeight || window.innerHeight;
+      if (!cw || !ch) { cw = window.innerWidth; ch = window.innerHeight; }
       if (cw > 0) w = cw;
       if (ch > 0) h = ch;
       camera.aspect = w / h;
@@ -198,12 +203,20 @@
       modelRadius = Math.max(0.001, half);
 
       modelLoaded = true;
+      // Asegurar que el stage esté visible ahora que el modelo cargó (algunas
+      // rutas de error previas pudieron haberlo ocultado). Si el fetch HEAD
+      // inicial abortó, esta es la garantía de que igual se muestra.
+      stage.style.display = '';
       refit();
 
       if (skeleton) skeleton.style.display = 'none';
     }, undefined, function (err) {
       console.warn('model3d:', src, err);
-      stage.style.display = 'none';
+      // NO ocultar el stage en cascada: ocultarlo dispara el CSS :has() que le
+      // quita el padding al content (layout roto). Mejor dejarlo visible y
+      // sacrificar solo el modelo.
+      if (skeleton) skeleton.style.display = 'none';
+      if (wrapper) wrapper.style.display = 'none';
     });
 
     // Opacidad 50%
