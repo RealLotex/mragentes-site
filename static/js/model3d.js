@@ -1,15 +1,15 @@
 /* =========================================
-   MR AGENTES — model3d.js v11
+   MR AGENTES — model3d.js v12
    Modelos 3D sticky de fondo de sección
    - El modelo queda fijo (sticky) en su posición relativa a la vista mientras
      scrolleás: su centro queda ANCLADO y rota con el progreso de scroll
-   - Dos ejes de rotación por scroll: horizontal 0°→-360° (rotY) y vertical
-     -45°→+45° (rotX). Se compensa la traslación vertical (group.position.y =
-     sin(rotX)) para que el modelo no parezca subir/bajar con el texto.
-   - Fit por ESFERA ()circunscripta: el modelo nunca se recorta por los
-     límites del canvas, sin importar cómo rote ni la orientación del modelo.
-   - Escala: usa todo el espacio disponible (0.98 del frustum), opacidad 50%
-   - Mobile: banda 320px, degradación automática si FPS < 24
+   - Rotación por scroll reducida al 30% (sutil): horizontal ≈0→-108° (rotY)
+     y vertical -13.5°→+13.5° (rotX). Se compensa la traslación vertical
+     (group.position.y = sin(rotX)). Puntero añade tilt fino.
+   - Offset de rotación inicial por modelo (180° para San Pedro y el busto).
+   - Fit por ESFERA circunscripta usando el wrapper (que se extiende más allá
+     del stage): el modelo fluye fuera de los bordes del elemento sin recorte.
+   - Escala 0.95 del frustum, opacidad 50%, degradación automática mobile.
    ========================================= */
 
 (function () {
@@ -123,6 +123,15 @@
     var group = new THREE.Group();
     scene.add(group);
 
+    // Offset de rotación inicial (Y) por modelo: algunos modelos llegan
+    // orientados de frente/espaldas y hay que girarlos 180° para mostrarlos
+    // bien. San Pedro (home-proyectos) y el busto (home-datos).
+    var rotOffsetY = 0;
+    if (/proyectos|datos|home-proyectos|home-datos/.test(src)) {
+      rotOffsetY = Math.PI; // 180°
+    }
+
+
     // Opacidad 50%
     wrapper.style.opacity = '0.5';
 
@@ -134,13 +143,15 @@
     // crece al girar y causaba crop).
     var modelRadius = 1;
 
-    // --- Reescala del canvas según el stage real (no el del init) ---
-    // El objetivo es ocupar TODO el espacio disponible del stage (evita que
-    // quede chico o recortado por las dimensiones capturadas temprano).
+    // --- Reescala del canvas según el espacio real (no el del init) ---
+    // El modelo usa TODO el espacio disponible: el wrapper se extiende más allá
+    // del stage (inset negativo en CSS), así que se mide el wrapper, no el
+    // stage, para que el modelo fluya fuera de los bordes del elemento.
     function refit() {
       if (!modelLoaded) return;
-      var cw = stage.clientWidth || w;
-      var ch = stage.clientHeight || h;
+      var el = wrapper && wrapper.clientWidth ? wrapper : stage;
+      var cw = el.clientWidth || w;
+      var ch = el.clientHeight || h;
       if (cw > 0) w = cw;
       if (ch > 0) h = ch;
       camera.aspect = w / h;
@@ -148,12 +159,12 @@
       renderer.setSize(w, h, false);
 
       // Escala la esfera del modelo para que quepa en el cono de visión, con un
-      // factor generoso (0.98) para usar casi todo el canvas sin recortar.
+      // factor generoso (0.95) para usar casi todo el espacio sin recortar.
       var dist = camera.position.length();
       var vHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-      var fitH = (2 * dist * vHalf * 0.98) / modelRadius;
+      var fitH = (2 * dist * vHalf * 0.95) / modelRadius;
       var hFov = 2 * Math.atan(vHalf * camera.aspect);
-      var fitW = (2 * dist * Math.tan(hFov / 2) * 0.98) / modelRadius;
+      var fitW = (2 * dist * Math.tan(hFov / 2) * 0.95) / modelRadius;
       group.scale.setScalar(Math.min(fitH, fitW));
     }
 
@@ -271,8 +282,8 @@
       // Movemos el group en Y con la señal contraria según el radio real del
       // modelo (modelRadius * escala), de modo que el centro visual quede
       // anclado aunque rote y no parece "subir o bajar" con el texto.
-      var rotY = -currentP * Math.PI * 2 + tiltY;
-      var rotX = clamp(-(currentP - 0.5) * (Math.PI / 2) + tiltX, -Math.PI / 4, Math.PI / 4);
+      var rotY = -currentP * Math.PI * 2 * 0.3 + tiltY + rotOffsetY;
+      var rotX = clamp(-(currentP - 0.5) * (Math.PI / 2) * 0.3 + tiltX, -Math.PI / 4, Math.PI / 4);
 
       group.rotation.y = rotY;
       group.rotation.x = rotX;

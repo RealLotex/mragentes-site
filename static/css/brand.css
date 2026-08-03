@@ -2220,14 +2220,16 @@ strong {
 }
 
 /* Columna con el modelo: sticky dentro de su columna, pegado al top mientras
-   el texto scrollea a su lado. El modelo se centra verticalmente en el canvas.
-   align-self:start es CLAVE: evita que el grid estire el item a toda la altura
-   del track (si se estira, sticky no tiene espacio y el modelo scrollea con el
-   texto). */
+   el texto scrollea a su lado.
+   Sin altura fija: el modelo puede extenderse más allá del área del stage
+   (no lo encierra una caja de 82vh/640px). Como el canvas del modelo es
+   absoluto, se le da una altura generosa de referencia para que el sticky y
+   el render tengan espacio, pero el modelo se dibuja por fuera y no se
+   recorta (overflow del canvas abierto). */
 .section-3d--static .section-3d-stage {
   position: sticky;
   top: 0;
-  height: min(82vh, 640px);
+  min-height: 100vh;
   width: 100%;
   margin: 0;
   align-self: start;
@@ -2259,14 +2261,26 @@ strong {
   grid-row: 1;
 }
 
-/* El canvas del modelo centra el modelo dentro del stage. */
+/* El canvas del modelo: se extiende MÁS ALLÁ del stage para que el modelo
+   pueda verse por fuera de los límites del elemento (sin recorte). inset
+   negativo desborda el contenedor y se anula el width/height forzado del
+   canvas global (que encajaba el render y recortaba). */
 .section-3d--static .model3d-stage-canvas {
   position: absolute;
-  inset: 0;
+  inset: -25%;
+  width: 150%;
+  height: 150%;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
+}
+
+.section-3d--static .model3d-stage-canvas canvas {
+  width: auto !important;
+  height: auto !important;
+  max-width: none;
+  max-height: none;
 }
 
 /* Variante full-width (contacto): el modelo funciona como FONDO de toda la
