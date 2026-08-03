@@ -1897,8 +1897,18 @@ strong {
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
+  /* El header crece con el contenido: sin altura fija para que el nav
+     (envuelto en 2 filas en mobile) se vea completo y centrado */
+  .site-header {
+    height: auto;
+  }
+
   .header-inner {
-    padding: 1rem 1.25rem;
+    padding: 0.9rem 1.25rem;
+    height: auto;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Nav siempre en flujo (como desktop): sin menú hamburguesa ni dropdown */
@@ -1906,7 +1916,7 @@ strong {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.6rem;
+    gap: 0.35rem;
     background: none;
     backdrop-filter: none;
     border-bottom: none;
@@ -1914,9 +1924,9 @@ strong {
   }
 
   .nav-links a {
-    padding: 0.6rem 0.9rem;
-    font-size: 1.6rem;
-    line-height: 1.25;
+    padding: 0.3rem 0.65rem;
+    font-size: 1.2rem;
+    line-height: 1.35;
   }
 
   .nav-links a::after {
@@ -1931,8 +1941,8 @@ strong {
   .nav-links a.btn.nav-cta {
     width: auto;
     text-align: center;
-    padding: 0.6rem 1.2rem;
-    font-size: 1.6rem;
+    padding: 0.3rem 0.9rem;
+    font-size: 1.2rem;
   }
 
   .hero {
@@ -2011,12 +2021,12 @@ strong {
   max-width: 720px;
   margin: -100vh auto 0;
   padding: 5vh 0 7vh;
-  /* Degradado de pergamino sutil para legibilidad sobre el modelo */
+  /* Degradado de pergamino MUY sutil para legibilidad sin tapar el modelo */
   background: linear-gradient(
     180deg,
     rgba(242, 234, 214, 0) 0%,
-    rgba(242, 234, 214, 0.9) 12%,
-    rgba(242, 234, 214, 0.9) 88%,
+    rgba(242, 234, 214, 0.45) 14%,
+    rgba(242, 234, 214, 0.45) 86%,
     rgba(242, 234, 214, 0) 100%
   );
 }
@@ -2120,12 +2130,12 @@ strong {
     width: 100%;
     margin: -100vh 0 0 !important;
     padding: 5vh 0 7vh;
-    /* Degradado de pergamino para legibilidad del texto sobre el modelo */
+    /* Degradado de pergamino MUY sutil para legibilidad sin tapar el modelo */
     background: linear-gradient(
       180deg,
       rgba(242, 234, 214, 0) 0%,
-      rgba(242, 234, 214, 0.88) 18%,
-      rgba(242, 234, 214, 0.88) 82%,
+      rgba(242, 234, 214, 0.42) 16%,
+      rgba(242, 234, 214, 0.42) 84%,
       rgba(242, 234, 214, 0) 100%
     );
   }
