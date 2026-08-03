@@ -2251,6 +2251,12 @@ strong {
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
   align-self: start;
+  /* Ancla el contenido a la fila 1 del grid. Sin esto, cuando el contenido
+     en la columna 1 es alto (cards/folio), cae ~640px debajo del modelo
+     sticky (quedando "muy abajo"). grid-row:1 lo mantiene arriba, alineado
+     con el stage, y NO rompe el flujo (a diferencia de top:-N que dejaba
+     hueco al fondo). */
+  grid-row: 1;
 }
 
 /* El canvas del modelo centra el modelo dentro del stage. */
