@@ -70,7 +70,8 @@
     fetch(src, { method: 'HEAD' })
       .then(function (res) {
         if (!res.ok) {
-          stage.style.display = 'none';
+          // No ocultar el stage: ocultarlo rompe el layout (CSS :has -> padding:0)
+          // y mata un modelo que ya pueda estar renderizando.
           return null;
         }
         return loadThree();
@@ -79,7 +80,8 @@
         if (mod) init(stage, section, skeleton, src, mod.THREE, mod.GLTFLoader);
       })
       .catch(function () {
-        stage.style.display = 'none';
+        // Nunca ocultar el stage por un error del HEAD/fetch: se deja visible
+        // y se sacrifica solo el modelo, preservando el layout.
       });
   });
 
