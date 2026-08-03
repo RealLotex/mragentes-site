@@ -2115,21 +2115,90 @@ strong {
 
 @media (max-width: 900px) {
   .section-3d {
-    min-height: 0;
+    min-height: 100vh;
   }
 
-  /* En mobile: modelo como banda superior, contenido a ancho completo */
+  /* En mobile el modelo TAMBIÉN es fondo sticky: full-width, el texto scrollea encima */
   .section-3d-stage {
-    position: relative;
-    top: auto;
-    height: 320px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
     width: 100%;
-    margin: 0 0 1.5rem !important;
+    margin: 0 !important;
   }
 
   .section-3d-content {
     width: 100%;
+    margin: -100vh 0 0 !important;
+    padding: 10vh 0 14vh;
+    /* Degradado de pergamino para legibilidad del texto sobre el modelo */
+    background: linear-gradient(
+      180deg,
+      rgba(242, 234, 214, 0) 0%,
+      rgba(242, 234, 214, 0.88) 18%,
+      rgba(242, 234, 214, 0.88) 82%,
+      rgba(242, 234, 214, 0) 100%
+    );
+  }
+}
+
+/* Variante estática: modelo como fondo ABSOLUTO (no sticky), contenido en flujo normal.
+   Para páginas con contenido muy alto (formulario de contacto) donde el sticky
+   con margin negativo cortaba el contenido. */
+.section-3d--static {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.section-3d--static .section-3d-stage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: auto;
+  width: 66.66%;
+}
+
+.section-3d--static.section-3d--right .section-3d-stage {
+  right: 0;
+  margin: 0;
+}
+
+.section-3d--static.section-3d--left .section-3d-stage {
+  left: 0;
+  margin: 0;
+}
+
+.section-3d--static .section-3d-content {
+  width: 50%;
+  margin: 0;
+  padding: 2rem 0 3rem;
+  background: none;
+}
+
+.section-3d--static.section-3d--left .section-3d-content {
+  margin-left: auto;
+}
+
+/* Variante full-width (contacto): contenido a ancho completo sobre el modelo */
+.section-3d--full .section-3d-content {
+  width: 100%;
+  max-width: 100%;
+  padding: 3rem 0 4rem;
+}
+
+@media (max-width: 900px) {
+  .section-3d--static .section-3d-stage {
+    position: relative;
+    height: 45vh;
+    width: 100%;
+    top: auto;
+    bottom: auto;
+  }
+
+  .section-3d--static .section-3d-content,
+  .section-3d--full .section-3d-content {
+    width: 100%;
     margin: 0 !important;
-    padding: 0;
+    padding: 2rem 0;
   }
 }

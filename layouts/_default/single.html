@@ -6,9 +6,9 @@
 </section>
 
 {{ if .Params.model3d }}
-<!-- Con modelo 3D de fondo: contenido en 50%, modelo en 2/3 -->
+<!-- Con modelo 3D de fondo: variante estática (sin sticky) para contenido largo -->
 <main class="main-content">
-<section class="section section-3d section-3d--right">
+<section class="section section-3d section-3d--right section-3d--static {{ if eq .File.BaseFileName "contacto" }}section-3d--full{{ end }}">
     {{ partial "model3d.html" (dict "src" .Params.model3d "label" "Modelo 3D") }}
     <div class="section-3d-content">
         <article class="content-page" itemscope itemtype="https://schema.org/Article" style="max-width:100%;">
