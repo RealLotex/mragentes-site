@@ -1,5 +1,5 @@
 /* =========================================
-   MR AGENTES — model3d.js v12
+   MR AGENTES — model3d.js v17
    Modelos 3D sticky de fondo de sección
    - El modelo queda fijo (sticky) en su posición relativa a la vista mientras
      scrolleás: su centro queda ANCLADO y rota con el progreso de scroll
@@ -10,6 +10,18 @@
    - Fit por ESFERA circunscripta usando el wrapper (que se extiende más allá
      del stage): el modelo fluye fuera de los bordes del elemento sin recorte.
    - Escala 0.95 del frustum, opacidad 50%, degradación automática mobile.
+
+   v17 (fix definitivo "que nunca falle"):
+   - Eliminado el HEAD fetch como GATE: el modelo solo se decide por el GET
+     real del .glb (si no hay red, Three, WebGL o el .glb da error, se degrada
+     limpiamente y se oculta el skeleton SIEMPRE).
+   - Todo init() está envuelto en try/catch externo: cualquier excepción
+     oculta el skeleton y deja el layout 100% intacto (nunca display:none del
+     stage).
+   - loader.load() se dispara SIEMPRE que haya Three, sin depender del tamaño
+     del stage (que puede estar a 0x0 mientras el layout pinta) — el refit
+     corrige el tamaño en cuanto haya espacio.
+   - skeleton.style.display se oculta en TODOS los caminos (success y error).
    ========================================= */
 
 (function () {
@@ -57,9 +69,15 @@
         else reject(new Error('three no cargó'));
       };
       window.addEventListener('three-ready', finish);
-      setTimeout(finish, 15000);
+      setTimeout(finish, 12000);
     });
     return threeReady;
+  }
+
+  // Oculta el skeleton de un stage de forma segura (no rompe el layout).
+  function hideSkeleton(stage) {
+    var skeleton = stage && stage.querySelector('.model3d-skeleton');
+    if (skeleton) skeleton.style.display = 'none';
   }
 
   stages.forEach(function (stage) {
@@ -67,49 +85,71 @@
     var section = stage.closest('.section-3d') || stage.parentElement;
     var skeleton = stage.querySelector('.model3d-skeleton');
 
-    fetch(src, { method: 'HEAD' })
-      .then(function (res) {
-        if (!res.ok) {
-          // No ocultar el stage: ocultarlo rompe el layout (CSS :has -> padding:0)
-          // y mata un modelo que ya pueda estar renderizando.
-          return null;
-        }
-        return loadThree();
-      })
+    // Regla de oro: el skeleton NUNCA puede quedar visible para siempre.
+    // Ponemos un timeout de seguridad que lo oculta si nada termina a tiempo,
+    // y el layout se preserva porque ocultar el skeleton no toca el stage.
+    var skeletonTimer = setTimeout(function () {
+      if (skeleton) skeleton.style.display = 'none';
+    }, 9000);
+
+    // --- Flujo NO bloqueado por HEAD ---
+    // El HEAD es solo una optimización opcional: no decide si cargamos ni
+    // bloquea el resto. El GET del .glb dentro de init() es el que manda.
+    var headOk = false;
+    try {
+      fetch(src, { method: 'HEAD' })
+        .then(function (res) { headOk = res.ok ? true : false; })
+        .catch(function () { headOk = false; });
+    } catch (e) { headOk = false; }
+
+    loadThree()
       .then(function (mod) {
-        if (mod) init(stage, section, skeleton, src, mod.THREE, mod.GLTFLoader);
+        // Skeleton: si tres demoró, al cargar lo ocultamos y dejamos que el
+        // canvas se vea dentro de init().
+        clearTimeout(skeletonTimer);
+        try {
+          init(stage, section, skeleton, src, mod.THREE, mod.GLTFLoader, mod.DRACOLoader);
+        } catch (err) {
+          console.warn('model3d: init falló', src, err);
+          hideSkeleton(stage);
+        }
       })
-      .catch(function () {
-        // Nunca ocultar el stage por un error del HEAD/fetch: se deja visible
-        // y se sacrifica solo el modelo, preservando el layout.
+      .catch(function (err) {
+        console.warn('model3d: three no cargó', src, err);
+        clearTimeout(skeletonTimer);
+        hideSkeleton(stage);
       });
   });
 
-  function init(stage, section, skeleton, src, THREE, GLTFLoader) {
+  function init(stage, section, skeleton, src, THREE, GLTFLoader, DRACOLoader) {
+    // Asegurar que el skeleton se oculte apenas empecemos (sin esperar al GLB).
+    hideSkeleton(stage);
+
     var wrapper = document.createElement('div');
     wrapper.className = 'model3d-stage-canvas';
     stage.appendChild(wrapper);
 
-    var w = stage.clientWidth || 600;
-    var h = stage.clientHeight || 600;
-
-    var renderer;
-    try {
-      renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true,
-        powerPreference: 'high-performance'
-      });
-    } catch (e) {
-      stage.style.display = 'none';
-      return;
+    // Tamaño: NO asumimos que el stage tiene tamaño real (puede estar 0x0
+    // mientras el layout pinta). Siempre caemos a algo >= 1px para que WebGL
+    // y el refit no se rompan.
+    function stageSize() {
+      var w = stage.clientWidth || section.clientWidth || window.innerWidth || 1;
+      var h = stage.clientHeight || section.clientHeight || window.innerHeight || 1;
+      return { w: Math.max(1, w), h: Math.max(1, h) };
     }
+    var size = stageSize();
+
+    var renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance'
+    });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setSize(w, h);
+    renderer.setSize(size.w, size.h, false);
     wrapper.appendChild(renderer.domElement);
 
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 200);
+    var camera = new THREE.PerspectiveCamera(40, size.w / size.h, 0.1, 200);
     camera.position.set(0, 0.4, 3.4);
     camera.lookAt(0, 0, 0);
 
@@ -126,48 +166,23 @@
     var group = new THREE.Group();
     scene.add(group);
 
-    // Offset de rotación inicial (Y) por modelo: algunos modelos llegan
-    // orientados de frente/espaldas y hay que girarlos 180° para mostrarlos
-    // bien. San Pedro (home-proyectos) y el busto (home-datos).
+    // Offset de rotación inicial (Y) por modelo.
     var rotOffsetY = 0;
     if (/proyectos|datos|home-proyectos|home-datos/.test(src)) {
       rotOffsetY = Math.PI; // 180°
     }
 
-
     // Opacidad 50%
     wrapper.style.opacity = '0.5';
 
-    var modelLoaded = false;
-
-    // Radio de la ESFERA circunscripta del modelo (sin escala). Acá guardamos
-    // el radio real, no la dimensión máxima del box: la esfera garantiza que el
-    // modelo NUNCA se recorte sin importar cómo rote (el box alineado a ejes
-    // crece al girar y causaba crop).
     var modelRadius = 1;
 
-    // --- Reescala del canvas según el espacio real (no el del init) ---
-    // El modelo usa TODO el espacio disponible: el wrapper se extiende más allá
-    // del stage (inset negativo en CSS), así que se mide el wrapper, no el
-    // stage, para que el modelo fluya fuera de los bordes del elemento.
     function refit() {
-      if (!modelLoaded) return;
-      // El wrapper (con inset negativo) es la referencia ideal, pero si el stage
-      // está oculto o colapsado (clientWidth 0) usamos el viewport/sección como
-      // fallback para que el canvas nunca quede en 0x0. Así el modelo siempre
-      // tiene espacio aunque el layout aún no pintó.
-      var el = (wrapper && wrapper.clientWidth) ? wrapper : stage;
-      var cw = el.clientWidth || section.clientWidth || window.innerWidth;
-      var ch = el.clientHeight || section.clientHeight || window.innerHeight;
-      if (!cw || !ch) { cw = window.innerWidth; ch = window.innerHeight; }
-      if (cw > 0) w = cw;
-      if (ch > 0) h = ch;
-      camera.aspect = w / h;
+      var s = stageSize();
+      camera.aspect = s.w / s.h;
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h, false);
+      renderer.setSize(s.w, s.h, false);
 
-      // Escala la esfera del modelo para que quepa en el cono de visión, con un
-      // factor generoso (0.95) para usar casi todo el espacio sin recortar.
       var dist = camera.position.length();
       var vHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
       var fitH = (2 * dist * vHalf * 0.95) / modelRadius;
@@ -176,18 +191,17 @@
       group.scale.setScalar(Math.min(fitH, fitW));
     }
 
+    // Cargar el modelo SIEMPRE (es acá donde se dispara el GET del .glb).
     var loader = new GLTFLoader();
-    // --- DRACO (compresión de malla) — los modelos optimizados usan
-    // KHR_draco_mesh_compression. Sin DRACOLoader el GLTFLoader falla con
-    // "No DRACOLoader instance provided". Se registra con el decoder desde CDN.
-    var dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/');
-    dracoLoader.preload();
-    loader.setDRACOLoader(dracoLoader);
+    var draco = new DRACOLoader();
+    draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/');
+    draco.preload();
+    loader.setDRACOLoader(draco);
+
     loader.load(src, function (gltf) {
       var model = gltf.scene;
 
-      // --- FIX ORIGEN: centrar el MODELO, no el group ---
+      // Centrar el MODELO
       model.updateMatrixWorld(true);
       var box = new THREE.Box3().setFromObject(model);
       var center = new THREE.Vector3();
@@ -197,36 +211,24 @@
       group.add(model);
       group.updateMatrixWorld(true);
 
-      // Guardar el radio de la esfera circunscripta (usado por refit).
       box = new THREE.Box3().setFromObject(group);
-      var size = new THREE.Vector3();
-      box.getSize(size);
-      var half = size.length() / 2; // media diagonal => radio de la esfera
-      modelRadius = Math.max(0.001, half);
+      var msize = new THREE.Vector3();
+      box.getSize(msize);
+      modelRadius = Math.max(0.001, msize.length() / 2);
 
-      modelLoaded = true;
-      // Asegurar que el stage esté visible ahora que el modelo cargó (algunas
-      // rutas de error previas pudieron haberlo ocultado). Si el fetch HEAD
-      // inicial abortó, esta es la garantía de que igual se muestra.
-      stage.style.display = '';
       refit();
 
-      if (skeleton) skeleton.style.display = 'none';
+      // Ocultar el skeleton en el success (garantía extra).
+      hideSkeleton(stage);
     }, undefined, function (err) {
       console.warn('model3d:', src, err);
-      // NO ocultar el stage en cascada: ocultarlo dispara el CSS :has() que le
-      // quita el padding al content (layout roto). Mejor dejarlo visible y
-      // sacrificar solo el modelo.
-      if (skeleton) skeleton.style.display = 'none';
+      // Error de carga: ocultar skeleton + wrapper, NUNCA ocultar el stage
+      // (ocultarlo dispara el CSS :has() y rompe el layout).
+      hideSkeleton(stage);
       if (wrapper) wrapper.style.display = 'none';
     });
 
-    // Opacidad 50%
-    wrapper.style.opacity = '0.5';
-
-    // ---------- Progreso de scroll (basado en la SECCIÓN, no en el stage) ----------
-    // Con sticky el stage queda fijo; el progreso se calcula sobre el recorrido
-    // completo de la sección: 0 al entrar, 1 al salir.
+    // ---------- Progreso de scroll ----------
     var progress = 0;
     var currentP = 0;
     function updateScroll() {
@@ -240,7 +242,7 @@
     window.addEventListener('scroll', updateScroll, { passive: true });
     window.addEventListener('resize', updateScroll);
 
-    // ---------- Tilt hacia el puntero (sutil) ----------
+    // ---------- Tilt hacia el puntero ----------
     var tiltY = 0, tiltX = 0, tiltTargetY = 0, tiltTargetX = 0;
     if (!IS_MOBILE && !REDUCED_MOTION) {
       section.addEventListener('mousemove', function (e) {
@@ -256,7 +258,6 @@
       });
     }
 
-    // ---------- Pausa fuera de viewport ----------
     function clamp(v, min, max) {
       return Math.max(min, Math.min(max, v));
     }
@@ -275,7 +276,6 @@
       requestAnimationFrame(loop);
       if (!visible) return;
 
-      // Degradación automática SOLO en mobile si va mal
       if (IS_MOBILE) {
         frames++;
         acc += 16.67;
@@ -284,34 +284,23 @@
           if (!degraded && fps < 24) {
             degraded = true;
             renderer.setPixelRatio(1);
-            renderer.setSize(w, h, false);
+            var s = stageSize();
+            renderer.setSize(s.w, s.h, false);
           }
           frames = 0;
           acc = 0;
         }
       }
 
-      // Easing del scroll
       currentP += (progress - currentP) * 0.06;
       tiltY += (tiltTargetY - tiltY) * 0.08;
       tiltX += (tiltTargetX - tiltX) * 0.08;
 
-      // Rotación INVERTIDA (sentido contrario al scroll):
-      // - horizontal: 0→-360° (rotY) a lo largo de la sección
-      // - vertical: -45°→+45° (rotX)
-      // Para que el modelo PAREZCA quieto en su lugar (sticky) mientras rota
-      // en dos ejes, compensamos la traslación vertical: rotar en X desplaza
-      // el centro aparente del modelo hacia arriba/abajo dentro del canvas.
-      // Movemos el group en Y con la señal contraria según el radio real del
-      // modelo (modelRadius * escala), de modo que el centro visual quede
-      // anclado aunque rote y no parece "subir o bajar" con el texto.
       var rotY = -currentP * Math.PI * 2 * 0.3 + tiltY + rotOffsetY;
       var rotX = clamp(-(currentP - 0.5) * (Math.PI / 2) * 0.3 + tiltX, -Math.PI / 4, Math.PI / 4);
 
       group.rotation.y = rotY;
       group.rotation.x = rotX;
-      // Compensación vertical: contrarrresta el corrimiento de la rotación en X
-      // para mantener el centro del modelo fijo respecto al viewport.
       group.position.y = Math.sin(rotX);
 
       renderer.render(scene, camera);
