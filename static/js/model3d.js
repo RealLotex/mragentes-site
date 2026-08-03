@@ -229,9 +229,10 @@
       tiltY += (tiltTargetY - tiltY) * 0.08;
       tiltX += (tiltTargetX - tiltX) * 0.08;
 
-      // Horizontal: 0→360° a lo largo de la sección. Vertical: -45°→+45°.
-      var rotY = currentP * Math.PI * 2 + tiltY;
-      var rotX = clamp((currentP - 0.5) * (Math.PI / 2) + tiltX, -Math.PI / 4, Math.PI / 4);
+      // Rotación INVERTIDA (sentido contrario al scroll):
+      // horizontal: 0→-360° a lo largo de la sección. Vertical: -45°→+45° invertido.
+      var rotY = -currentP * Math.PI * 2 + tiltY;
+      var rotX = clamp(-(currentP - 0.5) * (Math.PI / 2) + tiltX, -Math.PI / 4, Math.PI / 4);
 
       group.rotation.y = rotY;
       group.rotation.x = rotX;
