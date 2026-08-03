@@ -5,6 +5,40 @@
     {{ if .Description }}<p>{{ .Description }}</p>{{ end }}
 </section>
 
+{{ if .Params.model3d }}
+<!-- Con modelo 3D de fondo: contenido en 50%, modelo en 2/3 -->
+<section class="section section-3d section-3d--right">
+    {{ partial "model3d.html" (dict "src" .Params.model3d "label" "Modelo 3D") }}
+    <div class="section-3d-content">
+        <article class="content-page" itemscope itemtype="https://schema.org/Article" style="max-width:100%;">
+            {{ if and .Params.image (not (in (slice "contacto" "thanks") .File.BaseFileName)) }}
+            {{- $alt := .Params.image_alt | default (printf "Imagen: %s" .Title) }}
+            <img src="{{ .Params.image | relURL }}" alt="{{ $alt }}" class="content-header-image" loading="lazy">
+            {{ end }}
+
+            {{ if and (eq .Section "notas") .Date }}
+            <div class="nota-meta">
+                <time class="nota-meta-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format "2 de January de 2006" }}</time>
+                {{ with .Params.tags }}
+                <div class="tags">
+                    {{ range . }}
+                    {{ $tag := . }}
+                    {{ with $.Site.GetPage (printf "/tags/%s" $tag) }}
+                    <a href="{{ .RelPermalink }}" class="tag tag-link">{{ $tag }}</a>
+                    {{ else }}
+                    <span class="tag">{{ $tag }}</span>
+                    {{ end }}
+                    {{ end }}
+                </div>
+                {{ end }}
+            </div>
+            {{ end }}
+
+            {{ .Content }}
+        </article>
+    </div>
+</section>
+{{ else }}
 <main class="main-content">
     <article class="content-page" itemscope itemtype="https://schema.org/Article">
         {{ if and .Params.image (not (in (slice "contacto" "thanks") .File.BaseFileName)) }}
@@ -32,12 +66,6 @@
 
         {{ .Content }}
     </article>
-
-    {{ if .Params.model3d }}
-    <div class="section-with-model mt-3">
-        <div></div>
-        {{ partial "model3d.html" (dict "src" .Params.model3d "label" "Modelo 3D") }}
-    </div>
-    {{ end }}
 </main>
+{{ end }}
 {{ end }}

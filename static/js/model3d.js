@@ -1,26 +1,22 @@
 /* =========================================
-   MR AGENTES — model3d.js
-   Viewer 3D con Three.js (GLB/GLTF)
-   - Turntable infinito
-   - Rotación sutil siguiendo el puntero (indica interactividad)
-   - Skeleton loader mientras descarga
-   - Resolución adaptativa: baja en mobile / bajo rendimiento
-   - Si el modelo no existe (404), el panel se oculta
+   MR AGENTES — model3d.js v7
+   Modelos 3D de fondo (no paneles)
+   - Ocupan 2/3 del ancho, 3x más grandes, opacidad 50%
+   - Rotación guiada por scroll + turntable infinito + tilt hacia el puntero
+   - Máxima resolución (pixelRatio hasta 2, antialias)
+   - En mobile: banda superior y degradación automática si FPS < 24
+   - Skeleton loader mientras descarga; sin WebGL/404 se oculta el stage
    ========================================= */
 
 (function () {
   'use strict';
 
-  var panels = document.querySelectorAll('[data-model3d]');
-  if (!panels.length) return;
+  var stages = document.querySelectorAll('[data-model3d]');
+  if (!stages.length) return;
 
-  // ---------- Detección de rendimiento ----------
   var IS_MOBILE = window.matchMedia('(pointer: coarse)').matches
     || window.innerWidth < 768
     || (navigator.maxTouchPoints && navigator.maxTouchPoints > 1 && window.innerWidth < 1024);
-  var LOW_CORES = (navigator.hardwareConcurrency || 8) <= 4;
-  var LOW_QUALITY = IS_MOBILE || LOW_CORES;
-
   var REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ---------- Cargar Three.js dinámico ----------
@@ -28,7 +24,6 @@
   function loadThree() {
     if (threeReady) return threeReady;
     threeReady = new Promise(function (resolve, reject) {
-      // Import map + módulo three desde CDN (jsdelivr, versión fija)
       var script = document.createElement('script');
       script.type = 'importmap';
       script.textContent = JSON.stringify({
@@ -62,68 +57,63 @@
     return threeReady;
   }
 
-  // ---------- Por panel ----------
-  panels.forEach(function (panel) {
-    var src = panel.getAttribute('data-model3d');
-    var label = panel.getAttribute('data-label') || 'Modelo 3D';
-    var skeleton = panel.querySelector('.model3d-skeleton');
+  stages.forEach(function (stage) {
+    var src = stage.getAttribute('data-model3d');
+    var section = stage.closest('.section-3d') || stage.parentElement;
+    var skeleton = stage.querySelector('.model3d-skeleton');
 
-    // Verificar que el modelo exista; si no, ocultar el panel (sin romper nada)
     fetch(src, { method: 'HEAD' })
       .then(function (res) {
         if (!res.ok) {
-          panel.style.display = 'none';
+          stage.style.display = 'none';
           return null;
         }
         return loadThree();
       })
-      .then(function (THREEmod) {
-        if (!THREEmod) return;
-        initScene(panel, skeleton, src, label, THREEmod.THREE, THREEmod.GLTFLoader);
+      .then(function (mod) {
+        if (mod) init(stage, section, skeleton, src, mod.THREE, mod.GLTFLoader);
       })
       .catch(function () {
-        panel.style.display = 'none';
+        stage.style.display = 'none';
       });
   });
 
-  function initScene(panel, skeleton, src, label, THREE, GLTFLoader) {
-    // Canvas propio para no pisar el skeleton
+  function init(stage, section, skeleton, src, THREE, GLTFLoader) {
     var wrapper = document.createElement('div');
-    wrapper.className = 'model3d-canvas';
-    panel.appendChild(wrapper);
+    wrapper.className = 'model3d-stage-canvas';
+    stage.appendChild(wrapper);
 
-    var rect = panel.getBoundingClientRect();
-    var w = rect.width || 400;
-    var h = rect.height || 400;
+    var w = stage.clientWidth || 600;
+    var h = stage.clientHeight || 480;
 
     var renderer;
     try {
       renderer = new THREE.WebGLRenderer({
-        antialias: !LOW_QUALITY,
+        antialias: true,
         alpha: true,
-        powerPreference: LOW_QUALITY ? 'low-power' : 'high-performance'
+        powerPreference: 'high-performance'
       });
     } catch (e) {
-      // Sin WebGL (navegador viejo / GPU bloqueada): ocultar panel, no dejar skeleton infinito
-      panel.style.display = 'none';
+      stage.style.display = 'none';
       return;
     }
-    renderer.setPixelRatio(LOW_QUALITY ? 1 : Math.min(window.devicePixelRatio, 2));
+    // Máxima resolución
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(w, h);
     wrapper.appendChild(renderer.domElement);
 
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
-    camera.position.set(0, 0.55, 3.2);
+    var camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 200);
+    camera.position.set(0, 0.5, 3.2);
     camera.lookAt(0, 0, 0);
 
-    // Luces
-    var ambient = new THREE.AmbientLight(0xfff2dd, 1.6);
+    // Luces cálidas (pergamino)
+    var ambient = new THREE.AmbientLight(0xfff2dd, 1.8);
     scene.add(ambient);
-    var key = new THREE.DirectionalLight(0xfff0d8, 2.2);
+    var key = new THREE.DirectionalLight(0xfff0d8, 2.4);
     key.position.set(2.5, 4, 3);
     scene.add(key);
-    var fill = new THREE.DirectionalLight(0xffd9a0, 0.9);
+    var fill = new THREE.DirectionalLight(0xffd9a0, 1.0);
     fill.position.set(-3, 1, -2);
     scene.add(fill);
 
@@ -134,109 +124,119 @@
     loader.load(src, function (gltf) {
       var model = gltf.scene;
 
-      // Centrar el modelo en su origen ANTES de escalar
+      // Centrar en origen antes de escalar
       var box = new THREE.Box3().setFromObject(model);
       var center = new THREE.Vector3();
       box.getCenter(center);
       model.position.sub(center);
 
-      // Escala basada en el frustum de la cámara: el modelo ocupa ~75% del alto
-      // del panel sin importar las unidades del GLB (Sketchfab usa cm/mm).
+      // Escala frustum-based × 3 (fondo grande, se sale del encuadre a propósito)
       var size = new THREE.Vector3();
       box.getSize(size);
-      var maxDim = Math.max(size.x, size.y, size.z);
+      var maxDim = Math.max(size.x, size.y, size.z) || 1;
       var dist = camera.position.distanceTo(new THREE.Vector3(0, 0, 0));
       var fovHeight = 2 * dist * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-      var fill = LOW_QUALITY ? 0.7 : 0.78;
-      var scale = (fovHeight * fill) / maxDim;
+      var scale = (fovHeight * 2.3) / maxDim;
       model.scale.setScalar(scale);
 
       group.add(model);
-      group.position.y = -0.1;
 
-      // Quitar skeleton
+      // Skeleton fuera
       if (skeleton) skeleton.style.display = 'none';
     }, undefined, function (err) {
       console.warn('model3d:', src, err);
-      panel.style.display = 'none';
+      stage.style.display = 'none';
     });
 
-    // ---------- Turntable infinito + pointer-follow ----------
-    var rotationSpeed = REDUCED_MOTION ? 0 : 0.004;
-    var targetRotY = 0;
-    var targetRotX = 0;
-    var currentRotY = 0;
-    var currentRotX = 0;
-    // Pointer follow (solo con puntero fino o en desktop)
+    // Opacidad 50%
+    wrapper.style.opacity = '0.5';
+
+    // ---------- Rotación por scroll ----------
+    var scrollAngle = 0;
+    var scrollTarget = 0;
+    function updateScroll() {
+      var r = stage.getBoundingClientRect();
+      var center = r.top + r.height / 2;
+      var vp = window.innerHeight / 2;
+      scrollTarget = (vp - center) * 0.004;
+    }
+    updateScroll();
+    window.addEventListener('scroll', updateScroll, { passive: true });
+    window.addEventListener('resize', updateScroll);
+
+    // ---------- Tilt hacia el puntero ----------
+    var tiltY = 0, tiltX = 0, tiltTargetY = 0, tiltTargetX = 0;
     if (!IS_MOBILE && !REDUCED_MOTION) {
-      panel.addEventListener('mousemove', function (e) {
-        var r = panel.getBoundingClientRect();
-        var nx = (e.clientX - r.left) / r.width - 0.5;   // -0.5..0.5
+      section.addEventListener('mousemove', function (e) {
+        var r = section.getBoundingClientRect();
+        var nx = (e.clientX - r.left) / r.width - 0.5;
         var ny = (e.clientY - r.top) / r.height - 0.5;
-        targetRotY = nx * 0.6;
-        targetRotX = -ny * 0.4;
+        tiltTargetY = nx * 0.5;
+        tiltTargetX = -ny * 0.3;
       });
-      panel.addEventListener('mouseleave', function () {
-        targetRotY = 0;
-        targetRotX = 0;
+      section.addEventListener('mouseleave', function () {
+        tiltTargetY = 0;
+        tiltTargetX = 0;
       });
     }
 
-    // ---------- Render loop con pausa fuera de viewport ----------
+    var turntable = REDUCED_MOTION ? 0 : 0.002;
+
+    // ---------- Pausa fuera de viewport ----------
     var visible = true;
     var ro = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         visible = entry.isIntersecting;
       });
-    }, { threshold: 0.05 });
-    ro.observe(panel);
+    }, { threshold: 0.02 });
+    ro.observe(stage);
 
-    var running = true;
-    var fpsFrames = 0;
-    var fpsTime = 0;
-    var degraded = LOW_QUALITY;
-
+    // ---------- Loop ----------
+    var frames = 0, acc = 0, degraded = false;
     function loop() {
-      if (!running) return;
       requestAnimationFrame(loop);
-
       if (!visible) return;
 
-      // FPS monitoring para degradar resolución automáticamente
-      fpsFrames++;
-      fpsTime += 16.67;
-      if (fpsTime >= 2000) {
-        var fps = fpsFrames * 1000 / fpsTime;
-        if (!degraded && fps < 28) {
-          degraded = true;
-          renderer.setPixelRatio(1);
-          renderer.setSize(w, h, false);
+      // Degradación automática SOLO en mobile si va mal
+      if (IS_MOBILE) {
+        frames++;
+        acc += 16.67;
+        if (acc >= 2000) {
+          var fps = frames * 1000 / acc;
+          if (!degraded && fps < 24) {
+            degraded = true;
+            renderer.setPixelRatio(1);
+            renderer.setSize(w, h, false);
+          }
+          frames = 0;
+          acc = 0;
         }
-        fpsFrames = 0;
-        fpsTime = 0;
       }
 
-      // Turntable: rotación continua + easing hacia el puntero
-      currentRotY += rotationSpeed;
-      currentRotX += (targetRotX - currentRotX) * 0.08;
-      group.rotation.y = currentRotY + targetRotY;
-      group.rotation.x = targetRotX * 0.5;
+      // Scroll (easing) + turntable + puntero
+      scrollAngle += (scrollTarget - scrollAngle) * 0.06;
+      turntable += 0.002;
+      tiltY += (tiltTargetY - tiltY) * 0.08;
+      tiltX += (tiltTargetX - tiltX) * 0.08;
+
+      group.rotation.y = scrollAngle + turntable + tiltY;
+      group.rotation.x = tiltX * 0.5;
 
       renderer.render(scene, camera);
     }
     loop();
 
-    // Resize
-    var onResize = function () {
-      var r = panel.getBoundingClientRect();
-      if (r.width > 0 && r.height > 0) {
-        w = r.width;
-        h = r.height;
+    function onResize() {
+      var rw = stage.clientWidth;
+      var rh = stage.clientHeight;
+      if (rw > 0 && rh > 0) {
+        w = rw;
+        h = rh;
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
         renderer.setSize(w, h, false);
       }
-    };
+    }
     window.addEventListener('resize', onResize);
   }
 })();
