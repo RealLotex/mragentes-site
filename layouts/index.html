@@ -3,21 +3,7 @@
     <section class="hero">
         <div class="hero-grid"></div>
         <div class="hero-content">
-            <!-- Sello circular -->
-            <div class="hero-seal" aria-hidden="true">
-                <svg viewBox="0 0 108 108">
-                    <circle class="seal-ring" cx="54" cy="54" r="50"/>
-                    <circle class="seal-ring" cx="54" cy="54" r="44"/>
-                    <circle class="seal-ring--inner" cx="54" cy="54" r="37"/>
-                    <path id="seal-path" d="M54,54 m -32,0 a 32,32 0 1,1 64,0 a 32,32 0 1,1 -64,0" fill="none"/>
-                    <text class="seal-text"><textPath href="#seal-path">MR AGENTES · AUTOMATIZACION · IA ·</textPath></text>
-                    <text class="seal-center" x="54" y="61" text-anchor="middle">MA</text>
-                    <path d="M54 44 l2.2 4.6 5 0.7 -3.6 3.5 0.9 5 -4.5 -2.4 -4.5 2.4 0.9 -5 -3.6 -3.5 5 -0.7 z" class="seal-star"/>
-                </svg>
-            </div>
-
-            <span class="eyebrow eyebrow--center">MR AGENTES — GÁLVEZ, SANTA FE</span>
-            <h1>Tu negocio, trabajando <span class="gold" id="rotate-word">solo</span></h1>
+            <h1>Tu negocio, trabajando<br><span class="gold" id="rotate-word">solo</span></h1>
             <p class="subtitle">Automatización e inteligencia artificial para pymes de la región. Procesos que se ejecutan solos, agentes que responden a tus clientes y datos que deciden por vos.</p>
             <div class="btn-group">
                 <a href="{{ "contacto" | absURL }}" class="btn btn-primary">Contacto
@@ -33,124 +19,129 @@
         <img src="/creationofadam.png" alt="Detalle de La creación de Adán, Miguel Ángel — el instante entre dos dedos" loading="eager">
     </div>
 
+    <!-- SERVICIOS + MODELO (fondo derecho) -->
 <main class="main-content">
-    <!-- SERVICIOS -->
-    <section class="section">
-        <div class="section-title">
-            <span class="eyebrow">Servicios</span>
-            <h2>Qué hacemos</h2>
-            <p>Servicios de automatización e inteligencia artificial implementados, medidos y ajustados con datos reales de tu operación.</p>
-        </div>
-        <div class="card-grid card-grid-3col">
-            <div class="card">
-                <span class="card-num">Nº 01</span>
-                <h3>Automatización de procesos</h3>
-                <p>Facturación, carga de datos, reportes y envío de correos. Tareas repetitivas ejecutadas por máquinas, sin errores ni interrupciones.</p>
-                <span class="card-tag">n8n · Make · Zapier</span>
+    <section class="section section-3d section-3d--static section-3d--right">
+        {{ partial "model3d.html" (dict "src" "/models/home-servicios.glb" "label" "Modelo 3D — Servicios") }}
+        <div class="section-3d-content">
+            <div class="section-title">
+                <span class="eyebrow">Servicios</span>
+                <h2>Qué hacemos</h2>
+                <p>Servicios de automatización e inteligencia artificial implementados, medidos y ajustados con datos reales de tu operación.</p>
             </div>
-            <div class="card">
-                <span class="card-num">Nº 02</span>
-                <h3>Agentes con IA</h3>
-                <p>Asistentes que responden consultas, resuelven problemas y escalan a una persona cuando hace falta. Entrenados con la información del cliente.</p>
-                <span class="card-tag">OpenAI · WhatsApp API</span>
-            </div>
-            <div class="card">
-                <span class="card-num">Nº 03</span>
-                <h3>Datos que deciden</h3>
-                <p>Dashboards, reportes automáticos y predicciones. Información en tiempo real para tomar decisiones antes de que aparezca el problema.</p>
-                <span class="card-tag">Dashboards · Reporting</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- FOLIO — proyectos posibles -->
-    <section class="section">
-        <div class="section-title section-title--center">
-            <span class="eyebrow eyebrow--center">Proyectos</span>
-            <h2>Qué se puede construir</h2>
-            <p>Ejemplos concretos de lo que se puede construir con estas herramientas.</p>
-        </div>
-        <div class="folio">
-            <div class="folio-head">
-                <h3>Cuaderno de proyectos</h3>
-                <span class="folio-ref">Notas de trabajo</span>
-            </div>
-            <ul class="folio-list">
-                <li class="folio-item">
-                    <span class="folio-num">n.1</span>
-                    <div>
-                        <h4>Atención al cliente por WhatsApp</h4>
-                        <p>Respuestas automáticas a consultas frecuentes, con escalado a una persona cuando la consulta lo requiere.</p>
-                    </div>
-                </li>
-                <li class="folio-item">
-                    <span class="folio-num">n.2</span>
-                    <div>
-                        <h4>Facturación y comprobantes</h4>
-                        <p>Emisión y envío automático de facturas y comprobantes, sin carga manual.</p>
-                    </div>
-                </li>
-                <li class="folio-item">
-                    <span class="folio-num">n.3</span>
-                    <div>
-                        <h4>Reportes periódicos</h4>
-                        <p>Resumen de ventas y métricas enviado por email o WhatsApp con la frecuencia que defina el cliente.</p>
-                    </div>
-                </li>
-                <li class="folio-item">
-                    <span class="folio-num">n.4</span>
-                    <div>
-                        <h4>Sincronización de datos</h4>
-                        <p>Planillas, CRMs y sistemas conectados entre sí, eliminando la carga manual duplicada.</p>
-                    </div>
-                </li>
-                <li class="folio-item">
-                    <span class="folio-num">n.5</span>
-                    <div>
-                        <h4>Chatbot para web</h4>
-                        <p>Resolución de consultas frecuentes en el sitio, usando la documentación y la información del cliente.</p>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- DATOS -->
-    <section class="section">
-        <div class="section-title section-title--center">
-            <span class="eyebrow eyebrow--center">Datos</span>
-            <h2>Información</h2>
-        </div>
-        <div class="facts-grid">
-            <div class="fact-item">
-                <span class="fact-label">Cobertura</span>
-                <div class="fact-value">Gálvez</div>
-                <div class="fact-desc">Atención presencial y online en toda la provincia de Santa Fe.</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Canales</span>
-                <div class="fact-value">WhatsApp, email</div>
-                <div class="fact-desc">Formulario de contacto en el sitio.</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Tecnologías</span>
-                <div class="fact-value">n8n, Make</div>
-                <div class="fact-desc">OpenAI, WhatsApp API y otras integraciones según el proyecto.</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Modalidad</span>
-                <div class="fact-value">A medida</div>
-                <div class="fact-desc">Proyectos llave en mano, adaptados a cada operación.</div>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Acompañamiento</span>
-                <div class="fact-value">Directo</div>
-                <div class="fact-desc">Trato directo con el responsable, sin intermediarios.</div>
+            <div class="card-grid card-grid-3col" style="grid-template-columns:1fr;">
+                <div class="card">
+                    <span class="card-num">Nº 01</span>
+                    <h3>Automatización de procesos</h3>
+                    <p>Facturación, carga de datos, reportes y envío de correos. Tareas repetitivas ejecutadas por máquinas, sin errores ni interrupciones.</p>
+                    <span class="card-tag">n8n · Make · Zapier</span>
+                </div>
+                <div class="card">
+                    <span class="card-num">Nº 02</span>
+                    <h3>Agentes con IA</h3>
+                    <p>Asistentes que responden consultas, resuelven problemas y escalan a una persona cuando hace falta. Entrenados con la información del cliente.</p>
+                    <span class="card-tag">OpenAI · WhatsApp API</span>
+                </div>
+                <div class="card">
+                    <span class="card-num">Nº 03</span>
+                    <h3>Datos que deciden</h3>
+                    <p>Dashboards, reportes automáticos y predicciones. Información en tiempo real para tomar decisiones antes de que aparezca el problema.</p>
+                    <span class="card-tag">Dashboards · Reporting</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ÚLTIMAS NOTAS -->
+    <!-- PROYECTOS + MODELO (fondo izquierdo) -->
+    <section class="section section-3d section-3d--static section-3d--left">
+        {{ partial "model3d.html" (dict "src" "/models/home-proyectos.glb" "label" "Modelo 3D — Proyectos") }}
+        <div class="section-3d-content">
+            <div class="section-title">
+                <span class="eyebrow">Proyectos</span>
+                <h2>Qué se puede construir</h2>
+                <p>Ejemplos concretos de lo que se puede construir con estas herramientas.</p>
+            </div>
+            <div class="folio">
+                <ul class="folio-list">
+                    <li class="folio-item">
+                        <span class="folio-num">n.1</span>
+                        <div>
+                            <h4>Atención al cliente por WhatsApp</h4>
+                            <p>Respuestas automáticas a consultas frecuentes, con escalado a una persona cuando la consulta lo requiere.</p>
+                        </div>
+                    </li>
+                    <li class="folio-item">
+                        <span class="folio-num">n.2</span>
+                        <div>
+                            <h4>Facturación y comprobantes</h4>
+                            <p>Emisión y envío automático de facturas y comprobantes, sin carga manual.</p>
+                        </div>
+                    </li>
+                    <li class="folio-item">
+                        <span class="folio-num">n.3</span>
+                        <div>
+                            <h4>Reportes periódicos</h4>
+                            <p>Resumen de ventas y métricas enviado por email o WhatsApp con la frecuencia que defina el cliente.</p>
+                        </div>
+                    </li>
+                    <li class="folio-item">
+                        <span class="folio-num">n.4</span>
+                        <div>
+                            <h4>Sincronización de datos</h4>
+                            <p>Planillas, CRMs y sistemas conectados entre sí, eliminando la carga manual duplicada.</p>
+                        </div>
+                    </li>
+                    <li class="folio-item">
+                        <span class="folio-num">n.5</span>
+                        <div>
+                            <h4>Chatbot para web</h4>
+                            <p>Resolución de consultas frecuentes en el sitio, usando la documentación y la información del cliente.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- DATOS + MODELO (fondo derecho) -->
+    <section class="section section-3d section-3d--static section-3d--right">
+        {{ partial "model3d.html" (dict "src" "/models/home-datos.glb" "label" "Modelo 3D — Datos") }}
+        <div class="section-3d-content">
+            <div class="section-title">
+                <span class="eyebrow">Datos</span>
+                <h2>Información</h2>
+            </div>
+            <div class="facts-grid" style="grid-template-columns:repeat(2,1fr);">
+                <div class="fact-item">
+                    <span class="fact-label">Cobertura</span>
+                    <div class="fact-value">Gálvez</div>
+                    <div class="fact-desc">Atención presencial y online en toda la provincia de Santa Fe.</div>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Canales</span>
+                    <div class="fact-value">WhatsApp, email</div>
+                    <div class="fact-desc">Formulario de contacto en el sitio.</div>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Tecnologías</span>
+                    <div class="fact-value">n8n, Make</div>
+                    <div class="fact-desc">OpenAI, WhatsApp API y otras integraciones según el proyecto.</div>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Modalidad</span>
+                    <div class="fact-value">A medida</div>
+                    <div class="fact-desc">Proyectos llave en mano, adaptados a cada operación.</div>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Acompañamiento</span>
+                    <div class="fact-value">Directo</div>
+                    <div class="fact-desc">Trato directo con el responsable, sin intermediarios.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ÚLTIMAS NOTAS (sin modelo) -->
     {{ $notas := where .Site.RegularPages "Section" "notas" }}
     {{ $latest := $notas | first 3 }}
     {{ if $latest }}
@@ -171,7 +162,7 @@
     </section>
     {{ end }}
 
-    <!-- CTA -->
+    <!-- CTA (sin modelo) -->
     <section class="cta-section">
         <span class="eyebrow eyebrow--center">Contacto</span>
         <h2>Consultas y proyectos</h2>

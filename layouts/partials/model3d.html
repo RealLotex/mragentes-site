@@ -1,0 +1,10 @@
+{{ $src := .src | default "/models/model.glb" }}
+{{ $label := .label | default "Modelo 3D" }}
+<div class="section-3d-stage" data-model3d="{{ $src }}" data-label="{{ $label }}" aria-hidden="true">
+    <div class="model3d-skeleton">
+        <div class="skeleton-circle"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line short"></div>
+        <span class="skeleton-text">cargando modelo…</span>
+    </div>
+</div>

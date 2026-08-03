@@ -4,25 +4,19 @@
   "description": "Automatización e inteligencia artificial para potenciar tu negocio en Santa Fe",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#2596be",
+  "background_color": "#f2ead6",
+  "theme_color": "#f4eddc",
   "orientation": "portrait-primary",
   "lang": "es-AR",
   "icons": [
     {
-      "src": "/images/badge-icon.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "monochrome"
-    },
-    {
-      "src": "/images/notif-icon.png",
+      "src": "/faviconhand512.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "/images/notif-icon.png",
+      "src": "/faviconhand512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
