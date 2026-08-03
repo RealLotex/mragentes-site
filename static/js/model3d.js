@@ -1,10 +1,10 @@
 /* =========================================
-   MR AGENTES — model3d.js v17
+   MR AGENTES — model3d.js v18
    Modelos 3D sticky de fondo de sección
    - El modelo queda fijo (sticky) en su posición relativa a la vista mientras
      scrolleás: su centro queda ANCLADO y rota con el progreso de scroll
    - Rotación por scroll reducida al 30% (sutil): horizontal ≈0→-108° (rotY)
-     y vertical -13.5°→+13.5° (rotX). Se compensa la traslación vertical
+     y vertical COMPLETO -45°→+45° (rotX). Se compensa la traslación vertical
      (group.position.y = sin(rotX)). Puntero añade tilt fino.
    - Offset de rotación inicial por modelo (180° para San Pedro y el busto).
    - Fit por ESFERA circunscripta usando el wrapper (que se extiende más allá
@@ -297,7 +297,8 @@
       tiltX += (tiltTargetX - tiltX) * 0.08;
 
       var rotY = -currentP * Math.PI * 2 * 0.3 + tiltY + rotOffsetY;
-      var rotX = clamp(-(currentP - 0.5) * (Math.PI / 2) * 0.3 + tiltX, -Math.PI / 4, Math.PI / 4);
+      // Giro vertical COMPLETO: -45°→+45° (sin factor de reducción) + tilt fino.
+      var rotX = clamp(-(currentP - 0.5) * (Math.PI / 2) + tiltX, -Math.PI / 4, Math.PI / 4);
 
       group.rotation.y = rotY;
       group.rotation.x = rotX;

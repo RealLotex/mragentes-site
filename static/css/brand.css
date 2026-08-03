@@ -959,13 +959,18 @@ strong {
 
 /* ========== PAGE HEADER — piedra ========== */
 .page-header {
-  background-color: var(--paper-2);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 300'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.02' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.36 0 0 0 0 0.22 0 0 0 0.10 0'/%3E%3C/filter%3E%3Crect width='600' height='300' filter='url(%23m)'/%3E%3C/svg%3E");
+  background-color: rgba(242, 234, 214, 0.55);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 300'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.02' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.36 0 0 0 0 0.22 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='600' height='300' filter='url(%23m)'/%3E%3C/svg%3E");
   border-bottom: 2px solid var(--black);
   padding: 4.5rem 2rem 3.5rem;
   text-align: center;
   position: relative;
   overflow: hidden;
+  z-index: 2;
+  /* Semitransparente + blur: el modelo 3D de fondo se ve a través, opacidad
+     media (≈50%), solo nav y footer permanecen opacos */
+  backdrop-filter: blur(8px) saturate(1.05);
+  -webkit-backdrop-filter: blur(8px) saturate(1.05);
 }
 
 .page-header::before {
@@ -2055,14 +2060,17 @@ strong {
   width: 100%;
   max-width: 640px;
   padding: 2rem;
-  /* Panel blur (estilo card) — ya no tapa el modelo */
-  background: rgba(242, 234, 214, 0.72);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid var(--line-strong);
+  /* Panel blur (estilo card) — semitransparente ≈50% para que el modelo 3D
+     se vea a través (solo nav y footer opacos) */
+  background: rgba(242, 234, 214, 0.48);
+  backdrop-filter: blur(10px) saturate(1.04);
+  -webkit-backdrop-filter: blur(10px) saturate(1.04);
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: var(--radius);
   margin-top: 0;
   align-self: start;
+  /* Permite que el modelo fluya por detrás sin recorte */
+  overflow: visible;
 }
 
 .section-3d--right .section-3d-content {
