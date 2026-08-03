@@ -1707,7 +1707,7 @@ strong {
   object-fit: contain;
   background: var(--paper);
   border: 1.5px solid var(--black);
-  border-radius: 50%;
+  border-radius: var(--radius-sm);
   padding: 4px;
   margin-bottom: 0.6rem;
 }
