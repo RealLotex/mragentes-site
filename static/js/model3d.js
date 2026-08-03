@@ -120,13 +120,37 @@
     var group = new THREE.Group();
     scene.add(group);
 
+    // Escala de referencia del modelo (en unidades del modelo, antes de escalar)
+    var refMaxDim = 1;
+    var modelLoaded = false;
+
+    // Función para que el modelo SIEMPRE quepa entero en el canvas:
+    // recalcula la escala según el aspect actual (evita el crop al redimensionar).
+    function refit() {
+      if (!modelLoaded) return;
+      var cw = stage.clientWidth || w;
+      var ch = stage.clientHeight || h;
+      if (cw > 0) w = cw;
+      if (ch > 0) h = ch;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h, false);
+
+      // Escala para que el diámetro del modelo quepa en el menor de los dos
+      // ejes del frustum (garantiza que se vea COMPLETO, sin recortar).
+      var dist = camera.position.length();
+      var vHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+      var fitH = (2 * dist * vHalf * 0.9) / refMaxDim;
+      var hFov = 2 * Math.atan(vHalf * camera.aspect);
+      var fitW = (2 * dist * Math.tan(hFov / 2) * 0.9) / refMaxDim;
+      group.scale.setScalar(Math.min(fitH, fitW));
+    }
+
     var loader = new GLTFLoader();
     loader.load(src, function (gltf) {
       var model = gltf.scene;
 
       // --- FIX ORIGEN: centrar el MODELO, no el group ---
-      // (aplicar posición y luego escalar el group multiplicaba el offset
-      //  por el scale y los modelos con origen desplazado quedaban fuera)
       model.updateMatrixWorld(true);
       var box = new THREE.Box3().setFromObject(model);
       var center = new THREE.Vector3();
@@ -136,17 +160,14 @@
       group.add(model);
       group.updateMatrixWorld(true);
 
-      // Escala fit: modelo completo visible — el doble de grande (1.8x del alto)
+      // Guardar el tamaño máximo del modelo (sin escala) para el refit
       box = new THREE.Box3().setFromObject(group);
       var size = new THREE.Vector3();
       box.getSize(size);
-      var maxDim = Math.max(size.x, size.y, size.z) || 1;
-      var dist = camera.position.length();
-      var vHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-      var fitH = (2 * dist * vHalf * 1.8) / maxDim;
-      var hFov = 2 * Math.atan(vHalf * camera.aspect);
-      var fitW = (2 * dist * Math.tan(hFov / 2) * 1.8) / maxDim;
-      group.scale.setScalar(Math.min(fitH, fitW));
+      refMaxDim = Math.max(size.x, size.y, size.z) || 1;
+
+      modelLoaded = true;
+      refit();
 
       if (skeleton) skeleton.style.display = 'none';
     }, undefined, function (err) {
@@ -242,15 +263,7 @@
     loop();
 
     function onResize() {
-      var rw = stage.clientWidth;
-      var rh = stage.clientHeight;
-      if (rw > 0 && rh > 0) {
-        w = rw;
-        h = rh;
-        camera.aspect = w / h;
-        camera.updateProjectionMatrix();
-        renderer.setSize(w, h, false);
-      }
+      refit();
     }
     window.addEventListener('resize', onResize);
   }

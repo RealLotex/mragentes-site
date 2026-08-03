@@ -2022,16 +2022,16 @@ strong {
   width: 100%;
 }
 
-/* Fallback del variante estático (flex): si el modelo no carga, el contenido
-   pasa a ancho completo en vez de quedarse en su mitad. */
+/* Fallback del variante sticky (grid): si el modelo no carga, el contenido
+   pasa a ancho completo en vez de quedarse en su mitad de la grilla. */
 .section-3d--static:has(.section-3d-stage[style*="display: none"]) {
-  display: block;
+  grid-template-columns: 1fr;
 }
 .section-3d--static:has(.section-3d-stage[style*="display: none"]) .section-3d-content {
   width: 100%;
   max-width: 820px;
   margin: 0 auto;
-  flex: none;
+  grid-column: 1;
 }
 
 /* Opacidad del modelo — por defecto 0.5 en desktop */
@@ -2203,39 +2203,41 @@ strong {
   }
 }
 
-/* Variante estática: texto y modelo SIEMPRE lado a lado, ambos en flujo normal
-   (suben juntos con el scroll). El modelo queda al costado en su mitad y se
-   centra verticalmente; rota según el progreso de scroll del JS model3d.js.
-   Este era el problema del modo sticky: cuando el texto superaba los 100vh,
-   el modelo (sticky) se quedaba fijo y el texto quedaba debajo en vez de costado. */
+/* Variante sticky (texto | modelo lado a lado): el modelo queda en su columna
+   del grid y es position:sticky, así se queda fijo a la pantalla mientras el
+   texto (columna más alta) scrollea a su lado; el modelo gira según el
+   progreso de scroll. Al terminar el texto, la sección finaliza y el modelo
+   se suelta naturalmente al llegar la siguiente sección.
+   La diferencia con el modo anterior: el modelo es una COLUMNA del grid (no
+   un fondo absoluto), por eso queda SIEMPRE al costado del texto. */
 .section-3d--static {
-  min-height: 0;
-  display: flex;
-  align-items: stretch;
+  min-height: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
   gap: 2rem;
   padding: 2.5rem 0;
 }
 
+/* Columna con el modelo: sticky dentro de su columna, pegado al top mientras
+   el texto scrollea a su lado. El modelo se centra verticalmente en el canvas. */
 .section-3d--static .section-3d-stage {
-  position: relative;
-  top: auto;
-  bottom: auto;
-  height: auto;
-  width: 50%;
-  min-height: 60vh;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
   margin: 0;
-  flex: 1 1 50%;
   align-items: center;
 }
 
 /* Orden de las columnas según el lado del contenido */
-.section-3d--static.section-3d--right .section-3d-stage { order: 2; }
-.section-3d--static.section-3d--right .section-3d-content { order: 1; }
-.section-3d--static.section-3d--left .section-3d-stage { order: 1; }
-.section-3d--static.section-3d--left .section-3d-content { order: 2; }
+.section-3d--static.section-3d--right .section-3d-stage { grid-column: 2; }
+.section-3d--static.section-3d--right .section-3d-content { grid-column: 1; }
+.section-3d--static.section-3d--left .section-3d-stage { grid-column: 1; }
+.section-3d--static.section-3d--left .section-3d-content { grid-column: 2; }
 
 .section-3d--static .section-3d-content {
-  width: 50%;
+  width: 100%;
   max-width: none;
   margin: 0;
   padding: 2rem;
@@ -2244,19 +2246,17 @@ strong {
   -webkit-backdrop-filter: blur(6px);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
-  align-self: center;
-  flex: 1 1 50%;
+  align-self: start;
 }
 
-/* El canvas del modelo debe centrar el modelo dentro del stage:
-   el stage es position:relative, el canvas lo rellena con inset:0
-   (en modo sticky ya lo hacía así) y centra el contenido del renderer. */
+/* El canvas del modelo centra el modelo dentro del stage. */
 .section-3d--static .model3d-stage-canvas {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 /* Variante full-width (contacto): el modelo funciona como FONDO de toda la
