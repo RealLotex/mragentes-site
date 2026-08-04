@@ -8,7 +8,12 @@
 /* Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
-/* ========== VARIABLES ========== */
+/* ========== VARIABLES ==========
+   Identidad: cuaderno renacentista + Liquid Glass 2026 (Apple)
+   El material renacentista (pergamino/dorado) se vuelve VIDRIO LÍQUIDO:
+   translúcido que hereda el fondo, blur adaptativo, highlight cenital,
+   borde luminoso, esquinas grandes, sombras difusas, física sutil.
+   ========================================= */
 :root {
   --black: #000000;
   --ink: #000000;
@@ -27,15 +32,32 @@
   --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --font-body: 'EB Garamond', Georgia, serif;
   --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
-  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.12);
-  --shadow-md: 0 8px 28px rgba(0, 0, 0, 0.16);
-  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.2);
-  --radius-sm: 2px;
-  --radius: 4px;
-  --radius-lg: 8px;
-  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  --max-width: 1160px;
-  --header-h: 72px;
+
+  /* --- Liquid Glass 2026 tokens --- */
+  --glass-bg: rgba(242, 234, 214, 0.38);
+  --glass-bg-strong: rgba(242, 234, 214, 0.55);
+  --glass-bg-soft: rgba(242, 234, 214, 0.28);
+  --glass-blur: blur(22px) saturate(1.5);
+  --glass-blur-lg: blur(38px) saturate(1.6);
+  --glass-border: rgba(255, 255, 255, 0.55);
+  --glass-border-2: rgba(255, 255, 255, 0.28);
+  --glass-hi-top: linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.05) 38%, rgba(255,255,255,0) 55%);
+  --glass-glow: 0 0 0 1px rgba(255,255,255,0.15), 0 1px 1px rgba(0,0,0,0.04);
+
+  /* Radios grandes estilo Apple (20–32px) */
+  --radius-sm: 12px;
+  --radius: 22px;
+  --radius-lg: 32px;
+  --radius-pill: 999px;
+
+  /* Sombras muy suaves y difusas */
+  --shadow-sm: 0 4px 18px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 18px 48px rgba(0, 0, 0, 0.10), 0 6px 16px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 34px 80px rgba(0, 0, 0, 0.14), 0 12px 28px rgba(0, 0, 0, 0.09);
+
+  --transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  --max-width: 1180px;
+  --header-h: 84px;
 }
 
 /* ========== RESET ========== */
@@ -174,11 +196,13 @@ strong {
 
 /* ========== HEADER ========== */
 .site-header {
-  background: rgba(242, 234, 214, 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--black);
-  position: relative;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border-2);
+  box-shadow: var(--glass-glow), 0 1px 0 rgba(255,255,255,0.6) inset;
+  position: sticky;
+  top: 0;
   z-index: 1000;
   height: var(--header-h);
 }
@@ -243,12 +267,16 @@ strong {
 }
 
 .nav-links a.btn.nav-cta {
-  padding: 0.5rem 1.25rem;
+  padding: 0.55rem 1.4rem;
   font-family: var(--font-display);
   font-size: 1rem;
-  color: var(--paper);
-  background: var(--black);
-  border: 1px solid var(--black);
+  color: var(--ink);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border-2);
+  border-radius: var(--radius-pill);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-glow), 0 4px 14px rgba(0,0,0,0.08);
 }
 
 .nav-links a.btn.nav-cta::after {
@@ -256,22 +284,23 @@ strong {
 }
 
 .nav-links a.btn.nav-cta:hover {
-  background: var(--sepia);
-  border-color: var(--sepia);
-  color: var(--paper);
-  box-shadow: var(--shadow-sm);
+  background: var(--glass-bg-strong);
+  border-color: var(--glass-border);
+  color: var(--ink);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.3), 0 10px 26px rgba(0,0,0,0.12);
+  transform: translateY(-1px);
 }
 
 /* (Nav siempre visible en flujo, igual en desktop y mobile: sin menú hamburguesa) */
 
-/* ========== BUTTONS — negro puro, rectos ========== */
+/* ========== BUTTONS — Liquid Glass ========== */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  padding: 0.85rem 2rem;
-  border-radius: var(--radius-sm);
+  padding: 1rem 2.2rem;
+  border-radius: var(--radius-pill);
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.05rem;
@@ -280,6 +309,39 @@ strong {
   text-align: center;
   letter-spacing: 0.01em;
   border-bottom: none;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-glow), 0 8px 24px rgba(0,0,0,0.10);
+  transform: translateZ(0);
+  /* Highlight cenital: brillo blanco en el borde superior, como cristal
+     iluminado desde arriba (firma Apple Liquid Glass) */
+  background:
+    var(--glass-hi-top),
+    var(--glass-bg);
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 55%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
+  z-index: -1;
+  border-radius: inherit;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.3), 0 16px 40px rgba(0,0,0,0.14), 0 2px 6px rgba(0,0,0,0.06);
+  background:
+    var(--glass-hi-top),
+    rgba(242,234,214,0.55);
+}
+.btn:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10), 0 0 0 1px rgba(255,255,255,0.2) inset;
 }
 
 .btn svg {
@@ -528,36 +590,47 @@ strong {
 }
 
 .card {
-  background: rgba(242, 234, 214, 0.72);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid var(--line-strong);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-2);
   border-radius: var(--radius);
   padding: 2rem 1.8rem;
   transition: var(--transition);
   position: relative;
+  box-shadow: var(--glass-glow), 0 8px 26px rgba(0,0,0,0.07);
+  isolation: isolate;
+  /* Borde lumínico superior tipo Liquid Glass */
+}
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 1.2rem; right: 1.2rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+  pointer-events: none;
 }
 
 /* Marco interior tipo grabado */
 .card::before {
   content: '';
   position: absolute;
-  top: 7px;
-  left: 7px;
-  right: 7px;
-  bottom: 7px;
-  border: 1px solid rgba(168, 132, 60, 0.35);
-  border-radius: 1px;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 1px solid rgba(168, 132, 60, 0.3);
+  border-radius: calc(var(--radius) - 6px);
   pointer-events: none;
   opacity: 0;
   transition: var(--transition);
 }
 
 .card:hover {
-  border-color: var(--black);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-4px);
-  background: rgba(242, 234, 214, 0.92);
+  border-color: rgba(255,255,255,0.6);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.25), 0 22px 56px rgba(0,0,0,0.12), 0 8px 20px rgba(0,0,0,0.07);
+  transform: translateY(-6px);
+  background: var(--glass-bg-strong);
 }
 
 .card:hover::before {
@@ -601,14 +674,23 @@ strong {
 .folio {
   max-width: 820px;
   margin: 0 auto;
-  background: rgba(242, 234, 214, 0.78);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1.5px solid var(--black);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-md);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-glow), 0 18px 48px rgba(0,0,0,0.09);
   position: relative;
   padding: 2.2rem 2.4rem;
+  isolation: isolate;
+}
+.folio::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 2rem; right: 2rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+  pointer-events: none;
 }
 
 .folio-list {
@@ -959,18 +1041,27 @@ strong {
 
 /* ========== PAGE HEADER — piedra ========== */
 .page-header {
-  background-color: rgba(242, 234, 214, 0.55);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 300'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.02' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.36 0 0 0 0 0.22 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='600' height='300' filter='url(%23m)'/%3E%3C/svg%3E");
-  border-bottom: 2px solid var(--black);
+  background-color: var(--glass-bg-strong);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 300'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.02' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.36 0 0 0 0 0.22 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='600' height='300' filter='url(%23m)'/%3E%3C/svg%3E");
+  border-bottom: 1px solid var(--glass-border-2);
   padding: 4.5rem 2rem 3.5rem;
   text-align: center;
   position: relative;
   overflow: hidden;
   z-index: 2;
-  /* Semitransparente + blur: el modelo 3D de fondo se ve a través, opacidad
-     media (≈50%), solo nav y footer permanecen opacos */
-  backdrop-filter: blur(8px) saturate(1.05);
-  -webkit-backdrop-filter: blur(8px) saturate(1.05);
+  /* Liquid Glass: blur adaptativo + highlight cenital */
+  backdrop-filter: var(--glass-blur-lg) contrast(1.04);
+  -webkit-backdrop-filter: var(--glass-blur-lg) contrast(1.04);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), var(--glass-glow);
+  isolation: isolate;
+}
+.page-header::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 60%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 100%);
+  pointer-events: none;
 }
 
 .page-header::before {
@@ -1598,13 +1689,17 @@ strong {
 
 /* ========== FOOTER ========== */
 .site-footer {
-  background-color: var(--paper-2);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 300'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.02' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.36 0 0 0 0 0.22 0 0 0 0.10 0'/%3E%3C/filter%3E%3Crect width='600' height='300' filter='url(%23m)'/%3E%3C/svg%3E");
-  border-top: 2px solid var(--black);
+  background-color: var(--glass-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 300'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.02' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.36 0 0 0 0 0.22 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='600' height='300' filter='url(%23m)'/%3E%3C/svg%3E");
+  border-top: 1px solid var(--glass-border-2);
   color: var(--ink-soft);
   padding: 4rem 2rem 1.5rem;
   margin-top: auto;
   position: relative;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-glow), inset 0 1px 0 rgba(255,255,255,0.5);
+  isolation: isolate;
 }
 
 .site-footer::before {
@@ -2060,17 +2155,27 @@ strong {
   width: 100%;
   max-width: 640px;
   padding: 2rem;
-  /* Panel blur (estilo card) — semitransparente ≈50% para que el modelo 3D
-     se vea a través (solo nav y footer opacos) */
-  background: rgba(242, 234, 214, 0.48);
-  backdrop-filter: blur(10px) saturate(1.04);
-  -webkit-backdrop-filter: blur(10px) saturate(1.04);
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: var(--radius);
+  /* Liquid Glass: translúcido ≈50% + blur adaptativo + highlight cenital.
+     El modelo 3D se ve a través (fondo), como cristal líquido. */
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-glow), 0 14px 40px rgba(0,0,0,0.08);
   margin-top: 0;
   align-self: start;
   /* Permite que el modelo fluya por detrás sin recorte */
   overflow: visible;
+  isolation: isolate;
+}
+.section-3d-content::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 2rem; right: 2rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+  pointer-events: none;
 }
 
 .section-3d--right .section-3d-content {
@@ -2256,19 +2361,30 @@ strong {
   max-width: none;
   margin: 0;
   padding: 2rem;
-  /* Semitransparente ≈50% + blur: el modelo 3D se ve a través (fondo). */
-  background: rgba(242, 234, 214, 0.48);
-  backdrop-filter: blur(10px) saturate(1.04);
-  -webkit-backdrop-filter: blur(10px) saturate(1.04);
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: var(--radius);
+  /* Liquid Glass: translúcido + blur adaptativo + highlight cenital.
+     El modelo 3D se ve a través (fondo). */
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-2);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-glow), 0 14px 40px rgba(0,0,0,0.08);
   align-self: start;
+  isolation: isolate;
   /* Ancla el contenido a la fila 1 del grid. Sin esto, cuando el contenido
      en la columna 1 es alto (cards/folio), cae ~640px debajo del modelo
      sticky (quedando "muy abajo"). grid-row:1 lo mantiene arriba, alineado
      con el stage, y NO rompe el flujo (a diferencia de top:-N que dejaba
      hueco al fondo). */
   grid-row: 1;
+}
+.section-3d--static .section-3d-content::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 2rem; right: 2rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+  pointer-events: none;
 }
 
 /* El canvas del modelo: se extiende MÁS ALLÁ del stage para que el modelo
