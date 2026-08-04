@@ -167,13 +167,11 @@
     scene.add(group);
 
     // Offset de rotación inicial (Y) por modelo.
-    // - home-proyectos = San Pedro: giro 180° (queda de frente).
-    // - home-datos = el busto: 180° + 90° horario = 270°.
+    // - home-proyectos = San Pedro: giro 180°.
+    // - home-datos = el busto: giro 180° también (como lo pide el cliente).
     var rotOffsetY = 0;
-    if (/home-proyectos|proyectos/.test(src)) {
-      rotOffsetY = Math.PI;            // 180° (San Pedro)
-    } else if (/home-datos|datos/.test(src)) {
-      rotOffsetY = Math.PI + Math.PI / 2; // 270° = 180° + 90° horario (busto)
+    if (/home-proyectos|proyectos|home-datos|datos/.test(src)) {
+      rotOffsetY = Math.PI; // 180°
     }
 
     // Opacidad 50%
