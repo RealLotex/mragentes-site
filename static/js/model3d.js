@@ -1,5 +1,5 @@
 /* =========================================
-   MR AGENTES — model3d.js v18
+   MR AGENTES — model3d.js v19
    Modelos 3D sticky de fondo de sección
    - El modelo queda fijo (sticky) en su posición relativa a la vista mientras
      scrolleás: su centro queda ANCLADO y rota con el progreso de scroll
@@ -167,9 +167,13 @@
     scene.add(group);
 
     // Offset de rotación inicial (Y) por modelo.
+    // - home-proyectos = San Pedro: giro 180° (queda de frente).
+    // - home-datos = el busto: 180° + 90° horario = 270°.
     var rotOffsetY = 0;
-    if (/proyectos|datos|home-proyectos|home-datos/.test(src)) {
-      rotOffsetY = Math.PI; // 180°
+    if (/home-proyectos|proyectos/.test(src)) {
+      rotOffsetY = Math.PI;            // 180° (San Pedro)
+    } else if (/home-datos|datos/.test(src)) {
+      rotOffsetY = Math.PI + Math.PI / 2; // 270° = 180° + 90° horario (busto)
     }
 
     // Opacidad 50%
@@ -192,6 +196,11 @@
     }
 
     // Cargar el modelo SIEMPRE (es acá donde se dispara el GET del .glb).
+    // Prevención de popping: el grupo queda oculto hasta que el modelo esté
+    // totalmente listo (radio, refit y rotación inicial aplicados), así el
+    // primer frame que se pinta ya tiene el tamaño y orientación finales.
+    // El wrapper aparece con un fade-in CSS corto en lugar de un salto seco.
+    group.visible = false;
     var loader = new GLTFLoader();
     var draco = new DRACOLoader();
     draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/');
@@ -216,7 +225,11 @@
       box.getSize(msize);
       modelRadius = Math.max(0.001, msize.length() / 2);
 
+      // Aplicar todo ANTES de mostrar: tamaño + rotación inicial ya resueltos
       refit();
+      group.rotation.y = rotOffsetY;
+      group.position.y = Math.sin(0); // compensación base con rotX=0
+      group.visible = true;
 
       // Ocultar el skeleton en el success (garantía extra).
       hideSkeleton(stage);
