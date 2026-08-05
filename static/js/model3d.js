@@ -166,11 +166,13 @@
     var group = new THREE.Group();
     scene.add(group);
 
-    // Offset de rotación inicial (Y) por modelo.
-    // - home-proyectos = San Pedro: giro 180°.
-    // - home-datos = el busto: giro 180° también (como lo pide el cliente).
+    // Offset de rotación inicial (Y) por modelo. Lógica pura en model3d-offsets.js
+    // (testeada con TDD). San Pedro (home-proyectos) y el busto (home-datos): 180°;
+    // el resto: 0° (se ven bien). No hay debug keys ni valores runtime.
     var rotOffsetY = 0;
-    if (/home-proyectos|proyectos|home-datos|datos/.test(src)) {
+    if (window.MRModelOffsets) {
+      rotOffsetY = window.MRModelOffsets.getModelRotationOffset(src);
+    } else if (/home-proyectos|home-datos/.test(src)) {
       rotOffsetY = Math.PI; // 180°
     }
 
