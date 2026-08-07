@@ -1,51 +1,73 @@
 ---
-title: Nosotros
-description: Conocé a MR Agentes, tu aliado en automatización e IA desde Ciudad de
-  Gálvez, Santa Fe. Soluciones a medida para transformar tu negocio.
-model3d: /models/nosotros.glb
+title: Quién está atrás
+key: Taller
+description: MR Agentes es el taller de automatización de Marcos Rosich, en Gálvez,
+  provincia de Santa Fe. Cómo trabajo, con qué herramientas y qué podés esperar.
+lede: MR Agentes no es una consultora. Es un taller de una persona en Gálvez, y eso
+  determina casi todo lo demás.
+image: /images/mragentes.png
 ---
 
+Me llamo **Marcos Rosich** y trabajo desde Gálvez, en el centro de la provincia de
+Santa Fe. Construyo automatizaciones y agentes para pymes: la persona con la que
+hablás en la primera consulta es la misma que escribe el flujo, la misma que lo pone
+en producción y la misma que atiende el teléfono cuando algo se rompe un martes a la
+tarde.
 
-## Nuestra historia
+## Qué implica que sea uno solo
 
-MR Agentes nace en **Ciudad de Gálvez, Provincia de Santa Fe**, con una visión clara: **hacer que la inteligencia artificial y la automatización sean accesibles para todos los negocios de la región**. No importa si sos un emprendedor, una pyme o una empresa en crecimiento en Santa Fe — creemos que la tecnología no debería ser un privilegio, sino una herramienta al alcance de cualquiera que quiera crecer, sin importar dónde esté.
+Conviene decirlo antes de que lo descubras vos.
 
-## Nuestra misión
+Trabajo con pocos proyectos a la vez, así que a veces hay que esperar una o dos
+semanas para arrancar. A cambio no hay traspaso entre un vendedor que promete y un
+técnico que después explica por qué eso no se podía. No hay cuenta clave, ni gerente
+de proyecto, ni tres personas en una reunión donde alcanza con una.
 
-Transformar procesos empresariales a través de soluciones inteligentes que ahorren tiempo, reduzcan costos y potencien resultados. Trabajamos codo a codo con nuestros clientes de Santa Fe y toda la provincia para entender sus desafíos y diseñar herramientas que realmente resuelvan problemas.
+Tampoco tomo proyectos que me quedan grandes. Si lo que necesitás es migrar un ERP o
+sostener una guardia de veinticuatro horas, te lo digo en la primera charla y, si
+puedo, te paso el dato de alguien que lo haga.
 
-## Nuestros valores
+## Por qué en Gálvez
 
-<div class="features-grid">
-    <div class="feature-item">
-        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Resultados concretos</h4>
-        <p>No vendemos humo. Cada solución que implementamos tiene métricas claras de éxito.</p>
-    </div>
-    <div class="feature-item">
-        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0.33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Adaptabilidad</h4>
-        <p>Cada negocio es único. Diseñamos soluciones a medida, no plantillas genéricas.</p>
-    </div>
-    <div class="feature-item">
-        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Transparencia</h4>
-        <p>Te explicamos todo en lenguaje simple. Nada de cajas negras ni tecnicismos innecesarios.</p>
-    </div>
-    <div class="feature-item">
-        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Innovación constante</h4>
-        <p>La tecnología avanza rápido. Nosotros nos aseguramos de que vos vayas al mismo ritmo.</p>
-    </div>
-</div>
+Porque es donde vivo, y porque acá hay un montón de empresas —metalúrgicas, agro,
+comercio, servicios— que hacen a mano trabajo que una máquina puede hacer, y a las
+que ninguna consultora de Buenos Aires les va a mandar a nadie a mirar cómo cargan un
+remito.
 
-## ¿Por qué MR Agentes?
+Trabajar cerca cambia el resultado: ver la tarea en el lugar donde pasa, con la
+persona que la hace, muestra en veinte minutos cosas que no aparecen en tres
+videollamadas. Para el resto del país trabajo remoto sin problema, pero en la zona
+prefiero ir.
 
-Porque entendemos que detrás de cada negocio hay personas. No somos una consultora fría que tira tecnología sobre los problemas — **somos un equipo que se sienta con vos, entiende tu día a día, y construye la herramienta que realmente necesitás**.
+## Con qué construyo
 
-Trabajamos con tecnologías de última generación: inteligencia artificial, automatización robótica de procesos, machine learning, chatbots conversacionales e integraciones API. Pero lo más importante es que **todo esto lo ponemos al servicio de tus objetivos concretos**.
+**n8n** para orquestar. Es de código abierto, se puede alojar en tu propia
+infraestructura y —lo que más importa— si mañana no querés seguir conmigo, el flujo
+queda ahí y lo puede tomar cualquier otra persona. Ésa es la razón principal de la
+elección.
 
-Además, al estar radicados en Ciudad de Gálvez, conocemos de cerca la realidad de los negocios santafesinos. Entendemos los desafíos locales y podemos acompañarte de forma presencial cuando lo necesites.
+**Make y Zapier** cuando el cliente ya los tiene y funcionan bien. No hay motivo para
+migrar algo que anda.
 
-## Seguinos en redes
+**Modelos de OpenAI** para lo conversacional y para leer documentos, siempre acotados
+a la información del negocio y con una persona en el medio para cualquier decisión que
+tenga consecuencias.
 
-- [Instagram](https://www.instagram.com/mragentes) — Contenido diario sobre automatización e IA
-- [Facebook](https://www.facebook.com/mragentes) — Tips, casos de éxito y novedades
+**La API oficial de WhatsApp Business.** Nunca automatizaciones sobre WhatsApp
+personal: van contra los términos del servicio y terminan con el número bloqueado, casi
+siempre en el peor momento.
 
-{{< cta >}}
+## Cómo escribo las notas
+
+Publico seguido sobre lo que pasa en automatización e inteligencia artificial. Dos
+reglas: cada dato afirmado lleva su fuente enlazada al pie, y si algo se demostró
+falso, se corrige la nota y se deja anotada la corrección en lugar de borrarla.
+
+Escribo yo, con ayuda de herramientas para buscar y ordenar material. No publico nada
+que no haya leído y entendido, porque el que da la cara si una nota está mal soy yo.
+
+## Cómo seguir
+
+La primera charla dura una hora, no se cobra y no termina en un presupuesto salvo que
+encontremos algo que valga la pena. Si preferís ver cómo pienso antes de escribirme,
+[las notas](/notas/) son una muestra bastante representativa.

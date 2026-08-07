@@ -1,175 +1,291 @@
 {{ define "main" }}
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-grid"></div>
-        <div class="hero-content">
-            <h1>Tu negocio, trabajando<br><span class="gold" id="rotate-word">solo</span></h1>
-            <p class="subtitle">Automatización e inteligencia artificial para pymes de la región. Procesos que se ejecutan solos, agentes que responden a tus clientes y datos que deciden por vos.</p>
-            <div class="btn-group">
-                <a href="{{ "contacto" | absURL }}" class="btn btn-primary">Contacto
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </a>
-                <a href="{{ "servicios" | absURL }}" class="btn btn-secondary">Servicios</a>
-            </div>
-        </div>
-    </section>
 
-    <!-- IMAGEN FULL-BLEED — La creación de Adán -->
-    <div class="fullbleed-wrap texture-stone">
-        <img src="/creationofadam.png" alt="Detalle de La creación de Adán, Miguel Ángel — el instante entre dos dedos" loading="eager">
+{{- /* ==========================================================================
+     PORTADA
+     Sin degradado, sin fondo oscuro, sin palabra que se escribe sola. El titular
+     dice literalmente qué hace el negocio; la figura es una obra con ficha, no
+     una foto de banco.
+     ====================================================================== */ -}}
+<section class="cover sheet">
+
+  <div class="cover-head">
+    <h1>Automatizamos lo que hoy <span class="mark">hacés a mano</span>.</h1>
+  </div>
+
+  <div class="cover-sub">
+    <p class="lede">
+      Facturas que se emiten y se envían solas. Consultas de WhatsApp respondidas a
+      las tres de la mañana. Datos que dejan de cargarse dos veces. Desde Gálvez,
+      para pymes de Santa Fe y del resto del país.
+    </p>
+
+    <p class="margin-note col-aside">
+      Trabaja Marcos Rosich. La persona con la que hablás en la primera consulta es
+      la misma que construye y la misma que atiende cuando algo falla.
+    </p>
+
+    <div class="btn-row">
+      <a class="btn btn--minio" href="{{ "/contacto/" | relURL }}">Contar mi caso</a>
+      <a class="btn btn--ghost" href="{{ "/servicios/" | relURL }}">Ver qué se automatiza</a>
     </div>
+  </div>
 
-    <!-- SERVICIOS + MODELO (fondo derecho) -->
-<main class="main-content">
-    <section class="section section-3d section-3d--static section-3d--right">
-        {{ partial "model3d.html" (dict "src" "/models/home-servicios.glb" "label" "Modelo 3D — Servicios") }}
-        <div class="section-3d-content">
-            <div class="section-title">
-                <span class="eyebrow">Servicios</span>
-                <h2>Qué hacemos</h2>
-                <p>Servicios de automatización e inteligencia artificial implementados, medidos y ajustados con datos reales de tu operación.</p>
-            </div>
-            <div class="card-grid card-grid-3col" style="grid-template-columns:1fr;">
-                <div class="card">
-                    <span class="card-num">Nº 01</span>
-                    <h3>Automatización de procesos</h3>
-                    <p>Facturación, carga de datos, reportes y envío de correos. Tareas repetitivas ejecutadas por máquinas, sin errores ni interrupciones.</p>
-                    <span class="card-tag">n8n · Make · Zapier</span>
-                </div>
-                <div class="card">
-                    <span class="card-num">Nº 02</span>
-                    <h3>Agentes con IA</h3>
-                    <p>Asistentes que responden consultas, resuelven problemas y escalan a una persona cuando hace falta. Entrenados con la información del cliente.</p>
-                    <span class="card-tag">OpenAI · WhatsApp API</span>
-                </div>
-                <div class="card">
-                    <span class="card-num">Nº 03</span>
-                    <h3>Datos que deciden</h3>
-                    <p>Dashboards, reportes automáticos y predicciones. Información en tiempo real para tomar decisiones antes de que aparezca el problema.</p>
-                    <span class="card-tag">Dashboards · Reporting</span>
-                </div>
-            </div>
-        </div>
-    </section>
+  <figure class="plate col-plate">
+    <img src="/creationofadam.png" width="986" height="300" fetchpriority="high"
+         alt="Detalle del fresco La creación de Adán: dos manos que casi se tocan, la de Dios extendida y la de Adán a punto de recibir el impulso.">
+    <figcaption>
+      <b>fig. 1</b>
+      <span>Miguel Ángel Buonarroti, <i>La creación de Adán</i> (detalle), c. 1512. Fresco, Capilla Sixtina. Dominio público.</span>
+      <b>por qué</b>
+      <span>Toda la escena pasa en el espacio entre dos dedos: una mano transfiere a la otra la capacidad de actuar. Eso es delegar, y es exactamente lo que hace un agente. De ahí sale la mano grabada que usamos como marca.</span>
+    </figcaption>
+  </figure>
 
-    <!-- PROYECTOS + MODELO (fondo izquierdo) -->
-    <section class="section section-3d section-3d--static section-3d--left">
-        {{ partial "model3d.html" (dict "src" "/models/home-proyectos.glb" "label" "Modelo 3D — Proyectos") }}
-        <div class="section-3d-content">
-            <div class="section-title">
-                <span class="eyebrow">Proyectos</span>
-                <h2>Qué se puede construir</h2>
-                <p>Ejemplos concretos de lo que se puede construir con estas herramientas.</p>
-            </div>
-            <div class="folio">
-                <ul class="folio-list">
-                    <li class="folio-item">
-                        <span class="folio-num">n.1</span>
-                        <div>
-                            <h4>Atención al cliente por WhatsApp</h4>
-                            <p>Respuestas automáticas a consultas frecuentes, con escalado a una persona cuando la consulta lo requiere.</p>
-                        </div>
-                    </li>
-                    <li class="folio-item">
-                        <span class="folio-num">n.2</span>
-                        <div>
-                            <h4>Facturación y comprobantes</h4>
-                            <p>Emisión y envío automático de facturas y comprobantes, sin carga manual.</p>
-                        </div>
-                    </li>
-                    <li class="folio-item">
-                        <span class="folio-num">n.3</span>
-                        <div>
-                            <h4>Reportes periódicos</h4>
-                            <p>Resumen de ventas y métricas enviado por email o WhatsApp con la frecuencia que defina el cliente.</p>
-                        </div>
-                    </li>
-                    <li class="folio-item">
-                        <span class="folio-num">n.4</span>
-                        <div>
-                            <h4>Sincronización de datos</h4>
-                            <p>Planillas, CRMs y sistemas conectados entre sí, eliminando la carga manual duplicada.</p>
-                        </div>
-                    </li>
-                    <li class="folio-item">
-                        <span class="folio-num">n.5</span>
-                        <div>
-                            <h4>Chatbot para web</h4>
-                            <p>Resolución de consultas frecuentes en el sitio, usando la documentación y la información del cliente.</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
+  {{- /* Datos, no estadísticas. Cada línea es comprobable desde este mismo sitio
+         o en la primera conversación. Nada de "+10.000 usuarios". */ -}}
+  <dl class="datastrip col-plate">
+    <div>
+      <dt>Dónde</dt>
+      <dd>Gálvez, Santa Fe</dd>
+    </div>
+    <div>
+      <dt>Quién atiende</dt>
+      <dd>Marcos Rosich</dd>
+    </div>
+    <div>
+      <dt>Herramientas</dt>
+      <dd>n8n · Make · WhatsApp API</dd>
+    </div>
+    <div>
+      <dt>Presupuesto</dt>
+      <dd>Cerrado, por proyecto</dd>
+    </div>
+  </dl>
 
-    <!-- DATOS + MODELO (fondo derecho) -->
-    <section class="section section-3d section-3d--static section-3d--right">
-        {{ partial "model3d.html" (dict "src" "/models/home-datos.glb" "label" "Modelo 3D — Datos") }}
-        <div class="section-3d-content">
-            <div class="section-title">
-                <span class="eyebrow">Datos</span>
-                <h2>Información</h2>
-            </div>
-            <div class="facts-grid" style="grid-template-columns:repeat(2,1fr);">
-                <div class="fact-item">
-                    <span class="fact-label">Cobertura</span>
-                    <div class="fact-value">Gálvez</div>
-                    <div class="fact-desc">Atención presencial y online en toda la provincia de Santa Fe.</div>
-                </div>
-                <div class="fact-item">
-                    <span class="fact-label">Canales</span>
-                    <div class="fact-value">WhatsApp, email</div>
-                    <div class="fact-desc">Formulario de contacto en el sitio.</div>
-                </div>
-                <div class="fact-item">
-                    <span class="fact-label">Tecnologías</span>
-                    <div class="fact-value">n8n, Make</div>
-                    <div class="fact-desc">OpenAI, WhatsApp API y otras integraciones según el proyecto.</div>
-                </div>
-                <div class="fact-item">
-                    <span class="fact-label">Modalidad</span>
-                    <div class="fact-value">A medida</div>
-                    <div class="fact-desc">Proyectos llave en mano, adaptados a cada operación.</div>
-                </div>
-                <div class="fact-item">
-                    <span class="fact-label">Acompañamiento</span>
-                    <div class="fact-value">Directo</div>
-                    <div class="fact-desc">Trato directo con el responsable, sin intermediarios.</div>
-                </div>
-            </div>
-        </div>
-    </section>
+</section>
 
-    <!-- ÚLTIMAS NOTAS (sin modelo) -->
-    {{ $notas := where .Site.RegularPages "Section" "notas" }}
-    {{ $latest := $notas | first 3 }}
-    {{ if $latest }}
-    <section class="section section-notas-top">
-        <div class="section-title">
-            <span class="eyebrow">Notas</span>
-            <h2>Últimas notas</h2>
-            <p>Contenido sobre automatización e inteligencia artificial.</p>
-        </div>
-        <div class="nota-card-grid">
-            {{ range $latest }}
-            {{ partial "nota-card.html" . }}
-            {{ end }}
-        </div>
-        <div class="text-center mt-2">
-            <a href="{{ "notas" | absURL }}" class="btn btn-secondary">Ver todas las notas</a>
-        </div>
-    </section>
-    {{ end }}
 
-    <!-- CTA (sin modelo) -->
-    <section class="cta-section">
-        <span class="eyebrow eyebrow--center">Contacto</span>
-        <h2>Consultas y proyectos</h2>
-        <p>WhatsApp, email o formulario de contacto. Respuesta directa, sin intermediarios.</p>
-        <a href="{{ "contacto" | absURL }}" class="btn btn-primary">Contactar
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </a>
-    </section>
-</main>
+{{- /* ==========================================================================
+     QUÉ SE AUTOMATIZA — registro reglado, no una grilla de tarjetas.
+     Cada fila nombra la tarea concreta, describe el mecanismo y declara con qué
+     herramienta se hace. Sin adjetivos.
+     ====================================================================== */ -}}
+<section class="band band--loose band--ruled sheet" aria-labelledby="t-automatiza">
+  <div class="band-head">
+    <p class="key col-key">Trabajo</p>
+    <hgroup>
+      <h2 id="t-automatiza">Seis tareas que ya no deberías estar haciendo</h2>
+      <p>Son las que más aparecen en los relevamientos. Si la tuya no está en la lista,
+         probablemente también se pueda: lo vemos en la primera charla.</p>
+    </hgroup>
+  </div>
+
+  <ol class="ledger ledger--split col-wide">
+    <li>
+      <p class="key">01</p>
+      <div>
+        <h3>Emitir y mandar comprobantes</h3>
+        <p class="tools"><b>Con</b> n8n · el facturador que ya usás · correo y WhatsApp</p>
+      </div>
+      <p>Se cierra la venta, se emite el comprobante y sale por mail o WhatsApp con el
+         PDF adjunto. Nadie vuelve a copiar datos de una planilla al facturador.</p>
+    </li>
+    <li>
+      <p class="key">02</p>
+      <div>
+        <h3>Contestar lo que se pregunta siempre</h3>
+        <p class="tools"><b>Con</b> WhatsApp Business API · modelos de lenguaje</p>
+      </div>
+      <p>Horarios, precios, stock y estado del pedido, respondidos con la información
+         real del negocio. Cuando la consulta se sale del libreto, pasa a una persona
+         con toda la conversación adelante. Queda registro de lo que no supo contestar,
+         que es la parte que sirve para mejorarlo.</p>
+    </li>
+    <li>
+      <p class="key">03</p>
+      <div>
+        <h3>Mover datos entre sistemas</h3>
+        <p class="tools"><b>Con</b> n8n · Make · APIs · planillas</p>
+      </div>
+      <p>Lo que hoy se copia del mail a la planilla, de la planilla al sistema de gestión
+         y del sistema al depósito. Se define el recorrido una vez y deja de tocarse.</p>
+    </li>
+    <li>
+      <p class="key">04</p>
+      <div>
+        <h3>Leer remitos y facturas de proveedor</h3>
+        <p class="tools"><b>Con</b> extracción de documentos · revisión humana</p>
+      </div>
+      <p>PDF o foto sacada con el teléfono: se extraen los campos y entran cargados al
+         sistema. Lo que el modelo no puede leer con seguridad no se inventa — queda en
+         una bandeja aparte para revisar a mano.</p>
+    </li>
+    <li>
+      <p class="key">05</p>
+      <div>
+        <h3>Armar el reporte de los lunes</h3>
+        <p class="tools"><b>Con</b> n8n · planillas · correo</p>
+      </div>
+      <p>El resumen que alguien prepara a mano cada semana. Se define una vez y llega
+         solo, el día y a la hora que digas.</p>
+    </li>
+    <li>
+      <p class="key">06</p>
+      <div>
+        <h3>Avisar cuando un número se sale de rango</h3>
+        <p class="tools"><b>Con</b> n8n · WhatsApp · correo</p>
+      </div>
+      <p>Stock por debajo del mínimo, una factura que venció, ventas que caen contra la
+         semana anterior. El aviso llega cuando pasa, no cuando alguien se acuerda de mirar.</p>
+    </li>
+  </ol>
+
+  <p class="col-wide" style="margin-top:var(--s-4)">
+    <a class="arrow-link" href="{{ "/servicios/" | relURL }}">Fichas completas de cada servicio</a>
+  </p>
+</section>
+
+
+{{- /* ==========================================================================
+     CÓMO TRABAJAMOS — proceso con plazos declarados.
+     ====================================================================== */ -}}
+<section class="band band--loose band--tone band--inked sheet" aria-labelledby="t-como">
+  <div class="band-head">
+    <p class="key col-key">Método</p>
+    <hgroup>
+      <h2 id="t-como">Cómo es trabajar juntos</h2>
+      <p>Cinco pasos, con los plazos que se manejan de verdad.</p>
+    </hgroup>
+  </div>
+
+  <ol class="steps col-wide">
+    <li data-step="1">
+      <h3>Una charla de una hora, sin costo</h3>
+      <p>Miramos cómo se hace hoy la tarea, quién la hace y cuánto tiempo se lleva.
+         Si no encuentro nada que valga la pena automatizar, te lo digo en esa charla
+         y no hay presupuesto.</p>
+      <span class="when">Dura una hora · presencial en Gálvez o por videollamada</span>
+    </li>
+    <li data-step="2">
+      <h3>Relevamiento y presupuesto cerrado</h3>
+      <p>Te llega por escrito qué se va a construir, con qué herramientas, qué necesito
+         de tu lado y cuánto sale. Precio cerrado por el proyecto: si me lleva más
+         tiempo del que calculé, es problema mío.</p>
+      <span class="when">Entre 3 y 7 días después de la charla</span>
+    </li>
+    <li data-step="3">
+      <h3>Construcción</h3>
+      <p>Se arma sobre tus cuentas y tus datos reales, no sobre un ejemplo. Vas viendo
+         avances; no desaparezco hasta el día de la entrega.</p>
+      <span class="when">De 1 a 4 semanas, según el alcance acordado</span>
+    </li>
+    <li data-step="4">
+      <h3>Puesta en marcha en paralelo</h3>
+      <p>Arranca conviviendo con el método viejo hasta comprobar que hace lo mismo, con
+         los mismos números. Recién ahí se apaga lo anterior. Nunca al revés.</p>
+      <span class="when">1 o 2 semanas de convivencia</span>
+    </li>
+    <li data-step="5">
+      <h3>Después</h3>
+      <p>Las plataformas cambian sus APIs y los procesos del negocio también cambian.
+         Podés quedarte con un acuerdo de mantenimiento mensual o llamarme sólo cuando
+         haga falta. Se cotiza aparte y se decide al final, no antes.</p>
+      <span class="when">Mensual o por incidente, a elección</span>
+    </li>
+  </ol>
+</section>
+
+
+{{- /* ==========================================================================
+     LO QUE NO HACEMOS — el bloque que ninguna plantilla trae.
+     ====================================================================== */ -}}
+<section class="band band--loose band--ruled sheet" aria-labelledby="t-no">
+  <div class="band-head">
+    <p class="key col-key">Límites</p>
+    <hgroup>
+      <h2 id="t-no">Lo que no vas a encontrar acá</h2>
+      <p>Decirlo de entrada ahorra dos reuniones.</p>
+    </hgroup>
+  </div>
+
+  <ul class="nope col-wide">
+    <li>
+      <div>
+        <b>No prometemos porcentajes de ahorro antes de medir</b>
+        <span>Cualquiera que te asegure «reducí un 80&nbsp;% tus costos» sin haber visto
+        tu operación está adivinando. Los números se miden sobre tu proceso, y recién
+        después se ponen por escrito.</span>
+      </div>
+    </li>
+    <li>
+      <div>
+        <b>No revendemos licencias ni cobramos comisión de plataformas</b>
+        <span>Las cuentas de n8n, de la API de WhatsApp o de quien sea van a tu nombre y
+        las pagás vos, al precio de lista. Lo que cobro es construir e integrar.</span>
+      </div>
+    </li>
+    <li>
+      <div>
+        <b>No dejamos cajas negras</b>
+        <span>Todo queda documentado y las credenciales son tuyas. Si el año que viene
+        querés seguir con otra persona, te llevás el sistema andando y la documentación
+        para entenderlo.</span>
+      </div>
+    </li>
+    <li>
+      <div>
+        <b>No automatizamos un proceso que está mal</b>
+        <span>Si la tarea no debería existir, lo primero es sacarla, no hacerla más
+        rápido. Automatizar un circuito roto sólo produce errores a mayor velocidad.</span>
+      </div>
+    </li>
+    <li>
+      <div>
+        <b>No dejamos que un modelo decida solo sobre plata o sobre personas</b>
+        <span>Cobranzas, precios, descuentos y cualquier respuesta con consecuencia legal
+        pasan por una persona. El agente prepara; alguien firma.</span>
+      </div>
+    </li>
+  </ul>
+</section>
+
+
+{{- /* ==========================================================================
+     NOTAS — índice, no muro de tarjetas con foto de banco.
+     ====================================================================== */ -}}
+{{- $notas := first 4 (where site.RegularPages "Section" "notas") }}
+{{- with $notas }}
+<section class="band band--loose band--ruled sheet" aria-labelledby="t-notas">
+  <div class="band-head">
+    <p class="key col-key">Notas</p>
+    <hgroup>
+      <h2 id="t-notas">Lo último que escribimos</h2>
+      <p>Qué está pasando en automatización e IA, y qué implica para una pyme argentina.
+         Con las fuentes citadas al pie de cada nota.</p>
+    </hgroup>
+  </div>
+
+  <ul class="index col-wide">
+    {{- range . }}
+    <li>
+      <a href="{{ .RelPermalink }}">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
+        <div>
+          <h3>{{ .Title }}</h3>
+          <p>{{ .Description | default .Summary | plainify | truncate 165 }}</p>
+        </div>
+      </a>
+    </li>
+    {{- end }}
+  </ul>
+
+  <p class="col-wide" style="margin-top:var(--s-4)">
+    <a class="arrow-link" href="{{ "/notas/" | relURL }}">Todas las notas</a>
+  </p>
+</section>
+{{- end }}
+
+
+{{ partial "closer.html" . }}
+
 {{ end }}

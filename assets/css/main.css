@@ -1,0 +1,1629 @@
+@charset "UTF-8";
+/* ============================================================================
+   MR AGENTES — hoja de estilo principal
+   ----------------------------------------------------------------------------
+   Sistema visual: "lámina". La referencia no es una landing de software: es una
+   lámina anatómica y una hoja de especificación técnica. De ahí vienen las
+   decisiones: papel hueso, tinta cálida, filetes de un pixel, columna de claves
+   al margen, numeración de figuras, y un solo acento (minio, el naranja del
+   antióxido con el que se pintan las máquinas).
+
+   Nada flota. No hay tarjetas. La jerarquía se construye con filetes, medida de
+   línea y aire desigual — no con sombras.
+
+   Tipografías (las tres dibujadas en Argentina, ver /colofon/):
+     Archivo     — Omnibus-Type, Buenos Aires        → títulos, interfaz
+     Alegreya    — Huerta Tipográfica, Buenos Aires  → texto largo
+     Chivo Mono  — Omnibus-Type, Buenos Aires        → datos, claves, filetes
+
+   Orden del archivo:
+     01 fuentes · 02 tokens · 03 reset · 04 tipografía · 05 grilla
+     06 controles · 07 cabecera · 08 portada · 09 bloques · 10 notas
+     11 formulario · 12 pie · 13 utilidades · 14 impresión
+   ========================================================================== */
+
+/* ============================================================================
+   01 · FUENTES
+   Autoalojadas. Sin @import y sin llamadas a terceros: una hoja de estilo que
+   depende de fonts.googleapis.com bloquea el renderizado contra un dominio que
+   no controlamos. Subconjunto latino, que es todo lo que necesita el castellano.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Archivo";
+  src: url("/fonts/archivo-normal-latin.woff2") format("woff2-variations");
+  font-weight: 400 800;
+  font-stretch: 75% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alegreya";
+  src: url("/fonts/alegreya-normal-latin.woff2") format("woff2-variations");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alegreya";
+  src: url("/fonts/alegreya-italic-latin.woff2") format("woff2-variations");
+  font-weight: 400 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Chivo Mono";
+  src: url("/fonts/chivomono-normal-latin.woff2") format("woff2-variations");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ============================================================================
+   02 · TOKENS
+   ========================================================================== */
+
+:root {
+  /* --- Tinta y papel ---------------------------------------------------- */
+  --ink: #17130e;          /* negro cálido: el negro puro sobre papel vibra */
+  --ink-70: #4a4136;
+  --ink-55: #6b6052;
+  --bone: #f1ebde;         /* papel */
+  --bone-2: #e8e0cf;       /* papel a media luz: bandas y celdas alternas */
+  --bone-3: #ddd2bb;       /* papel a contraluz: bordes de figura */
+
+  /* --- Acento único: minio, el antióxido de las máquinas ---------------- */
+  --minio: #a8391b;
+  --minio-ink: #8a2d13;    /* mismo tono, contraste AA sobre papel */
+
+  /* --- Filetes ---------------------------------------------------------- */
+  --rule: rgba(23, 19, 14, 0.2);
+  --rule-mid: rgba(23, 19, 14, 0.38);
+  --rule-ink: rgba(23, 19, 14, 0.82);
+  --hair: 1px;
+
+  /* --- Familias --------------------------------------------------------- */
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-text: "Alegreya", Georgia, "Times New Roman", serif;
+  --f-data: "Chivo Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* --- Escala tipográfica (fluida, razón 1.25) --------------------------- */
+  --t-xs: 0.75rem;
+  --t-sm: 0.8125rem;
+  --t-base: 1.125rem;
+  --t-md: clamp(1.25rem, 0.4vw + 1.16rem, 1.4rem);
+  --t-lg: clamp(1.5rem, 1vw + 1.28rem, 1.95rem);
+  --t-xl: clamp(1.95rem, 2.2vw + 1.45rem, 2.9rem);
+  --t-2xl: clamp(2.4rem, 4.4vw + 1.2rem, 4.6rem);
+
+  /* --- Ritmo vertical. A propósito NO es una escala uniforme: los bloques
+         respiran distinto según su peso en la página. --------------------- */
+  --s-1: 0.375rem;
+  --s-2: 0.75rem;
+  --s-3: 1.25rem;
+  --s-4: 2rem;
+  --s-5: 3.25rem;
+  --s-6: 5rem;
+  --s-7: 7.5rem;
+
+  /* --- Grilla ----------------------------------------------------------- */
+  --pad: clamp(1.25rem, 5vw, 4rem);
+  --gap: clamp(1.25rem, 2.5vw, 2.5rem);
+  --key-col: 7.5rem;      /* columna de claves: "fig. 3", "n.02", fechas */
+  --measure: 42rem;       /* medida de lectura: ~72 caracteres en Alegreya */
+  --aside-col: 15rem;     /* marginalia */
+  --header-h: 60px;
+
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ============================================================================
+   03 · RESET
+   ========================================================================== */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+* { margin: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 1.5rem);
+  tab-size: 2;
+}
+
+body {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bone);
+  color: var(--ink);
+  font-family: var(--f-text);
+  font-size: var(--t-base);
+  line-height: 1.62;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button { background: none; border: 0; }
+
+ul, ol { padding: 0; list-style: none; }
+
+::selection {
+  background: var(--minio);
+  color: var(--bone);
+}
+
+/* Foco: un rectángulo, no un halo. Visible sobre papel y sobre tinta. */
+:focus-visible {
+  outline: 2px solid var(--minio);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--pad);
+  top: 0;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  transform: translateY(-120%);
+  transition: transform 0.15s var(--ease);
+}
+
+.skip-link:focus-visible { transform: translateY(0); }
+
+/* ============================================================================
+   04 · TIPOGRAFÍA
+   ========================================================================== */
+
+h1, h2, h3, h4 {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-stretch: 112%;          /* Archivo tiene eje de ancho: lo usamos */
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+h1 { font-size: var(--t-2xl); }
+h2 { font-size: var(--t-xl); }
+
+h3 {
+  font-size: var(--t-md);
+  font-weight: 650;
+  font-stretch: 105%;
+  line-height: 1.14;
+  letter-spacing: -0.01em;
+}
+
+h4 {
+  font-size: 1.0625rem;
+  font-weight: 650;
+  font-stretch: 100%;
+  line-height: 1.24;
+  letter-spacing: -0.005em;
+}
+
+p { text-wrap: pretty; }
+
+p + p { margin-top: var(--s-3); }
+
+strong { font-weight: 700; }
+
+em { font-style: italic; }
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--rule-mid);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+  transition: text-decoration-color 0.12s var(--ease), color 0.12s var(--ease);
+}
+
+a:hover {
+  color: var(--minio-ink);
+  text-decoration-color: currentColor;
+}
+
+/* --- Clave: la etiqueta corta que va al margen o encima de un bloque ------
+   Reemplaza al "eyebrow" decorativo: acá siempre dice algo (una figura, un
+   número de ficha, una fecha, una sección). ------------------------------- */
+.key {
+  font-family: var(--f-data);
+  font-size: var(--t-xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-55);
+  font-variant-numeric: tabular-nums;
+}
+
+.key--minio { color: var(--minio-ink); }
+
+/* Marca de acento: subrayado grueso a media altura, como un resaltado a mano
+   alzada sobre la prueba de imprenta. No es un gradiente. */
+/* El trazo va por debajo de la línea de base, no encima de las letras.
+   El relleno inferior es lo que baja el fondo: en un elemento en línea el
+   padding agranda la caja de pintado sin mover el renglón. Con
+   background-position mayor a 100 % el trazo cae fuera de la caja y no se
+   pinta — que fue exactamente lo que pasó al primer intento. */
+.mark {
+  background-image: linear-gradient(var(--minio), var(--minio));
+  background-repeat: no-repeat;
+  background-size: 100% 0.11em;
+  background-position: 0 100%;
+  padding: 0 0.04em 0.17em;
+}
+
+/* Nota al margen. En pantallas anchas vive en la columna de la derecha. */
+.margin-note {
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  line-height: 1.5;
+  color: var(--ink-55);
+  border-top: var(--hair) solid var(--rule-ink);
+  padding-top: var(--s-2);
+}
+
+.lede {
+  font-size: var(--t-md);
+  line-height: 1.46;
+  color: var(--ink-70);
+  max-width: 34ch;
+}
+
+/* ============================================================================
+   05 · GRILLA
+   La página es una lámina: margen de claves · plancha · marginalia.
+   ========================================================================== */
+
+.sheet {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--pad), 1fr)
+    [key-start] minmax(0, var(--key-col))
+    [key-end text-start] minmax(0, var(--measure))
+    [text-end aside-start] minmax(0, var(--aside-col))
+    [aside-end] minmax(var(--pad), 1fr)
+    [full-end];
+  column-gap: var(--gap);
+}
+
+.sheet > * { grid-column: text; min-width: 0; }
+.sheet > .col-key { grid-column: key; }
+.sheet > .col-aside { grid-column: aside; }
+.sheet > .col-wide { grid-column: text-start / aside-end; }
+.sheet > .col-plate { grid-column: key-start / aside-end; }
+.sheet > .col-full { grid-column: full; }
+
+main { flex: 1 0 auto; }
+
+/* Banda: unidad de sección. El padding vertical lo fija cada banda, no una
+   variable global — el ritmo uniforme es lo que hace que una página parezca
+   generada. */
+.band { padding-block: var(--s-6); }
+.band--tight { padding-block: var(--s-5); }
+.band--loose { padding-block: var(--s-7); }
+.band--ruled { border-top: var(--hair) solid var(--rule); }
+.band--inked { border-top: 2px solid var(--ink); }
+.band--tone { background: var(--bone-2); }
+
+/* Encabezado de banda: clave a la izquierda, título en la plancha. */
+.band-head {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: key-start / aside-end;
+  align-items: start;
+  margin-bottom: var(--s-4);
+}
+
+.band-head .key { grid-column: key; padding-top: 0.55em; }
+.band-head hgroup { grid-column: text; }
+.band-head hgroup p {
+  margin-top: var(--s-2);
+  color: var(--ink-70);
+  max-width: 46ch;
+}
+
+/* ============================================================================
+   06 · CONTROLES
+   Botones rectangulares con 2px de radio. El mecanismo es de placa metálica:
+   apoyada sobre su sombra dura, se hunde al presionar. Sin píldoras.
+   ========================================================================== */
+
+.btn {
+  --btn-bg: var(--ink);
+  --btn-fg: var(--bone);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.72em 1.35em;
+  border: var(--hair) solid var(--ink);
+  border-radius: 2px;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--f-display);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-stretch: 105%;
+  letter-spacing: 0.005em;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.1s var(--ease), box-shadow 0.1s var(--ease),
+              background-color 0.12s var(--ease);
+}
+
+.btn:hover {
+  color: var(--btn-fg);
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.btn--minio { --btn-bg: var(--minio); border-color: var(--minio); }
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  box-shadow: 3px 3px 0 var(--bone-3);
+}
+
+.btn--ghost:hover { background: var(--bone-2); box-shadow: 2px 2px 0 var(--bone-3); }
+
+.btn svg { flex: none; }
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  align-items: center;
+}
+
+/* Enlace-flecha: para navegación secundaria, sin botón. */
+.arrow-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+  font-family: var(--f-display);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 0.15em;
+}
+
+.arrow-link::after {
+  content: "→";
+  transition: transform 0.14s var(--ease);
+}
+
+.arrow-link:hover { color: var(--minio-ink); border-bottom-color: var(--minio); }
+.arrow-link:hover::after { transform: translateX(0.25em); }
+
+/* ============================================================================
+   07 · CABECERA
+   ========================================================================== */
+
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bone);
+  border-bottom: var(--hair) solid var(--ink);
+}
+
+.masthead-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--gap);
+  min-height: var(--header-h);
+  padding-inline: var(--pad);
+}
+
+/* Firma: la mano grabada + el nombre. La marca es la mano — el logo azul
+   anterior no decía nada que la mano no diga mejor. */
+.signature {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  padding-block: 0.5rem;
+}
+
+/* Sin filtros. El grabado ya viene con lo que necesita: línea negra y relleno
+   crema sobre transparente, que es justo el papel de esta página. Pasarlo a
+   negro pleno —como estaba— lo convertía en una mancha con forma de nada. */
+.signature img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  transform: translateY(1px);
+}
+
+.signature-name {
+  font-family: var(--f-display);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  font-stretch: 112%;
+  letter-spacing: -0.015em;
+  line-height: 1;
+}
+
+.signature-name span {
+  font-weight: 400;
+  font-stretch: 100%;
+  color: var(--ink-55);
+}
+
+.masthead nav {
+  grid-column: 2;
+  justify-self: end;
+  display: flex;
+  gap: clamp(0.9rem, 2vw, 1.9rem);
+}
+
+.masthead nav a {
+  font-family: var(--f-display);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding-block: 0.35rem;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.masthead nav a:hover { border-bottom-color: var(--rule-mid); color: var(--ink); }
+
+.masthead nav a[aria-current="page"] {
+  font-weight: 650;
+  border-bottom-color: var(--minio);
+}
+
+.masthead-cta { grid-column: 3; }
+
+.masthead-cta .btn { padding: 0.55em 1rem; font-size: 0.875rem; box-shadow: 2px 2px 0 var(--ink); }
+
+/* Botón de menú: sólo existe en pantallas angostas. */
+.menu-btn {
+  display: none;
+  grid-column: 3;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.6rem 0;
+  min-height: 44px;
+}
+
+.menu-btn-bars {
+  display: grid;
+  gap: 4px;
+  width: 20px;
+}
+
+.menu-btn-bars i {
+  display: block;
+  height: 2px;
+  background: var(--ink);
+  transition: transform 0.18s var(--ease), opacity 0.18s var(--ease);
+}
+
+[aria-expanded="true"] .menu-btn-bars i:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+[aria-expanded="true"] .menu-btn-bars i:nth-child(2) { opacity: 0; }
+[aria-expanded="true"] .menu-btn-bars i:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* ============================================================================
+   08 · PORTADA
+   Sin degradado, sin fondo oscuro, sin animación de tipeo. El peso lo lleva la
+   tipografía y una figura real con su epígrafe.
+   ========================================================================== */
+
+.cover { padding-block: clamp(var(--s-5), 7vw, var(--s-7)) 0; }
+
+.cover-head { grid-column: key-start / aside-end; }
+
+/* Sin `text-wrap: balance` acá. Balancear reparte el ancho entre todas las
+   líneas, y en un teléfono eso convierte un titular de tres renglones en uno de
+   cuatro cortos — además de partir la frase subrayada en dos, con medio trazo en
+   cada mitad. El titular se corta donde corresponde por sentido. */
+.cover h1 {
+  font-size: var(--t-2xl);
+  font-stretch: 118%;
+  font-weight: 750;
+  letter-spacing: -0.032em;
+  line-height: 0.94;
+  max-width: 16ch;
+  text-wrap: pretty;
+}
+
+.cover-sub {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: key-start / aside-end;
+  margin-top: var(--s-4);
+  align-items: start;
+}
+
+.cover-sub .lede { grid-column: text; max-width: 40ch; }
+.cover-sub .btn-row { grid-column: text; margin-top: var(--s-4); }
+.cover-sub .col-aside { margin-top: 0.4rem; }
+
+/* Figura de portada: el detalle de Miguel Ángel, tratado como lámina con
+   epígrafe de catálogo. No es una foto de banco: es una obra con ficha. */
+.plate {
+  margin-top: var(--s-5);
+  border-top: 2px solid var(--ink);
+  border-bottom: var(--hair) solid var(--rule);
+  padding-block: var(--s-3);
+}
+
+.plate figure { margin: 0; }
+
+.plate img {
+  width: 100%;
+  /* La reproducción es cálida y desaturada: la igualamos al papel para que la
+     lámina y la página sean el mismo objeto. */
+  filter: sepia(0.18) contrast(1.04) saturate(0.86);
+  mix-blend-mode: multiply;
+}
+
+.plate figcaption {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem var(--s-3);
+  margin-top: var(--s-2);
+  font-family: var(--f-data);
+  font-size: var(--t-xs);
+  line-height: 1.5;
+  color: var(--ink-55);
+}
+
+.plate figcaption b {
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--minio-ink);
+  white-space: nowrap;
+}
+
+/* --- Tira de datos: reemplaza al bloque de estadísticas. Sólo hechos
+       verificables desde esta misma página. Nada de "10.000+ usuarios". ---- */
+.datastrip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  border-top: var(--hair) solid var(--ink);
+  border-bottom: var(--hair) solid var(--ink);
+  margin-top: var(--s-5);
+}
+
+.datastrip div {
+  padding: var(--s-3) var(--s-3);
+  border-right: var(--hair) solid var(--rule);
+}
+
+/* La primera celda arranca al ras del margen para alinear con el resto de la
+   página; las demás necesitan aire después de su filete. */
+.datastrip div:first-child { padding-left: 0; }
+.datastrip div:last-child { border-right: 0; padding-right: 0; }
+
+.datastrip dt {
+  font-family: var(--f-data);
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-55);
+  margin-bottom: 0.35rem;
+}
+
+.datastrip dd {
+  margin: 0;
+  font-family: var(--f-display);
+  font-size: 1.0625rem;
+  font-weight: 650;
+  font-stretch: 105%;
+  line-height: 1.24;
+}
+
+/* ============================================================================
+   09 · BLOQUES DE CONTENIDO
+   Todo lo que en una plantilla sería una tarjeta, acá es una fila reglada.
+   ========================================================================== */
+
+/* --- Registro: lista numerada con filete. El patrón base del sitio. ------ */
+.ledger { border-top: 2px solid var(--ink); }
+
+.ledger > li {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  gap: 0 var(--s-3);
+  padding-block: var(--s-3);
+  border-bottom: var(--hair) solid var(--rule);
+}
+
+.ledger > li > .key { padding-top: 0.32em; }
+
+.ledger h3 + p { margin-top: var(--s-1); color: var(--ink-70); }
+
+.ledger .tools {
+  margin-top: var(--s-2);
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  color: var(--ink-55);
+}
+
+.ledger .tools b {
+  font-weight: 500;
+  color: var(--minio-ink);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--t-xs);
+  margin-right: 0.5rem;
+}
+
+/* Registro expandido: cada fila abre en dos columnas (qué es / qué implica) */
+.ledger--split > li { grid-template-columns: 3.5rem minmax(0, 1fr); }
+
+@media (min-width: 62rem) {
+  .ledger--split > li {
+    grid-template-columns: 3.5rem minmax(0, 20rem) minmax(0, 1fr);
+    align-items: start;
+  }
+  .ledger--split > li > :last-child { padding-left: var(--s-3); border-left: var(--hair) solid var(--rule); }
+}
+
+/* --- Ficha: tabla de especificación. Para servicios y datos duros. ------- */
+.spec {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.0625rem;
+}
+
+.spec caption {
+  text-align: left;
+  font-family: var(--f-data);
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--minio-ink);
+  padding-bottom: var(--s-2);
+  border-bottom: 2px solid var(--ink);
+}
+
+.spec th,
+.spec td {
+  text-align: left;
+  vertical-align: baseline;
+  padding: 0.85rem var(--s-3) 0.85rem 0;
+  border-bottom: var(--hair) solid var(--rule);
+}
+
+.spec th {
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  font-weight: 400;
+  color: var(--ink-55);
+  width: 11rem;
+  white-space: nowrap;
+}
+
+.spec td:last-child { padding-right: 0; }
+
+/* --- Pasos: proceso con línea de tiempo vertical ------------------------ */
+.steps { position: relative; }
+
+.steps > li {
+  position: relative;
+  padding-left: 3.25rem;
+  padding-bottom: var(--s-4);
+}
+
+.steps > li::before {
+  content: attr(data-step);
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border: var(--hair) solid var(--ink);
+  border-radius: 2px;
+  background: var(--bone);
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.steps > li::after {
+  content: "";
+  position: absolute;
+  left: calc(1rem - 0.5px);
+  top: 2.35rem;
+  bottom: 0.35rem;
+  width: var(--hair);
+  background: var(--rule-mid);
+}
+
+.steps > li:last-child { padding-bottom: 0; }
+.steps > li:last-child::after { display: none; }
+
+.steps h3 { margin-bottom: var(--s-1); }
+.steps p { color: var(--ink-70); }
+
+.steps .when {
+  display: inline-block;
+  margin-top: var(--s-2);
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  color: var(--minio-ink);
+}
+
+/* --- Descarte: "lo que no hacemos". Bloque de honestidad, invertido en
+       tono para que no se lea como un beneficio más. --------------------- */
+.nope { border-top: 2px solid var(--ink); }
+
+.nope > li {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: var(--s-3);
+  padding-block: var(--s-3);
+  border-bottom: var(--hair) solid var(--rule);
+  align-items: baseline;
+}
+
+.nope > li::before {
+  content: "×";
+  font-family: var(--f-data);
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--minio);
+}
+
+.nope b { display: block; font-family: var(--f-display); font-stretch: 105%; }
+.nope span { color: var(--ink-70); }
+
+/* --- Cita ------------------------------------------------------------- */
+blockquote {
+  margin: var(--s-4) 0;
+  padding-left: var(--s-3);
+  border-left: 2px solid var(--minio);
+  font-size: var(--t-md);
+  line-height: 1.44;
+}
+
+blockquote p + cite {
+  display: block;
+  margin-top: var(--s-2);
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  font-style: normal;
+  color: var(--ink-55);
+}
+
+/* --- Retrato: una persona real, no un banco de imágenes ----------------- */
+.portrait {
+  display: grid;
+  gap: var(--s-3);
+  grid-column: key-start / aside-end;
+  grid-template-columns: subgrid;
+  align-items: start;
+  margin-block: var(--s-4);
+}
+
+.portrait img {
+  grid-column: key;
+  width: 100%;
+  border: var(--hair) solid var(--ink);
+  filter: grayscale(1) sepia(0.22) contrast(1.06);
+}
+
+.portrait figcaption { grid-column: text; }
+
+/* ============================================================================
+   10 · NOTAS
+   El índice es un índice: fecha, título, tema. Sin muros de tarjetas con foto
+   de banco — que además obligaban a bajar 200 kB por fila para no decir nada.
+   ========================================================================== */
+
+.index { border-top: 2px solid var(--ink); }
+
+.index > li { border-bottom: var(--hair) solid var(--rule); }
+
+.index a {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0.25rem var(--s-3);
+  padding-block: var(--s-3);
+  text-decoration: none;
+  transition: background-color 0.12s var(--ease);
+}
+
+.index a:hover { background: var(--bone-2); color: inherit; }
+
+.index time {
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  color: var(--ink-55);
+  font-variant-numeric: tabular-nums;
+  padding-top: 0.28em;
+  white-space: nowrap;
+}
+
+/* El título de cada fila es h2 en las páginas de índice (cuelga directo del h1)
+   y h3 en la portada, donde ya hay un h2 de sección encima. Mismo aspecto en
+   los dos casos: el nivel es semántica, no tamaño. */
+.index :is(h2, h3) {
+  font-size: var(--t-md);
+  font-weight: 650;
+  font-stretch: 105%;
+  line-height: 1.14;
+  letter-spacing: -0.01em;
+  transition: color 0.12s var(--ease);
+}
+
+.index a:hover :is(h2, h3) { color: var(--minio-ink); }
+
+.index p {
+  margin-top: 0.3rem;
+  font-size: 1rem;
+  color: var(--ink-70);
+  max-width: 62ch;
+}
+
+.index .topics {
+  margin-top: var(--s-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* Tema: rectángulo, no cápsula. Los 24 px de alto mínima no son estéticos —
+   es el blanco mínimo que pide la WCAG 2.2 para un objetivo señalable. */
+.topic {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  font-family: var(--f-data);
+  font-size: var(--t-xs);
+  letter-spacing: 0.05em;
+  padding: 0.2em 0.55em;
+  border: var(--hair) solid var(--rule-mid);
+  border-radius: 2px;
+  color: var(--ink-55);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background: transparent; }
+
+.topic--on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bone);
+}
+
+/* --- Filtro del índice ------------------------------------------------- */
+.filter {
+  display: grid;
+  gap: var(--s-2);
+  margin-bottom: var(--s-4);
+  padding-bottom: var(--s-3);
+  border-bottom: var(--hair) solid var(--rule);
+}
+
+.filter-field {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: var(--hair) solid var(--ink);
+  border-radius: 2px;
+  background: var(--bone);
+  padding: 0 0.75rem;
+}
+
+.filter-field:focus-within { outline: 2px solid var(--minio); outline-offset: 1px; }
+
+.filter-field svg { flex: none; color: var(--ink-55); }
+
+.filter-field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  padding: 0.7rem 0;
+  font-family: var(--f-data);
+  font-size: 0.9375rem;
+  min-height: 44px;
+}
+
+.filter-field input:focus { outline: none; }
+.filter-field input::placeholder { color: var(--ink-55); }
+
+.filter-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.filter-count {
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  color: var(--ink-55);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Artículo ---------------------------------------------------------- */
+.article-head {
+  grid-column: key-start / aside-end;
+  display: grid;
+  grid-template-columns: subgrid;
+  padding-block: var(--s-5) var(--s-4);
+  border-bottom: 2px solid var(--ink);
+}
+
+.article-head .col-key { padding-top: 0.5em; }
+.article-head hgroup { grid-column: text; }
+
+.article-head h1 {
+  font-size: var(--t-xl);
+  font-stretch: 108%;
+  max-width: 20ch;
+}
+
+.article-head .lede { margin-top: var(--s-3); max-width: 48ch; }
+
+.article-meta {
+  grid-column: text;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  align-items: center;
+  margin-top: var(--s-3);
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  color: var(--ink-55);
+}
+
+/* Cuerpo del artículo: medida corta, y los títulos vuelven a colgarse del
+   margen izquierdo como en una edición cuidada. */
+.prose { padding-block: var(--s-4) var(--s-6); }
+
+.prose > * + * { margin-top: var(--s-3); }
+
+.prose h2 {
+  font-size: var(--t-lg);
+  margin-top: var(--s-5);
+  padding-top: var(--s-2);
+  border-top: var(--hair) solid var(--rule);
+}
+
+/* Cuando la nota abre directamente con un h2, su filete cae justo debajo del
+   que cierra la cabecera del artículo: dos reglas paralelas separadas por un
+   hueco vacío. La primera no lleva ninguna. */
+.prose > h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.prose h3 { margin-top: var(--s-4); }
+
+.prose ul,
+.prose ol { margin-left: 0; padding-left: 1.4rem; }
+.prose ul { list-style: square; }
+.prose ol { list-style: decimal; }
+.prose li::marker { color: var(--minio); font-size: 0.9em; }
+.prose li + li { margin-top: var(--s-2); }
+
+.prose img {
+  border: var(--hair) solid var(--rule-mid);
+  margin-block: var(--s-4);
+}
+
+.prose hr {
+  border: 0;
+  border-top: var(--hair) solid var(--rule);
+  margin-block: var(--s-5);
+}
+
+.prose code {
+  font-family: var(--f-data);
+  font-size: 0.86em;
+  background: var(--bone-2);
+  border: var(--hair) solid var(--rule);
+  border-radius: 2px;
+  padding: 0.1em 0.35em;
+}
+
+.prose pre {
+  background: var(--ink);
+  color: var(--bone);
+  padding: var(--s-3);
+  overflow-x: auto;
+  border-radius: 2px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.prose pre code { background: none; border: 0; padding: 0; color: inherit; }
+
+/* Las tablas escritas en markdown pueden ser anchas y se dejan desplazar solas.
+   Las fichas (.spec) no: son de dos columnas y tienen que seguir siendo una
+   tabla de verdad, o el ancho fijo de la primera columna deja de aplicarse. */
+.prose table:not(.spec) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+  display: block;
+  overflow-x: auto;
+}
+
+.prose th,
+.prose td {
+  text-align: left;
+  padding: 0.7rem var(--s-3) 0.7rem 0;
+  border-bottom: var(--hair) solid var(--rule);
+}
+
+.prose thead th {
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  font-weight: 500;
+  border-bottom: var(--hair) solid var(--ink);
+}
+
+.prose blockquote { font-family: var(--f-text); }
+
+/* Paginación */
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: var(--s-5);
+  padding-top: var(--s-3);
+  border-top: var(--hair) solid var(--ink);
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+}
+
+.pager a,
+.pager span {
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  display: inline-grid;
+  place-items: center;
+  padding: 0 0.6rem;
+  border: var(--hair) solid var(--rule-mid);
+  border-radius: 2px;
+  text-decoration: none;
+}
+
+.pager a:hover { border-color: var(--ink); color: var(--ink); }
+.pager [aria-current="page"] { background: var(--ink); border-color: var(--ink); color: var(--bone); }
+
+/* ============================================================================
+   11 · FORMULARIO
+   ========================================================================== */
+
+.form { display: grid; gap: var(--s-3); }
+
+.form label {
+  display: grid;
+  gap: 0.4rem;
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  color: var(--ink-70);
+}
+
+.form label span i {
+  font-style: normal;
+  color: var(--minio);
+}
+
+.form input,
+.form select,
+.form textarea {
+  width: 100%;
+  border: var(--hair) solid var(--rule-ink);
+  border-radius: 2px;
+  background: var(--bone);
+  padding: 0.7rem 0.8rem;
+  font-family: var(--f-text);
+  font-size: 1.0625rem;
+  min-height: 44px;
+}
+
+.form textarea { min-height: 8rem; resize: vertical; line-height: 1.5; }
+
+.form select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2317130e' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  padding-right: 2.2rem;
+}
+
+.form :is(input, select, textarea):focus-visible {
+  outline: 2px solid var(--minio);
+  outline-offset: 0;
+  border-color: var(--minio);
+}
+
+.form-note {
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  color: var(--ink-55);
+}
+
+/* Trampa para robots: fuera de pantalla, no display:none (algunos bots lo
+   detectan), y excluida del foco y del lector de pantalla. */
+.trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Formulario y canales conviven: quien ya sabe qué quiere escribe por WhatsApp
+   sin tener que pasar por el formulario. En una columna el formulario va
+   primero porque es el destino más probable de esta página. */
+.contact-layout { display: grid; gap: var(--s-5); }
+
+@media (min-width: 62rem) {
+  .contact-layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: var(--s-5) var(--s-5);
+    align-items: start;
+  }
+}
+
+/* Esta página necesita más ancho que una medida de lectura. */
+.prose--wide { grid-column: text-start / aside-end; }
+
+/* Canales de contacto: filas regladas, no tarjetas con ícono. */
+.channels { border-top: 2px solid var(--ink); }
+
+.channels > div {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: var(--s-3);
+  padding-block: var(--s-3);
+  border-bottom: var(--hair) solid var(--rule);
+  align-items: baseline;
+}
+
+.channels dt {
+  font-family: var(--f-data);
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-55);
+}
+
+.channels dd { margin: 0; }
+.channels dd b { display: block; font-family: var(--f-display); font-size: 1.0625rem; font-stretch: 105%; }
+.channels dd small { display: block; font-family: var(--f-data); font-size: var(--t-sm); color: var(--ink-55); margin-top: 0.2rem; }
+
+/* ============================================================================
+   12 · PIE
+   ========================================================================== */
+
+.colophon {
+  margin-top: auto;
+  border-top: 2px solid var(--ink);
+  background: var(--bone-2);
+  padding-block: var(--s-5) var(--s-3);
+}
+
+.colophon-grid {
+  grid-column: key-start / aside-end;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--s-4) var(--gap);
+}
+
+.colophon h2 {
+  font-size: var(--t-xs);
+  font-family: var(--f-data);
+  font-weight: 500;
+  font-stretch: 100%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-55);
+  margin-bottom: var(--s-2);
+  letter-spacing: 0.1em;
+}
+
+.colophon li { padding-block: 0.15rem; }
+
+/* Los enlaces del pie son de lista, no de párrafo: se les da altura propia para
+   que sean un blanco cómodo con el pulgar. */
+.colophon li a {
+  display: inline-block;
+  min-height: 24px;
+  padding-block: 0.1rem;
+}
+
+.colophon a { font-size: 1rem; text-decoration-color: var(--rule); }
+
+.colophon address {
+  font-style: normal;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.colophon .signature { margin-bottom: var(--s-2); }
+
+.colophon-bottom {
+  grid-column: key-start / aside-end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  justify-content: space-between;
+  margin-top: var(--s-5);
+  padding-top: var(--s-2);
+  border-top: var(--hair) solid var(--rule-mid);
+  font-family: var(--f-data);
+  font-size: var(--t-xs);
+  color: var(--ink-55);
+}
+
+.social {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: var(--s-3);
+}
+
+.social a {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: var(--hair) solid var(--rule-mid);
+  border-radius: 2px;
+  color: var(--ink-70);
+}
+
+.social a:hover { border-color: var(--ink); color: var(--minio-ink); background: var(--bone); }
+
+/* Aviso de notificaciones: control real, con estado. */
+.push-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  align-items: center;
+  margin-top: var(--s-2);
+}
+
+.push-toast {
+  position: fixed;
+  left: var(--pad);
+  right: var(--pad);
+  bottom: 1rem;
+  z-index: 80;
+  max-width: 28rem;
+  margin-inline: auto;
+  background: var(--bone);
+  border: var(--hair) solid var(--ink);
+  border-radius: 2px;
+  box-shadow: 4px 4px 0 var(--ink);
+  padding: var(--s-3);
+  transform: translateY(140%);
+  transition: transform 0.28s var(--ease);
+}
+
+.push-toast.visible { transform: translateY(0); }
+.push-toast p { font-size: 1rem; margin-bottom: var(--s-2); }
+.push-toast-actions { display: flex; gap: var(--s-2); flex-wrap: wrap; }
+
+/* ============================================================================
+   13 · UTILIDADES
+   ========================================================================== */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.stack-4 > * + * { margin-top: var(--s-4); }
+.stack-3 > * + * { margin-top: var(--s-3); }
+
+.rule-top { border-top: var(--hair) solid var(--rule); padding-top: var(--s-3); }
+
+/* Cierre de página: invitación al contacto sin repetir el patrón de banda. */
+.closer {
+  border-top: 2px solid var(--ink);
+  background: var(--ink);
+  color: var(--bone);
+  padding-block: var(--s-6);
+}
+
+.closer h2 { color: var(--bone); max-width: 18ch; }
+
+/* Papel sobre tinta adelgaza la letra: el suavizado en escala de grises se come
+   medio trazo de una serif. Se compensa con peso, no subiendo la opacidad —
+   que sólo la aclararía todavía más. */
+.closer p {
+  color: rgba(241, 235, 222, 0.92);
+  font-weight: 500;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+  margin-top: var(--s-3);
+  max-width: 42ch;
+}
+
+.closer .key { color: rgba(241, 235, 222, 0.72); }
+.closer .btn-row { margin-top: var(--s-4); }
+
+/* Los enlaces sueltos van en papel; los botones mandan sobre esa regla. El
+   selector de abajo excluye .btn a propósito: cuando no lo hacía, el color del
+   texto del botón primario ganaba por especificidad y quedaba hueso sobre
+   hueso, es decir, invisible. */
+.closer a:not(.btn) { color: var(--bone); }
+
+.closer .btn {
+  --btn-bg: var(--bone);
+  --btn-fg: var(--ink);
+  color: var(--ink);
+  border-color: var(--bone);
+  box-shadow: 3px 3px 0 var(--minio);
+}
+
+.closer .btn:hover { color: var(--ink); box-shadow: 2px 2px 0 var(--minio); }
+
+.closer .btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--bone);
+  color: var(--bone);
+  box-shadow: 3px 3px 0 rgba(241, 235, 222, 0.45);
+}
+
+.closer .btn--ghost:hover { color: var(--bone); background: rgba(241, 235, 222, 0.1); }
+
+/* ============================================================================
+   14 · ADAPTACIÓN A PANTALLAS ANGOSTAS
+   La grilla de tres columnas colapsa a una. Las claves pasan de vivir al margen
+   a encabezar su bloque. Nada se apila "por defecto": cada patrón dice cómo.
+   ========================================================================== */
+
+@media (max-width: 61.99rem) {
+  :root { --key-col: 0px; --aside-col: 0px; }
+
+  .sheet {
+    grid-template-columns:
+      [full-start] var(--pad)
+      [key-start key-end text-start] minmax(0, 1fr)
+      [text-end aside-start aside-end] var(--pad)
+      [full-end];
+  }
+
+  .sheet > .col-key,
+  .sheet > .col-aside { grid-column: text; }
+
+  .band-head,
+  .cover-sub,
+  .article-head,
+  .portrait,
+  .colophon-grid,
+  .colophon-bottom,
+  .cover-head {
+    grid-column: text;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Los hijos de estos bloques se colocaban con nombres de línea (key, text,
+     aside) que en la grilla de una sola columna ya no existen. CSS Grid no los
+     ignora: inventa líneas implícitas con ese nombre y manda los elementos a
+     columnas fuera de la grilla — que es como la nota al margen terminaba
+     encima de los botones y después reducida a una palabra por renglón.
+
+     Van enumerados uno por uno y con `>` a propósito: una consulta de medios no
+     agrega especificidad, así que `.cover-sub > *` (0,1,0) perdía contra el
+     `.cover-sub .lede` (0,2,0) de más arriba y la regla no se aplicaba nunca. */
+  .cover-sub > .lede,
+  .cover-sub > .btn-row,
+  .cover-sub > .col-aside,
+  .cover-head > *,
+  .band-head > .key,
+  .band-head > hgroup,
+  .article-head > .col-key,
+  .article-head > hgroup,
+  .article-head > .article-meta,
+  .portrait > img,
+  .portrait > figcaption {
+    grid-column: auto;
+  }
+
+  .band-head .key { padding-top: 0; margin-bottom: var(--s-2); }
+
+  .cover-sub { gap: var(--s-3); }
+
+  /* La nota al margen es complementaria: en una columna va después de los
+     botones, no antes. */
+  .cover-sub .col-aside { order: 3; margin-top: var(--s-2); }
+  .cover-sub .btn-row { order: 2; }
+
+  .portrait img { max-width: 11rem; }
+}
+
+@media (max-width: 47.99rem) {
+  :root {
+    --t-base: 1.0625rem;
+    --s-6: 3.5rem;
+    --s-7: 4.5rem;
+  }
+
+  .masthead nav {
+    display: none;
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    flex-direction: column;
+    gap: 0;
+    background: var(--bone);
+    border-bottom: var(--hair) solid var(--ink);
+    padding: var(--s-2) var(--pad) var(--s-3);
+    box-shadow: 0 14px 24px -18px rgba(23, 19, 14, 0.6);
+  }
+
+  .masthead nav.open { display: flex; }
+
+  .masthead nav a {
+    padding-block: 0.8rem;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    border-bottom: var(--hair) solid var(--rule);
+    border-left: 2px solid transparent;
+    padding-left: 0;
+  }
+
+  .masthead nav a[aria-current="page"] {
+    border-bottom-color: var(--rule);
+    border-left-color: var(--minio);
+    padding-left: 0.7rem;
+  }
+
+  .masthead nav a:last-of-type { border-bottom: 0; }
+
+  .masthead-cta { display: none; }
+  .menu-btn { display: flex; }
+  .masthead-inner { grid-template-columns: 1fr auto; position: relative; }
+  .masthead nav { grid-column: 1 / -1; }
+
+  /* Un poco más chico y menos expandido que en escritorio: así «hacés a mano»
+     entra completo en un renglón y el trazo de acento no se parte en dos
+     pedazos con largos distintos. */
+  .cover h1 {
+    font-size: clamp(2.05rem, 8.4vw, 2.9rem);
+    font-stretch: 108%;
+    max-width: 100%;
+    letter-spacing: -0.026em;
+  }
+
+  /* La frase acentuada viaja entera. Partida en dos renglones el trazo salía
+     cortado en dos tramos de largo distinto y parecía un error de impresión.
+     Mide unos 260 px al tamaño de acá: entra hasta en una pantalla de 320. */
+  .cover h1 .mark { white-space: nowrap; }
+
+  .datastrip { grid-template-columns: repeat(2, 1fr); }
+  .datastrip div { border-right: 0; padding-right: var(--s-3); }
+  .datastrip div:nth-child(odd) { border-right: var(--hair) solid var(--rule); }
+  .datastrip div:not(:nth-last-child(-n + 2)) { border-bottom: var(--hair) solid var(--rule); }
+
+  .ledger > li,
+  .index a { grid-template-columns: minmax(0, 1fr); }
+
+  .ledger > li > .key,
+  .index time { padding-top: 0; }
+
+  .ledger--split > li > :last-child { padding-left: 0; border-left: 0; }
+
+  .spec th,
+  .spec td { display: block; width: auto; padding-right: 0; }
+  .spec th { border-bottom: 0; padding-bottom: 0.15rem; }
+  .spec td { padding-top: 0; }
+
+  .channels > div { grid-template-columns: minmax(0, 1fr); gap: 0.25rem; }
+
+  .plate figcaption { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; }
+
+  .colophon-bottom { flex-direction: column; }
+}
+
+/* ============================================================================
+   MOVIMIENTO
+   El sitio no tiene animaciones de entrada. Lo único que se mueve responde a
+   una acción del usuario (foco, presión, apertura de menú). Aun así, se respeta
+   la preferencia del sistema.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================================
+   15 · IMPRESIÓN
+   Las notas se imprimen y se archivan. Que salgan bien es parte del trabajo.
+   ========================================================================== */
+
+@media print {
+  :root { --pad: 0; --key-col: 0px; --aside-col: 0px; }
+
+  body { background: #fff; color: #000; font-size: 11pt; }
+
+  .masthead,
+  .menu-btn,
+  .closer,
+  .filter,
+  .pager,
+  .push-toast,
+  .push-row,
+  .social,
+  .btn-row,
+  .skip-link { display: none !important; }
+
+  .sheet { display: block; }
+
+  a { text-decoration: none; }
+  .prose a::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; word-break: break-all; }
+
+  h1, h2, h3 { break-after: avoid; }
+  p, li, figure, blockquote { break-inside: avoid; }
+
+  .colophon { background: none; border-top: 1px solid #000; padding-block: 8pt; }
+}

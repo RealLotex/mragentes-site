@@ -1,0 +1,60 @@
+{{ define "main" }}
+
+<article class="sheet">
+
+  <header class="article-head">
+    <p class="key col-key">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
+    </p>
+    <hgroup>
+      <h1>{{ .Title }}</h1>
+      {{- with .Description }}<p class="lede">{{ . }}</p>{{ end }}
+    </hgroup>
+    <p class="article-meta">
+      <span>{{ math.Max 1 (math.Round (div (float .WordCount) 200)) }} min de lectura</span>
+      {{- with .Params.tags }}
+      <span class="topics" style="display:flex;gap:.4rem;flex-wrap:wrap">
+        {{- range . }}
+        {{- $t := . }}
+        {{- with site.GetPage (printf "/tags/%s" ($t | urlize)) }}<a class="topic" href="{{ .RelPermalink }}">{{ $t }}</a>{{ else }}<span class="topic">{{ $t }}</span>{{ end }}
+        {{- end }}
+      </span>
+      {{- end }}
+    </p>
+  </header>
+
+  {{- /* La imagen de portada de cada nota sigue existiendo en el front matter
+         porque la usan las tarjetas de Facebook, WhatsApp y Twitter al compartir.
+         Pero no se pinta arriba del artículo: son fotos de archivo genéricas que
+         no ilustran nada y empujaban el texto media pantalla hacia abajo. */ -}}
+
+  <div class="prose">
+    {{ .Content }}
+  </div>
+
+  {{- $rel := where (where site.RegularPages "Section" "notas") "Permalink" "!=" .Permalink }}
+  {{- with .Params.tags }}
+    {{- $tags := . }}
+    {{- $rel = where $rel ".Params.tags" "intersect" $tags }}
+  {{- end }}
+  {{- with first 3 $rel }}
+  <aside class="rule-top" style="margin-bottom:var(--s-6)">
+    <p class="key" style="margin-bottom:var(--s-2)">Seguir por acá</p>
+    <ul class="index">
+      {{- range . }}
+      <li>
+        <a href="{{ .RelPermalink }}">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
+          <div><h3>{{ .Title }}</h3></div>
+        </a>
+      </li>
+      {{- end }}
+    </ul>
+  </aside>
+  {{- end }}
+
+</article>
+
+{{ partial "closer.html" . }}
+
+{{ end }}

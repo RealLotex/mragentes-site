@@ -1,84 +1,100 @@
-<div class="contact-grid">
-    <div>
-        <form class="contact-form" action="https://formspree.io/f/xwvjyyky" method="POST" target="_blank">
-            <label for="nombre">Nombre *</label>
-            <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre">
+{{- /* Formulario de contacto + canales.
 
-            <label for="email">Email *</label>
-            <input type="email" id="email" name="email" required placeholder="tu@email.com">
+  Cambios respecto de la versión anterior:
+  · `target="_blank"` fuera. Abría el acuse de Formspree en una pestaña nueva y
+    dejaba al visitante mirando un dominio ajeno. Ahora `_next` lo devuelve a
+    /gracias/, que es una página nuestra y ya existía sin usarse.
+  · `_gotcha` es la trampa de Formspree para robots: si viene completo, descarta
+    el envío. Va fuera de pantalla, no en display:none.
+  · `autocomplete` real en cada campo, para que el navegador complete de una vez.
+  · Los canales son filas de una lista de definiciones, no cinco tarjetas con
+    cinco íconos casi idénticos.
+*/ -}}
 
-            <label for="telefono">Teléfono</label>
-            <input type="tel" id="telefono" name="telefono" placeholder="11 1234-5678">
+<div class="contact-layout">
+  <form class="form" action="https://formspree.io/f/xwvjyyky" method="POST">
+    <input type="hidden" name="_next" value="{{ "/gracias/" | absURL }}">
+    <input type="hidden" name="_subject" value="Consulta desde mragentes.com.ar">
+    <p class="trap" aria-hidden="true">
+      <label>No completar este campo <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+    </p>
 
-            <label for="servicio">¿Qué servicio te interesa?</label>
-            <select id="servicio" name="servicio">
-                <option value="">Seleccioná una opción</option>
-                <option value="automatizacion">Automatización de procesos</option>
-                <option value="asistente">Asistente con IA</option>
-                <option value="datos">Análisis de datos</option>
-                <option value="integracion">Integraciones</option>
-                <option value="llave-en-mano">Proyecto llave en mano</option>
-                <option value="otro">Otro</option>
-            </select>
+    <label>
+      <span>Nombre <i aria-hidden="true">*</i><span class="visually-hidden">(obligatorio)</span></span>
+      <input type="text" name="nombre" required autocomplete="name">
+    </label>
 
-            <label for="mensaje">Mensaje *</label>
-            <textarea id="mensaje" name="mensaje" required placeholder="Contanos en qué podemos ayudarte..."></textarea>
+    <label>
+      <span>Correo <i aria-hidden="true">*</i><span class="visually-hidden">(obligatorio)</span></span>
+      <input type="email" name="email" required autocomplete="email" inputmode="email">
+    </label>
 
-            <button type="submit" class="btn btn-primary">Enviar mensaje</button>
-        </form>
+    <label>
+      <span>Teléfono o WhatsApp</span>
+      <input type="tel" name="telefono" autocomplete="tel" inputmode="tel" placeholder="3404 50-2729">
+    </label>
+
+    <label>
+      <span>Empresa y rubro</span>
+      <input type="text" name="empresa" autocomplete="organization" placeholder="Metalúrgica, comercio, estudio…">
+    </label>
+
+    <label>
+      <span>Qué tarea te está comiendo el día <i aria-hidden="true">*</i><span class="visually-hidden">(obligatorio)</span></span>
+      <textarea name="mensaje" required rows="6" placeholder="Contame cómo se hace hoy, quién la hace y más o menos cuánto tiempo se lleva por semana. Con eso alcanza para la primera charla."></textarea>
+    </label>
+
+    <div class="btn-row">
+      <button class="btn btn--minio" type="submit">Enviar</button>
+      <span class="form-note">Contesto dentro del día hábil.</span>
     </div>
 
-    <div class="contact-info">
-        <h3>También podés contactarnos por:</h3>
+    <p class="form-note">
+      El formulario se procesa con Formspree y el mensaje llega a
+      {{ site.Params.email }}. No se comparte con nadie más y no se usa para
+      ninguna lista de correo. Si preferís no pasar por un tercero, escribime
+      directo por WhatsApp o por correo.
+    </p>
+  </form>
 
-        <div class="contact-channel">
-            <div class="contact-channel-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            </div>
-            <div class="contact-channel-text">
-                <div class="label">WhatsApp</div>
-                <div class="value"><a href="https://wa.me/5493404502729" target="_blank" rel="noopener">3404 50-2729</a></div>
-            </div>
-        </div>
-
-        <div class="contact-channel">
-            <div class="contact-channel-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            </div>
-            <div class="contact-channel-text">
-                <div class="label">Dirección</div>
-                <div class="value">Ciudad de Gálvez, Provincia de Santa Fe</div>
-            </div>
-        </div>
-
-        <div class="contact-channel">
-            <div class="contact-channel-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            </div>
-            <div class="contact-channel-text">
-                <div class="label">Email</div>
-                <div class="value"><a href="mailto:marcos@mragentes.com.ar">marcos@mragentes.com.ar</a></div>
-            </div>
-        </div>
-
-        <div class="contact-channel">
-            <div class="contact-channel-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-            </div>
-            <div class="contact-channel-text">
-                <div class="label">Instagram</div>
-                <div class="value"><a href="https://www.instagram.com/mragentes" target="_blank" rel="noopener">@mragentes</a></div>
-            </div>
-        </div>
-
-        <div class="contact-channel">
-            <div class="contact-channel-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-            </div>
-            <div class="contact-channel-text">
-                <div class="label">Facebook</div>
-                <div class="value"><a href="https://www.facebook.com/mragentes" target="_blank" rel="noopener">MR Agentes</a></div>
-            </div>
-        </div>
-    </div>
+  <div>
+    <dl class="channels">
+      <div>
+        <dt>WhatsApp</dt>
+        <dd>
+          <b><a href="https://wa.me/{{ site.Params.whatsapp }}" rel="noopener">3404 50-2729</a></b>
+          <small>La vía más rápida. Lunes a viernes, 9 a 18 h.</small>
+        </dd>
+      </div>
+      <div>
+        <dt>Correo</dt>
+        <dd>
+          <b><a href="mailto:{{ site.Params.email }}">{{ site.Params.email }}</a></b>
+          <small>Para lo que necesite adjuntos o quede por escrito.</small>
+        </dd>
+      </div>
+      <div>
+        <dt>Dónde</dt>
+        <dd>
+          <b>Gálvez, provincia de Santa Fe</b>
+          <small>Las reuniones presenciales se coordinan antes por WhatsApp, en tu
+          oficina o donde esté el proceso que vamos a mirar. Remoto, en todo el país.</small>
+        </dd>
+      </div>
+      <div>
+        <dt>Horario</dt>
+        <dd>
+          <b>Lunes a viernes, 9 a 18 h</b>
+          <small>Hora de Argentina (UTC−3).</small>
+        </dd>
+      </div>
+      <div>
+        <dt>Redes</dt>
+        <dd>
+          <b><a href="{{ site.Params.instagram }}" rel="noopener">@mragentes</a></b>
+          <small>También en <a href="{{ site.Params.facebook }}" rel="noopener">Facebook</a> y por <a href="{{ "/notas/index.xml" | relURL }}">RSS</a>.</small>
+        </dd>
+      </div>
+    </dl>
+  </div>
 </div>

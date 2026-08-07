@@ -1,22 +1,35 @@
 {{ define "main" }}
-<!-- Page Header -->
-<section class="page-header">
-    <h1>#{{ .Title }}</h1>
-    <p>{{ len .Pages }} nota{{ if ne (len .Pages) 1 }}s{{ end }} con esta etiqueta</p>
+
+<section class="sheet">
+  <header class="article-head">
+    <p class="key col-key">Tema</p>
+    <hgroup>
+      <h1>{{ .Title }}</h1>
+      <p class="lede">{{ len .Pages }} nota{{ if ne (len .Pages) 1 }}s{{ end }} sobre este tema.</p>
+    </hgroup>
+  </header>
 </section>
 
-<main class="main-content">
-    <div class="tag-term-nav">
-        <a href="{{ "/tags/" | relURL }}" class="back-link">← Todas las tags</a>
-        <a href="{{ "/notas/" | relURL }}" class="back-link">← Todas las notas</a>
-    </div>
+<section class="band band--tight sheet">
+  <p class="col-wide" style="margin-bottom:var(--s-3)">
+    <a class="arrow-link" href="{{ "/notas/" | relURL }}">Volver al índice de notas</a>
+  </p>
 
-    <div class="notas-list">
-        <div class="nota-card-grid">
-            {{ range .Pages }}
-            {{ partial "nota-card.html" . }}
-            {{ end }}
+  <ul class="index col-wide">
+    {{- range .Pages }}
+    <li>
+      <a href="{{ .RelPermalink }}">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
+        <div>
+          <h2>{{ .Title }}</h2>
+          <p>{{ .Description | default .Summary | plainify | truncate 190 }}</p>
         </div>
-    </div>
-</main>
+      </a>
+    </li>
+    {{- end }}
+  </ul>
+</section>
+
+{{ partial "closer.html" . }}
+
 {{ end }}
