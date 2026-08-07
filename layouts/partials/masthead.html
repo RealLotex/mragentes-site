@@ -1,0 +1,33 @@
+<header class="masthead">
+  <div class="masthead-inner">
+
+    {{- /* La marca es la mano grabada. El logotipo azul anterior no aportaba
+           nada que la mano no diga mejor, y peleaba con la paleta. */ -}}
+    <a class="signature" href="{{ "/" | relURL }}" {{ if .IsHome }}aria-current="page"{{ end }}>
+      <img src="/faviconhand512.png" width="30" height="30" alt="" aria-hidden="true">
+      <span class="signature-name">MR&nbsp;<span>Agentes</span></span>
+    </a>
+
+    <nav id="menu-principal" data-menu aria-label="Principal">
+      {{- $here := .RelPermalink }}
+      {{- range site.Menus.main }}
+        {{- $url := .URL | relURL }}
+        {{- $on := or (eq $here $url) (and (ne $url "/") (hasPrefix $here $url)) }}
+      <a href="{{ $url }}"{{ if $on }} aria-current="page"{{ end }}>{{ .Name }}</a>
+      {{- end }}
+    </nav>
+
+    <div class="masthead-cta">
+      <a class="btn btn--minio" href="{{ "/contacto/" | relURL }}">Escribinos</a>
+    </div>
+
+    {{- /* Nace oculto: sin JavaScript el <nav> queda visible en el flujo y un
+           botón que no hace nada sólo confunde. site.js lo revela. */ -}}
+    <button class="menu-btn" type="button" data-menu-btn hidden
+            aria-expanded="false" aria-controls="menu-principal">
+      <span data-menu-label>Menú</span>
+      <span class="menu-btn-bars" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+
+  </div>
+</header>

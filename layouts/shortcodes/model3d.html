@@ -1,3 +1,0 @@
-{{ $src := .Get "src" | default "/models/model.glb" }}
-{{ $label := .Get "label" | default "Modelo 3D" }}
-{{ partial "model3d.html" (dict "src" $src "label" $label) }}

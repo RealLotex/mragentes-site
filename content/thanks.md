@@ -1,12 +1,13 @@
 ---
-title: "Gracias por contactarte con MR Agentes"
-description: "Tu mensaje fue enviado correctamente. Te responderemos a la brevedad. Seguinos en Instagram para más contenido sobre automatización e IA."
-image: "/images/mragentes.png"
-image_alt: "MR Agentes - Logo"
-layout: "thanks"
+title: Mensaje enviado
+url: /gracias/
+aliases:
+  - /thanks/
+layout: thanks
+description: Recibimos tu consulta. Contestamos dentro del día hábil por el mismo
+  canal por el que escribiste.
+image: /images/mragentes.png
 ---
-¡Gracias por escribirnos! Te vamos a responder a la brevedad.
 
-Mientras tanto, seguinos en [Instagram](https://www.instagram.com/mragentes) para no perderte nuestras novedades sobre automatización e IA.
-
-[Volver al inicio →](/)
+Si en el mensaje contaste qué tarea querés sacarte de encima, es probable que la
+respuesta ya venga con una primera opinión sobre si conviene automatizarla o no.

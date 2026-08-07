@@ -1,0 +1,71 @@
+{{- /* ---------------------------------------------------------------------
+  Datos estructurados.
+
+  Regla: acá sólo va lo que es cierto y verificable en la propia página. La
+  versión anterior declaraba priceRange, un logo de 3000×3000 que no existía y
+  un SearchAction apuntando a /search/, que nunca se construyó. Un dato
+  estructurado que miente es peor que no tenerlo: Google lo cruza con la página.
+--------------------------------------------------------------------- */ -}}
+
+{{- $org := dict
+  "@type" "ProfessionalService"
+  "@id" (printf "%s#mragentes" site.BaseURL)
+  "name" "MR Agentes"
+  "description" site.Params.description
+  "url" site.BaseURL
+  "image" (absURL "/faviconhand512.png")
+  "email" site.Params.email
+  "telephone" "+5493404502729"
+  "founder" (dict "@type" "Person" "name" "Marcos Rosich")
+  "knowsLanguage" "es-AR"
+  "address" (dict
+    "@type" "PostalAddress"
+    "addressLocality" "Gálvez"
+    "addressRegion" "Santa Fe"
+    "addressCountry" "AR")
+  "areaServed" (slice
+    (dict "@type" "City" "name" "Gálvez")
+    (dict "@type" "AdministrativeArea" "name" "Provincia de Santa Fe"))
+  "sameAs" (slice site.Params.instagram site.Params.facebook)
+-}}
+
+{{- $graph := slice $org -}}
+
+{{- if eq .Section "notas" -}}
+  {{- $article := dict
+    "@type" "BlogPosting"
+    "@id" (printf "%s#nota" .Permalink)
+    "headline" (.Title | plainify)
+    "description" (.Description | plainify)
+    "url" .Permalink
+    "datePublished" (.Date.Format "2006-01-02T15:04:05-03:00")
+    "dateModified" (.Lastmod.Format "2006-01-02T15:04:05-03:00")
+    "inLanguage" "es-AR"
+    "wordCount" .WordCount
+    "isAccessibleForFree" true
+    "author" (dict "@id" (printf "%s#mragentes" site.BaseURL))
+    "publisher" (dict "@id" (printf "%s#mragentes" site.BaseURL))
+    "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+  -}}
+  {{- with .Params.tags }}{{ $article = merge $article (dict "keywords" (delimit . ", ")) }}{{ end -}}
+  {{- with .Params.image }}{{ $article = merge $article (dict "image" (absURL .)) }}{{ end -}}
+  {{- $graph = $graph | append $article -}}
+{{- end -}}
+
+{{- /* Miga de pan: sólo en páginas internas, y armada desde los ancestros
+       reales de Hugo en vez de adivinar posiciones a mano. */ -}}
+{{- if not .IsHome -}}
+  {{- $items := slice (dict "@type" "ListItem" "position" 1 "name" "Inicio" "item" site.BaseURL) -}}
+  {{- $pos := 1 -}}
+  {{- range (.Ancestors.Reverse) -}}
+    {{- if not .IsHome -}}
+      {{- $pos = add $pos 1 -}}
+      {{- $items = $items | append (dict "@type" "ListItem" "position" $pos "name" .Title "item" .Permalink) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $pos = add $pos 1 -}}
+  {{- $items = $items | append (dict "@type" "ListItem" "position" $pos "name" .Title "item" .Permalink) -}}
+  {{- $graph = $graph | append (dict "@type" "BreadcrumbList" "@id" (printf "%s#ruta" .Permalink) "itemListElement" $items) -}}
+{{- end -}}
+
+<script type="application/ld+json">{{ (dict "@context" "https://schema.org" "@graph" $graph) | jsonify }}</script>

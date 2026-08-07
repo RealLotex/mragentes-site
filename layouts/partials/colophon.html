@@ -1,0 +1,70 @@
+<footer class="colophon sheet">
+  <div class="colophon-grid">
+
+    <div>
+      <a class="signature" href="{{ "/" | relURL }}">
+        <img src="/faviconhand512.png" width="30" height="30" alt="" aria-hidden="true">
+        <span class="signature-name">MR&nbsp;<span>Agentes</span></span>
+      </a>
+      <address>
+        Gálvez, provincia de Santa Fe<br>
+        Argentina<br>
+        <a href="mailto:{{ site.Params.email }}">{{ site.Params.email }}</a><br>
+        <a href="https://wa.me/{{ site.Params.whatsapp }}" rel="noopener">WhatsApp 3404 50-2729</a>
+      </address>
+      <div class="social">
+        <a href="{{ site.Params.instagram }}" rel="me noopener" aria-label="MR Agentes en Instagram">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="{{ site.Params.facebook }}" rel="me noopener" aria-label="MR Agentes en Facebook">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3 0-1.3-.13-2.46-.13-2.43 0-4.1 1.49-4.1 4.22V9.9H7.4V13h2.74v8z"/></svg>
+        </a>
+        <a href="{{ "/notas/index.xml" | relURL }}" aria-label="Suscribirse por RSS">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1.4" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div>
+      <h2>Secciones</h2>
+      <ul>
+        {{- range site.Menus.main }}
+        <li><a href="{{ .URL | relURL }}">{{ .Name }}</a></li>
+        {{- end }}
+        <li><a href="{{ "/tags/" | relURL }}">Temas</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h2>Atención</h2>
+      <ul>
+        <li>Lunes a viernes, 9 a 18 h (ART)</li>
+        <li>Presencial en Gálvez, coordinando antes</li>
+        <li>Remoto en todo el país</li>
+        <li><a href="{{ "/contacto/" | relURL }}">Formulario de contacto</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h2>Avisos de nota nueva</h2>
+      <div class="push-row">
+        <button class="btn btn--ghost" type="button" data-push-btn hidden aria-pressed="false">Avisarme cuando publique</button>
+      </div>
+      <p class="form-note" data-push-status style="margin-top:.6rem">
+        Un aviso por cada nota nueva. También hay <a href="{{ "/notas/index.xml" | relURL }}">RSS</a>.
+      </p>
+    </div>
+
+  </div>
+
+  {{- /* Colofón propiamente dicho. Que un sitio declare con qué está hecho es
+         una costumbre vieja de la imprenta y sigue siendo la forma más corta de
+         demostrar que alguien tomó decisiones en vez de aceptar un tema. */ -}}
+  <div class="colophon-bottom">
+    <span>&copy; {{ now.Year }} MR Agentes · Gálvez, Santa Fe</span>
+    <span>
+      Compuesto en Archivo y Chivo&nbsp;Mono (Omnibus-Type) y Alegreya (Huerta Tipográfica), las tres dibujadas en Argentina.
+      Sin cookies ni analítica de terceros. <a href="{{ "/colofon/" | relURL }}">Colofón</a>
+    </span>
+  </div>
+</footer>

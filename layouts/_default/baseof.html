@@ -1,257 +1,83 @@
 <!DOCTYPE html>
 <html lang="es-AR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {{- $description := .Description | default .Summary | default .Site.Params.description }}
-    {{- $title := .Site.Title }}
-    {{- if .IsHome }}
-      {{- $title = printf "%s | La automatización con IA llegó a Gálvez" .Site.Title }}
-    {{- else if .Title }}
-      {{- $title = printf "%s | %s" .Title .Site.Title }}
-    {{- end }}
+{{- /* Título y descripción se arman una sola vez y se reutilizan en todas las
+       etiquetas sociales: antes cada bloque los recalculaba y se iban
+       desincronizando. */ -}}
+{{- $desc := .Description | default .Summary | default site.Params.description | plainify | truncate 158 }}
+{{- $title := cond .IsHome (printf "%s — automatización y agentes de IA en Gálvez, Santa Fe" site.Title) (printf "%s · %s" .Title site.Title) }}
+{{- $img := absURL (.Params.image | default "/images/mragentes.png") }}
 
-    <meta name="description" content="{{ $description | plainify | truncate 155 }}">
-    <meta name="theme-color" content="#f4eddc">
-    <meta name="geo.region" content="AR-S">
-    <meta name="geo.placename" content="Ciudad de Gálvez, Santa Fe">
-    <meta name="author" content="MR Agentes">
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-    <meta name="googlebot-news" content="index, follow">
-    <meta name="generator" content="MR Agentes CMS">
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}">
+<link rel="canonical" href="{{ .Permalink }}">
 
-    <!-- Push Notifications -->
-    <meta name="vapid-key" content="BFGo1CVPwPDvjg-P6drE18gKe8m00LZDVUPxO7DRfRX9zLYqco57y-V0hDsot9rINydYxOmCkK-_TijpFNeM6x0">
-    <meta name="push-api-url" content="https://mragentes-push.rosichmarcos.workers.dev">
+<meta name="theme-color" content="#f1ebde">
+<meta name="color-scheme" content="light">
+<meta name="author" content="MR Agentes">
+<meta name="geo.region" content="AR-S">
+<meta name="geo.placename" content="Gálvez, Santa Fe">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="{{ "manifest.json" | absURL }}">
-    <link rel="canonical" href="{{ .Permalink }}">
-    <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ "/sitemap.xml" | absURL }}">
-    <link rel="search" type="application/opensearchdescription+xml" title="{{ .Site.Title }}" href="{{ "/opensearch.xml" | absURL }}">
+{{- /* Fuentes: autoalojadas y precargadas. Las dos que pintan el primer
+       viewport se precargan; la itálica y la monoespaciada llegan después
+       porque no bloquean nada que se vea de entrada. */}}
+<link rel="preload" href="/fonts/archivo-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/alegreya-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 
-    <!-- RSS Feed para que Google / ChatGPT / Gemini detecten contenido nuevo -->
-    <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} — Notas" href="{{ "/notas/index.xml" | absURL }}">
-    <link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}" href="{{ "/index.xml" | absURL }}">
+{{- with resources.Get "css/main.css" }}
+  {{- $css := . | minify | fingerprint "sha256" }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{- end }}
 
-    <title>{{ $title }}</title>
+{{- $js := slice (resources.Get "js/site.js") (resources.Get "js/push.js") | resources.Concat "js/site.bundle.js" | minify | fingerprint "sha256" }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="{{ $title }}">
-    <meta property="og:description" content="{{ $description | plainify | truncate 155 }}">
-    <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
-    <meta property="og:url" content="{{ .Permalink }}">
-    <meta property="og:site_name" content="{{ .Site.Title }}">
-    <meta property="og:locale" content="es_AR">
-    {{- with .Params.image | default "/images/mragentes.png" }}
-    <meta property="og:image" content="{{ . | absURL }}">
-    <meta property="og:image:alt" content="{{ $.Title }}">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    {{- end }}
-    {{ if .IsPage }}<meta property="article:author" content="MR Agentes">
-    <meta property="article:publisher" content="MR Agentes">{{ end }}
-    {{- with .Params.tags }}{{ range . }}<meta property="article:tag" content="{{ . }}">{{ end }}{{ end }}
-    {{- with .Date }}<meta property="article:published_time" content="{{ .Format "2006-01-02T15:04:05-03:00" }}">{{ end }}
-    {{ with .Site.Params.instagram }}<meta property="og:see_also" content="{{ . }}">{{ end }}
-    {{ with .Site.Params.facebook }}<meta property="og:see_also" content="{{ . }}">{{ end }}
+<link rel="icon" href="/faviconhand512.ico" sizes="any">
+<link rel="icon" href="/faviconhand512.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/faviconhand512.png">
+<link rel="manifest" href="/manifest.json">
 
-    <!-- Twitter Cards -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:site" content="@mragentes">
-    <meta name="twitter:title" content="{{ $title }}">
-    <meta name="twitter:description" content="{{ $description | plainify | truncate 155 }}">
-    <meta name="twitter:creator" content="@mragentes">
-    {{- with .Params.image | default "/images/mragentes.png" }}
-    <meta name="twitter:image" content="{{ . | absURL }}">
-    <meta name="twitter:image:alt" content="{{ $.Title }}">
-    {{- end }}
+<link rel="alternate" type="application/rss+xml" title="MR Agentes — Notas" href="{{ "/notas/index.xml" | absURL }}">
+<link rel="sitemap" type="application/xml" href="{{ "/sitemap.xml" | absURL }}">
+<link rel="search" type="application/opensearchdescription+xml" title="{{ site.Title }}" href="{{ "/opensearch.xml" | absURL }}">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ "faviconhand512.ico" | absURL }}">
-    <link rel="icon" type="image/png" sizes="512x512" href="{{ "faviconhand512.png" | absURL }}">
-    <link rel="apple-touch-icon" sizes="512x512" href="{{ "faviconhand512.png" | absURL }}">
+<meta name="vapid-key" content="BFGo1CVPwPDvjg-P6drE18gKe8m00LZDVUPxO7DRfRX9zLYqco57y-V0hDsot9rINydYxOmCkK-_TijpFNeM6x0">
+<meta name="push-api-url" content="https://mragentes-push.rosichmarcos.workers.dev">
 
-    <link rel="preconnect" href="https://mragentes.com.ar">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:type" content="{{ cond (eq .Section "notas") "article" "website" }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:locale" content="es_AR">
+<meta property="og:image" content="{{ $img }}">
+<meta property="og:image:alt" content="{{ .Params.image_alt | default .Title }}">
+{{- if eq .Section "notas" }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05-03:00" }}">
+{{- range .Params.tags }}<meta property="article:tag" content="{{ . }}">{{ end }}
+{{- end }}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@mragentes">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $desc }}">
+<meta name="twitter:image" content="{{ $img }}">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="/css/brand.css?v=21">
-    <link rel="stylesheet" href="/css/scroll.css?v=14">
-
-    <!-- Scroll Animations -->
-    <script src="/js/scroll-animations.js?v=14" defer></script>
-    <script src="/js/main.js?v=14" defer></script>
-    <script src="/js/model3d-offsets.js?v=21" defer></script>
-    <script src="/js/model3d.js?v=21" defer></script>
-    <script src="/js/push-notifications.js?v=14" defer></script>
-
-    {{- if .IsHome }}
-    <!-- Schema.org: Organization + LocalBusiness (Homepage) -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "@id": "{{ .Site.BaseURL }}#organization",
-        "name": "MR Agentes",
-        "description": "Automatización e inteligencia artificial para potenciar tu negocio. Soluciones modernas, resultados reales.",
-        "url": "{{ .Site.BaseURL }}",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "{{ "images/mragentes.png" | absURL }}",
-            "width": 3000,
-            "height": 3000
-        },
-        "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Ciudad de Gálvez",
-            "addressRegion": "Santa Fe",
-            "addressCountry": "AR"
-        },
-        "contactPoint": [{
-            "@type": "ContactPoint",
-            "telephone": "+54-3404-502729",
-            "contactType": "customer service",
-            "email": "marcos@mragentes.com.ar",
-            "availableLanguage": ["Spanish"]
-        }],
-        "sameAs": [
-            "{{ .Site.Params.instagram }}",
-            "{{ .Site.Params.facebook }}"
-        ]
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        "@id": "{{ .Site.BaseURL }}#localbusiness",
-        "name": "MR Agentes",
-        "description": "Servicios de automatización e inteligencia artificial para empresas en Santa Fe.",
-        "url": "{{ .Site.BaseURL }}",
-        "telephone": "+54-3404-502729",
-        "email": "marcos@mragentes.com.ar",
-        "parentOrganization": { "@id": "{{ .Site.BaseURL }}#organization" },
-        "areaServed": [
-            { "@type": "City", "name": "Ciudad de Gálvez" },
-            { "@type": "State", "name": "Santa Fe" }
-        ],
-        "priceRange": "$$"
-    }
-    </script>
-    {{- else if eq .Section "notas" }}
-    <!-- Schema.org: Article (Notas) — enriquecido para Google AI / ChatGPT -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "@id": "{{ .Permalink }}#article",
-        "headline": "{{ .Title }}",
-        "description": "{{ $description | plainify | truncate 155 }}",
-        "author": {
-            "@type": "Organization",
-            "@id": "{{ .Site.BaseURL }}#organization",
-            "name": "MR Agentes"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "@id": "{{ .Site.BaseURL }}#organization"
-        },
-        "datePublished": "{{ .Date.Format "2006-01-02T15:04:05-03:00" }}",
-        "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05-03:00" | default (.Date.Format "2006-01-02T15:04:05-03:00") }}",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "{{ .Permalink }}"
-        },
-        "url": "{{ .Permalink }}",
-        {{- with .Params.image }}
-        "image": {
-            "@type": "ImageObject",
-            "url": "{{ . | absURL }}",
-            "width": 1200,
-            "height": 630
-        },
-        {{- end }}
-        {{- with .Params.tags }}
-        "keywords": "{{ delimit . ", " }}",
-        {{- end }}
-        "articleSection": "Automatización e IA",
-        "inLanguage": "es-AR",
-        "isAccessibleForFree": true
-    }
-    </script>
-    {{- end }}
-
-    <!-- BreadcrumbList Schema (corregido: sin duplicados, @id por página) -->
-    {{- if not .IsHome }}
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "@id": "{{ .Permalink }}#breadcrumb",
-        "itemListElement": [
-            {
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Inicio",
-                "item": "{{ .Site.BaseURL }}"
-            }
-            {{- if .Section }}
-            ,{
-                "@type": "ListItem",
-                "position": 2,
-                "name": "{{ humanize .Section }}",
-                "item": "{{ .Site.BaseURL }}{{ .Section }}/"
-            }
-            {{- end }}
-            {{- if not .IsSection }}
-            ,{
-                "@type": "ListItem",
-                "position": {{ if .Section }}3{{ else }}2{{ end }},
-                "name": "{{ .Title }}",
-                "item": "{{ .Permalink }}"
-            }
-            {{- end }}
-        ]
-    }
-    </script>
-    {{- end }}
-
-    <!-- WebSite Schema para Google SGE / AI Overview -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "@id": "{{ .Site.BaseURL }}#website",
-        "name": "MR Agentes",
-        "description": "{{ .Site.Params.description }}",
-        "url": "{{ .Site.BaseURL }}",
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": "{{ .Site.BaseURL }}search/?q={search_term_string}",
-            "query-input": "required name=search_term_string"
-        }
-    }
-    </script>
+{{ partial "schema.html" . }}
 </head>
+
 <body>
-    {{ partial "header.html" . }}
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-    {{ block "main" . }}{{ end }}
+{{ partial "masthead.html" . }}
 
-    {{ partial "footer.html" . }}
+<main id="contenido">
+  {{- block "main" . }}{{ end -}}
+</main>
 
-    <script>
-        /* Nav siempre en flujo (igual desktop y mobile): sin toggle de menú */
-    </script>
-
-    <!-- Pasamos las tags de cada nota como JSON para search (si es página de notas) -->
-    {{- if eq .Section "notas" }}
-    <script type="application/json" id="page-tags-json">
-    {{- with .Params.tags }}{{ . | jsonify }}{{ else }}[]{{ end }}
-    </script>
-    {{- end }}
+{{ partial "colophon.html" . }}
 </body>
 </html>
