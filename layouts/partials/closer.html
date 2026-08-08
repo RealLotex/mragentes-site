@@ -1,0 +1,20 @@
+{{- /* Cierre de página. Reemplaza al bloque «¿Listo para el próximo paso?»:
+       decía cero y aparecía idéntico en cada página. Éste dice qué pasa cuando
+       escribís y en cuánto tiempo. */ -}}
+<section class="closer sheet">
+  <div class="band-head">
+    <p class="key col-key">Contacto</p>
+    <hgroup>
+      <h2>Contame qué tarea te está comiendo el día</h2>
+      <p>Escribime por WhatsApp o por el formulario y arrancamos por ahí. La primera
+         charla es de una hora y no se cobra; si no hay nada para automatizar, te lo
+         digo ahí mismo.</p>
+    </hgroup>
+  </div>
+  <div class="col-wide">
+    <div class="btn-row">
+      <a class="btn" href="https://wa.me/{{ site.Params.whatsapp }}" rel="noopener">WhatsApp 3404 50-2729</a>
+      <a class="btn btn--ghost" href="{{ "/contacto/" | relURL }}">Formulario de contacto</a>
+    </div>
+  </div>
+</section>

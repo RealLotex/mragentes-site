@@ -1,12 +1,20 @@
 {{ define "main" }}
-<main class="main-content" style="min-height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center;">
-    <article class="content-page" style="max-width: 600px;">
-        <div style="font-size: 4rem; margin-bottom: 1rem; color: var(--brand);">✓</div>
-        <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">{{ .Title }}</h1>
-        <p style="font-size: 1.1rem; color: var(--gray-500); margin-bottom: 2rem;">
-            Te vamos a responder a la brevedad.
-        </p>
-        <a href="/" class="btn btn-primary">Volver al inicio →</a>
-    </article>
-</main>
+<article class="sheet band band--loose">
+  <header class="article-head">
+    <p class="key col-key col-key--minio">Recibido</p>
+    <hgroup>
+      <h1>{{ .Title }}</h1>
+      <p class="lede">Llegó tu mensaje. Contesto por el mismo canal, dentro del día
+        hábil. Si es urgente, escribime por WhatsApp y lo vemos ahora.</p>
+    </hgroup>
+  </header>
+
+  <div class="prose">
+    {{ .Content }}
+    <div class="btn-row" style="margin-top:var(--s-4)">
+      <a class="btn" href="https://wa.me/{{ site.Params.whatsapp }}" rel="noopener">Escribir por WhatsApp</a>
+      <a class="btn btn--ghost" href="{{ "/notas/" | relURL }}">Leer las notas mientras tanto</a>
+    </div>
+  </div>
+</article>
 {{ end }}

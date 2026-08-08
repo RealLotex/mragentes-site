@@ -1,0 +1,34 @@
+{{- /* Ficha técnica de un servicio.
+
+  Cada servicio se describe con los mismos cinco campos, siempre en el mismo
+  orden, incluido el que casi nadie publica: en qué casos NO conviene. Un
+  cuadro comparable entre servicios vale más que tres párrafos de adjetivos.
+
+  Uso:
+    {{< ficha
+        incluye="..."
+        herramientas="..."
+        aporta="..."
+        plazo="..."
+        nosirve="..." >}}
+*/ -}}
+<table class="spec">
+  {{- with .Get "titulo" }}<caption>{{ . }}</caption>{{ end }}
+  <tbody>
+    {{- with .Get "incluye" }}
+    <tr><th scope="row">Qué incluye</th><td>{{ . | markdownify }}</td></tr>
+    {{- end }}
+    {{- with .Get "herramientas" }}
+    <tr><th scope="row">Con qué se hace</th><td>{{ . | markdownify }}</td></tr>
+    {{- end }}
+    {{- with .Get "aporta" }}
+    <tr><th scope="row">Qué necesito de vos</th><td>{{ . | markdownify }}</td></tr>
+    {{- end }}
+    {{- with .Get "plazo" }}
+    <tr><th scope="row">Plazo típico</th><td>{{ . | markdownify }}</td></tr>
+    {{- end }}
+    {{- with .Get "nosirve" }}
+    <tr><th scope="row">Cuándo no conviene</th><td>{{ . | markdownify }}</td></tr>
+    {{- end }}
+  </tbody>
+</table>

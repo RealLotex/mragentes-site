@@ -1,0 +1,78 @@
+{{ define "main" }}
+
+{{- /* ==========================================================================
+     ÍNDICE DE NOTAS
+
+     Antes esto era una grilla de tarjetas con una foto de banco de imágenes de
+     fondo por fila. Costaba varios megabytes, las fotos no decían nada sobre el
+     contenido y las tres columnas obligaban a truncar los títulos.
+
+     Un índice es un índice: fecha, título, de qué trata y con qué temas. Se lee
+     de un vistazo, se busca con Ctrl+F y pesa lo que pesa el texto.
+     ====================================================================== */ -}}
+
+{{ $pages := where site.RegularPages "Section" "notas" }}
+
+<section class="sheet">
+  <header class="article-head">
+    <p class="key col-key">Notas · {{ len $pages }}</p>
+    <hgroup>
+      <h1>{{ .Title }}</h1>
+      <p class="lede">Qué está pasando en automatización e inteligencia artificial y qué
+        significa para una pyme argentina. Cada nota cita sus fuentes al pie.</p>
+    </hgroup>
+  </header>
+</section>
+
+<section class="band band--tight sheet">
+
+  {{- /* El filtro trabaja sobre las filas ya renderizadas. Sin JavaScript el
+         formulario no aparece y el índice completo sigue estando. */ -}}
+  <div class="col-wide filter" data-filter>
+    <div class="filter-field">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.3-4.3"/></svg>
+      <label class="visually-hidden" for="q">Buscar entre las notas</label>
+      <input id="q" type="search" placeholder="Buscar por título o contenido" data-filter-input autocomplete="off">
+      <span class="filter-count" data-filter-count>{{ len $pages }} notas</span>
+    </div>
+
+    {{- $top := first 10 site.Taxonomies.tags.ByCount }}
+    {{- with $top }}
+    <div class="filter-topics">
+      <span class="key">Temas</span>
+      {{- range . }}
+      <button class="topic" type="button" aria-pressed="false" data-topic="{{ .Page.Title | urlize }}">{{ .Page.Title }} <span aria-hidden="true">·&nbsp;{{ .Count }}</span></button>
+      {{- end }}
+      <a class="key" href="{{ "/tags/" | relURL }}" style="margin-left:.5rem">Ver todos&nbsp;→</a>
+    </div>
+    {{- end }}
+  </div>
+
+  <ul class="index col-wide" data-index>
+    {{- range $pages }}
+    <li data-topics="{{ range $i, $t := .Params.tags }}{{ if $i }}|{{ end }}{{ $t | urlize }}{{ end }}">
+      <a href="{{ .RelPermalink }}">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
+        <div>
+          <h2>{{ .Title }}</h2>
+          <p>{{ .Description | default .Summary | plainify | truncate 190 }}</p>
+          {{- with .Params.tags }}
+          <div class="topics">
+            {{- range . }}<span class="topic">{{ . }}</span>{{ end }}
+          </div>
+          {{- end }}
+        </div>
+      </a>
+    </li>
+    {{- end }}
+  </ul>
+
+  <p class="col-wide rule-top" data-filter-empty hidden style="margin-top:var(--s-3)">
+    Ninguna nota coincide con esa búsqueda. Probá con menos palabras o quitá algún tema.
+  </p>
+
+</section>
+
+{{ partial "closer.html" . }}
+
+{{ end }}

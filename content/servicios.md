@@ -1,72 +1,110 @@
 ---
 title: Servicios
-description: Servicios de automatización e inteligencia artificial para tu negocio
-  en Santa Fe. Automatización de procesos, asistentes con IA y análisis de datos.
-model3d: /models/servicios.glb
+key: Fichas
+description: Automatización de procesos, agentes de atención por WhatsApp, lectura
+  de documentos y tableros de control para pymes de Santa Fe. Presupuesto cerrado
+  por proyecto y las cuentas a tu nombre.
+lede: Cuatro tipos de trabajo. Cada uno con lo que incluye, con qué se construye,
+  qué necesito de tu lado, cuánto tarda y en qué casos conviene no hacerlo.
+image: /images/mragentes.png
 ---
 
-
-Ofrecemos un conjunto de servicios modulares que se adaptan a las necesidades de tu negocio. Podés contratarlos de forma individual o combinarlos para una transformación integral.
-
----
+Casi ningún proyecto es uno solo de estos cuatro: lo habitual es que una parte sea
+automatización, otra parte atención y otra parte tablero. Se cotizan juntos, como un
+proyecto, no como una suma de módulos.
 
 ## Automatización de procesos
 
-Eliminá las tareas repetitivas que consumen horas de tu equipo. Diseñamos bots inteligentes que trabajan las 24 horas del día.
+La tarea que alguien hace todos los días, siempre igual, abriendo tres pestañas.
+Se define el circuito una vez y pasa a ejecutarse solo: cuando llega un mail, cuando
+se cierra una venta, cuando son las 8 de la mañana del lunes.
 
-**¿Qué podemos automatizar?**
+Los casos más frecuentes son emisión y envío de comprobantes, sincronización entre
+una planilla y el sistema de gestión, alta de clientes en varios sistemas a la vez, y
+el reporte periódico que alguien arma a mano.
 
-- **Facturación y cobranzas:** Emisión automática de facturas, seguimiento de pagos y recordatorios.
-- **Atención al cliente:** Respuestas automáticas a consultas frecuentes, derivación inteligente a humanos.
-- **Procesamiento de documentos:** Extracción de datos de PDFs, formularios, correos electrónicos.
-- **Reporting:** Generación de informes periódicos sin intervención manual.
+{{< ficha
+    titulo="Ficha 01 — automatización de procesos"
+    incluye="Relevamiento del circuito actual, construcción del flujo, conexión con los sistemas que ya usás, manejo de errores (qué pasa cuando un servicio no responde) y documentación escrita de cómo funciona."
+    herramientas="n8n como motor principal. Make o Zapier cuando el cliente ya los tiene pagos. Conexión por API con lo que haya: sistema de gestión, facturador, planillas, correo."
+    aporta="Un acceso a los sistemas involucrados y una persona del equipo que conozca la tarea de verdad — normalmente quien la hace, no quien la supervisa."
+    plazo="De una a tres semanas para un circuito. Los proyectos con varios circuitos encadenados se entregan por partes."
+    nosirve="Si el proceso cambia todos los meses o todavía no está definido. Automatizar algo que se está discutiendo sale caro dos veces: primero se construye y después se tira." >}}
 
-<div class="features-grid">
-    <div class="feature-item">
-        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Hasta 80% menos tiempo</h4>
-        <p>En tareas que antes tomaban horas, ahora toman minutos.</p>
-    </div>
-    <div class="feature-item">
-        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Reducción de errores</h4>
-        <p>Los bots no se equivocan ni se saltan pasos.</p>
-    </div>
-    <div class="feature-item">
-        <h4><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;vertical-align:-2px"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> ROI medible</h4>
-        <p>Resultados concretos desde el primer mes.</p>
-    </div>
-</div>
+## Agentes de atención
 
----
+Un agente que atiende por WhatsApp o desde el sitio, con la información real del
+negocio cargada: horarios, precios, condiciones, estado del pedido.
 
-## Asistentes con IA
+La diferencia con un chatbot de árbol de opciones es que entiende la pregunta escrita
+como la escribe un cliente, con errores de tipeo y sin elegir del menú. La diferencia
+con dejar un modelo suelto es que está acotado a lo que sabe, y cuando no sabe lo dice
+y pasa la conversación a una persona con todo el historial adelante.
 
-Chatbots y asistentes virtuales que entienden lenguaje natural, aprenden de cada interacción y se integran con tus sistemas existentes.
+Desde agosto de 2026 el Reglamento europeo de IA exige que un sistema conversacional
+avise que es un sistema. Todos los agentes se entregan identificándose, acá y allá —
+en la práctica, además, [genera más confianza que disimularlo](/notas/).
 
-**Características:**
+{{< ficha
+    titulo="Ficha 02 — agentes de atención"
+    incluye="Carga de la base de conocimiento con la información del negocio, definición de qué puede y qué no puede responder, derivación a una persona con el historial de la charla, y un registro de las consultas que no supo contestar para ir corrigiéndolo."
+    herramientas="API oficial de WhatsApp Business, modelos de lenguaje de OpenAI, n8n para la orquestación. Widget para el sitio cuando hace falta."
+    aporta="La información que hoy tenés dispersa (lista de precios, horarios, preguntas frecuentes reales) y una persona que reciba las derivaciones."
+    plazo="De dos a cuatro semanas, más una o dos de ajuste con conversaciones reales. Un agente no queda fino el primer día: queda fino después de leer lo que la gente le pregunta."
+    nosirve="Si el volumen de consultas es bajo y variado. Cuando son diez mensajes por día y cada uno es distinto, el agente resuelve poco y conviene invertir en otra cosa." >}}
 
-- Conversaciones naturales con IA generativa
-- Integración con WhatsApp, web, Messenger
-- Base de conocimiento personalizada con la información de tu negocio
-- Escalamiento inteligente a un operador humano cuando sea necesario
-- Analytics: medí consultas, satisfacción, temas frecuentes
+## Lectura de documentos
 
----
+Remitos, facturas de proveedor y órdenes de compra que hoy alguien transcribe a mano.
+Entran como PDF o como foto sacada con el teléfono, se extraen los campos y salen
+cargados en el sistema.
 
-## Análisis de datos e informes
+El punto importante es qué pasa con lo dudoso: cuando la extracción no tiene
+confianza suficiente, el documento no se carga con datos inventados. Va a una bandeja
+de revisión. Es menos vistoso en una demo y es la única forma de que sirva en
+producción.
 
-Convertí datos dispersos en decisiones claras. Centralizamos tu información y generamos dashboards interactivos.
+{{< ficha
+    titulo="Ficha 03 — lectura de documentos"
+    incluye="Definición de los campos a extraer, procesamiento de PDF e imágenes, umbral de confianza y bandeja de revisión manual, carga al sistema destino y control de duplicados."
+    herramientas="Modelos de extracción de documentos, n8n para el circuito, conexión al sistema de gestión."
+    aporta="Entre veinte y cincuenta documentos de muestra, incluidos los feos: escaneados torcidos, con sello encima, de proveedores que usan un formato propio."
+    plazo="De dos a cuatro semanas. La mayor parte del tiempo se va en los formatos raros, no en los prolijos."
+    nosirve="Si son menos de veinte o treinta documentos por mes. Por debajo de ese volumen, el tiempo de revisar lo que el sistema marca como dudoso se parece bastante al de cargarlos a mano." >}}
 
-**¿Cómo funciona?**
+## Tableros y alertas
 
-1. Conectamos tus fuentes de datos (CRM, ERP, Excel, APIs)
-2. Limpiamos y organizamos la información
-3. Construimos dashboards con las métricas que importan
-4. Programamos alertas y reportes automáticos
+Menos vistoso que lo anterior y, en varios negocios, lo que más cambia el día a día.
 
----
+Un tablero con los números que se miran de verdad, actualizado solo. Y sobre todo
+alertas: avisos que llegan cuando un número se sale del rango en vez de esperar a que
+alguien entre a mirar. Stock por debajo del mínimo, una factura vencida hace más de
+treinta días, ventas de la semana por debajo de la anterior.
 
-## Proyectos llave en mano
+{{< ficha
+    titulo="Ficha 04 — tableros y alertas"
+    incluye="Unificación de las fuentes de datos, limpieza, tablero actualizado automáticamente y reglas de alerta con su canal de envío (WhatsApp o correo)."
+    herramientas="Planillas conectadas, bases de datos, n8n. Tablero en la herramienta que ya uses; si no usás ninguna, se define en el relevamiento."
+    aporta="Acceso a las fuentes y una definición clara de qué números importan. Ésta suele ser la parte difícil, y la charlamos juntos."
+    plazo="De una a dos semanas para un tablero con sus alertas."
+    nosirve="Si los datos de origen están mal cargados. Un tablero no corrige datos malos: los muestra más rápido y con mejor tipografía." >}}
 
-¿No sabés por dónde empezar? Te hacemos un diagnóstico gratuito de tu negocio y te proponemos un plan de automatización integral.
+## Cómo se cobra
 
-{{< cta >}}
+**Presupuesto cerrado por proyecto.** No trabajo por hora: el número que figura en el
+presupuesto es el que se factura. Si me lleva más tiempo del que calculé, es problema
+mío, no tuyo.
+
+**Las cuentas de las plataformas van a tu nombre.** n8n, la API de WhatsApp, OpenAI y
+cualquier otro servicio los contratás y los pagás vos, al precio de lista, con tu
+tarjeta. No revendo licencias ni cobro comisión sobre eso. Lo que cobro es el trabajo
+de construir e integrar.
+
+**El mantenimiento se decide al final, no al principio.** Cuando el sistema está
+andando y ya sabés cuánto lo usás, elegís entre un acuerdo mensual o llamarme sólo
+cuando haga falta.
+
+No publico una lista de precios porque no la tengo: dos proyectos que se describen con
+la misma frase pueden tener cuatro veces de diferencia según cuántos sistemas haya que
+tocar. El presupuesto sale entre tres y siete días después de la primera charla, es
+por escrito, y no se cobra.

@@ -1,12 +1,11 @@
 {
   "name": "MR Agentes",
   "short_name": "MR Agentes",
-  "description": "Automatización e inteligencia artificial para potenciar tu negocio en Santa Fe",
+  "description": "Automatización de procesos y agentes de IA para pymes. Gálvez, Santa Fe.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f2ead6",
-  "theme_color": "#f4eddc",
-  "orientation": "portrait-primary",
+  "background_color": "#f1ebde",
+  "theme_color": "#f1ebde",
   "lang": "es-AR",
   "icons": [
     {
