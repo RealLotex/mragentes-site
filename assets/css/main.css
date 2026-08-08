@@ -152,6 +152,20 @@ body {
   overflow-x: hidden;
 }
 
+/* Grano de papel. La versión vieja del sitio tenía turbulencia al 55 % de
+   opacidad más tres degradados radiales más manchas de tinta: se veía sucio y
+   costaba dos capas fijas de composición. Acá es una sola capa al 3,5 %: no se
+   distingue el grano, se nota que el fondo no es una superficie plana. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
 img,
 svg,
 video {
@@ -949,6 +963,12 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
   border-bottom: var(--hair) solid var(--rule);
 }
 
+/* Un elemento de grilla mide `min-width: auto`, o sea su contenido mínimo, y
+   eso puede ser más ancho que la pista que lo contiene. El campo de búsqueda
+   —que trae el ancho por defecto de un <input> más el contador— se pasaba de la
+   columna en pantallas de 320 px. */
+.filter > * { min-width: 0; }
+
 .filter-field {
   display: flex;
   align-items: center;
@@ -985,10 +1005,18 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 }
 
 .filter-count {
+  flex: none;
   font-family: var(--f-data);
   font-size: var(--t-sm);
   color: var(--ink-55);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* En pantallas muy angostas el contador le come el lugar al campo. El dato
+   sigue estando en el encabezado de la página («Notas · 16»). */
+@media (max-width: 24rem) {
+  .filter-count { display: none; }
 }
 
 /* --- Artículo ---------------------------------------------------------- */
@@ -1358,6 +1386,253 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 .push-toast-actions { display: flex; gap: var(--s-2); flex-wrap: wrap; }
 
 /* ============================================================================
+   12b · COMPOSICIÓN
+   ----------------------------------------------------------------------------
+   Lo que faltaba en la primera vuelta. El sistema estaba bien pero el armado
+   era el mismo seis veces seguidas: etiqueta, título, bajada, lista. Eso es una
+   plantilla aunque los ingredientes sean propios.
+
+   Tres correcciones:
+   · Cada sección tiene una estructura distinta — catálogo denso a dos columnas,
+     recorrido horizontal, bloque a sangre, índice. Cambia el eje, no sólo el
+     contenido.
+   · La página alterna tono: papel → papel a media luz → papel → TINTA → papel →
+     MINIO. Antes era beige de punta a punta.
+   · Los márgenes se usan. Los numerales cuelgan en la columna de claves y las
+     reglas cortan de borde a borde, así el hueco de la derecha deja de ser un
+     descuido y pasa a ser parte de la composición.
+   ========================================================================== */
+
+/* --- Numeral de sección: grande, en el margen, colgado --------------------
+   Es la pieza que hace legible la estructura de un vistazo y la que rompe la
+   alineación única de la primera versión. */
+.numeral {
+  font-family: var(--f-display);
+  font-size: clamp(2.75rem, 5vw, 4.75rem);
+  font-weight: 750;
+  font-stretch: 118%;
+  line-height: 0.78;
+  letter-spacing: -0.04em;
+  color: var(--minio);
+  font-variant-numeric: lining-nums;
+}
+
+.numeral small {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: var(--f-data);
+  font-size: var(--t-xs);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-55);
+  line-height: 1.3;
+}
+
+/* --- Bandas tonales ---------------------------------------------------- */
+.band--ink {
+  background: var(--ink);
+  color: var(--bone);
+  border-top: 0;
+}
+
+/* --- Superficies oscuras -------------------------------------------------
+   Todo lo de abajo existe porque los tokens del sistema son para papel: los
+   filetes son negro translúcido y los textos secundarios son grises oscuros.
+   Puestos sobre tinta desaparecen. Se redefinen en bloque en vez de parchear
+   cada componente, así cualquier pieza que se mueva a una banda oscura queda
+   legible sin tocarla. */
+.band--ink,
+.closer {
+  --rule: rgba(241, 235, 222, 0.22);
+  --rule-mid: rgba(241, 235, 222, 0.42);
+  --ink-55: rgba(241, 235, 222, 0.68);
+  --ink-70: rgba(241, 235, 222, 0.86);
+}
+
+.band--ink :is(h2, h3, h4, b) { color: var(--bone); }
+.band--ink .numeral { color: var(--bone); }
+.band--ink .numeral small { color: rgba(241, 235, 222, 0.62); }
+.band--ink .key { color: rgba(241, 235, 222, 0.62); }
+
+/* Alegreya sobre fondo oscuro adelgaza: se compensa con peso, no con opacidad. */
+.band--ink p,
+.band--ink span,
+.closer p {
+  color: rgba(241, 235, 222, 0.9);
+  font-weight: 500;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
+}
+
+/* `.band-head hgroup p` es más específico que `.closer p`, así que sin esta
+   línea la bajada del cierre salía en gris oscuro sobre minio. */
+.band--ink .band-head hgroup p,
+.closer .band-head hgroup p { color: rgba(241, 235, 222, 0.82); }
+
+/* Los bordes duros del sistema son `var(--ink)` literal: invisibles sobre tinta. */
+.band--ink :is(.nope, .ledger, .index, .catalog, .track, .channels, .datastrip) { border-top-color: rgba(241, 235, 222, 0.5); }
+
+/* El minio sobre tinta baja demasiado el contraste para una marca chica. */
+.band--ink .nope > li::before { color: var(--bone); }
+
+.band--minio {
+  background: var(--minio);
+  color: var(--bone);
+  border-top: 0;
+}
+
+.band--minio :is(h2, h3) { color: var(--bone); }
+.band--minio p { color: rgba(255, 250, 242, 0.94); font-weight: 500; -webkit-font-smoothing: auto; }
+.band--minio .key { color: rgba(255, 250, 242, 0.75); }
+
+/* --- Encabezado de banda con numeral colgado --------------------------- */
+.band-head--numbered { align-items: start; }
+.band-head--numbered .numeral { grid-column: key; }
+
+/* --- Catálogo: la sección densa. Dos columnas de fichas cortas, interlínea
+       apretada, tipo más chico. Es el contrapeso del resto de la página, que
+       respira mucho — sin un bloque denso todo parece igual de vacío. ------ */
+.catalog {
+  grid-column: key-start / aside-end;
+  display: grid;
+  gap: 0;
+  border-top: 2px solid var(--ink);
+}
+
+@media (min-width: 56rem) {
+  .catalog { grid-template-columns: 1fr 1fr; }
+  /* Filete vertical entre columnas, sin usar borde en cada celda (que dejaría
+     un filete doble en el medio). */
+  .catalog > li:nth-child(odd) { border-right: var(--hair) solid var(--rule); padding-right: var(--s-4); }
+  .catalog > li:nth-child(even) { padding-left: var(--s-4); }
+}
+
+.catalog > li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 0 var(--s-2);
+  padding-block: var(--s-3);
+  border-bottom: var(--hair) solid var(--rule);
+}
+
+.catalog .n {
+  font-family: var(--f-data);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--minio-ink);
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+}
+
+.catalog h3 { font-size: 1.15rem; line-height: 1.16; }
+
+.catalog p {
+  margin-top: 0.35rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ink-70);
+}
+
+.catalog .tools {
+  margin-top: 0.5rem;
+  font-family: var(--f-data);
+  font-size: var(--t-xs);
+  letter-spacing: 0.02em;
+  color: var(--ink-55);
+}
+
+/* --- Recorrido: el método, en horizontal. Cambiar de eje es lo que impide
+       que esta sección se lea igual que la anterior. ---------------------- */
+.track {
+  grid-column: key-start / aside-end;
+  display: grid;
+  gap: var(--s-3);
+  counter-reset: paso;
+}
+
+@media (min-width: 62rem) {
+  .track {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 0;
+    border-top: 2px solid var(--ink);
+  }
+
+  .track > li {
+    padding: var(--s-3) var(--s-3) 0 0;
+    border-right: var(--hair) solid var(--rule);
+  }
+
+  .track > li:last-child { border-right: 0; padding-right: 0; }
+}
+
+.track > li { position: relative; }
+
+.track > li::before {
+  counter-increment: paso;
+  content: counter(paso);
+  display: block;
+  font-family: var(--f-data);
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--minio-ink);
+  margin-bottom: var(--s-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.track h3 { font-size: 1.08rem; line-height: 1.16; margin-bottom: 0.4rem; }
+.track p { font-size: 0.98rem; line-height: 1.5; color: var(--ink-70); }
+
+.track .when {
+  display: block;
+  margin-top: var(--s-2);
+  padding-top: var(--s-2);
+  border-top: var(--hair) solid var(--rule);
+  font-family: var(--f-data);
+  font-size: var(--t-xs);
+  color: var(--minio-ink);
+}
+
+@media (max-width: 61.99rem) {
+  .track > li { padding-bottom: var(--s-3); border-bottom: var(--hair) solid var(--rule); }
+  .track > li:first-child { border-top: 2px solid var(--ink); padding-top: var(--s-3); }
+}
+
+/* --- Portada a sangre: el titular arranca en la columna de claves, o sea a la
+       izquierda del cuerpo de texto. Es la asimetría que antes prometía la
+       grilla y no cumplía. ------------------------------------------------ */
+.cover-head { grid-column: key-start / aside-end; }
+
+.plate--bleed {
+  grid-column: full;
+  margin-top: var(--s-4);
+  border-top: 2px solid var(--ink);
+  border-bottom: 0;
+  padding-block: 0;
+}
+
+.plate--bleed img { width: 100%; max-height: 42vh; object-fit: cover; object-position: center 42%; }
+
+.plate--bleed figcaption {
+  padding: var(--s-2) var(--pad) 0;
+  border-top: var(--hair) solid var(--rule);
+}
+
+@media (min-width: 62rem) {
+  .plate--bleed figcaption {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 34rem) minmax(0, 1fr);
+    gap: 0.35rem var(--gap);
+    padding-inline: var(--pad);
+  }
+}
+
+/* Filete a sangre: separa secciones de borde a borde en vez de dejar el corte
+   flotando dentro de la medida de texto. */
+.rule-bleed { grid-column: full; border-top: 2px solid var(--ink); }
+
+/* ============================================================================
    13 · UTILIDADES
    ========================================================================== */
 
@@ -1377,10 +1652,14 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 
 .rule-top { border-top: var(--hair) solid var(--rule); padding-top: var(--s-3); }
 
-/* Cierre de página: invitación al contacto sin repetir el patrón de banda. */
+/* Cierre de página: en minio pleno. Es el único lugar donde el acento se usa a
+   toda superficie, y por eso funciona — un acento que aparece en todas partes
+   deja de acentuar. Contraste hueso sobre minio: 5,3:1, pasa AA.
+   El bloque de límites queda en tinta, así los dos cierres oscuros de la página
+   no se parecen entre sí. */
 .closer {
   border-top: 2px solid var(--ink);
-  background: var(--ink);
+  background: var(--minio);
   color: var(--bone);
   padding-block: var(--s-6);
 }
@@ -1399,8 +1678,10 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
   max-width: 42ch;
 }
 
-.closer .key { color: rgba(241, 235, 222, 0.72); }
+.closer .key { color: rgba(255, 250, 242, 0.8); }
 .closer .btn-row { margin-top: var(--s-4); }
+.closer .numeral { color: var(--bone); }
+.closer .numeral small { color: rgba(255, 250, 242, 0.75); }
 
 /* Los enlaces sueltos van en papel; los botones mandan sobre esa regla. El
    selector de abajo excluye .btn a propósito: cuando no lo hacía, el color del
@@ -1413,19 +1694,19 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
   --btn-fg: var(--ink);
   color: var(--ink);
   border-color: var(--bone);
-  box-shadow: 3px 3px 0 var(--minio);
+  box-shadow: 3px 3px 0 var(--ink);
 }
 
-.closer .btn:hover { color: var(--ink); box-shadow: 2px 2px 0 var(--minio); }
+.closer .btn:hover { color: var(--ink); box-shadow: 2px 2px 0 var(--ink); }
 
 .closer .btn--ghost {
   --btn-bg: transparent;
   --btn-fg: var(--bone);
   color: var(--bone);
-  box-shadow: 3px 3px 0 rgba(241, 235, 222, 0.45);
+  box-shadow: 3px 3px 0 rgba(23, 19, 14, 0.45);
 }
 
-.closer .btn--ghost:hover { color: var(--bone); background: rgba(241, 235, 222, 0.1); }
+.closer .btn--ghost:hover { color: var(--bone); background: rgba(23, 19, 14, 0.14); }
 
 /* ============================================================================
    14 · ADAPTACIÓN A PANTALLAS ANGOSTAS
@@ -1444,8 +1725,16 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
       [full-end];
   }
 
+  /* En una sola columna, `text-start / aside-end` sigue abarcando la canaleta
+     derecha —que en la grilla angosta es el padding de la página—, así que los
+     bloques anchos sobresalían exactamente el ancho de ese padding. Todos
+     vuelven a la columna de texto. */
   .sheet > .col-key,
-  .sheet > .col-aside { grid-column: text; }
+  .sheet > .col-aside,
+  .sheet > .col-wide,
+  .sheet > .col-plate,
+  .catalog,
+  .track { grid-column: text; }
 
   .band-head,
   .cover-sub,
