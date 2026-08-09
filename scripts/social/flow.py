@@ -205,28 +205,42 @@ def publish_nota(
     results = []
     record: dict = {"date": nota.date.isoformat(), "images": [public_name(p) for p in pieces["all"]]}
 
-    fb = meta.facebook_photo(pieces["feed"][0], captions["facebook"], link=nota.url(settings.site_base_url))
+    # Facebook: publicar el álbum completo (todas las láminas del feed), no
+    # la portada sola.
+    fb = meta.facebook_album(pieces["feed"], captions["facebook"], link=nota.url(settings.site_base_url))
     results.append(fb)
     if fb.ok:
         record["facebook"] = fb.id
 
     urls = []
+    missing = []
     for path in pieces["feed"]:
         url = resolve_public_url(public_name(path), settings, wait=wait)
         if url:
             urls.append(url)
         else:
-            log(f"  ⚠️  {public_name(path)} todavía no responde por URL; se saltea esa lámina.")
+            missing.append(public_name(path))
+            log(f"  ⚠️  {public_name(path)} no respondió por URL; se intenta igual vía raw.")
+
+    # Si alguna no resolvió, reintentamos con espera extra antes de rendirnos:
+    # un carrusel incompleto no es aceptable.
+    for _path in list(missing):
+        url = resolve_public_url(_path, settings, wait=120)
+        if url:
+            urls.append(url)
+            missing.remove(_path)
 
     if urls:
         ig = (
-            meta.instagram_carousel(urls, captions["instagram"])
+            meta.instagram_carousel(urls[:10], captions["instagram"])
             if len(urls) > 1
             else meta.instagram_image(urls[0], captions["instagram"])
         )
         results.append(ig)
         if ig.ok:
             record["instagram"] = ig.id
+        elif missing:
+            log(f"  ✖ Instagram: faltaron láminas -> {', '.join(missing)}")
     else:
         log("  ✖ Instagram: ninguna pieza quedó accesible por URL pública.")
 
@@ -237,6 +251,14 @@ def publish_nota(
             results.append(st)
             if st.ok:
                 record["story"] = st.id
+            # La historia también se publica en Facebook como foto de feed:
+            # la historia 9:16 es parte de la pieza y completa la publicación.
+            if meta.settings.can_post_facebook:
+                fbs = meta.facebook_photo(pieces["story"], captions["facebook"],
+                                          link=nota.url(settings.site_base_url))
+                results.append(fbs)
+                if fbs.ok:
+                    record.setdefault("facebook_story", fbs.id)
 
     state_mod.record(nota.slug, record, state)
     return {

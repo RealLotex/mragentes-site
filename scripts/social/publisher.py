@@ -19,6 +19,7 @@ como resultado, no como excepción hacia afuera.
 from __future__ import annotations
 
 import time
+import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -130,6 +131,54 @@ class Meta:
                           url=f"https://facebook.com/{post_id}" if post_id else "")
         except PublishError as exc:
             return Result("facebook", "feed", False, error=str(exc))
+
+    def facebook_album(self, images: list[Path | str], caption: str, link: str = "") -> Result:
+        """Publica el carrusel completo en Facebook como álbum.
+
+        El gran problema del pipeline original: publicaba `pieces['feed'][0]` — la
+        portada nada más — con `/{page}/photos` (single photo). Acá se sube cada
+        imagen y después se arma UN post con `attached_media`, que es lo que
+        Facebook muestra como álbum/carrusel con todas las láminas.
+        """
+        if not self.settings.can_post_facebook:
+            return Result("facebook", "album", False, skipped="falta FB_PAGE_ID o token")
+        if not images:
+            return Result("facebook", "album", False, error="sin imágenes")
+        text = caption if not link or link in caption else f"{caption}\n\n{link}"
+        try:
+            attached: list[str] = []
+            for image in images[:10]:
+                path = Path(image)
+                if path.exists():
+                    with path.open("rb") as fh:
+                        body = self._post(
+                            f"{self.settings.fb_page_id}/photos",
+                            {"published": "false"},
+                            files={"source": (path.name, fh, "image/jpeg")},
+                        )
+                else:
+                    body = self._post(
+                        f"{self.settings.fb_page_id}/photos",
+                        {"url": str(image), "published": "false"},
+                    )
+                fid = body.get("id", "")
+                if fid:
+                    attached.append(json.dumps({"media_fbid": fid}))
+            if not attached:
+                return Result("facebook", "album", False, error="no se pudieron subir las fotos")
+            body = self._post(
+                f"{self.settings.fb_page_id}/feed",
+                {
+                    "message": text,
+                    "attached_media": "[" + ",".join(attached) + "]",
+                    "published": "true",
+                },
+            )
+            post_id = str(body.get("post_id") or body.get("id", ""))
+            return Result("facebook", "album", True, id=post_id,
+                          url=f"https://facebook.com/{post_id}" if post_id else "")
+        except PublishError as exc:
+            return Result("facebook", "album", False, error=str(exc))
 
     # ── Instagram ───────────────────────────────────────────────────────
     def _ig_container(self, params: dict) -> str:
