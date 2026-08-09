@@ -1,0 +1,11 @@
+# Dependencias de los scripts (no del build de Hugo).
+#   pip install -r scripts/requirements.txt
+#
+# Pillow      → compone las piezas de Instagram y Facebook
+# fonttools   → convierte los WOFF2 del sitio a TTF para poder dibujarlos
+# brotli      → fonttools lo necesita para descomprimir WOFF2
+# requests    → Graph API de Meta (subida multipart y contenedores de IG)
+Pillow>=10.2
+fonttools>=4.50
+Brotli>=1.1
+requests>=2.31

@@ -1741,8 +1741,22 @@ def _generate_description(title, tags, body):
     return desc.strip()[:157].rsplit(' ', 1)[0] + '.'
 
 
+def _load_dotenv():
+    """Carga el .env de la raíz (si existe) para que las claves salgan de ahí."""
+    try:
+        from scripts.social.config import load_dotenv
+    except ImportError:
+        sys.path.insert(0, BASE_DIR)
+        try:
+            from scripts.social.config import load_dotenv
+        except ImportError:
+            return
+    load_dotenv()
+
+
 def _send_push_notification(title, filepath, worker_url=None):
     """Envía notificación push a suscriptores via Cloudflare Worker."""
+    _load_dotenv()
     # Cargar config local para el token y worker URL
     config = {}
     config_file = os.path.join(BASE_DIR, "scripts", "config.local.json")
@@ -1753,7 +1767,7 @@ def _send_push_notification(title, filepath, worker_url=None):
         except (json.JSONDecodeError, OSError):
             pass
 
-    worker_url = worker_url or config.get("pushWorkerUrl", "")
+    worker_url = worker_url or config.get("pushWorkerUrl", "") or os.environ.get("PUSH_WORKER_URL", "")
     api_token = config.get("pushApiToken", "") or os.environ.get("PUSH_API_TOKEN", "")
 
     if not worker_url or not api_token:
@@ -1792,6 +1806,25 @@ def _send_push_notification(title, filepath, worker_url=None):
                 print("    ❌ Todas las entregas fallaron — puede haber problema de VAPID keys o suscripciones vencidas")
     except Exception as e:
         print(f"  ⚠️  Push notification HTTP error: {e}")
+
+
+def _announce_on_social(filepath):
+    """Aviso de nota nueva en Facebook e Instagram.
+
+    La pieza se compone con la imagen de portada de la nota y el sistema visual
+    del sitio (ver scripts/social/). Si algo falla, se avisa y se sigue: la nota
+    ya está publicada en la web.
+    """
+    try:
+        from scripts.social.hook import announce
+    except ImportError:
+        sys.path.insert(0, BASE_DIR)  # la raíz del repo, para que `scripts` sea paquete
+        try:
+            from scripts.social.hook import announce
+        except ImportError as exc:
+            print(f"  ⚠️  Redes: no pude cargar el social manager ({exc})")
+            return
+    announce(filepath)
 
 
 def _generate_image_alt(image_filename):
@@ -1921,6 +1954,8 @@ def main():
         print(f"🎉 Nota publicada exitosamente: {entry['title']}")
         # Enviar notificación push
         _send_push_notification(entry["title"], filepath, args.push_worker)
+        # Aviso en Facebook e Instagram con la imagen de la nota
+        _announce_on_social(filepath)
     else:
         print(f"⚠️  Nota creada localmente pero hubo error al pushear: {filepath}")
 

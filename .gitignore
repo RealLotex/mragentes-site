@@ -1,8 +1,32 @@
+# Build de Hugo
 public/
 resources/
 .hugo_build.lock
-scripts/.publish_state.json
+
+# ── Secretos ────────────────────────────────────────────────────────────────
+# Todo lo que tenga credenciales queda fuera del repo. La plantilla vacía
+# (.env.example) sí se versiona: es la documentación de qué hay que completar.
+.env
+.env.*
+!.env.example
 scripts/config.local.json
 scripts/push_subscriptions.json
 scripts/push_server.service
 scripts/deploy_worker.sh
+*.pem
+*.key
+
+# ── Estado y archivos de trabajo ────────────────────────────────────────────
+scripts/.publish_state.json
+scripts/_browser_enrich.json
+scripts/_browser_enrich_enriched.json
+scripts/_last_trends.json
+__pycache__/
+*.py[cod]
+
+# Fuentes convertidas a TTF y otros temporales del social manager
+scripts/social/.cache/
+
+# Muestrario de plantillas: se regenera con
+#   python3 -m scripts.social gallery
+static/social/muestrario/

@@ -29,6 +29,7 @@ import subprocess
 import datetime
 import re
 import argparse
+import urllib.parse
 from pathlib import Path
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -159,8 +160,22 @@ def git_commit_push(filepath, title):
         os.chdir(original_cwd)
 
 
+def _load_dotenv():
+    """Carga el .env de la raíz (si existe) para que las claves salgan de ahí."""
+    try:
+        from scripts.social.config import load_dotenv
+    except ImportError:
+        sys.path.insert(0, BASE_DIR)
+        try:
+            from scripts.social.config import load_dotenv
+        except ImportError:
+            return
+    load_dotenv()
+
+
 def send_push_notification(title, filepath):
     """Enviar notificación push a suscriptores vía Cloudflare Worker."""
+    _load_dotenv()
     config_file = os.path.join(BASE_DIR, "scripts", "config.local.json")
     config = {}
     if os.path.exists(config_file):
@@ -170,16 +185,18 @@ def send_push_notification(title, filepath):
         except (json.JSONDecodeError, OSError):
             pass
 
-    worker_url = config.get("pushWorkerUrl", "")
+    worker_url = config.get("pushWorkerUrl", "") or os.environ.get("PUSH_WORKER_URL", "")
     api_token = config.get("pushApiToken", "") or os.environ.get("PUSH_API_TOKEN", "")
 
     if not worker_url or not api_token:
         print("  ℹ️  Push notification no configurada")
         return
 
-    # Generate URL from title slug (Hugo-compatible), NOT from filename
-    slug = slugify(title)
-    url = f"https://mragentes.com.ar/notas/{slug}/"
+    # La URL sale del nombre del archivo, que es de donde Hugo saca el permalink
+    # (/notas/:slug/ con :slug = nombre del .md, fecha incluida). Derivarla del
+    # título dejaba afuera la fecha y el aviso llevaba a una página que no existe.
+    slug = os.path.splitext(os.path.basename(filepath))[0]
+    url = f"https://mragentes.com.ar/notas/{urllib.parse.quote(slug)}/"
     
     # Short title: max 7 words
     words = title.split()
@@ -208,6 +225,25 @@ def send_push_notification(title, filepath):
             print(f"  🔔 Push: {sent} enviadas, {failed} fallidas")
     except Exception as e:
         print(f"  ⚠️  Push notification error: {e}")
+
+
+def announce_on_social(filepath):
+    """Aviso de nota nueva en Facebook e Instagram (ver scripts/social/).
+
+    Compone las piezas con la imagen de portada de la nota. Publica desde acá
+    sólo si SOCIAL_LOCAL_PUBLISH=1; si no, lo hace el workflow de GitHub.
+    Nunca corta el flujo: la nota ya está en la web.
+    """
+    try:
+        from scripts.social.hook import announce
+    except ImportError:
+        sys.path.insert(0, BASE_DIR)  # la raíz del repo, para que `scripts` sea paquete
+        try:
+            from scripts.social.hook import announce
+        except ImportError as exc:
+            print(f"  ⚠️  Redes: no pude cargar el social manager ({exc})")
+            return
+    announce(filepath)
 
 
 # ─── MAIN ─────────────────────────────────────────────────────────────────
@@ -293,6 +329,9 @@ def publish_blog_post(json_path, dry_run=False, force=False):
     if success:
         # 4. Notificación push
         send_push_notification(title, filepath)
+
+        # 4b. Aviso en Facebook e Instagram, con la imagen de la nota
+        announce_on_social(filepath)
 
         # 5. Actualizar estado
         state = load_state()

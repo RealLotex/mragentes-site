@@ -1,0 +1,265 @@
+{
+  "version": 1,
+  "nota": "Biblioteca de posteos. Cada entrada es un posteo listo: la plantilla que usa, el contenido de la lámina y el texto para cada red. Editar este archivo no requiere tocar código — el CLI lo lee tal cual. Para agregar uno nuevo, copiar una entrada, cambiarle la clave y escribir arriba.",
+  "posts": [
+    {
+      "key": "diagnostico",
+      "template": "ficha",
+      "piece": {
+        "title": "Diagnóstico de automatización",
+        "kicker": "servicio",
+        "lead": "Una charla, tu operación sobre la mesa y una lista de qué conviene automatizar primero.",
+        "rows": [
+          ["qué es", "Un relevamiento de tus procesos repetitivos"],
+          ["dura", "Una hora, por videollamada o en Gálvez"],
+          ["te llevás", "Lista priorizada por horas ahorradas"],
+          ["cuesta", "Sin cargo, y sin obligación de seguir"],
+          ["después", "Presupuesto cerrado, o nada"]
+        ],
+        "cta": "Escribinos por WhatsApp y lo agendamos"
+      },
+      "caption": {
+        "facebook": "Antes de vender nada preferimos mirar cómo trabajás.\n\nEl diagnóstico es una hora de charla: nos contás cómo entran los pedidos, dónde se cargan los datos, qué se repite todas las semanas. Salís con una lista priorizada por horas ahorradas, no por lo que a nosotros nos conviene vender.\n\nSi al final la respuesta es «esto no se automatiza», también te lo decimos.\n\nAgendalo: https://mragentes.com.ar/contacto/\n\n#MRAgentes #Automatizacion #Pymes #SantaFe",
+        "instagram": "Antes de vender nada preferimos mirar cómo trabajás.\n\nUna hora de charla, tu operación sobre la mesa y una lista priorizada por horas ahorradas. Si la respuesta es «esto no se automatiza», también te lo decimos.\n\nSin cargo. Enlace en la bio.\n\n#MRAgentes #Automatizacion #IAparaPymes #Pymes #Galvez #SantaFe #Argentina #TransformacionDigital"
+      }
+    },
+    {
+      "key": "por-donde-empezar",
+      "template": "lista",
+      "piece": {
+        "title": "Por dónde se empieza a automatizar",
+        "kicker": "para tener a mano",
+        "items": [
+          ["Escribí lo que se repite", "Todo lo que tu equipo hace más de tres veces por semana a mano."],
+          ["Medí las horas, no la molestia", "Diez horas semanales de copiar y pegar valen más que una tarea odiada de veinte minutos."],
+          ["Empezá por una sola", "La que más tiempo come. Automatizar todo junto es la forma más común de no automatizar nada."]
+        ],
+        "cta": "Si querés, la lista la hacemos juntos"
+      },
+      "caption": {
+        "facebook": "La pregunta que más nos hacen: ¿por dónde arranco?\n\nTres pasos, en este orden:\n\n1. Escribí lo que se repite — todo lo que se hace más de tres veces por semana a mano.\n2. Medí las horas, no la molestia. Diez horas semanales de copiar y pegar valen más que una tarea odiada de veinte minutos.\n3. Empezá por una sola. Automatizar todo junto es la forma más común de no automatizar nada.\n\n¿Querés que la lista la hagamos juntos? https://mragentes.com.ar/contacto/\n\n#MRAgentes #Automatizacion #Productividad #Pymes",
+        "instagram": "La pregunta que más nos hacen: ¿por dónde arranco?\n\n· Escribí lo que se repite\n· Medí las horas, no la molestia\n· Empezá por una sola tarea\n\nAutomatizar todo junto es la forma más común de no automatizar nada.\n\nEnlace en la bio.\n\n#MRAgentes #Automatizacion #IAparaPymes #Productividad #Pymes #SantaFe #Galvez #Argentina"
+      }
+    },
+    {
+      "key": "mito-chatbots",
+      "template": "mito",
+      "piece": {
+        "title": "«Un bot le va a contestar mal a mis clientes»",
+        "kicker": "mito y verdad",
+        "items": [
+          ["mito", "Un bot atiende peor que una persona, así que mejor no ponerlo."],
+          ["verdad", "Atiende peor que tu mejor vendedor y muchísimo mejor que nadie a las once de la noche. Bien armado, resuelve lo repetido y pasa a una persona en cuanto la consulta se sale del libreto."]
+        ],
+        "cta": "Lo charlamos sin vueltas: mragentes.com.ar/contacto"
+      },
+      "caption": {
+        "facebook": "«Un bot le va a contestar mal a mis clientes.»\n\nEs el miedo más común, y no es tonto: todos vimos alguno contestar cualquier cosa.\n\nLa comparación justa, igual, no es contra tu mejor vendedor. Es contra el silencio de las once de la noche, o contra el mensaje que quedó sin leer el domingo. Bien armado, un asistente resuelve lo repetido —horarios, precios, estado del pedido— y pasa a una persona en cuanto la consulta se sale del libreto.\n\nLa clave está en dónde ponés esa puerta.\n\n#MRAgentes #Chatbots #AtencionAlCliente #Pymes",
+        "instagram": "«Un bot le va a contestar mal a mis clientes.»\n\nLa comparación justa no es contra tu mejor vendedor: es contra el silencio de las once de la noche.\n\nBien armado, resuelve lo repetido y pasa a una persona en cuanto la consulta se sale del libreto.\n\nEnlace en la bio.\n\n#MRAgentes #Chatbots #AtencionAlCliente #IAparaPymes #Pymes #Automatizacion #SantaFe #Argentina"
+      }
+    },
+    {
+      "key": "dato-tareas",
+      "template": "dato",
+      "piece": {
+        "stat": "40%",
+        "kicker": "el dato",
+        "caption": "de las tareas administrativas de una pyme son automatizables hoy",
+        "lead": "No son las tareas difíciles: son las obvias. Pasar datos de un formulario a una planilla, avisar que llegó un pedido, armar el mismo informe todos los lunes.",
+        "author": "Estimación propia sobre relevamientos de clientes"
+      },
+      "caption": {
+        "facebook": "El 40% de las tareas administrativas de una pyme son automatizables hoy.\n\nY no son las difíciles: son las obvias. Pasar datos de un formulario a una planilla. Avisar que llegó un pedido. Armar el mismo informe todos los lunes a la mañana.\n\nEse porcentaje no se libera solo. Pero se libera.\n\n#MRAgentes #Automatizacion #Productividad #Pymes",
+        "instagram": "40% de las tareas administrativas de una pyme son automatizables hoy.\n\nY no son las difíciles: son las obvias. Pasar datos de un formulario a una planilla, avisar que llegó un pedido, armar el mismo informe todos los lunes.\n\nEnlace en la bio.\n\n#MRAgentes #Automatizacion #Productividad #IAparaPymes #Pymes #Galvez #SantaFe #Argentina"
+      }
+    },
+    {
+      "key": "cita-criterio",
+      "template": "cita",
+      "piece": {
+        "quote": "Automatizar un proceso desordenado no lo arregla: lo hace fallar más rápido y con menos testigos.",
+        "author": "MR Agentes · criterio de la casa",
+        "kicker": "cita",
+        "lead": "Por eso el primer trabajo casi nunca es técnico. Es ponerle nombre a los pasos que hoy viven en la cabeza de alguien."
+      },
+      "caption": {
+        "facebook": "«Automatizar un proceso desordenado no lo arregla: lo hace fallar más rápido y con menos testigos.»\n\nEs el criterio con el que arrancamos cualquier trabajo. Antes de conectar dos sistemas hay que poder decir en voz alta qué pasa entre uno y otro, y quién decide qué.\n\nCuando ese paso está claro, la parte técnica es la fácil.\n\n#MRAgentes #Automatizacion #Procesos #Pymes",
+        "instagram": "«Automatizar un proceso desordenado no lo arregla: lo hace fallar más rápido y con menos testigos.»\n\nPor eso el primer trabajo casi nunca es técnico: es ponerle nombre a los pasos que hoy viven en la cabeza de alguien.\n\nEnlace en la bio.\n\n#MRAgentes #Automatizacion #Procesos #IAparaPymes #Pymes #SantaFe #Argentina #TransformacionDigital"
+      }
+    },
+    {
+      "key": "antes-despues-pedidos",
+      "template": "comparativa",
+      "piece": {
+        "title": "Un pedido que entra por WhatsApp",
+        "kicker": "el mismo proceso, dos veces",
+        "rows": [
+          ["Alguien lee el mensaje cuando puede", "Entra al sistema en el momento"],
+          ["Lo copia a la planilla", "Se carga solo, sin retipear"],
+          ["Avisa a depósito por otro chat", "Depósito recibe el aviso al instante"],
+          ["El cliente pregunta cómo viene", "El cliente recibe el estado sin preguntar"]
+        ],
+        "cta": "Diagnóstico sin cargo · mragentes.com.ar"
+      },
+      "caption": {
+        "facebook": "El mismo pedido, dos veces.\n\nAntes: alguien lee el mensaje cuando puede, lo copia a la planilla, avisa a depósito por otro chat, y el cliente pregunta tres veces cómo viene.\n\nDespués: entra al sistema en el momento, se carga solo, depósito recibe el aviso al instante y el cliente recibe el estado sin preguntar.\n\nNo cambió el pedido. Cambió cuántas veces lo tocó una persona.\n\n#MRAgentes #Automatizacion #WhatsApp #Pymes",
+        "instagram": "El mismo pedido, dos veces.\n\nNo cambia el pedido: cambia cuántas veces lo tiene que tocar una persona.\n\nEnlace en la bio.\n\n#MRAgentes #Automatizacion #WhatsAppBusiness #IAparaPymes #Pymes #Galvez #SantaFe #Argentina"
+      }
+    },
+    {
+      "key": "como-trabajamos",
+      "template": "pasos",
+      "piece": {
+        "title": "Cómo trabajamos",
+        "kicker": "de la charla a producción",
+        "items": [
+          ["Relevamos", "Una hora mirando cómo trabaja tu equipo, sin PowerPoint."],
+          ["Elegimos una", "La tarea que más horas come. Una sola, para tener resultado pronto."],
+          ["Armamos y probamos", "Con tus datos reales y tu gente usándolo, no en un demo."],
+          ["Queda andando", "Con documentación, y con alguien de tu equipo que sepa tocarlo."]
+        ],
+        "cta": "Semanas, no trimestres"
+      },
+      "caption": {
+        "facebook": "Cómo trabajamos, sin vueltas:\n\n1. Relevamos: una hora mirando cómo trabaja tu equipo, sin PowerPoint.\n2. Elegimos una: la tarea que más horas come. Una sola, para tener resultado pronto.\n3. Armamos y probamos con tus datos reales y tu gente usándolo, no en un demo.\n4. Queda andando, documentado, y con alguien de tu equipo que sepa tocarlo.\n\nSemanas, no trimestres.\n\n#MRAgentes #Automatizacion #Pymes #SantaFe",
+        "instagram": "Cómo trabajamos, sin vueltas.\n\n· Relevamos una hora, sin PowerPoint\n· Elegimos una sola tarea: la que más horas come\n· Probamos con datos reales y tu gente usándolo\n· Queda andando y documentado\n\nSemanas, no trimestres.\n\n#MRAgentes #Automatizacion #IAparaPymes #Pymes #Procesos #Galvez #SantaFe #Argentina"
+      }
+    },
+    {
+      "key": "glosario-agente",
+      "template": "glosario",
+      "piece": {
+        "title": "Agente",
+        "kicker": "diccionario mínimo de ia",
+        "caption": "sustantivo · lo que antes llamábamos «el sistema»",
+        "lead": "Un programa que no espera que le aprietes un botón: recibe un objetivo, decide los pasos y usa las herramientas que tiene a mano para llegar. Un chatbot responde; un agente hace.",
+        "quote": "Un chatbot te dice cuándo llega el pedido. Un agente reprograma la entrega, avisa al cliente y actualiza la planilla."
+      },
+      "caption": {
+        "facebook": "Agente (sustantivo): un programa que no espera que le aprietes un botón. Recibe un objetivo, decide los pasos y usa las herramientas que tiene a mano.\n\nLa diferencia con un chatbot, en criollo: un chatbot te dice cuándo llega el pedido. Un agente reprograma la entrega, avisa al cliente y actualiza la planilla.\n\nDe ahí el nombre de la casa.\n\n#MRAgentes #AgentesDeIA #InteligenciaArtificial #Pymes",
+        "instagram": "Agente (sustantivo): un programa que no espera que le aprietes un botón.\n\nUn chatbot te dice cuándo llega el pedido. Un agente reprograma la entrega, avisa al cliente y actualiza la planilla.\n\nDe ahí el nombre de la casa.\n\n#MRAgentes #AgentesDeIA #InteligenciaArtificial #IAparaPymes #Pymes #SantaFe #Galvez #Argentina"
+      }
+    },
+    {
+      "key": "pregunta-horas",
+      "template": "pregunta",
+      "piece": {
+        "title": "¿Cuántas horas por semana copia y pega tu equipo?",
+        "kicker": "pregunta",
+        "lead": "Contá sólo lo que pasa de una pantalla a otra sin cambiar nada en el camino. Casi siempre da más de lo que uno cree.",
+        "cta": "Contanos en los comentarios"
+      },
+      "caption": {
+        "facebook": "¿Cuántas horas por semana copia y pega tu equipo?\n\nContá sólo lo que pasa de una pantalla a otra sin cambiar nada en el camino: del mail a la planilla, de la planilla al sistema, del sistema al WhatsApp.\n\nCasi siempre da más de lo que uno cree. Te leemos.\n\n#MRAgentes #Automatizacion #Productividad #Pymes",
+        "instagram": "¿Cuántas horas por semana copia y pega tu equipo?\n\nContá sólo lo que pasa de una pantalla a otra sin cambiar nada en el camino.\n\nCasi siempre da más de lo que uno cree. Te leemos en los comentarios.\n\n#MRAgentes #Automatizacion #Productividad #IAparaPymes #Pymes #Galvez #SantaFe #Argentina"
+      }
+    },
+    {
+      "key": "caso-turnos",
+      "template": "caso",
+      "piece": {
+        "title": "Turnos que se confirmaban a mano",
+        "kicker": "ejemplo de manual",
+        "rows": [
+          ["problema", "Dos horas diarias confirmando turnos por teléfono y anotando en papel"],
+          ["solución", "Recordatorio automático por WhatsApp con confirmación en un toque"],
+          ["resultado", "El teléfono quedó para lo que no se puede automatizar: atender bien"]
+        ],
+        "stat": "2 h",
+        "unit": "por día",
+        "caption": "que volvieron al mostrador",
+        "cta": "¿Te suena parecido? Escribinos"
+      },
+      "caption": {
+        "facebook": "Un caso de manual, de los que más se repiten:\n\nProblema: dos horas diarias confirmando turnos por teléfono y anotando en papel.\nSolución: recordatorio automático por WhatsApp, con confirmación en un toque.\nResultado: el teléfono quedó libre para lo que no se puede automatizar, que es atender bien.\n\nDos horas por día no es poco: es un cuarto de la jornada de alguien.\n\n#MRAgentes #Automatizacion #WhatsApp #Pymes",
+        "instagram": "Dos horas por día confirmando turnos a mano.\n\nRecordatorio automático por WhatsApp, confirmación en un toque, y el teléfono libre para lo que no se puede automatizar: atender bien.\n\nDos horas por día es un cuarto de la jornada de alguien.\n\nEnlace en la bio.\n\n#MRAgentes #Automatizacion #WhatsAppBusiness #IAparaPymes #Pymes #Galvez #SantaFe #Argentina"
+      }
+    },
+    {
+      "key": "titular-integracion",
+      "template": "titular",
+      "piece": {
+        "title": "Si tu CRM no le habla a tu WhatsApp, el traductor es tu equipo",
+        "kicker": "para pensar",
+        "lead": "Cada sistema que no se conecta con el de al lado le agrega una tarea manual a alguien. Esa tarea no está en ningún organigrama, pero se paga igual.",
+        "cta": "Automatización y agentes de IA para pymes · Gálvez, Santa Fe"
+      },
+      "caption": {
+        "facebook": "Si tu CRM no le habla a tu WhatsApp, el traductor es tu equipo.\n\nCada sistema que no se conecta con el de al lado le agrega una tarea manual a alguien. Esa tarea no está en ningún organigrama, no la pidió nadie, y se paga igual: en horas.\n\nConectar dos herramientas que ya tenés suele ser más barato que comprar una tercera.\n\n#MRAgentes #Automatizacion #Integraciones #Pymes",
+        "instagram": "Si tu CRM no le habla a tu WhatsApp, el traductor es tu equipo.\n\nEsa tarea no está en ningún organigrama, no la pidió nadie, y se paga igual: en horas.\n\nConectar dos herramientas que ya tenés suele salir más barato que comprar una tercera.\n\n#MRAgentes #Automatizacion #Integraciones #IAparaPymes #Pymes #SantaFe #Galvez #Argentina"
+      }
+    },
+    {
+      "key": "semana-ia",
+      "template": "agenda",
+      "piece": {
+        "title": "Lo que pasó esta semana en IA",
+        "kicker": "resumen",
+        "rows": [
+          ["lunes", "Nueva obligación de transparencia para chatbots en la UE"],
+          ["miércoles", "Los agentes en producción se triplicaron en un año"],
+          ["viernes", "El informe que separa adoptar de rentabilizar"]
+        ],
+        "cta": "El análisis completo, en el sitio"
+      },
+      "caption": {
+        "facebook": "Lo que pasó esta semana en IA, en tres líneas:\n\n· Nueva obligación de transparencia para chatbots en la UE.\n· Los agentes en producción se triplicaron en un año.\n· Salió el informe que separa adoptar de rentabilizar — no es lo mismo.\n\nEl análisis completo, con las fuentes, en https://mragentes.com.ar/notas/\n\n#MRAgentes #InteligenciaArtificial #Tendencias #Pymes",
+        "instagram": "Lo que pasó esta semana en IA, en tres líneas.\n\nEl análisis completo, con las fuentes a la vista, está en el sitio — enlace en la bio.\n\n#MRAgentes #InteligenciaArtificial #Tendencias #IAparaPymes #Pymes #Galvez #SantaFe #Argentina #Automatizacion"
+      }
+    },
+    {
+      "key": "ficha-asistente",
+      "template": "ficha",
+      "piece": {
+        "title": "Asistente de atención por WhatsApp",
+        "kicker": "servicio",
+        "lead": "Responde lo repetido, deriva lo que no, y nunca deja un mensaje sin leer.",
+        "rows": [
+          ["atiende", "Horarios, precios, stock y estado de pedidos"],
+          ["deriva", "Todo lo que se sale del libreto, con el historial"],
+          ["habla como", "Tu negocio: el tono lo definimos con vos"],
+          ["se conecta a", "Planillas, CRM, sistema de pedidos"],
+          ["puesta en marcha", "Dos a cuatro semanas"]
+        ],
+        "cta": "Pedí la ficha completa por WhatsApp"
+      },
+      "caption": {
+        "facebook": "Asistente de atención por WhatsApp: responde lo repetido, deriva lo que no, y nunca deja un mensaje sin leer.\n\nAtiende horarios, precios, stock y estado de pedidos. Cuando la consulta se sale del libreto, pasa la conversación a una persona con todo el historial, para que nadie tenga que repetir nada.\n\nPuesta en marcha: dos a cuatro semanas.\n\n#MRAgentes #Chatbots #WhatsApp #AtencionAlCliente #Pymes",
+        "instagram": "Asistente de atención por WhatsApp.\n\nResponde lo repetido, deriva lo que no, y nunca deja un mensaje sin leer. Cuando la consulta se sale del libreto, pasa a una persona con todo el historial.\n\nPuesta en marcha: dos a cuatro semanas. Enlace en la bio.\n\n#MRAgentes #Chatbots #WhatsAppBusiness #AtencionAlCliente #IAparaPymes #Pymes #Galvez #SantaFe"
+      }
+    },
+    {
+      "key": "anuncio-contacto",
+      "template": "anuncio",
+      "piece": {
+        "title": "Primera charla, sin cargo",
+        "kicker": "mr agentes",
+        "lead": "Automatización de procesos y agentes de IA para pymes. Te decimos si conviene — y si no conviene, también.",
+        "rows": [
+          ["web", "mragentes.com.ar"],
+          ["whatsapp", "3404 50-2729"],
+          ["dónde", "Gálvez, Santa Fe · remoto en todo el país"]
+        ]
+      },
+      "caption": {
+        "facebook": "Primera charla, sin cargo.\n\nAutomatización de procesos y agentes de IA para pymes. Miramos tu operación y te decimos si conviene automatizar algo. Si no conviene, también te lo decimos: es la parte del trabajo que más tiempo ahorra.\n\nGálvez, Santa Fe. Remoto en todo el país.\nhttps://mragentes.com.ar/contacto/\n\n#MRAgentes #Automatizacion #Pymes #Galvez #SantaFe",
+        "instagram": "Primera charla, sin cargo.\n\nMiramos tu operación y te decimos si conviene automatizar algo. Si no conviene, también te lo decimos: es la parte del trabajo que más tiempo ahorra.\n\nGálvez, Santa Fe · remoto en todo el país. Enlace en la bio.\n\n#MRAgentes #Automatizacion #IAparaPymes #Pymes #Galvez #SantaFe #Argentina #AgentesDeIA"
+      }
+    },
+    {
+      "key": "punto-ejemplo",
+      "template": "punto",
+      "piece": {
+        "stat": "01",
+        "title": "Lo que se repite, se automatiza",
+        "lead": "Si una tarea se hace igual todas las semanas, ya está documentada: sólo falta escribirla en un lugar donde la lea una máquina.",
+        "kicker": "punto uno",
+        "cta": "Deslizá »"
+      },
+      "caption": {
+        "facebook": "Lo que se repite, se automatiza.\n\nSi una tarea se hace igual todas las semanas, ya está documentada — vive en la cabeza de alguien. Sólo falta escribirla en un lugar donde la pueda leer una máquina.\n\n#MRAgentes #Automatizacion #Pymes",
+        "instagram": "Lo que se repite, se automatiza.\n\nSi una tarea se hace igual todas las semanas ya está documentada: vive en la cabeza de alguien. Sólo falta escribirla donde la lea una máquina.\n\n#MRAgentes #Automatizacion #IAparaPymes #Pymes #Procesos #SantaFe #Galvez #Argentina"
+      }
+    }
+  ]
+}

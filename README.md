@@ -35,6 +35,7 @@ layouts/         plantillas
   shortcodes/    ficha (tabla de especificación), contacto (formulario + canales)
 static/          se copia tal cual: fuentes, imágenes, sw.js, manifest, robots
 scripts/         publicación automática de notas (Python, fuera del build)
+  social/        composición y publicación de las piezas de Instagram y Facebook
 ```
 
 ### Decisiones que conviene no deshacer sin pensarlo
@@ -94,6 +95,39 @@ especificidad — una consulta de medios no agrega especificidad por sí sola.
 
 Las notas diarias las escribe `scripts/publish_daily.py`, que crea el archivo en
 `content/notas/`, commitea y pushea. El deploy es el mismo.
+
+### Y el aviso en redes sale solo
+
+El mismo push dispara `.github/workflows/social.yml`: compone cuatro láminas
+4:5 y una historia 9:16 con la imagen de portada de la nota, las publica en
+Facebook e Instagram y deja registro para no repetir. Todo con el sistema
+visual de esta hoja de estilo — mismos colores, mismas tipografías, la misma
+mano grabada.
+
+Está documentado en **[`scripts/social/README.md`](scripts/social/README.md)**.
+Lo mínimo:
+
+```bash
+pip install -r scripts/requirements.txt
+cp .env.example .env                          # completar las claves de Meta
+python3 -m scripts.social doctor              # ¿está todo?
+python3 -m scripts.social gallery             # muestrario de las 15 plantillas
+python3 -m scripts.social publish-nota --latest --dry-run
+```
+
+Los tres secretos que necesita el workflow (`META_ACCESS_TOKEN`, `FB_PAGE_ID`,
+`IG_USER_ID`) van en *Settings → Secrets and variables → Actions*. Sin ellos no
+falla nada: compone las piezas, las deja en `static/social/` y avisa qué falta.
+
+### Credenciales
+
+Nada de tokens en el código ni en archivos versionados. Todo sale de `.env`
+(que está en `.gitignore`) o de los secretos de Actions; `.env.example` es la
+plantilla vacía y sí se versiona. Para revisar que no se haya escapado nada:
+
+```bash
+python3 scripts/scan_secrets.py --all    # árbol de trabajo + historial completo
+```
 
 ---
 
