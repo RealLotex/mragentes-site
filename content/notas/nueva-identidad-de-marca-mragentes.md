@@ -2,7 +2,7 @@
 title: La nueva identidad de MR Agentes
 date: 2026-08-08
 description: 'Estrenamos identidad de marca para mragentes.com.ar: misma esencia, nueva cara. Te contamos qué cambió, por qué, y cómo queda todo el sitio alineado.'
-image: /images/mragentes.png
+image: /images/stock/digital-world.jpg
 tags:
 - marca
 - identidad
