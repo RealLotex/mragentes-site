@@ -18,10 +18,12 @@ Rediseñamos completamente mragentes.com.ar y con eso llega una nueva identidad 
 
 ## Qué cambió
 
-- **Tipografías propias** — El sitio ahora usa las mismas familias de texto y títulos en todo: Archivo para display, Alegreya para lectura e itálicas, Chivo Mono para datos. Nada se ve improvisado.
-- **Paleta unificada** — Los colores de marca se aplican en cada pieza del sitio y de las redes sociales, desde la portada hasta el carrusel más chico.
-- **La mano grabada** — El logotipo con "MR" en negrita y "Agentes" en regular, igual que la firma del sitio, ahora es el sello visual de todo lo que publicamos.
-- **Fotos sin estirar** — Las imágenes respetan su proporción, con cobertura inteligente en vez de deformarse. Los cuadraditos vacíos donde faltaba una fuente, desaparecieron.
+- **Tipografías propias** — Archivo, Alegreya y Chivo Mono, las mismas familias en todo el sitio.
+- **Paleta unificada** — Los colores de marca aplicados en cada pieza.
+- **La mano grabada** — El logotipo MR, sello visual de todo lo que publicamos.
+- **Fotos sin estirar** — Imágenes con cobertura inteligente, nunca deformadas.
+- **15 plantillas nuevas** — Para las piezas de redes, con la identidad del sitio.
+- **Aviso automático** — Cada nota nueva sale sola en Facebook e Instagram.
 
 ## Por qué importa para tu negocio
 

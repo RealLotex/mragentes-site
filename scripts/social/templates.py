@@ -359,7 +359,7 @@ def t_anuncio(piece: Piece, surf: Surface, seed: int, ground: str) -> Sheet:
     """13 · Anuncio con canales. El cierre de cualquier carrusel."""
     sh = _new_sheet(surf, "minio" if ground == "paper" and seed % 2 else ground, seed,
                     section=_label(piece, "aviso"), meta=piece.meta,
-                    footer_right=piece.footer_right or brand.SITE_HOST)
+                    footer_right=piece.footer_right or brand.HANDLE)
     stack(sh, [
         Kicker(piece.kicker or "mr agentes"),
         Gap(16),

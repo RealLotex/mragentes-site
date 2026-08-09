@@ -237,9 +237,11 @@ def support_pieces(nota: Nota, limit: int = 3) -> list[tuple[str, Piece]]:
             cta="La nota completa, en el sitio",
         )))
     elif nota.bullets:
+        items = [_trim(b, 100) for b in nota.bullets[:4]]
+        n = len(items)
         out.append(("lista", Piece(
-            title="Tres cosas para llevarse",
-            items=[_trim(b, 110) for b in nota.bullets[:4]],
+            title=(f"{n} cosas para llevarse") if n else "Lo que trae la nota",
+            items=items,
             kicker="para tener a mano",
             cta="La nota completa, en el sitio",
         )))
