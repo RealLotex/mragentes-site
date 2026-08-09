@@ -113,7 +113,9 @@ def _label(piece: Piece, default: str) -> str:
 def t_nota(piece: Piece, surf: Surface, seed: int, ground: str) -> Sheet:
     """01 · Aviso de nota nueva. Usa la imagen de la nota como fondo."""
     photo = piece.photo if piece.photo and Path(piece.photo).exists() else None
-    band = surf.key == "story" or (seed % 3 == 2 and photo)
+    # Con foto de portada, priorizar el fondo completo (la identidad visual de la
+    # nota es la imagen). Sin foto, cae a la variante con banda tipográfica.
+    band = not photo or (surf.key == "story" and photo)
 
     if photo and not band:
         sh = _new_sheet(surf, "ink", seed, photo=photo, section=_label(piece, "nota nueva"),
