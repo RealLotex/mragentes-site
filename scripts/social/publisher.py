@@ -181,30 +181,27 @@ class Meta:
             return Result("facebook", "album", False, error=str(exc))
 
     def facebook_story(self, image: Path | str) -> Result:
-        """Publica una historia real de Facebook (sube al carrusel de Stories).
+        """Publica una historia real de Facebook (endpoint /stories).
 
-        Es distinto de `facebook_photo`, que sube al feed. Acá se usa el
-        endpoint `/{page_id}/stories` y el archivo 9:16.
+        El edge `/{page_id}/stories` existe; para poder POSTear requiere el
+        permiso `pages_manage_metadata` en el token de página (además de
+        `pages_manage_posts`). Sin él, Meta responde "Unsupported post request".
         """
         if not self.settings.can_post_facebook:
             return Result("facebook", "historia", False, skipped="falta FB_PAGE_ID o token")
         try:
             path = Path(image)
-            if path.exists():
-                with path.open("rb") as fh:
-                    body = self._post(
-                        f"{self.settings.fb_page_id}/stories",
-                        {"image_type": "image/jpeg"},
-                        files={"source": (path.name, fh, "image/jpeg")},
-                    )
-                    body = dict(body)
-            else:
+            if not path.exists():
+                return Result("facebook", "historia", False,
+                              error=f"no existe la historia: {path.name}")
+            with path.open("rb") as fh:
                 body = self._post(
                     f"{self.settings.fb_page_id}/stories",
-                    {"url": str(image), "image_type": "image/jpeg"},
+                    {"image_type": "jpg"},
+                    files={"source": (path.name, fh, "image/jpeg")},
                 )
-            mid = str(body.get("id", ""))
-            return Result("facebook", "historia", True, id=mid)
+            logic_id = str(body.get("logic_id") or body.get("id") or "")
+            return Result("facebook", "historia", True, id=logic_id)
         except PublishError as exc:
             return Result("facebook", "historia", False, error=str(exc))
 
