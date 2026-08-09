@@ -180,6 +180,34 @@ class Meta:
         except PublishError as exc:
             return Result("facebook", "album", False, error=str(exc))
 
+    def facebook_story(self, image: Path | str) -> Result:
+        """Publica una historia real de Facebook (sube al carrusel de Stories).
+
+        Es distinto de `facebook_photo`, que sube al feed. Acá se usa el
+        endpoint `/{page_id}/stories` y el archivo 9:16.
+        """
+        if not self.settings.can_post_facebook:
+            return Result("facebook", "historia", False, skipped="falta FB_PAGE_ID o token")
+        try:
+            path = Path(image)
+            if path.exists():
+                with path.open("rb") as fh:
+                    body = self._post(
+                        f"{self.settings.fb_page_id}/stories",
+                        {"image_type": "image/jpeg"},
+                        files={"source": (path.name, fh, "image/jpeg")},
+                    )
+                    body = dict(body)
+            else:
+                body = self._post(
+                    f"{self.settings.fb_page_id}/stories",
+                    {"url": str(image), "image_type": "image/jpeg"},
+                )
+            mid = str(body.get("id", ""))
+            return Result("facebook", "historia", True, id=mid)
+        except PublishError as exc:
+            return Result("facebook", "historia", False, error=str(exc))
+
     # ── Instagram ───────────────────────────────────────────────────────
     def _ig_container(self, params: dict) -> str:
         body = self._post(f"{self.settings.ig_user_id}/media", params)
