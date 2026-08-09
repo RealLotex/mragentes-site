@@ -251,13 +251,10 @@ def publish_nota(
             results.append(st)
             if st.ok:
                 record["story"] = st.id
-            # La historia también se publica en Facebook como historia real
-            # (endpoint /stories), no como foto de feed.
-            if meta.settings.can_post_facebook:
-                fbs = meta.facebook_story(pieces["story"])
-                results.append(fbs)
-                if fbs.ok:
-                    record.setdefault("facebook_story", fbs.id)
+            # La historia de Facebook no se publica por Graph API: Meta no
+            # expone el edge para apps de terceros (verificado: /stories da
+            # "Unsupported post request" con o sin pages_manage_metadata).
+            # La historia queda solo en Instagram, donde sí funciona.
 
     state_mod.record(nota.slug, record, state)
     return {
