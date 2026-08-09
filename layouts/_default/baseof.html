@@ -9,7 +9,7 @@
        desincronizando. */ -}}
 {{- $desc := .Description | default .Summary | default site.Params.description | plainify | truncate 158 }}
 {{- $title := cond .IsHome (printf "%s — automatización y agentes de IA en Gálvez, Santa Fe" site.Title) (printf "%s · %s" .Title site.Title) }}
-{{- $img := absURL (.Params.image | default "/images/mragentes.png") }}
+{{- $img := absURL (.Params.image | default "/images/faviconhand512.png") }}
 
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $desc }}">
