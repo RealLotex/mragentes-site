@@ -2,7 +2,7 @@
   "version": 2,
   "published": {
     "nueva-identidad-de-marca-mragentes": {
-      "updated": "2026-08-09T01:22:17",
+      "updated": "2026-08-09T02:15:01",
       "date": "2026-08-08",
       "images": [
         "nueva-identidad-de-marca-mragentes/01-nota.jpg",
@@ -10,7 +10,10 @@
         "nueva-identidad-de-marca-mragentes/03-lista.jpg",
         "nueva-identidad-de-marca-mragentes/04-anuncio.jpg",
         "nueva-identidad-de-marca-mragentes/historia.jpg"
-      ]
+      ],
+      "facebook": "1202855116233616_122122044561359279",
+      "instagram": "18116907409728991",
+      "story": "18028076060665217"
     }
   }
 }
