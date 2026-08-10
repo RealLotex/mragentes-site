@@ -164,10 +164,21 @@ Pexels batch 2026-06-18: 14 imágenes con IDs 8386440, 8566472, 8438918, 8441272
     
 ⚠️ **Si se agregan imágenes manualmente:** agregar el filename a `STOCK_IMAGES` en `publish_daily.py` y su alt text a `_generate_image_alt()`.
 
+### Flujo de relevamiento + notas (v5 — 2026-08-10)
+
+> 📥 **Cola diaria:** `content/cola_diaria.md` — buffer de noticias relevantes detectadas CADA día. Las notas de Mié/Dom se redactan tomando lo mejor de esta cola, así no se pierde la noticia del día.
+> La cola se commitea junto con la próxima nota (NUNCA con git restore que la borre: agregada al commit de la nota).
+
+**Por qué:** con 2 notas/semana (Mié+Dom) hay margen para más calidad. El relevamiento es DIARIO (ticker de noticias, sin redactar); la investigación profunda + redacción solo los días de publicación. Sin subagentes: un solo contexto redacta de punta a punta para no perder coherencia.
+
 ### Cron
-- **Nombre:** "Web — Nota Diaria"
-- **Horario:** 12:00 todos los días (America/Cordoba)
-- **Payload:** Investiga, escribe `content/notas/<slug>.md`, commitea y pushea a `main`. El push dispara la publicación automática en FB+IG vía Actions.
+- **Nombre:** "Relevamiento diario de noticias IA (cola)"
+- **Horario:** 18:00 TODOS los días (America/Cordoba)
+- **Payload:** Escanea fuentes (La Nación, Infobae, iProUP, iProfesional, Ámbito, TechCrunch, The Verge, ArsTechnica, MIT Tech Review, VentureBeat, artificialintelligence-news.com, The Guardian), detecta 2-4 noticias relevantes del día y las agrega a `content/cola_diaria.md`. NO redacta, NO commitea, NO publica.
+- **Timeout:** 420s | **Delivery:** none
+- **Nombre:** "Web — Nota Diaria (Dom+Mié)"
+- **Horario:** 12:00 mié + dom (America/Cordoba)
+- **Payload:** Lee `content/cola_diaria.md` (FUENTE PRIMARIA), elige 2-3 noticias más relevantes → investigación profunda en 2 pasadas (bruta + selectiva con fetch) → redacta nota pseudo-académica con citas/links reales → valida → commit+push (incluye cola_diaria.md en el commit). El push dispara la publicación automática en FB+IG vía Actions.
 - **Timeout:** 480s | **Delivery:** announce telegram | **Light context:** false
 - **Nombre:** "Social Manager — Daily Post"
 - **Horario:** 13:00 todos los días (America/Cordoba)
