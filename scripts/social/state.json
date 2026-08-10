@@ -43,6 +43,15 @@
       "facebook": "1202855116233616_122122255665359279",
       "instagram": "18052567223623381",
       "story": "18212877934358030"
+    },
+    "ficha-asistente": {
+      "updated": "2026-08-10T13:02:13",
+      "date": "2026-08-10",
+      "images": [
+        "biblioteca/ficha-asistente.jpg"
+      ],
+      "instagram": "18119196697920335",
+      "facebook_error": "publish_actions deprecated (permiso de app, no token)"
     }
   }
 }
