@@ -30,3 +30,7 @@ scripts/social/.cache/
 # Muestrario de plantillas: se regenera con
 #   python3 -m scripts.social gallery
 static/social/muestrario/
+
+# ── Legacy de master (NO versionar: contienen secretos leakeados) ──────────
+META API TOKENS.txt
+cf_worker_hardcoded_token.js
