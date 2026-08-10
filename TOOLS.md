@@ -175,4 +175,94 @@ Pexels batch 2026-06-18: 14 imágenes con IDs 8386440, 8566472, 8438918, 8441272
 
 ---
 
+---
+
+## 🛡️ Seguridad — Lecciones 2026-08-10 (purga total del historial)
+
+> ⚠️ **El repo `mragentes-site` es PÚBLICO** (sirve la web). Cualquier archivo con un secreto que se commitee queda expuesto al mundo en el historial, para siempre.
+
+### Lo que pasó (para entender por qué)
+- Un `FACEBOOK_ACCESS_TOKEN` real se coló en el repo hace meses (`META API TOKENS.txt`).
+- El token quedó en el historial git. Como el repo es público, cualquiera lo ve.
+- Se rotó el token (mitigación funcional) y luego se hizo **purga total del historial** con `git filter-repo` + force-push.
+
+### Reglas NO negociables
+1. **NUNCA committear secretos.** `.env`, `META API TOKENS.txt`, `config.local.json`, tokens, keys → todo en `.gitignore` y SOLO en disco local.
+2. **Antes de `git add .`**, revisar que no haya archivos sospechosos: `git status` y buscar `.env`, `token`, `secret`, `TOKENS`.
+3. **Un token que se pega en un chat/quedó en un commit está quemado** → rotarlo, no alcanza con "borrar el archivo".
+4. **Repo público = asumí que el historial lo lee cualquiera.** Pensar antes de pushear.
+
+### Cómo auditar secretos (rápido, pickaxe)
+```bash
+# Buscar un fragmento de token en TODO el historial (rápido, ~4s)
+git log --all --oneline -S "<frag_15_chars>" --
+
+# Buscar archivos con nombres sospechosos en todas las branches
+for b in main; do git ls-tree -r $b --name-only | grep -iE "\.env$|token|secret|TOKENS|credential" | grep -v .example; done
+
+# Script existente (árbol + historial)
+python3 scripts/scan_secrets.py --all
+```
+> **Lección 2026-08-10:** el barrido lento es `git grep <frag>` por commit. El método CORRECTO y rápido es `git log --all -S <frag>` (pickaxe).
+
+### Cómo rotar el token de Meta (long-lived)
+```bash
+# Necesitás: FB_APP_ID + FB_APP_SECRET (en social-manager/.env) y un short-lived token
+curl -s "https://graph.facebook.com/v25.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${APP_ID}&client_secret=CRET}&fb_exchange_token=${SHORT}"
+# Devuelve un access_token long-lived (expires_at=0)
+# Validar: GET /debug_token?input_token=<nuevo>&access_token=<app_id|app_secret>
+```
+Luego actualizar:
+- `.env` local (raíz) → `META_ACCESS_TOKEN`
+- **Secret de GitHub Actions** → vía API (ver abajo)
+
+### Cómo actualizar un secret de GitHub Actions por API (no se puede leer)
+> Los secrets de GitHub **NO se leen** por API (solo nombre + fecha). Se actualizan cifrando con la public key del repo (NaCl sealed box).
+```python
+# pip: pynacl
+import base64, json, urllib.request, nacl.public
+# 1) GET /repos/<repo>/actions/secrets/public-key  -> {key_id, key}
+# 2) box = nacl.public.SealedBox(PublicKey(b64decode(key))); enc = box.encrypt(valor.encode())
+# 3) PUT /repos/<repo>/actions/secrets/<NAME>  body={encrypted_value: b64(enc), key_id}
+```
+
+### Cómo hacer purga total del historial (último recurso, destructivo)
+```bash
+# 1) BACKUP completo del repo ANTES de tocar nada
+mkdir -p tmp/security_backup && git bundle create tmp/security_backup/backup_$(date +%Y%m%d).bundle --all
+
+# 2) Trabajar en un MIRROR aparte, NUNCA en el repo real
+rm -rf tmp/purge_work && git clone --mirror . tmp/purge_work && cd tmp/purge_work
+
+# 3) Purgar (filter-repo se instala con: pipx install git-filter-repo)
+git filter-repo --force --invert-paths --path "META API TOKENS.txt" --path "archivo_secreto"
+# (filter-repo borra el remote 'origin' a propósito; hay que re-agregarlo para pushear)
+
+# 4) VERIFICAR el mirror: token ausente, estructura web intacta
+#    git log --all -S <top-secret>  → vacío
+
+# 5) Force-push desde el mirror al repo real
+cd tmp/purge_work && git push --force https://TOKEN@github.com/<owner>/<repo>.git main:main
+
+# 6) Reconstruir el repo local desde el historial purgado
+cd <workspace> && git fetch origin && git reset --hard origin/main
+
+# 7) Limpiar: rm -rf tmp/purge_work
+```
+> ⚠️ `git filter-repo` reescribe TODOS los SHAs del historial → cualquier clon/referencia vieja queda inválida. Por eso el backup con `git bundle` es obligatorio.
+> ⚠️ GitHub guarda caché de los commits viejos (forks, búsqueda) un tiempo. Reportar el secret en **Settings → Security → Secret scanning** para que GitHub lo invalide.
+
+### Lección: nunca rebasear historial con duplicados
+- Este repo tuvo 2 ramas (main + master) con commits intercalados/duplicados por un bundle de backup.
+- Intentar `git rebase origin/main` sobre una rama local con 126 commits duplicados generó conflictos de add/add (AGENTS.md, TOOLS.md…).
+- **Fix:** abortar el rebase y regenerar `main` desde origin: `git switch -C main origin/main`. NO reaplicar commits duplicados a mano.
+
+### Estado actual post-purga (2026-08-10)
+- Rama única: `main` (master eliminada local + origin). Sin tags.
+- `git filter-repo` purgó `META API TOKENS.txt` y `cf_worker_hardcoded_token.js` → 366→253 commits.
+- Secrets de GitHub: `META_ACCESS_TOKEN` (rotado), `FB_PAGE_ID`, `IG_USER_ID` sincronizados con `.env`.
+- Backup disponible: `tmp/security_backup/repo_backup_20260810_111319.bundle` (323 MB).
+
+---
+
 Add whatever helps you do your job. This is your cheat sheet.

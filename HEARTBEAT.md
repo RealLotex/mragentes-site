@@ -16,7 +16,9 @@ Tu trabajo es mejorar continuamente los templates de slides:
 - Siempre publicar stories junto con cada post
 
 ## Estado
-- Tokens de API: válidos por 59 días (desde 2026-06-11)
+- **Rama única: `main`** (master eliminada local + origin tras unificación + purga 2026-08-10)
+- **Token Meta: rotado** (long-lived nuevo). Vive SOLO en `.env` local (ignorado) + secrets de GitHub. NUNCA committear.
+- **Repo público** → 🛡️ no committear secretos (ver TOOLS.md → Seguridad)
 - Cron nocturno: activo cada 30min (00-07h)
 - Cron Web Nota Diaria (12:00): solo publica nota web (SIN web_note_to_social.py)
 - Cron Social Manager Daily (13:00): publica siguiente día del calendario con --next. Única fuente de verdad para redes.
@@ -32,6 +34,13 @@ Tu trabajo es mejorar continuamente los templates de slides:
 - Singles (Día 4, 7, 11, 14, 17, 21, 24, 30): usan content_db en social_manager.py, no necesitan slide_details.
 
 ## Fixes Record
+- **2026-08-10:** 🛡️ SEGURIDAD — Purga total del historial (repo públício).
+  1. Descubierto `FACEBOOK_ACCESS_TOKEN` real leakeado en historial (`META API TOKENS.txt`, commit ba7179b).
+  2. Rotado token Meta (long-lived) vía fb_exchange_token; actualizados secrets GitHub (libsodium).
+  3. Eliminada rama master (solo queda main) + tag de backup.
+  4. Purga total del historial con `git filter-repo` + force-push (366→253 commits).
+  5. Backup: `tmp/security_backup/repo_backup_20260810_111319.bundle`.
+  6. Documentado en TOOLS.md (sección Seguridad) + AGENTS.md (red line secretos).
 - **2026-06-14:** Badge (.cta-button) en layout single no tenía fondo azul — faltaba CSS class en CSS_SINGLE. FIX: agregado .cta-button a CSS_SINGLE con bg #2596be, padding 28px 60px, font-size 56px, border-radius 18px.
 - **2026-06-14:** Cron daily post cambiado de sessionTarget:main (systemEvent) a isolated (agentTurn).
 - **2026-06-14:** Catbox.moe timeout aumentado de 60s a 120s.

@@ -65,6 +65,14 @@ Después de cada cambio en scripts/herramientas/procesos:
 - `trash` > `rm`
 - When in doubt, ask.
 
+### 🛡️ Red Line de SECRETOS (crítico, lección 2026-08-10)
+- **El repo `mragentes-site` es PÚBLICO.** Todo lo que se commitea queda visible para siempre en el historial.
+- **NUNCA committear secretos** (`.env`, `META API TOKENS.txt`, tokens, keys). Están en `.gitignore` y viven SOLO en disco local + secrets de GitHub.
+- **Antes de `git add .` / `git commit`**: revisá `git status` y confirmá que no entran archivos con credenciales (`.env`, `token`, `secret`, `TOKENS`).
+- **Un token que aparece en un chat, un log o un commit quedó quemado** → hay que rotarlo (no alcanza con borrar el archivo).
+- **Nunca pegar tokens completos en conversaciones** — referenciá por fragmento o longitud.
+- Ver TOOLS.md → sección "🛡️ Seguridad" para los procedimientos de auditoría, rotación y purga.
+
 ## External vs Internal
 
 **Safe to do freely:** Read files, explore, organize, search the web, work within workspace.
