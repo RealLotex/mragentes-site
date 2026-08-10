@@ -52,6 +52,15 @@ python3 scripts/scan_secrets.py --all   # Escanea árbol + historial por secreto
 ```
 
 ### Known Issues (nuevo sistema)
+- ⚠️ **2026-08-10 FIX: `publish-library` registra en state.json** (era `cmd_publish_library`, no llamaba a `state.record` → duplicados en cron). Ahora lo hace igual que `publish-nota`, solo si al menos una plataforma publicó. Commit `a7c102d`.
+- ⚠️ **Categorizar el error de Meta ANTES de tocar tokens** (método que ahorra tokens quemados):
+  - `(#200) publish_actions ... deprecated` = **permiso de app/scope deprecado**, NO token vencido. Hay que regenerar token con `pages_manage_posts` + `pages_read_engagement` (+ `pages_manage_metadata` para stories). No hay fix de código.
+  - `190 Session has expired` = token vencido (corto ~2h), regenerar long-lived (60 días).
+  - Verificar permisos: `GET /debug_token?input_token=<tok>&access_token=<app_id|app_secret>` → mirar `scopes` y `expires_at` (0 = long-lived).
+- ⚠️ **El token GitHub para actualizar secrets vive en `/tmp/git-creds`** (credential store: `https://<user>:<token>@github.com`). No hay `gh` CLI ni `GITHUB_TOKEN` en env. Para update de secrets: extraer de ese archivo (campo 3 con `awk -F'[:@]'`).
+- ⚠️ Confiar en **prueba real** antes de dar por bueno un token: publicar un post de test y borrarlo (ver "prueba de publicación" abajo). `debug_token` solo dice que el token es válido, no que el permiso funcione.
+- ⚠️ El dataclass `Result` de `publisher.py` usa `.network` (y `kind`/`ok`/`id`). NO existe `.platform` (error común al replicar el patrón de registro).
+- ⚠️ `publish-nota` publica la nota como **álbum de fotos** (`facebook_album`, usa `/photos` con `published:false` + `/feed` con `attached_media`). Si la nota no aparece: verificar `is_published` y el permalink del post con `GET /<post_id>?fields=id,is_published,permalink_url` (NO pedir campos agregados tipo `attachments{...}` → dan `(#12) deprecate_post_aggregated_fields`).
 - Tokens Meta de corta duración → expiran a las ~2h; requerir long-lived (60 días).
 - El workflow `social.yml` corre en nube de GitHub (no local); usa los secrets, no el `.env` local.
 - Borrar post IG requiere token con `instagram_content_publish` (no disponible)
@@ -216,12 +225,20 @@ python3 scripts/scan_secrets.py --all
 ```
 > **Lección 2026-08-10:** el barrido lento es `git grep <frag>` por commit. El método CORRECTO y rápido es `git log --all -S <frag>` (pickaxe).
 
-### Cómo rotar el token de Meta (long-lived)
+### Cómo rotar el token de Meta (long-lived) — flujo completo verificado 2026-08-10
 ```bash
-# Necesitás: FB_APP_ID + FB_APP_SECRET (en social-manager/.env) y un short-lived token
-curl -s "https://graph.facebook.com/v25.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${APP_ID}&client_secret=CRET}&fb_exchange_token=${SHORT}"
-# Devuelve un access_token long-lived (expires_at=0)
-# Validar: GET /debug_token?input_token=<nuevo>&access_token=<app_id|app_secret>
+# 1) Necesitás: FB_APP_ID + FB_APP_SECRET (en social-manager/.env) y un page token corto vivo
+# 2) Generar long-lived (expires_at=0)
+curl -s "https://graph.facebook.com/v25.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${APP_ID}&client_secret=${APP_SECRET}&fb_exchange_token=${SHORT}"
+# 3) Validar permisos (TIENE que incluir pages_manage_posts!)
+curl -s "https://graph.facebook.com/v25.0/debug_token?input_token=${LONG}&access_token=${APP_ID}|${APP_SECRET}"
+#    → scopes esperados: pages_manage_posts, pages_read_engagement, pages_manage_metadata, pages_show_list...
+#    → expires_at: 0 = long-lived que no expira
+```
+**Antes de instalar el token, hacer PRUEBA REAL de publicación** (un post de test y borrarlo):
+```bash
+# POST /v25.0/<page_id>/feed con message → devuelve post_id (permite publicar = pages_manage_posts OK)
+# DELETE /v25.0/<post_id> → devuelve success
 ```
 Luego actualizar:
 - `.env` local (raíz) → `META_ACCESS_TOKEN`

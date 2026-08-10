@@ -17,7 +17,9 @@ Tu trabajo es mejorar continuamente los templates de slides:
 
 ## Estado
 - **Rama única: `main`** (master eliminada local + origin tras unificación + purga 2026-08-10)
-- **Token Meta: rotado** (long-lived nuevo). Vive SOLO en `.env` local (ignorado) + secrets de GitHub. NUNCA committear.
+- **Token Meta: rotado** (long-lived nuevo, `expires_at:0`). Vive SOLO en `.env` local (ignorado) + secrets de GitHub. NUNCA committear. Permisos: `pages_manage_posts`, `pages_read_engagement`, `pages_manage_metadata`, `pages_show_list`.
+- **Nota del blog → FB/IG viaja por GitHub Actions** al pushear `content/notas/*.md`. Si no aparece en FB: es caché o falló el álbum; verificar `is_published` + permalink con `GET /<post_id>?fields=id,is_published,permalink_url` (crear NO pedir `attachments{}` → deprecado).
+- **Bug `publish-library` FIX 2026-08-10** (`a7c102d`): ahora registra en `state.json` → no duplica en cron.
 - **Repo público** → 🛡️ no committear secretos (ver TOOLS.md → Seguridad)
 - Cron nocturno: activo cada 30min (00-07h)
 - Cron Web Nota Diaria (12:00): solo publica nota web (SIN web_note_to_social.py)

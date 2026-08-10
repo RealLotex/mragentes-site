@@ -71,6 +71,7 @@ Después de cada cambio en scripts/herramientas/procesos:
 - **Antes de `git add .` / `git commit`**: revisá `git status` y confirmá que no entran archivos con credenciales (`.env`, `token`, `secret`, `TOKENS`).
 - **Un token que aparece en un chat, un log o un commit quedó quemado** → hay que rotarlo (no alcanza con borrar el archivo).
 - **Nunca pegar tokens completos en conversaciones** — referenciá por fragmento o longitud.
+- **Antes de pedir un token nuevo, CATEGORIZAR el error de Meta** (lección 2026-08-10): `publish_actions deprecated` ≠ `Session has expired`. Diagnosticar con `debug_token` y probar publicación real ANTES de tocar `.env`/secrets. Ver TOOLS.md → sección Social Manager → Known Issues.
 - Ver TOOLS.md → sección "🛡️ Seguridad" para los procedimientos de auditoría, rotación y purga.
 
 ## External vs Internal
