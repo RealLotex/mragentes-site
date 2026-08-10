@@ -17,6 +17,7 @@ falta. Con `--dry-run` tampoco toca la red, aunque las credenciales estén.
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
 import subprocess
 import sys
@@ -28,6 +29,7 @@ if __package__ in (None, ""):  # permite `python3 scripts/social/cli.py`
 
 from . import copy as copywriter  # noqa: E402
 from . import notas as notas_mod  # noqa: E402
+from . import state as state_mod  # noqa: E402
 from . import templates as tpl  # noqa: E402
 from .config import BASE_DIR, ENV_FILE, OUT_DIR, load_settings  # noqa: E402
 from .flow import ascii_slug, commit_and_push, public_name, publish_nota, render_nota_pieces  # noqa: E402
@@ -286,6 +288,23 @@ def cmd_publish_library(args) -> int:
         if surl:
             results.append(meta.instagram_story(surl))
     _print_result_block("── Resultado ───────────────────────────────────────────────", results)
+
+    # Registrar en state.json (igual que publish-nota) para evitar duplicados
+    # en el cron. La clave es args.key; sin esto, si el cron vuelve a correr,
+    # no hay forma de saber que la pieza ya se publicó.
+    record: dict = {"date": datetime.datetime.now().date().isoformat()}
+    fb = next((r for r in results if r.network == "facebook" and r.ok), None)
+    ig = next((r for r in results if r.network == "instagram" and r.kind == "feed" and r.ok), None)
+    st = next((r for r in results if r.network == "instagram" and r.kind == "historia" and r.ok), None)
+    if fb:
+        record["facebook"] = fb.id
+    if ig:
+        record["instagram"] = ig.id
+    if st:
+        record["story"] = st.id
+    if record != {"date": record["date"]}:
+        state_mod.record(args.key, record, state=state_mod.load())
+
     return 0 if any(r.ok for r in results) else 1
 
 
