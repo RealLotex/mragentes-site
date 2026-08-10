@@ -68,4 +68,4 @@
   {{- $graph = $graph | append (dict "@type" "BreadcrumbList" "@id" (printf "%s#ruta" .Permalink) "itemListElement" $items) -}}
 {{- end -}}
 
-<script type="application/ld+json">{{ (dict "@context" "https://schema.org" "@graph" $graph) | jsonify }}</script>
+<script type="application/ld+json">{{ (dict "@context" "https://schema.org" "@graph" $graph) | jsonify | safeJS }}</script>
