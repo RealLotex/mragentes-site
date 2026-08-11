@@ -34,3 +34,7 @@ static/social/muestrario/
 # ── Legacy de master (NO versionar: contienen secretos leakeados) ──────────
 META API TOKENS.txt
 cf_worker_hardcoded_token.js
+
+# ── Cerebros Creativos Suite (proyecto privado con secretos del ERP/bot) ──
+cerebros-corp/
+
