@@ -12,7 +12,24 @@ from __future__ import annotations
 
 import datetime
 import re
+import unicodedata
 import urllib.parse
+
+
+# ── Slug (replica la transformación urlize de Hugo) ────────────────────────
+
+
+def _slugify(title: str) -> str:
+    """Transforma un título en el slug con el que Hugo arma el permalink.
+
+    Hugo (goldmark) toma el ``title`` del front matter, lo normaliza y
+    reemplaza todo lo que no es alfanumérico por guiones. Se preservan los
+    acentos: ``bajó`` NO se convierte en ``bajo`` (una transliteración a
+    ASCII produciría 404, porque la web usa el slug acentuado).
+    """
+    s = unicodedata.normalize("NFKC", title).lower()
+    s = re.sub(r"[^a-z0-9áéíóúüñ]+", "-", s).strip("-")
+    return s
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -71,8 +88,18 @@ class Nota:
     # ── Identidad ───────────────────────────────────────────────────────
     @property
     def slug(self) -> str:
-        """El slug es el nombre del archivo: así arma Hugo el permalink."""
-        return self.path.stem
+        """El slug real que usa Hugo para el permalink /notas/:slug/.
+
+        Hugo arma el permalink desde el ``title`` del front matter (ver
+        hugo.toml: ``[permalinks] notas = "/notas/:slug/"``), NO desde el
+        nombre del archivo. El filename en disco lleva prefijo de fecha y está
+        truncado/transliterado (``2026-08-12-la-ia-se-bajo-...-invisible.md``),
+        así que usarlo como slug producía links rotos: con la fecha de más y
+        sin las tildes del título real (``bajó`` vs ``bajo``) → 404 en la web.
+        Se replica la transformación urlize de Hugo aplicada al ``title`` para
+        que el link social coincida exactamente con el permalink publicado.
+        """
+        return _slugify(self.title)
 
     def url(self, base: str = "https://mragentes.com.ar") -> str:
         return f"{base.rstrip('/')}/notas/{urllib.parse.quote(self.slug)}/"
