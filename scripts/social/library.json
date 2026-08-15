@@ -260,6 +260,21 @@
         "facebook": "Lo que se repite, se automatiza.\n\nSi una tarea se hace igual todas las semanas, ya está documentada — vive en la cabeza de alguien. Sólo falta escribirla en un lugar donde la pueda leer una máquina.\n\n#MRAgentes #Automatizacion #Pymes",
         "instagram": "Lo que se repite, se automatiza.\n\nSi una tarea se hace igual todas las semanas ya está documentada: vive en la cabeza de alguien. Sólo falta escribirla donde la lea una máquina.\n\n#MRAgentes #Automatizacion #IAparaPymes #Pymes #Procesos #SantaFe #Galvez #Argentina"
       }
+    },
+    {
+      "key": "fagos-ecoli",
+      "template": "dato",
+      "piece": {
+        "stat": "16",
+        "kicker": "inteligencia artificial + biología",
+        "caption": "fagos (virus que matan bacterias) diseñados por IA, de ~300 candidatos",
+        "lead": "El modelo Evo 2, de Stanford, escribió genomas completos de bacteriófagos. De lo que el laboratorio sintetizó, 16 copias resultaron viables y matan cepas de E. coli resistentes a los fagos naturales. Publicado en Science.",
+        "author": "Stanford / Evo 2 — revista Science"
+      },
+      "caption": {
+        "facebook": "La IA no solo escribe texto: empezó a escribir genomas.\n\nEl modelo Evo 2 (Stanford) diseñó genomas completos de bacteriófagos — virus que infectan y matan bacterias. De ~300 diseños que el laboratorio sintetizó, 16 resultaron viables y eliminaron cepas de E. coli resistentes a los fagos naturales.\n\nEs la primera vez que una IA genera virus funcionales desde cero, y abre un camino nuevo contra las bacterias que resisten a los antibióticos.\n\nEl estudio salió en Science.\n\n#MRAgentes #InteligenciaArtificial #Ciencia #Fagos #Biotecnologia #Ecoli",
+        "instagram": "La IA no solo escribe texto: empezó a escribir genomas.\n\nEvo 2 (Stanford) diseñó genomas completos de bacteriófagos. De ~300 diseños, 16 resultaron viables y eliminaron cepas de E. coli resistentes a los fagos naturales.\n\nPrimeros virus funcionales generados por IA desde cero — un camino nuevo contra las bacterias resistentes a antibióticos. Publicado en Science.\n\n#MRAgentes #InteligenciaArtificial #Ciencia #Biotecnologia #Fagos #Ecoli"
+      }
     }
   ]
 }
