@@ -42,9 +42,11 @@ cd /home/openclaw/.openclaw/workspace
 ./tmp/venv_social/bin/python -m scripts.social doctor                    # Diagnóstico
 ./tmp/venv_social/bin/python -m scripts.social publish-nota --slug X --dry-run  # Renderizar sin publicar
 ./tmp/venv_social/bin/python -m scripts.social publish-nota --latest    # Publicar última
+./tmp/venv_social/bin/python -m scripts.social publish-library --key X  # Publicar pieza de biblioteca
 ./tmp/venv_social/bin/python -m scripts.social gallery                  # Muestrario 15 plantillas
 ```
 > ⚠️ Usar `./tmp/venv_social/bin/python` (tiene las deps). El python del sistema no tiene pip.
+> ⚠️ `publish-library` y `publish-nota` **abortan si la clave/slug ya está en `state.json`** (protege contra duplicados, como el caso del 2026-08-15). Para republicar a propósito usar `--force` — con cuidado, eso duplica en redes.
 
 ### Verificación de seguridad
 ```bash
@@ -52,6 +54,7 @@ python3 scripts/scan_secrets.py --all   # Escanea árbol + historial por secreto
 ```
 
 ### Known Issues (nuevo sistema)
+- ⚠️ **2026-08-15 FIX: `publish-library` guardia anti-duplicado de ENTRADA**. El 10/08 se arregló que registrara en state.json, pero todavía publicaba SIN revisar si la clave ya estaba → si el cron reintentaba o el comando se invocaba dos veces en la misma ventana, Facebook/IG recibían el post 2 veces (el duplicado aparecía ~1 min después del original). Ahora `publish-library` revisa `state.json` ANTES de publicar y aborta salvo `--force` (igual que `publish-nota`). Commit: ver `git log` tras el fix de hoy.
 - ⚠️ **2026-08-10 FIX: `publish-library` registra en state.json** (era `cmd_publish_library`, no llamaba a `state.record` → duplicados en cron). Ahora lo hace igual que `publish-nota`, solo si al menos una plataforma publicó. Commit `a7c102d`.
 - ⚠️ **Categorizar el error de Meta ANTES de tocar tokens** (método que ahorra tokens quemados):
   - `(#200) publish_actions ... deprecated` = **permiso de app/scope deprecado**, NO token vencido. Hay que regenerar token con `pages_manage_posts` + `pages_read_engagement` (+ `pages_manage_metadata` para stories). No hay fix de código.

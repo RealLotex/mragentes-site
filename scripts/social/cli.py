@@ -253,6 +253,21 @@ def cmd_publish_library(args) -> int:
     settings = load_settings()
     if args.dry_run:
         settings.dry_run = True
+
+    # ── Guardia anti-duplicado ──────────────────────────────────────────
+    # `publish-nota` revisa state.json antes de publicar y por eso nunca
+    # duplica. Acá no se revisaba → si el cron reintenta o se invoca el
+    # comando dos veces en la misma ventana, Facebook/Instagram recibían
+    # el post dos veces (el duplicado aparecía ~1 min después del original,
+    # cuando el chequeo de URL/verificación ya había pasado).
+    # Lección 2026-08-15: mismo guard que publish-nota, con --force para
+    # republicar deliberadamente.
+    state = state_mod.load()
+    if state_mod.is_published(args.key, state) and not args.force:
+        print(f"○ «{args.key}» ya se publicó ({state['published'][args.key].get('date', '?')}).")
+        print("  Usá --force si querés republicarlo a propósito (CUIDADO: duplica en redes).")
+        return 0
+
     key, piece = library_piece(args.key)
     seed = copywriter.seed_for(args.key)
 
@@ -370,6 +385,7 @@ def build_parser() -> argparse.ArgumentParser:
     pl.add_argument("--surface", choices=("feed", "portrait"), default="portrait")
     pl.add_argument("--story", action="store_true")
     pl.add_argument("--dry-run", action="store_true")
+    pl.add_argument("--force", action="store_true", help="republicar aunque ya esté registrada (CUIDADO: duplica)")
     pl.add_argument("--no-commit", action="store_true")
     pl.add_argument("--branch", default="")
     pl.add_argument("--wait", type=int, default=240)
