@@ -11,6 +11,159 @@ description: "Buffer de noticias relevantes de IA/automatización detectadas dia
 
 ---
 
+## 2026-08-15 — Sábado
+
+### 📈 OpenAI: por primera vez, el negocio enterprise supera a ChatGPT en ingresos — dos trimestres antes de lo proyectado (US$40.000M anualizados)
+- **Fuente original:** CNBC / Unite.AI
+- **URL:** https://www.cnbc.com/2026/08/14/openai-cfo-friar-tells-investors-that-enterprise-bigger-than-consumer.html
+- **Por qué importa:** La CFO Sarah Friar dijo el 14/8 a inversores que los ingresos enterprise de OpenAI ya superan a los del negocio consumer de ChatGPT —un cruce que la propia compañía proyectaba recién para fin de 2026—, con un run rate anualizado de US$40.000M y el negocio de empresas creciendo 32% solo en julio (la publicidad ya roza US$1.000M anualizados). Es la señal más clara hasta ahora de que la IA dejó de ser un producto de consumo: la empresa que define la categoría ahora vive de vender automatización a empresas — justo el mercado en el que operan las PyMEs argentinas.
+- **Fuentes de soporte (para la investigación profunda del domingo):**
+  - Unite.AI (cobertura completa): https://www.unite.ai/openai-tells-investors-enterprise-revenue-has-overtaken-its-chatgpt-consumer-business/
+  - TechTimes (cruce dos trimestres antes de lo previsto): https://www.techtimes.com/articles/324562/20260815/openai-enterprise-revenue-tops-consumer-first-time-40-billion-arr-two-quarters-early.htm
+  - Yahoo Finance (FT, run rate US$40.000M + índice de precios): https://finance.yahoo.com/technology/ai/articles/openai-annualized-revenue-tops-40-150033141.html
+
+### 💸 El precio de los modelos de IA de EE.UU. cayó ~25% en un mes (FT): DeepSeek, Moonshot y Z.ai ya lideran el volumen de tokens sobre Claude y ChatGPT — pero DeepSeek sube sus precios 93%
+- **Fuente original:** Financial Times (vía Yahoo Finance) / BigGo Finance
+- **URL:** https://finance.yahoo.com/technology/ai/articles/openai-annualized-revenue-tops-40-150033141.html
+- **Por qué importa:** Según el índice de precios de tokens de Silicon Data citado por el FT, los precios de los modelos líderes de EE.UU. cayeron casi 25% desde mediados de julio (OpenAI recortó Luna 80% hasta $0,20/$1,20 por M tokens y Anthropic posicionó Opus 5 a ~la mitad del costo de Fable 5). En OpenRouter, los modelos chinos de DeepSeek, Moonshot y Z.ai ya superan a Claude y ChatGPT en volumen de tokens entre desarrolladores, y DoorDash, Siemens y Airbnb están probando modelos chinos en producción. El giro contraintuitivo del 14/8: DeepSeek subió V4 Flash 93% ($0,14→$0,27/M) — los chinos ganan participación y empiezan a marcar precio. Para una PyME: el costo por token de automatizar sigue cayendo y las alternativas chinas ya no son experimento.
+- **Fuentes de soporte (para la investigación profunda del domingo):**
+  - TipRanks (empresas probando modelos chinos + datos OpenRouter): https://www.tipranks.com/news/openai-and-anthropic-slash-ai-prices-as-enterprise-customers-turn-to-cheaper-chinese-models
+  - BigGo Finance (análisis del recorte de precios): https://finance.biggo.com/news/7e9f1d12-cf40-4852-a49a-ed69b6925090
+  - AIToolsRecap (suba de DeepSeek 93% del 14/8): https://aitoolsrecap.com/Blog/AINewsAugust2026.aspx
+
+### 🤖 Alibaba: Qwen supera 3.000 millones de descargas en 6 meses — más que Google (418M) y Meta (227M) juntas, y el ecosistema open-weight chino domina la capa gratuita
+- **Fuente original:** Bloomberg
+- **URL:** https://www.bloomberg.com/news/articles/2026-08-15/alibaba-ai-models-hit-3-billion-downloads-passing-meta-google
+- **Por qué importa:** Bloomberg informó el 15/8 que la familia Qwen de Alibaba acumuló más de 3.000 millones de descargas globales en los últimos seis meses (con picos de ~1,1M de descargas por día en enero), frente a 418M de Google y 227M de Meta en 2026 según el conteo de Hugging Face: el ecosistema suma 460+ modelos open-source y 300.000+ derivados. Es la prueba numérica de que la capa open-weight quedó dominada por laboratorios chinos (Qwen, DeepSeek, Moonshot) — para una PyME, cada vez más una automatización puede arrancar de un modelo gratis y descargable, sin API por token.
+- **Fuentes de soporte (para la investigación profunda del domingo):**
+  - Free Press Journal: https://www.freepressjournal.in/business/alibabas-qwen-ai-models-cross-3-billion-downloads-surpass-google-and-meta-in-open-source-ai
+  - CryptoBriefing (700M descargas solo en Hugging Face a enero): https://cryptobriefing.com/alibaba-qwen-3-billion-downloads/
+
+### 💰 Anthropic reporta su primer trimestre rentable: ingresos Q2 2026 de más de US$11.500M (14x interanual) y prepara su IPO con Morgan Stanley, Goldman Sachs y JPMorgan
+- **Fuente original:** CNBC / Bloomberg
+- **URL:** https://www.cnbc.com/2026/08/15/anthropic-revenue-jumps-to-over-11point5-billion-in-q2-report.html
+- **Por qué importa:** Anthropic comunicó a inversores ingresos preliminares de más de US$11.500M en Q2 2026 —14 veces los US$787M de Q2 2025 y más del doble de los US$4.730M de Q1— con su primer trimestre de resultado operativo ajustado positivo, en la previa de un IPO de otoño que estructuran Morgan Stanley, Goldman Sachs y JPMorgan. Junto con el cruce enterprise de OpenAI (entrada de arriba), confirma que los laboratorios frontier ya son negocios sustentables: la guerra de precios y la caída de costos no son una burbuja, sino una industria que madura financieramente — contexto para decidir cuándo y con qué proveedor automatizar.
+- **Fuentes de soporte (para la investigación profunda del domingo):**
+  - Bloomberg (datos preliminares): https://www.bloomberg.com/news/articles/2026-08-14/anthropic-revenue-ahead-of-ipo-surges-over-14-fold-in-second-quarter
+  - Fortune (análisis de valuación): https://fortune.com/2026/08/15/anthropic-revenue-q2-11-5-billion-ipo-investors/
+  - CryptoBriefing (14x y primer trimestre en positivo): https://cryptobriefing.com/anthropic-14-fold-revenue-increase-q2/
+
+## 2026-08-14 — Viernes
+
+### 🧠 Zhipu (Z.ai) lanza GLM-5.3: el nuevo líder open-weight en coding y agentes, con mejoras de ~50% sin tocar el tamaño (743B) — y promete pesos abiertos en 2 semanas
+- **Fuente original:** The Decoder / Igeekphone
+- **URL:** https://the-decoder.com/zhipu-ai-releases-glm-5-3-claims-its-the-strongest-open-weights-coding-model/
+- **Por qué importa:** El 14/8 la china Zhipu (Z.ai) liberó GLM-5.3, que según sus benchmarks es el modelo open-weights más potente para coding y agentes: +50% vs. GLM-5.2 con la misma arquitectura de ~743B parámetros, todo ganado por post-training sin agrandar el modelo. Los saltos más llamativos: Terminal-Bench 3.0 de 4,6 a 28,3; DeepSWE v1.1 de 46,2 a 66,9; Agents' Last Exam de 23,8 a 28,5; y 1.769 en GDPval-AA v2 (44 ocupaciones profesionales). Zhipu afirma que su rendimiento en coding y tareas agenticas "se acerca al de Claude Opus 5" y que los pesos open-source llegan en ~2 semanas. Es la tercera bala china de la semana (tras DeepSeek V4-Pro y la guerra de precios): un frontier de agentes descargable, modificable y sin API por token, justo en la categoría que las PyMEs usan para automatizar desarrollo.
+- **Fuentes de soporte (para la investigación profunda del domingo):**
+  - Igeekphone (benchmarks completos): https://www.igeekphone.com/glm-5-3-released-zhishu-claims-new-open-source-ai-leader-with-major-gains-in-coding-and-agentic-tasks/
+  - BigGo Finance (pesos open-source en 2 semanas): https://finance.biggo.com/news/0b571a42-9531-433c-b81b-c8468d173989
+  - explainx.ai (lanzamiento, acceso y foco ciberseguridad): https://explainx.ai/blog/glm-5-3-launch-cyber-defense-benchmarks-august-2026
+
+### 🌐 Cloudflare lanza Kitesurf, un navegador construido solo para agentes de IA (3-7x menos recursos que Chromium), y su CFO proyecta 1.000 bots por cada humano en la web en 5 años
+- **Fuente original:** Blog de Cloudflare
+- **URL:** https://blog.cloudflare.com/kitesurf/
+- **Por qué importa:** Cloudflare presentó esta semana Kitesurf, un motor de navegador pensado exclusivamente para agentes de IA: sin tabs, sin extensiones, sin rendering pixel-perfect — corre entero en Workers (Rust→WebAssembly, pasa más de 215.000 Web Platform Tests), usa 3-4x menos CPU y 4-7x menos memoria que Chromium, y migrar un agente existente toma ~1 día de trabajo; gratis en beta vía Browser Run y con planes de abrirlo open-source. En la misma semana, su CFO pronosticó que el tráfico no-humano (bots y agentes) llegará a 1.000 veces el tráfico humano en 5 años. Para una PyME: el costo de automatizar tareas web (scraping, testing, agentes que operan sitios) está por caer un orden de magnitud — y la web que usan sus clientes va a ser cada vez más operada por agentes, no por personas.
+- **Fuentes de soporte (para la investigación profunda del domingo):**
+  - Trew Knowledge (resumen semanal + pronóstico CFO 1.000x): https://trewknowledge.com/2026/08/14/ai-this-week-agents-get-a-browser-commerce-and-creative-tools/
+  - HostingAdvice (migración en 1 día, cobertura de TechCrunch): https://www.hostingadvice.com/blog/cloudflares-new-browser-is-built-for-ai-agents/
+  - Kitesurf (demo del navegador): https://kitesurf.cloudflare.app/
+
+### 📈 Salesforce: las empresas casi triplican sus agentes de IA activos en un año y tardan ~2 días en crear uno nuevo (Agentic Enterprise Index 2026)
+- **Fuente original:** Salesforce (comunicado oficial) / MarketingDirecto
+- **URL:** https://www.salesforce.com/news/stories/agentic-enterprise-index-insights-2026/
+- **Por qué importa:** El Agentic Enterprise Index 2026 de Salesforce (datos agregados de la plataforma Agentforce entre feb-2025 y abr-2026, difundido el 13/8) muestra que el número medio de agentes activos por empresa casi se triplicó en un año, el uso semanal por empleado se triplicó, y el tiempo medio para crear un agente cayó 53% hasta ~2 días — con el sector retail a la cabeza. Es la métrica más concreta hasta ahora de que los agentes pasaron de experimento a operación estándar, y complementa el dato del 13/8 (solo 23% de empresas reporta ROI): la barrera ya no es la herramienta sino el proceso. Para una PyME argentina: los competidores están automatizando en días, no en meses.
+- **Fuentes de soporte (para la investigación profunda del domingo):**
+  - MarketingDirecto (español): https://www.marketingdirecto.com/digital-general/digital/despliegue-agentes-ia-empresas-duplica-salesforce-agentic-enterprise-index
+  - La Ecuación Digital (casi triplican, retail a la cabeza): https://www.laecuaciondigital.com/tecnologias/inteligencia-artificial/agentes-ia-empresas-salesforce/
+  - Enterprise DNA (uso semanal x3 con calidad estable): https://enterprisedna.co/resources/news/salesforce-agentic-enterprise-index-agent-deployments-double-2026/
+
+### 🛒 Google Maps empieza a tomar pedidos de comida por agentes: Ask Maps arma el carrito, el usuario solo paga, y Google co-desarrolla un "protocolo universal de comercio" con Square y Toast
+- **Fuente original:** Restaurant Business Online / Google
+- **URL:** https://www.restaurantbusinessonline.com/technology/google-gets-back-restaurant-ordering
+- **Por qué importa:** Google expandió Ask Maps (su capa de IA sobre Maps) con capacidades agenticas que completan tareas, no solo responden: pedir comida ("el plato X para llevar de camino a casa") devuelve restaurantes abiertos en la ruta y arma el carrito para que el usuario solo revise y pague — integrado con Square y Toast y con Uber Eats en camino (decenas de miles de restaurantes), más hoteles con precios en vivo y conexión a Gmail/Calendar. Google co-desarrolla con sus socios el "Universal Commerce Protocol for Food": intenta convertirse en la capa de interfaz sobre los sistemas de punto de venta que los restaurantes ya usan. Ask Maps ya rueda en Brasil, México, Indonesia y Japón (el pedido de comida por ahora es solo en EE.UU.). Para un negocio local: el agente pasa de recomendar a transaccionar, y el restaurant que competía por su ficha en Maps ahora compite por entrar en la shortlist del asistente.
+- **Fuentes de soporte (para la investigación profunda del domingo):**
+  - AndroidAyuda (español): https://androidayuda.com/noticias/general/google-maps-da-un-salto-con-ia-pedidos-hoteles-y-asistencia-personal-en-una-sola-app/
+  - TaxHeal (recap del anuncio de Google): https://www.taxheal.com/ask-maps-gets-more-helpful-with-food-ordering-and-more.html
+  - Trew Knowledge (análisis del Universal Commerce Protocol): https://trewknowledge.com/2026/08/14/ai-this-week-agents-get-a-browser-commerce-and-creative-tools/
+
+## 2026-08-13 — Jueves
+
+### ⚡ Google lanza Gemini 3.7 Flash con precio introductorio a la mitad ($0,75/$3,75 por M tokens) y afirma que supera a Claude Sonnet 5 y GPT-5.6 Terra en flujos de trabajo empresariales
+- **Fuente original:** VentureBeat / blog de Google
+- **URL:** https://venturebeat.com/technology/googles-gemini-3-7-flash-targets-coding-and-agents-with-a-50-introductory-price-cut
+- **Por qué importa:** El 13/8 Google presentó Gemini 3.7 Flash, su "workhorse" más inteligente para coding, agentes y knowledge work: el precio introductorio es la mitad del de 3.6 Flash —US$0,75 por M tokens de entrada y US$3,75 por M de salida hasta el 31/12/2026— y según sus benchmarks supera a Claude Sonnet 5 y GPT-5.6 Terra en completar workflows empresariales reales a la mitad del costo (el modelo ya llegó al agente Gemini Spark para suscriptores AI Pro/Ultra). Es el tercer movimiento de precios de la semana (OpenAI -80% en Luna, Anthropic congeló la suba de Sonnet 5, ahora Google -50%): el costo de automatizar con IA sigue cayendo y ahora con foco explícito en tareas multi-paso de negocio, no solo en chat.
+- **Fuentes de soporte (para la investigación profunda del domingo):**
+  - Google Developers (anuncio oficial en X): https://x.com/googledevs/status/2087951018973962410
+  - Blog de Google (anuncio oficial): https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-3-7-flash/
+  - The Decoder: https://the-decoder.com/gemini-3-7-flash-lands-with-coding-gains-and-undercuts-its-three-week-old-predecessors-price-by-50/
+  - TechTimes (vs. Claude/GPT en workflows): https://www.techtimes.com/articles/324387/20260813/google-cuts-gemini-37-flash-price-half-it-claims-top-claude-business-workflows.htm
+
+### 🧰 DeepSeek saca V4-Pro de preview (1,6T parámetros, open-weight MIT) y libera Harness v0.1, su runtime de agentes open-source rival de Claude Code — pero sube los precios de API
+- **Fuente original:** The Decoder / VentureBeat
+- **URL:** https://the-decoder.com/deepseek-launches-an-improved-v4-pro-model-raises-api-prices-and-makes-its-agent-software-open-source/
+- **Por qué importa:** El 13/8 DeepSeek pasó a GA su flagship V4-Pro (1,6 billones de parámetros, pesos abiertos bajo licencia MIT — según Unsloth, "matches Claude-4.8-Opus performance") y liberó Harness v0.1 en GitHub bajo MIT: el runtime de agentes que convierte los V4 en agentes de código autónomos multi-paso, el mismo proyecto "DeepSeek Harness Team" que anunció el 11/8 con Claude Code como benchmark. La novedad contraintuitiva: a la vez sube los precios de API (el cache hit pasa a costar 6x). Para una PyME: la pila completa de agentes de código china ya es descargable y modificable gratis — la categoría más usada para automatizar desarrollo tiene ahora un rival open-source completo del líder propietario.
+- **Fuentes de soporte (para la investigación profunda del domingo):**
+  - VentureBeat (Harness open source vs. Claude Code): https://venturebeat.com/technology/deepseek-harness-launches-as-open-source-rival-to-claude-code-alongside-v4-pro-on-api-with-higher-prices
+  - Unite.AI (V4-Pro GA): https://www.unite.ai/deepseek-ships-v4-pro-as-its-flagship-model-leaves-preview/
+  - CryptoBriefing (V4-Pro open-weight): https://cryptobriefing.com/deepseek-v4-pro-model-launch/
+  - CryptoBriefing (Harness v0.1 developer preview): https://cryptobriefing.com/deepseek-harness-open-source-developer-preview/
+
+### 🧮 OpenAI revela que Astra (familia de razonamiento aún no pública) resolvió 10 problemas abiertos de matemática y ciencias de la computación —algunos de ~100 años, incluida una conjetura de Erdős— por ~US$2.000 en cómputo, y pausa parte del trabajo por riesgo de ciberseguridad "crítico"
+- **Fuente original:** The Information (exclusiva) / reportes de la semana
+- **URL:** https://www.theinformation.com/briefings/exclusive-openai-previews-astra-ai-model-dc
+- **Por qué importa:** Astra, la nueva familia de modelos de OpenAI para tareas de larga duración y colaboración multi-agente (preview privado en Washington esta semana), resolvió de forma autónoma 10 problemas abiertos de matemática y teoría de la computación que llevaban hasta ~80-100 años sin solución humana —con pruebas verificadas por máquina publicadas en GitHub y un costo de cómputo total estimado en ~US$2.000 vía API (incluye una conjetura de Paul Erdős). En paralelo, OpenAI frenó parte del trabajo sobre Astra porque sus evaluaciones internas no pueden descartar que alcance capacidades de ciberseguridad "críticas". Doble señal para el negocio: los agentes autónomos ya hacen trabajo de investigación de élite por centavos de dólar, y la seguridad (no la capacidad) es lo que retrasa su salida al mercado.
+- **Fuentes de soporte (para la investigación profunda del domingo):**
+  - OSAS AI (resumen de la semana, proofs en GitHub): https://osasai.com/blog/ai-news-august-2026-first-two-weeks
+  - Geeky Gadgets (los 10 problemas): https://www.geeky-gadgets.com/openai-astra-gpt-6-expectations/
+  - Memeburn (pausa por ciberseguridad): https://memeburn.com/openai-pauses-some-astra-work-over-critical-cybersecurity-concerns/
+  - RealnoeVremya (costo ~$2.000 de los 10 problemas): https://realnoevremya.com/articles/9522-ai-hacks-solves-and-reshapes-the-world
+
+### 📉 Solo el 23% de las empresas reporta valor económico tras implementar IA (WEF-KPMG): el "error" que explica por qué las PyMEs pagan y no ven resultados
+- **Fuente original:** La Nación (con datos de World Economic Forum + KPMG)
+- **URL:** https://www.lanacion.com.ar/economia/IA/las-empresas-invierten-millones-en-ia-pero-pocas-ven-resultados-el-error-que-explica-por-que-nid13082026/
+- **Por qué importa:** Un informe de World Economic Forum y KPMG difundido el 13/8 indica que solo el 23% de las compañías reporta valor económico tras implementar IA —y apenas un 6% nota un impacto significativo—; además, el 41% de las tareas que los trabajadores quieren automatizar sigue sin resolverse. La Nación lo ilustra con Teamcubation: "El mayor riesgo no es no usar IA: es pagarla y no ver resultados", y el error típico es centralizar la IA en vez de distribuirla y entrenar a los equipos. Es la contracara local de la adopción: la oferta de agentes nunca fue más barata (ver entradas de arriba), pero el ROI depende de procesos y capacitación, no de la herramienta — el argumento directo para el servicio de MR Agentes.
+- **Fuentes de soporte (para la investigación profunda del domingo):**
+  - Informe WEF/KPMG citado (McKinsey Insights): https://www.mckinsey.com/featured-insights/americas/from-potential-to-productivity-latin-america-in-the-intelligent-age
+  - Stanford Salt Lab (qué quieren automatizar los trabajadores): https://news.stanford.edu/stories/2025/07/what-workers-really-want-from-ai
+
+## 2026-08-12 — Miércoles
+
+### 🚀 SpaceXAI (ex-xAI) lanza Grok 4.6: empata con GPT-5.6 Sol Max en el índice de Artificial Analysis, enfocado en agentes de larga duración y coding
+- **Fuente original:** VentureBeat / SpaceXAI
+- **URL:** https://venturebeat.com/technology/spacexai-debuts-grok-4-6-overtaking-kimi-k3s-performance-and-matching-gpt-5-6-sol-for-worlds-third-best-on-artificial-analysis
+- **Por qué importa:** El 12/8 SpaceXAI (la empresa de Elon Musk, ex-xAI) liberó Grok 4.6, su nuevo modelo frontier con foco en agentes de larga duración (tareas de muchos pasos), coding y knowledge work — ya integrado en Cursor. Puntúa 61 en el Artificial Analysis Intelligence Index: supera al open-weight Kimi K3 (Moonshot) y empata con GPT-5.6 Sol Max (+5 puntos vs. Grok 4.5 High), detrás de Claude Opus 5 y Fable 5 — con API desde US$2/M tokens de entrada y US$6/M de salida (mid-priced para un frontier). Para una PyME: confirma la tendencia ya anotada el 11/8 — los agentes potentes bajan de precio y ahora llegan con soporte nativo para tareas largas autónomas, sin pagar premium.
+- **Fuentes de soporte (para la investigación profunda del miércoles):**
+  - SpaceXAI (anuncio oficial): https://x.ai/news/grok-4-6
+  - Unite.AI: https://www.unite.ai/spacexai-launches-grok-4-6-for-long-running-agents/
+  - 9to5Mac: https://9to5mac.com/2026/08/12/spacexai-releases-grok-4-6/
+
+### 🧑‍💻 DeepSeek arma equipo de agentes para competir con Claude Code: registra la cuenta oficial "DeepSeek Harness Team" en WeChat y arranca pruebas internas
+- **Fuente original:** Bloomberg
+- **URL:** https://www.bloomberg.com/news/articles/2026-08-12/deepseek-publicizes-efforts-to-challenge-anthropic-s-claude-code
+- **Por qué importa:** DeepSeek (Hangzhou) registró el 11/8 la cuenta oficial "DeepSeek Harness Team" en WeChat y publicó búsquedas laborales para un equipo dedicado a desarrollar agentes de IA que compitan con Claude Code de Anthropic. El objetivo declarado: "construir DeepSeek Code Harness desde cero, con Claude Code como benchmark" (confirmado en mayo por el investigador senior Chen Deli); el equipo lo lidera Cui Tianyi, medallista de oro ACM. Las pruebas internas ya comenzaron y los observadores leen esto como señal de que el producto oficial está cerca. Relevancia: la categoría "agente de código" —la más usada por empresas para automatizar desarrollo— pasa a tener un jugador chino ultra-económico, en línea con la guerra de precios del 11/8.
+- **Fuentes de soporte (para la investigación profunda del miércoles):**
+  - The Edge Malaysia: https://theedgemalaysia.com/node/814303
+  - BigGo Finance (cronología completa del proyecto): https://finance.biggo.com/news/b76ddf18-0edf-4cc1-a004-fee5f869a86d
+  - Yahoo Finance (copia Bloomberg): https://finance.yahoo.com/technology/ai/articles/deepseek-publicizes-efforts-challenge-anthropic-162917515.html
+
+### 🛡️ Primer ciberataque "casi autónomo" documentado: hackers vinculados a China usaron agentes de IA open-source (Hermes + OpenClaw) para vulnerar 21 sistemas del gobierno de Taiwán
+- **Fuente original:** Financial Times (investigación de la firma israelí Dream)
+- **URL:** https://www.pcmag.com/news/chinese-hackers-created-a-near-autonomous-attack-using-open-source-ai
+- **Por qué importa:** El FT informó el 12/8 que un ataque de 4 días contra el gobierno taiwanés —que mapeó 21 sistemas, comprometió 85 cuentas y robó más de 2.500 registros de personal— fue ejecutado con frameworks de agentes de IA open-source (Hermes y OpenClaw) ensamblados en una plataforma de hacking casi autónoma: los agentes priorizaban rutas de ataque y generaban código de explotación solos, dirigidos vía Telegram. Es el primer caso documentado de guerra digital autónoma de punta a punta (Infobae lo cubrió en español). Confirma la advertencia de la cola del 10/8: los agentes de IA no solo automatizan trabajo legítimo — también bajan el costo del cibercrimen, y la seguridad de los agentes es el límite real de la automatización.
+- **Fuentes de soporte (para la investigación profunda del miércoles):**
+  - Infobae (español): https://www.infobae.com/america/mundo/2026/08/12/hackers-vinculados-al-regimen-chino-usaron-agentes-de-ia-para-vulnerar-sistemas-del-gobierno-de-taiwan/
+  - Benzinga: https://www.benzinga.com/news/26/08/61138673/chinese-hackers-used-ai-agents-to-hunt-taiwan-government-systems-breaching-85-accounts-and-stealing-thousands-of-records-report
+  - CybersecurityNews: https://cybersecuritynews.com/chinese-hackers-target-taiwan-using-ai/
+
+### 💲 Anthropic congela el precio de Claude Sonnet 5: cancela la suba planificada a $3/$15 en septiembre y hace permanente el valor introductorio ($2/$10)
+- **Fuente original:** The Stack / Anthropic (anuncio del 11/8)
+- **URL:** https://www.thestack.technology/anthropic-follows-openai-with-frontier-model-price-cuts/
+- **Por qué importa:** El 11/8 Anthropic anunció que el precio introductorio de Sonnet 5 —US$2 por millón de tokens de entrada y US$10 de salida— pasa a ser permanente, cancelando la suba planificada a $3/$15 para septiembre. La propia compañía lo confirmó en X: "lanzamos Sonnet 5 en junio a $2/$10 hasta el 31 de agosto, y ese precio no cambiará". Es el segundo recorte de precios de un frontier lab en días (OpenAI ya bajó 80% Luna) y llega en la previa del IPO de Anthropic. Para empresas que despliegan agentes: la previsibilidad del costo por token se vuelve variable competitiva clave, y Sonnet 5 queda más barato que GPT-5.6 Terra en output ($10 vs $12).
+- **Fuentes de soporte (para la investigación profunda del miércoles):**
+  - explainx.ai: https://explainx.ai/blog/anthropic-sonnet-5-permanent-pricing-august-2026
+  - GuruFocus: https://www.gurufocus.com/news/9022707/anthropic-maintains-claude-sonnet-5-pricing-amid-ipo-plans
+  - BigGo Finance (precio + auto mode + contexto IPO): https://finance.biggo.com/news/1dccd9a9-f66f-46b1-98cb-0b5ca2e8d0b3
+
 ## 2026-08-11 — Martes
 
 ### 🦙 Meta libera Muse Glimmer: su modelo de IA más potente ahora es open-weight, corre en una notebook — y Zuckerberg publica el manifiesto "El futuro es para todos"
