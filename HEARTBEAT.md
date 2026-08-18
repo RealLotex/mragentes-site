@@ -36,6 +36,7 @@ Tu trabajo es mejorar continuamente los templates de slides:
 - Singles (Día 4, 7, 11, 14, 17, 21, 24, 30): usan content_db en social_manager.py, no necesitan slide_details.
 
 ## Fixes Record
+- **2026-08-18:** 🐛 FIX "✖ No encontré la nota" en `social.yml` — el run de Actions del 16/08 (`31954463278`) falló porque el workflow pasa el slug del **filename** y `find()` solo matcheaba el slug del **título**. `find()` ahora matchea también por filename (con/sin prefijo de fecha). Nota del 16/08 publicada manualmente (FB `1202855116233616_122124240723359279`, IG `17978720585901868`, story `18115740364937185`) y registrada en state.json.
 - **2026-08-15:** 🐛 FIX ANTI-DUPLICADO `publish-library` — se publicó `mito-chatbots` duplicado (~1 min tras el original, `92c8cc9`/cron #6495). Comando publicado 2 veces en la misma ventana. `publish-library` NO revisaba `state.json` antes de publicar (a diferencia de `publish-nota`). Agregada guardia de entrada: corta si la clave ya está registrada, con flag `--force` para republicar deliberadamente. **Regla: publish-library y publish-nota siempre abortan si la clave/slug ya está en state.json.**
 - **2026-08-10:** 🛡️ SEGURIDAD — Purga total del historial (repo públício).
   1. Descubierto `FACEBOOK_ACCESS_TOKEN` real leakeado en historial (`META API TOKENS.txt`, commit ba7179b).

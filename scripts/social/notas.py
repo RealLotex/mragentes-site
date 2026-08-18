@@ -243,16 +243,45 @@ def latest() -> Nota | None:
     return notas[-1] if notas else None
 
 
+_DATE_PREFIX_RE = re.compile(r"^\d{4}-\d{2}-\d{2}-")
+
+
+def _strip_date_prefix(value: str) -> str:
+    """Quita el prefijo de fecha ``YYYY-MM-DD-`` de un nombre de archivo."""
+    return _DATE_PREFIX_RE.sub("", value)
+
+
 def find(needle: str) -> Nota | None:
-    """Busca por ruta, por slug exacto o por coincidencia parcial del nombre."""
+    """Busca por ruta, por slug, por nombre de archivo o coincidencia parcial.
+
+    Acepta cualquiera de las dos identidades que circulan por el sistema:
+
+    - el slug real derivado del título (sin fecha, con tildes):
+      ``openai-ya-no-vive-de-chatgpt-la-semana-en-que-la-ia-se-volvió-...``
+    - el nombre del archivo en disco, con o sin prefijo de fecha y extensión:\n      ``2026-08-16-openai-ya-no-vive-de-chatgpt-la-ia-se-volvio-...``\n      (que es lo que le pasa el workflow de GitHub Actions).\n    """
     p = Path(needle)
     if p.exists() and p.suffix == ".md":
         return load(p)
+    needle_stem = Path(needle).stem  # sin extensión si la trae
+    needle_clean = _strip_date_prefix(needle_stem)
+
     for nota in all_notas():
-        if nota.slug == needle:
+        if nota.slug == needle or nota.slug == needle_clean:
             return nota
+        stem = nota.path.stem
+        if stem == needle_stem or stem == needle_clean:
+            return nota
+        if _strip_date_prefix(stem) == needle_clean:
+            return nota
+
     lowered = needle.lower()
+    lowered_clean = needle_clean.lower() if needle_clean != needle_stem else lowered
     for nota in reversed(all_notas()):
-        if lowered in nota.slug.lower() or lowered in nota.title.lower():
+        if (
+            lowered in nota.slug.lower()
+            or lowered in nota.title.lower()
+            or lowered in nota.path.stem.lower()
+            or (lowered_clean != lowered and lowered_clean in nota.path.stem.lower())
+        ):
             return nota
     return None
