@@ -11,6 +11,83 @@ description: "Buffer de noticias relevantes de IA/automatización detectadas dia
 
 ---
 
+## 2026-08-17 — Lunes
+
+### 💳 Stripe compra OpenRouter por más de US$7.000M: el "enrutador de modelos de IA" pasa de US$1.300M a US$7.000M en 3 meses — y la capa de orquestación multi-modelo queda consagrada como infraestructura
+- **Fuente original:** Bloomberg (vía TechCrunch) / Fortune
+- **URL:** https://techcrunch.com/2026/08/16/stripe-will-reportedly-acquire-ai-gateway-startup-openrouter-for-7b/
+- **Por qué importa:** Bloomberg reportó el 16/8 que Stripe cerró la compra de OpenRouter por más de US$7.000M: la startup que da a los desarrolladores una única pasarela para elegir entre cientos de modelos de IA (routing por precio, rendimiento y carga de trabajo) saltó de una valuación de ~US$1.300M en mayo —cuando levantó US$113M en Serie B con Sequoia, a16z, Menlo Ventures y CapitalG de Alphabet— a más de US$7.000M en tres meses. Stripe no lo confirma oficialmente (TechCrunch: "no comenta rumores"), pero el movimiento valida que cambiar de proveedor sin reescribir código y arbitrar costos entre GPT/Claude/Gemini/DeepSeek dejó de ser un feature para convertirse en capa crítica de la pila de IA — la respuesta práctica a la volatilidad de precios anotada el 16/8 (DeepSeek +50% a +1.100% desde el 17/8). Para una PyME: la estrategia "no casarse con un solo modelo" pasa a ser producto estándar, y automatizar se vuelve más barato cuando cada tarea se rutea al modelo que mejor la resuelve por menos plata.
+- **Fuentes de soporte (para la investigación profunda del miércoles):**
+  - Fortune (acuerdo finalizado, contexto del deal): https://fortune.com/2026/08/16/stripe-7-billion-deal-ai-firm-openrouter-acquisition/
+  - La República (español): https://www.larepublica.co/globoeconomia/stripe-cierra-acuerdo-de-mas-de-us-7-000-millones-para-comprar-la-empresa-de-ia-openrouter-4460305
+  - La Razón (español, análisis del mapa de servicios): https://www.larazon.es/tecnologia-consumo/inteligencia-artificial/7000-millones-openrouter-acuerdo-llevaria-stripe-centro-ia-cambiaria-mapa-sus-servicios-digitales_202608176a833634a046ad6ebcb6a8d0.html
+
+### 🏗️ Nvidia garantiza hasta US$105.000M para el megacampus de OpenAI en Ohio: el mayor respaldo financiero de su historia (supera a CoreWeave) y el proyecto total podría pasar los US$500.000M — la deuda "fantasma" de la IA suma su capítulo récord
+- **Fuente original:** CNBC / Reuters (filing SEC del 17/8)
+- **URL:** https://www.cnbc.com/2026/08/17/nvidia-financing-open-ai-data-center-ohio.html
+- **Por qué importa:** Un filing SEC del lunes 17/8 reveló que Nvidia garantiza hasta US$105.000M en obligaciones de leasing y energía del megacampus de ~10 GW que OpenAI alquila en Pike County, Ohio (según The Information; primera fase de 800MW para 2028 y 35.000 empleos de construcción según Axios), además de invertir US$1.500M en SB Energy —la subsidiaria de SoftBank que construirá y operará el campus sobre un sitio de enriquecimiento de uranio desactivado—; el costo total del proyecto, con chips, podría superar los US$500.000M, el mayor compromiso de data center de la historia y la garantía más grande que Nvidia haya dado jamás, por encima de los backstops de CoreWeave. Es el capítulo más grande de la historia del 16/8 (US$70.000M en "pasivos fantasma"): el financiamiento de la IA no figura en los balances —lo garantizan los propios vendedores de chips— y si el boom se enfría, la exposición crediticia es récord y el costo de la automatización se resiente en cadena.
+- **Fuentes de soporte (para la investigación profunda del miércoles):**
+  - Reuters (US$1.500M en SB Energy, contexto del deal): https://www.reuters.com/business/media-telecom/nvidia-invest-15-billion-sb-energy-under-openai-data-center-deal-2026-08-17/
+  - Axios (estructura, empleo, cronograma): https://www.axios.com/2026/08/17/openai-nvidia-ohio-data-center-sb-energy
+  - Unite.AI (análisis de la garantía de 8 GW): https://www.unite.ai/nvidia-guarantees-up-to-105b-for-8-gw-ohio-ai-campus-leased-by-openai/
+
+### 🐙 GitHub se cae a nivel mundial más de 3 horas: Copilot, Actions, PRs y la API quedaron degradados (20-50% de error) y frenaron pipelines de CI/CD y flujos de agentes de código en todo el mundo
+- **Fuente original:** GeekWire / Windows Central / GitHub Status
+- **URL:** https://www.geekwire.com/2026/github-outage-disrupts-developers-worldwide-in-latest-setback-for-microsoft-coding-platform/
+- **Por qué importa:** El lunes 17/8 GitHub sufrió una interrupción global que arrancó ~13:40 UTC y duró más de 3 horas: la web y la API con ~20% de errores, las descargas de archivos con ~50%, autenticación SAML/OIDC/SCIM degradada, y Copilot, Actions, Issues y Pull Requests afectados — Copilot estuvo caído ~5,5 horas según StatusGator y Microsoft confirmó la investigación en curso (7 de 8 servicios mitigados a las 16:59 UTC según Cyber Kendra). Es la interrupción más disruptiva para desarrolladores en meses y un recordatorio concreto para equipos que automatizan desarrollo: el stack moderno (repos + CI/CD + agente de código) tiene un punto único de falla — la resiliencia (mirror, fallback, plan B) pasa a ser parte del diseño de la automatización, no un lujo.
+- **Fuentes de soporte (para la investigación profunda del miércoles):**
+  - Windows Central (alcance del impacto en Copilot): https://www.windowscentral.com/software-apps/github-is-down-and-so-is-copilot-here-is-what-we-know-so-far
+  - CybersecurityNews (línea de tiempo del incidente): https://cybersecuritynews.com/github-outage-worldwide/
+  - GitHub Status (estado oficial): https://www.githubstatus.com/
+
+### 🛡️ OpenAI desarma el equipo de Preparedness (evaluación de riesgos catastróficos): el tercer grupo de seguridad disuelto en 2 años, a meses del IPO — y las funciones se reparten entre ciberseguridad y bioseguridad
+- **Fuente original:** The Verge (reporta el Financial Times) / Engadget
+- **URL:** https://www.theverge.com/ai-artificial-intelligence/980817/openai-disbands-preparedness-team
+- **Por qué importa:** Según FT vía The Verge, OpenAI disolvió a fin de julio su equipo Preparedness —el encargado de evaluar si los modelos podrían generar riesgos severos (biológicos, cibernéticos)— como parte de un "streamlining" previo al IPO: las responsabilidades se reparten entre los equipos de ciberseguridad y bioseguridad, y su líder Dylan Scandinaro pasa a investigar sistemas de IA auto-mejorantes (recursive self-improvement). Es el tercer grupo de seguridad desarmado en dos años (tras superalignment y AGI readiness) y aterriza justo cuando la cola viene registrando incidentes agenticos (hackeo a Hugging Face, ataque casi autónomo a Taiwán, pausa de Astra por ciberseguridad): la pregunta de gobernanza —¿equipo independiente o dueños de producto?— se vuelve central para quien decide construir sobre OpenAI, el proveedor más usado por PyMEs.
+- **Fuentes de soporte (para la investigación profunda del miércoles):**
+  - CryptoBriefing (tercer equipo de seguridad disuelto): https://cryptobriefing.com/openai-disbands-preparedness-safety-team/
+  - Engadget ("streamlining" y foco en ChatGPT): https://www.engadget.com/2237916/openai-reportedly-disbanded-its-preparedness-team-as-part-of-streamlining-process/
+  - Kernel News (resumen del reporte): https://kernel.news/2026/08/17/openai-disbands-team-assessing-catastrophic-ai-risks/
+
+## 2026-08-16 — Domingo
+
+### 🤖 Sam Altman: "la singularidad está entre nosotros" y ChatGPT tendrá "contexto perfecto de tu vida" en 6 meses — una IA que monitorea pantalla, reuniones y llamadas de forma continua
+- **Fuente original:** BioBioChile / The Economic Times
+- **URL:** https://www.biobiochile.cl/noticias/ciencia-y-tecnologia/adelantos/2026/08/16/chatgpt-estaria-a-pocos-meses-de-saber-absolutamente-todo-sobre-tu-vida-segun-su-fundador-sam-altman.shtml
+- **Por qué importa:** En una conferencia en Silicon Valley el 15-16/8, Altman anunció que en los próximos seis meses OpenAI lanzará una IA capaz de monitorear continuamente la pantalla, las reuniones y las llamadas del usuario, como asistente proactivo que sugiere ideas y evita errores — "contexto perfecto de tu vida" — y declaró que "estamos, por así decirlo, en la singularidad". Es la apuesta más explícita hasta ahora a que el asistente deja de ser un chat para convertirse en una capa que lo ve todo (con la privacidad como contracara inmediata): el modelo de automatización que vende MR Agentes deja de ser "pedirle a una IA" para ser "la IA trabaja con vos, viendo tu operación".
+- **Fuentes de soporte (para la investigación profunda del miércoles):**
+  - The Economic Times (perfect context of your whole life): https://economictimes.indiatimes.com/news/international/global-trends/openai-ceo-sam-altman-says-chatgpt-could-have-perfect-context-of-your-whole-life-within-six-months/articleshow/133242792.cms
+  - La Vanguardia (declaración de la "singularidad"): https://www.lavanguardia.com/neo/sociedad-neo/20260816/11611445/sam-altman-anuncia-singularidad-ia-llevo-toda-vida-esperando-esto-creo-increible.html
+
+### 🏦 US$70.000M en "pasivos fantasma" alarman a los bonistas: Nvidia y Broadcom garantizan deuda de IA sin registrarla en sus balances — Broadcom cae 5-6% y BofA estima US$370.000M de deuda senior para 2029
+- **Fuente original:** The Business Times (análisis del FT) / Yahoo Finance
+- **URL:** https://www.businesstimes.com.sg/companies-markets/telcos-media-tech/us70-billion-phantom-liabilities-why-bond-traders-are-worried-about-ai-firms-credit-backstops
+- **Por qué importa:** Hay ~US$70.000M en backstops de "valor residual" (RVG) que no figuran en los balances de las grandes empresas de IA: Nvidia anunció el 11/8 una alianza de financiación de hasta US$500.000M con Jensen Huang cubriendo hasta el 25% del riesgo residual por caso, y Broadcom backstopeó la mayor parte del deal Big Sky de US$35.000M (Apollo y Blackstone compran chips para arrendárselos a Anthropic) — su plataforma AI XPV podría acumular US$370.000M de deuda senior para mediados de 2029 según BofA, y S&P ya lo trata como "deuda contingente" mientras Moody's alerta por el "overhang" crediticio. En paralelo, Alphabet, Amazon y Meta pidieron prestados ~US$220.000M en 2026 (Reuters) y los rendimientos de los bonos suben: Broadcom perdió 5-6% el jueves y BofA le recortó la nota. Es el primer cuestionamiento serio a la sostenibilidad financiera del boom de infraestructura IA — si el financiamiento se encarece, el costo de la automatización se resiente en cadena.
+- **Fuentes de soporte (para la investigación profunda del miércoles):**
+  - Yahoo Finance (bond traders agonizing over $70B): https://finance.yahoo.com/technology/ai/articles/bond-traders-agonizing-over-70-190000845.html
+  - 24/7 Wall St (Broadcom -6%, BofA US$370.000M): https://247wallst.com/investing/2026/08/14/broadcom-sinks-6-as-bofa-flags-370b-in-ai-debt-amd-climbs-4-on-bairds-1250-call/
+  - BigGo Finance (off-balance-sheet guarantees): https://finance.biggo.com/news/917b8433-26e3-43ff-a0af-338a6ec0a8b8
+  - Negocios.com (la bomba de 70.000M que inquieta a Wall Street, español): https://www.negocios.com/articulo/mercados/bomba-70000-millones-ia-inquieta-wall-street/20260816122523492051.html
+
+### 🚪 OpenAI sufre un éxodo de ejecutivos en la previa de su IPO de US$1 billón: 12 altos directivos se fueron en 8 meses — Brad Lightcap (8 años en la empresa), Denise Dresser (CRO) y Chloé Bakalar (ética) — y el listing podría pasar a 2027
+- **Fuente original:** Financial Times / CNBC
+- **URL:** https://www.ft.com/content/53082739-7714-4aae-9816-e55ab423cbee
+- **Por qué importa:** El FT reportó el 15/8 que OpenAI está en plena reestructuración ejecutiva: 12 ejecutivos senior dejaron la empresa en los primeros ocho meses de 2026, incluyendo a Brad Lightcap (ex-COO y mano derecha de Altman, 8 años, se va a "empezar algo nuevo"), la CRO Denise Dresser (contratada justamente para acelerar el negocio enterprise — se va la semana en que ese negocio superó a ChatGPT en ingresos) y la jefa de ética Chloé Bakalar; el IPO de ~US$1 billón podría retrasarse a 2027 mientras Anthropic ya la superó en ingresos anualizados. Para una PyME que automatiza sobre OpenAI: el proveedor más usado del mercado está en plena transición de liderazgo en el peor momento, y la estabilidad del vendor pasa a ser un criterio de compra.
+- **Fuentes de soporte (para la investigación profunda del miércoles):**
+  - KuCoin (12 senior executives en 8 meses): https://www.kucoin.com/news/flash/openai-faces-major-leadership-shakeup-ahead-of-ipo
+  - CNBC (Friar/Dresser/Lightcap, contexto enterprise): https://www.cnbc.com/2026/08/14/openai-cfo-friar-tells-investors-that-enterprise-bigger-than-consumer.html
+  - Cointribune (el IPO de US$1T podría esperar a 2027): https://www.cointribune.com/en/openai-must-reassure-investors-after-a-wave-of-high-profile-exits
+  - La Vanguardia (9 directivos dejaron OpenAI en los últimos meses, español): https://www.lavanguardia.com/neo/ia/20260816/11613940/9-directivos-han-dejado-openai-ultimos-meses-crece-incertidumbre-me-empezar-nuevo.html
+
+### 💸 DeepSeek sube los precios de su API entre 50% y 1.100% desde el 17/8: el fin de la era ultra-económica china — V4-Pro (53 puntos en Artificial Analysis vs 40 de V4 Flash) apunta a agentes
+- **Fuente original:** Reuters
+- **URL:** https://www.reuters.com/world/china/deepseek-raises-api-pricing-its-v4-models-2026-08-13/
+- **Por qué importa:** Reuters informó que a partir del 17/8 DeepSeek cambia radicalmente su estructura de precios de API, con subas de entre 50% y 1.100% según el modelo y el uso — la escalada definitiva de la suba de V4 Flash de 93% del 14/8 ya anotada en esta cola. En paralelo, V4-Pro salió de preview con 53 puntos en el Artificial Analysis Intelligence Index (vs 40 de V4 Flash) y promocionado explícitamente para agentes de IA. Es la señal de que la guerra de precios que alimentó la caída del costo por token de las últimas semanas empieza a revertirse: la sostenibilidad comercial (no solo el precio) vuelve a ser el criterio para elegir proveedor de automatización — y un agente que hace decenas o cientos de llamadas por tarea se vuelve sensible al costo.
+- **Fuentes de soporte (para la investigación profunda del miércoles):**
+  - Reuters (V4-Pro oficial): https://www.reuters.com/world/china/deepseek-releases-official-v4-pro-model-it-steps-up-expansion-2026-08-13/
+  - AIdapted (resumen 16/8, subas 50%-1.100% desde el 17/8): https://www.aidapted.ro/en/articles/ai-news-august-16-2026-openai-deepseek-europe/
+  - The Decoder (V4-Pro GA + precios, ya citado el 13/8): https://the-decoder.com/deepseek-launches-an-improved-v4-pro-model-raises-api-prices-and-makes-its-agent-software-open-source/
+
 ## 2026-08-15 — Sábado
 
 ### 📈 OpenAI: por primera vez, el negocio enterprise supera a ChatGPT en ingresos — dos trimestres antes de lo proyectado (US$40.000M anualizados)
