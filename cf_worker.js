@@ -12,6 +12,9 @@
 //   POST /api/send/         — Send a push notification to all subscribers
 
 const encoder = new TextEncoder();
+const SITE_ORIGIN = 'https://mragentes.com.ar';
+const BRAND_ICON = '/faviconhand512.png';
+const BRAND_BADGE = '/faviconhand512.png';
 
 function tokenOk(provided, expected) {
   if (typeof provided !== 'string' || typeof expected !== 'string' || provided.length !== expected.length) return false;
@@ -25,6 +28,31 @@ function forbidden(cors) {
     status: 403,
     headers: { ...cors, 'Content-Type': 'application/json' },
   });
+}
+
+function publicPostImage(value) {
+  if (typeof value !== 'string' || !value.trim()) return null;
+  try {
+    const image = new URL(value, SITE_ORIGIN);
+    if (image.origin !== SITE_ORIGIN || !image.pathname.startsWith('/images/stock/')) return null;
+    return `${SITE_ORIGIN}${image.pathname}${image.search}`;
+  } catch {
+    return null;
+  }
+}
+
+function buildNotificationPayload({ title, body, url, image, tag } = {}) {
+  const payload = {
+    title: String(title || 'MR Agentes').slice(0, 120),
+    body: String(body || 'Hay contenido nuevo disponible.').slice(0, 255),
+    url: typeof url === 'string' ? url.slice(0, 500) : `${SITE_ORIGIN}/`,
+    icon: BRAND_ICON,
+    badge: BRAND_BADGE,
+    tag: String(tag || `nota-${Date.now()}`).slice(0, 120),
+  };
+  const postImage = publicPostImage(image);
+  if (postImage) payload.image = postImage;
+  return payload;
 }
 
 export default {
@@ -112,14 +140,12 @@ async function handleSubscribe(request, env, cors) {
 // ─── Welcome push on subscribe ─────────────────────────────────────────────
 
 async function sendWelcomePush(sub, env) {
-  const payload = JSON.stringify({
+  const payload = JSON.stringify(buildNotificationPayload({
     title: '🔔 Bienvenido a MR Agentes',
     body: 'Activaste las notificaciones. Ahora vas a recibir alertas cuando publiquemos una nota nueva.',
-    url: 'https://mragentes.com.ar/',
-    icon: '/images/favicon.png',
-    badge: '/images/favicon.png',
+    url: `${SITE_ORIGIN}/`,
     tag: 'welcome-' + Date.now(),
-  });
+  }));
 
   const vapidHeaders = await generateVapidHeaders(
     sub.endpoint,
@@ -189,14 +215,13 @@ async function handleSendOne(request, env, cors) {
   const msgBody = (body.body || 'Test push').slice(0, 255);
   const url = body.url && typeof body.url === 'string' ? body.url.slice(0, 500) : 'https://mragentes.com.ar/';
 
-  const payload = JSON.stringify({
+  const payload = JSON.stringify(buildNotificationPayload({
     title,
     body: msgBody,
     url,
-    icon: '/images/favicon.png',
-    badge: '/images/favicon.png',
+    image: body.image,
     tag: `debug-${Date.now()}`,
-  });
+  }));
 
   try {
     const vapidHeaders = await generateVapidHeaders(
@@ -264,14 +289,13 @@ async function handleSend(request, env, cors) {
     });
   }
 
-  const payload = JSON.stringify({
+  const payload = JSON.stringify(buildNotificationPayload({
     title,
     body: msgBody,
     url,
-    icon: '/images/favicon.png',
-    badge: '/images/favicon.png',
+    image: body.image,
     tag: `nota-${Date.now()}`,
-  });
+  }));
 
   // Collect error details per subscription for debugging
   const errors = [];
@@ -702,4 +726,4 @@ function base64UrlEncode(bytes) {
   return btoa(binary).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 }
 
-export { webPushEncrypt, generateVapidHeaders };
+export { webPushEncrypt, generateVapidHeaders, buildNotificationPayload };

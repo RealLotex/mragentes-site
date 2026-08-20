@@ -3,6 +3,6 @@
   <ShortName>MR Agentes</ShortName>
   <Description>Buscar en MR Agentes - Automatización e IA</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="128" height="128" type="image/png">https://mragentes.com.ar/images/favicon_v2.png</Image>
+  <Image width="512" height="512" type="image/png">https://mragentes.com.ar/faviconhand512.png</Image>
   <Url type="text/html" template="https://mragentes.com.ar/search/?q={searchTerms}"/>
 </OpenSearchDescription>

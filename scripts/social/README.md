@@ -4,8 +4,8 @@ Compone y publica las piezas de Instagram y Facebook con **el mismo sistema
 visual que el sitio**: papel hueso, tinta cálida, minio como único acento, las
 tres tipografías argentinas autoalojadas y la mano grabada como firma.
 
-El logotipo azul (`static/images/mragentes.png`) quedó fuera. La marca es la
-misma que el masthead: la mano de `static/faviconhand512.png` con «MR» en
+Los logos anteriores quedaron fuera. La marca es la misma que el masthead: la
+mano de `static/faviconhand512.png` con «MR» en
 negrita y «Agentes» en regular más claro, exactamente como lo pinta
 `.signature-name` en `assets/css/main.css`.
 

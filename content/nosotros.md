@@ -5,7 +5,7 @@ description: MR Agentes es el taller de automatización de Marcos Rosich, en Gá
   provincia de Santa Fe. Cómo trabajo, con qué herramientas y qué podés esperar.
 lede: MR Agentes no es una consultora. Es un taller de una persona en Gálvez, y eso
   determina casi todo lo demás.
-image: /images/mragentes.png
+image: /faviconhand512.png
 ---
 
 Me llamo **Marcos Rosich** y trabajo desde Gálvez, en el centro de la provincia de

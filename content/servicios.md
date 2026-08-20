@@ -6,7 +6,7 @@ description: Automatización de procesos, agentes de atención por WhatsApp, lec
   por proyecto y las cuentas a tu nombre.
 lede: Cuatro tipos de trabajo. Cada uno con lo que incluye, con qué se construye,
   qué necesito de tu lado, cuánto tarda y en qué casos conviene no hacerlo.
-image: /images/mragentes.png
+image: /faviconhand512.png
 ---
 
 Casi ningún proyecto es uno solo de estos cuatro: lo habitual es que una parte sea
