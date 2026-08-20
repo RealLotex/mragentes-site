@@ -11,8 +11,10 @@
 //
 // 2. El manejador de fetch respondía desde el cache pero nunca guardaba nada,
 //    así que el cache jamás se llenaba más allá de la precarga. Ahora guarda.
-const CACHE = 'mragentes-v5';
+const CACHE = 'mragentes-v6';
 const NOTA_LIST_URL = 'https://mragentes.com.ar/notas/index.json';
+const BRAND_ICON = '/faviconhand512.png';
+const BRAND_BADGE = '/faviconhand512.png';
 
 // Sólo rutas que no cambian de nombre entre publicaciones.
 const PRECACHE = [
@@ -34,7 +36,7 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activado v2.1');
+  console.log('[SW] Activado v6');
   event.waitUntil(
     (async () => {
       // Limpiar caches viejos
@@ -95,19 +97,18 @@ self.addEventListener('push', (event) => {
   const title = data.title || 'Nueva nota de MR Agentes';
   const options = {
     body: data.body || 'Hay contenido nuevo disponible.',
-    icon: '/images/notif-icon-white.png',
-    badge: '/images/badge-icon-white.png',
-    image: data.image || '/images/notif-image.png',
+    icon: data.icon || BRAND_ICON,
+    badge: data.badge || BRAND_BADGE,
     vibrate: [200, 100, 200],
     data: { url: data.url || '/', dateOfArrival: Date.now() },
     actions: [
       { action: 'open', title: 'Leer nota' },
-      { action: 'close', title: 'Cerrar' },
     ],
     tag: data.tag || 'new-nota',
     renotify: true,
     requireInteraction: true,
   };
+  if (data.image) options.image = data.image;
 
   event.waitUntil(
     self.registration.showNotification(title, options).then(() => {
@@ -122,7 +123,6 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   console.log('[SW] Click en notificación:', event.action);
   event.notification.close();
-  if (event.action === 'close') return;
 
   const url = event.notification.data?.url || '/';
   event.waitUntil(
@@ -148,12 +148,11 @@ self.addEventListener('message', (event) => {
     const d = event.data.payload;
     self.registration.showNotification(d.title || 'MR Agentes', {
       body: d.body || '',
-      icon: '/images/notif-icon-white.png',
-      badge: '/images/badge-icon-white.png',
+      icon: d.icon || BRAND_ICON,
+      badge: d.badge || BRAND_BADGE,
       data: { url: d.url || '/' },
       actions: [
         { action: 'open', title: 'Leer nota' },
-        { action: 'close', title: 'Cerrar' },
       ],
     });
   }

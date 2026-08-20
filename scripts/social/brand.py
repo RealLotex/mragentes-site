@@ -5,8 +5,8 @@ Los valores no se inventaron acá: son los mismos tokens de `assets/css/main.css
 y las mismas tres tipografías autoalojadas en `static/fonts/`. Si el sitio cambia
 de tinta, esto se actualiza en un solo lugar y todas las piezas siguen.
 
-El logotipo azul viejo (`static/images/mragentes.png`) NO se usa: la marca es la
-mano grabada (`static/faviconhand512.png`), igual que en el masthead del sitio.
+La marca es la mano grabada (`static/faviconhand512.png`), igual que en el
+masthead del sitio.
 """
 
 from __future__ import annotations

@@ -1754,7 +1754,7 @@ def _load_dotenv():
     load_dotenv()
 
 
-def _send_push_notification(title, filepath, worker_url=None):
+def _send_push_notification(title, filepath, worker_url=None, image_filename=None):
     """Envía notificación push a suscriptores via Cloudflare Worker."""
     _load_dotenv()
     # Cargar config local para el token y worker URL
@@ -1780,12 +1780,18 @@ def _send_push_notification(title, filepath, worker_url=None):
     print(f"  🔔 Enviando notificación push via {worker_url}/api/send/...")
     try:
         import urllib.request
-        payload = json.dumps({
-            "token": api_token,
-            "title": title,
-            "body": "Acabamos de publicar una nueva nota en MR Agentes.",
-            "url": url,
-        }).encode()
+        try:
+            from scripts.push_payload import build_payload
+        except ImportError:
+            from push_payload import build_payload
+        payload_data = build_payload(
+            title,
+            "Acabamos de publicar una nueva nota en MR Agentes.",
+            url,
+            f"{STOCK_IMAGES_DIR}{image_filename}" if image_filename else None,
+        )
+        payload_data["token"] = api_token
+        payload = json.dumps(payload_data).encode()
         req = urllib.request.Request(
             f"{worker_url}/api/send/",
             data=payload,
@@ -1953,7 +1959,7 @@ def main():
     if success:
         print(f"🎉 Nota publicada exitosamente: {entry['title']}")
         # Enviar notificación push
-        _send_push_notification(entry["title"], filepath, args.push_worker)
+        _send_push_notification(entry["title"], filepath, args.push_worker, entry.get("image"))
         # Aviso en Facebook e Instagram con la imagen de la nota
         _announce_on_social(filepath)
     else:

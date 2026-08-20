@@ -110,7 +110,8 @@ def send_push_to_all(title, body, url, image=None):
         "title": title,
         "body": body,
         "url": url,
-        "icon": "/images/favicon_v2.png",
+        "icon": "/faviconhand512.png",
+        "badge": "/faviconhand512.png",
         "tag": f"nota-{int(time.time())}",
     }
     if image:

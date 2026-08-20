@@ -6,7 +6,7 @@ description: Con qué está construido este sitio, qué tipografías usa y por q
 lede: La costumbre de cerrar un libro declarando con qué se compuso es vieja y
   sigue sirviendo. Un negocio que automatiza procesos ajenos debería poder mostrar
   cómo hizo el propio.
-image: /images/mragentes.png
+image: /faviconhand512.png
 no_closer: true
 ---
 

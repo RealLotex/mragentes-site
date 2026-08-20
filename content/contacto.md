@@ -6,7 +6,7 @@ description: Escribinos por WhatsApp, correo o formulario. Primera charla de una
   día hábil.
 lede: La primera charla dura una hora, no se cobra y no termina en un presupuesto
   salvo que encontremos algo que valga la pena automatizar.
-image: /images/mragentes.png
+image: /faviconhand512.png
 no_closer: true
 wide: true
 ---

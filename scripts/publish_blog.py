@@ -173,7 +173,7 @@ def _load_dotenv():
     load_dotenv()
 
 
-def send_push_notification(title, filepath):
+def send_push_notification(title, filepath, image_filename=None):
     """Enviar notificación push a suscriptores vía Cloudflare Worker."""
     _load_dotenv()
     config_file = os.path.join(BASE_DIR, "scripts", "config.local.json")
@@ -206,12 +206,18 @@ def send_push_notification(title, filepath):
 
     try:
         import urllib.request
-        payload = json.dumps({
-            "token": api_token,
-            "title": short_title,
-            "body": "Accedé para leer esta nota en nuestra web.",
-            "url": url,
-        }).encode()
+        try:
+            from scripts.push_payload import build_payload
+        except ImportError:
+            from push_payload import build_payload
+        payload_data = build_payload(
+            short_title,
+            "Accedé para leer esta nota en nuestra web.",
+            url,
+            f"{STOCK_IMAGES_DIR}{image_filename}" if image_filename else None,
+        )
+        payload_data["token"] = api_token
+        payload = json.dumps(payload_data).encode()
         req = urllib.request.Request(
             f"{worker_url}/api/send/",
             data=payload,
@@ -328,7 +334,7 @@ def publish_blog_post(json_path, dry_run=False, force=False):
 
     if success:
         # 4. Notificación push
-        send_push_notification(title, filepath)
+        send_push_notification(title, filepath, image_filename)
 
         # 4b. Aviso en Facebook e Instagram, con la imagen de la nota
         announce_on_social(filepath)

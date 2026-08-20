@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import assert from 'node:assert/strict';
-import { webPushEncrypt, generateVapidHeaders, default as worker } from '../cf_worker.js';
+import { webPushEncrypt, generateVapidHeaders, buildNotificationPayload, default as worker } from '../cf_worker.js';
 
 const enc = new TextEncoder();
 const b64 = (bytes) => Buffer.from(bytes).toString('base64url');
@@ -93,8 +93,24 @@ async function testAuth() {
   }
 }
 
+function testNotificationPayload() {
+  const payload = buildNotificationPayload({
+    title: 'Nota nueva',
+    body: 'Entrá a leerla.',
+    url: 'https://mragentes.com.ar/notas/nota-nueva/',
+    image: 'https://mragentes.com.ar/images/stock/cover.jpg',
+  });
+  assert.equal(payload.icon, '/faviconhand512.png');
+  assert.equal(payload.badge, '/faviconhand512.png');
+  assert.equal(payload.image, 'https://mragentes.com.ar/images/stock/cover.jpg');
+
+  const external = buildNotificationPayload({ image: 'https://tracker.example/pixel.jpg' });
+  assert.equal('image' in external, false);
+}
+
 await testRoundTrip();
 await testRfcVector();
 await testVapid();
 await testAuth();
+testNotificationPayload();
 console.log('push tests: ok');
