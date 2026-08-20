@@ -45,6 +45,17 @@ def main():
         pass
 
     doy = datetime.now().timetuple().tm_yday
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    # ⚠️ Guard anti-doble-poste: si CUALQUIER clave ya se publicó HOY (fecha), abortar.
+    # Evita que un reintento del cron publique una segunda pieza el mismo día
+    # (caso 2026-08-20: rescate manual + reintento = 2 posts).
+    posted_today = [k for k, v in published.items() if str(v.get("date", ""))[:10] == today]
+    if posted_today:
+        print(f"ALREADY_POSTED_TODAY={posted_today[0]}")
+        print(f"NOTE=Ya hay post publicado hoy ({posted_today[0]}) — terminá sin publicar")
+        sys.exit(1)
+
     key = keys[doy % len(keys)]
     is_pub = key in published
 
