@@ -46,6 +46,18 @@
     return "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
   }
 
+  function keyMatches(sub) {
+    var applied = sub.options && sub.options.applicationServerKey;
+    if (!applied) return true;
+    var wanted = b64ToBytes(VAPID);
+    var have = new Uint8Array(applied);
+    if (have.length !== wanted.length) return false;
+    for (var i = 0; i < have.length; i++) {
+      if (have[i] !== wanted[i]) return false;
+    }
+    return true;
+  }
+
   function init() {
     var btn = document.querySelector("[data-push-btn]");
     var status = document.querySelector("[data-push-status]");
@@ -70,8 +82,8 @@
     btn.hidden = false;
 
     navigator.serviceWorker.register("/sw.js", { scope: "/" }).then(function (reg) {
-      return reg.pushManager.getSubscription().then(function (sub) {
-        render(!!sub);
+      return revalidate(reg).then(function (on) {
+        render(on);
 
         btn.addEventListener("click", function () {
           btn.disabled = true;
@@ -99,6 +111,13 @@
         : "Un aviso por cada nota nueva. Nada de promociones.");
     }
 
+    function revalidate(reg) {
+      return reg.pushManager.getSubscription().then(function (sub) {
+        if (!sub || keyMatches(sub)) return !!sub;
+        return drop(sub).then(function () { return add(reg); });
+      });
+    }
+
     function add(reg) {
       return reg.pushManager
         .subscribe({ userVisibleOnly: true, applicationServerKey: b64ToBytes(VAPID) })
@@ -108,10 +127,12 @@
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(sub)
-          }).then(function () { return true; })
-            /* Si el worker no responde, la suscripción local ya existe: no la
-               revertimos, pero tampoco mentimos diciendo que quedó registrada. */
-            .catch(function () { return true; });
+          }).then(function (response) {
+            if (!response.ok) throw new Error("el servidor rechazó la suscripción");
+            return true;
+          }).catch(function (error) {
+            return sub.unsubscribe().catch(function () {}).then(function () { throw error; });
+          });
         })
         .catch(function (e) {
           if (Notification.permission === "denied") {

@@ -6,16 +6,26 @@
 //   API_TOKEN          — Auth token for /api/send/
 // KV Namespace Binding: PUSH_SUBS (configured in Cloudflare dashboard)
 //
-// New VAPID keys (2026-06-16):
-//   Public:  BFGo1CVPwPDvjg-P6drE18gKe8m00LZDVUPxO7DRfRX9zLYqco57y-V0hDsot9rINydYxOmCkK-_TijpFNeM6x0
-//   Private: vuiJSe03BBYra_kRAW2B14c0_fVPpz9grm8Ba00fvRk
-//
 // API endpoints:
 //   POST /api/subscribe/    — Save a push subscription
 //   POST /api/unsubscribe/  — Remove a push subscription
 //   POST /api/send/         — Send a push notification to all subscribers
 
 const encoder = new TextEncoder();
+
+function tokenOk(provided, expected) {
+  if (typeof provided !== 'string' || typeof expected !== 'string' || provided.length !== expected.length) return false;
+  let difference = 0;
+  for (let i = 0; i < expected.length; i++) difference |= provided.charCodeAt(i) ^ expected.charCodeAt(i);
+  return difference === 0;
+}
+
+function forbidden(cors) {
+  return new Response(JSON.stringify({ error: 'Invalid token' }), {
+    status: 403,
+    headers: { ...cors, 'Content-Type': 'application/json' },
+  });
+}
 
 export default {
   async fetch(request, env) {
@@ -165,12 +175,7 @@ async function handleUnsubscribe(request, env, cors) {
 
 async function handleSendOne(request, env, cors) {
   const body = await request.json();
-  // if (body.token !== env.API_TOKEN) {
-  //   return new Response(JSON.stringify({ error: 'Invalid token' }), {
-  //     status: 403,
-  //     headers: { ...cors, 'Content-Type': 'application/json' },
-  //   });
-  // }
+  if (!tokenOk(body.token, env.API_TOKEN)) return forbidden(cors);
 
   if (!body.subscription || !body.subscription.endpoint) {
     return new Response(JSON.stringify({ error: 'subscription.endpoint required' }), {
@@ -244,15 +249,8 @@ async function handleSendOne(request, env, cors) {
 // ─── Send Notification ───────────────────────────────────────────────────────
 
 async function handleSend(request, env, cors) {
-  // Authenticate
   const body = await request.json();
-  // TEMP: skip token check for debugging
-  // if (body.token !== env.API_TOKEN) {
-  //   return new Response(JSON.stringify({ error: 'Invalid token' }), {
-  //     status: 403,
-  //     headers: { ...cors, 'Content-Type': 'application/json' },
-  //   });
-  // }
+  if (!tokenOk(body.token, env.API_TOKEN)) return forbidden(cors);
 
   // Validate payload
   const title = (body.title || 'MR Agentes').slice(0, 120);
@@ -284,9 +282,11 @@ async function handleSend(request, env, cors) {
   let removed = 0;
   const BATCH_SIZE = 50;
   let cursor;
+  let done = false;
 
   do {
     const listResult = await env.PUSH_SUBS.list({ cursor, limit: BATCH_SIZE });
+    done = listResult.list_complete;
     cursor = listResult.cursor;
 
     const batch = listResult.keys;
@@ -360,7 +360,7 @@ async function handleSend(request, env, cors) {
       if (r === 'sent') sent++;
       else if (r === 'failed') failed++;
     }
-  } while (cursor);
+  } while (!done);
 
   return new Response(
     JSON.stringify({ status: 'ok', sent, failed, removed, errors: errors.length > 0 ? errors : undefined }),
@@ -404,26 +404,23 @@ async function handleDebugStatus(request, env, cors) {
 // ─── Debug: clear all subscriptions ──────────────────────────────────────────
 
 async function handleClearAll(request, env, cors) {
-  // Auth required (same API_TOKEN) — TEMP disabled
-  // const body = await request.json();
-  // if (body.token !== env.API_TOKEN) {
-  //   return new Response(JSON.stringify({ error: 'Invalid token' }), {
-  //     status: 403,
-  //     headers: { ...cors, 'Content-Type': 'application/json' },
-  //   });
-  // }
+  let body;
+  try { body = await request.json(); } catch { return forbidden(cors); }
+  if (!tokenOk(body.token, env.API_TOKEN)) return forbidden(cors);
 
   let deleted = 0;
   let cursor;
+  let done = false;
   do {
     const listResult = await env.PUSH_SUBS.list({ cursor, limit: 50 });
+    done = listResult.list_complete;
     cursor = listResult.cursor;
     const batch = listResult.keys;
     if (batch.length > 0) {
       await Promise.all(batch.map(k => env.PUSH_SUBS.delete(k.name)));
       deleted += batch.length;
     }
-  } while (cursor);
+  } while (!done);
 
   return new Response(JSON.stringify({ status: 'ok', deleted }), {
     status: 200,
@@ -502,8 +499,8 @@ async function generateVapidHeaders(endpoint, subject, privateKeyBase64, publicK
 // ─── Web Push Encryption (RFC 8291 - aes128gcm) ────────────────────────────
 
 async function webPushEncrypt(payload, clientPublicKeyBase64, authBase64) {
-  const payloadBytes = encoder.encode(payload);
-  const clientPublicKey = base64UrlDecode(clientPublicKeyBase64);
+  const plaintext = encoder.encode(payload);
+  const uaPublic = base64UrlDecode(clientPublicKeyBase64);
   const authSecret = base64UrlDecode(authBase64);
 
   // Generate ephemeral ECDH key pair
@@ -513,119 +510,62 @@ async function webPushEncrypt(payload, clientPublicKeyBase64, authBase64) {
     ['deriveBits'],
   );
 
-  const serverPublicKey = await crypto.subtle.exportKey('raw', serverKey.publicKey);
-  const clientKey = await crypto.subtle.importKey(
+  const asPublic = new Uint8Array(await crypto.subtle.exportKey('raw', serverKey.publicKey));
+  const uaKey = await crypto.subtle.importKey(
     'raw',
-    clientPublicKey,
+    uaPublic,
     { name: 'ECDH', namedCurve: 'P-256' },
     true,
     [],
   );
 
   // ECDH shared secret
-  const sharedSecret = new Uint8Array(
-    await crypto.subtle.deriveBits({ name: 'ECDH', public: clientKey }, serverKey.privateKey, 256),
+  const ecdhSecret = new Uint8Array(
+    await crypto.subtle.deriveBits({ name: 'ECDH', public: uaKey }, serverKey.privateKey, 256),
   );
 
-  // HKDF-based key derivation per RFC 8291 section 3.2
   const salt = crypto.getRandomValues(new Uint8Array(16));
-
-  // PRK = HMAC-SHA256(auth_secret, shared_secret) with info "Content-Encoding: auth\0"
-  const prk = await hmacSha256(authSecret, sharedSecret, new Uint8Array(0));
-
-  // IKM = HMAC-SHA256(salt, PRK) with info "Content-Encoding: auth\0"
-  const ikm = await hmacSha256(salt, prk, new Uint8Array(0));
-
-  // CEK info: "Content-Encoding: aes128gcm\0" + padding(0x00) + record_size (4 bytes big-endian)
-  const recordSize = payloadBytes.length + 16;
-  const cekInfo = new Uint8Array([
-    ...encoder.encode('Content-Encoding: aes128gcm\x00'),
-    0x00, 0x00, 0x00, 0x00, // padding
-    (recordSize >> 24) & 0xff,
-    (recordSize >> 16) & 0xff,
-    (recordSize >> 8) & 0xff,
-    recordSize & 0xff,
-  ]);
-  const cek = await hkdfExpand(ikm, cekInfo, 16);
-
-  // Nonce info: "Content-Encoding: nonce\0"
-  const nonceInfo = encoder.encode('Content-Encoding: nonce\x00');
-  const nonce = await hkdfExpand(ikm, nonceInfo, 12);
-
-  // Encryption with AES-128-GCM
-  const iv = new Uint8Array(12);
-  for (let i = 0; i < 12; i++) {
-    iv[i] = nonce[i] ^ salt[i % 16];
-  }
+  const keyInfo = concatBytes(encoder.encode('WebPush: info\0'), uaPublic, asPublic);
+  const ikm = await hkdf(authSecret, ecdhSecret, keyInfo, 32);
+  const cek = await hkdf(salt, ikm, encoder.encode('Content-Encoding: aes128gcm\0'), 16);
+  const nonce = await hkdf(salt, ikm, encoder.encode('Content-Encoding: nonce\0'), 12);
+  const record = concatBytes(plaintext, new Uint8Array([0x02]));
 
   const aesKey = await crypto.subtle.importKey('raw', cek, { name: 'AES-GCM' }, false, ['encrypt']);
 
-  const encrypted = await crypto.subtle.encrypt(
-    {
-      name: 'AES-GCM',
-      iv,
-      additionalData: encoder.encode('Content-Encoding: aes128gcm'),
-      tagLength: 128,
-    },
+  const ciphertext = new Uint8Array(await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv: nonce, tagLength: 128 },
     aesKey,
-    payloadBytes,
-  );
+    record,
+  ));
 
-  // Build output: salt(16) + recordSize(4 BE) + serverPublicKey(65) + ciphertext
-  const spk = new Uint8Array(serverPublicKey);
-  const enc = new Uint8Array(encrypted);
-  const recordSizeBytes = new Uint8Array([
-    (recordSize >> 24) & 0xff,
-    (recordSize >> 16) & 0xff,
-    (recordSize >> 8) & 0xff,
-    recordSize & 0xff,
-  ]);
-
-  const output = new Uint8Array(16 + 4 + spk.length + enc.length);
-  output.set(salt, 0);
-  output.set(recordSizeBytes, 16);
-  output.set(spk, 20);
-  output.set(enc, 20 + spk.length);
-
-  return output;
+  const recordSize = Math.max(4096, ciphertext.length + 1);
+  const header = new Uint8Array(16 + 4 + 1 + asPublic.length);
+  header.set(salt, 0);
+  new DataView(header.buffer).setUint32(16, recordSize, false);
+  header[20] = asPublic.length;
+  header.set(asPublic, 21);
+  return concatBytes(header, ciphertext);
 }
 
-// ─── HMAC-SHA256 helper ─────────────────────────────────────────────────────
-
-async function hmacSha256(keyBytes, data, info) {
-  const key = await crypto.subtle.importKey(
-    'raw',
-    keyBytes,
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
+// HKDF extract + expand, RFC 5869.
+async function hkdf(salt, ikm, info, length) {
+  const extractKey = await crypto.subtle.importKey(
+    'raw', salt, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'],
   );
-
-  const input = new Uint8Array([...info, ...data]);
-  return new Uint8Array(await crypto.subtle.sign('HMAC', key, input));
-}
-
-// ─── HKDF-Expand helper ────────────────────────────────────────────────────
-
-async function hkdfExpand(prk, info, length) {
-  const key = await crypto.subtle.importKey(
-    'raw',
-    prk,
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign'],
+  const prk = new Uint8Array(await crypto.subtle.sign('HMAC', extractKey, ikm));
+  const expandKey = await crypto.subtle.importKey(
+    'raw', prk, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'],
   );
-
-  let result = new Uint8Array(0);
-  let t = new Uint8Array(0);
-
-  for (let i = 1; result.length < length; i++) {
-    const input = new Uint8Array([...t, ...info, i]);
-    t = new Uint8Array(await crypto.subtle.sign('HMAC', key, input));
-    result = new Uint8Array([...result, ...t]);
+  let output = new Uint8Array(0);
+  let previous = new Uint8Array(0);
+  for (let i = 1; output.length < length; i++) {
+    previous = new Uint8Array(await crypto.subtle.sign(
+      'HMAC', expandKey, concatBytes(previous, info, new Uint8Array([i])),
+    ));
+    output = concatBytes(output, previous);
   }
-
-  return result.slice(0, length);
+  return output.slice(0, length);
 }
 
 // ─── PKCS#8 DER builder for P-256 EC private key ──────────────────────────
@@ -761,3 +701,5 @@ function base64UrlEncode(bytes) {
   for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
   return btoa(binary).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 }
+
+export { webPushEncrypt, generateVapidHeaders };
