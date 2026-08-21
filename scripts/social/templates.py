@@ -207,7 +207,7 @@ def t_lista(piece: Piece, surf: Surface, seed: int, ground: str) -> Sheet:
         Rule(pad_top=26, pad_bottom=30),
         Ledger(items=piece.items),
         Flex(1),
-        Mono(piece.cta or "Escribinos y lo vemos en tu operación", size=24),
+        Mono(piece.cta or "Escribinos y lo vemos en tu empresa", size=24),
     ])
     return sh
 

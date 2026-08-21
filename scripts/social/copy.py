@@ -38,7 +38,7 @@ HOOKS = [
 CLOSERS_FB = [
     "Se lee en cinco minutos. El enlace, acá arriba.",
     "Si te toca de cerca, escribinos y lo charlamos sin vueltas.",
-    "¿Lo estás viendo en tu operación? Contanos.",
+    "¿Lo estás viendo en tu empresa? Contanos.",
     "Como siempre: sin humo y con las fuentes a la vista.",
     "Comentanos qué harías vos.",
 ]
@@ -251,7 +251,7 @@ def support_pieces(nota: Nota, limit: int = 3) -> list[tuple[str, Piece]]:
 
 def closing_piece(nota: Nota) -> Piece:
     return Piece(
-        title="¿Esto te pasa en tu operación?",
+        title="¿Esto te pasa en tu empresa?",
         lead="Automatización de procesos y agentes de IA para pymes. "
              "Primera charla sin cargo: te decimos si conviene y si no, también.",
         kicker="mr agentes",
