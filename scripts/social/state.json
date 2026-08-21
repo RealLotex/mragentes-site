@@ -179,6 +179,21 @@
       "date": "2026-08-20",
       "facebook": "1202855116233616_122124771933359279",
       "instagram": "18095227265414805"
+    },
+    "cancer-vacuna-ia": {
+      "updated": "2026-08-21T11:59:45",
+      "date": "2026-08-21",
+      "images": [
+        "cancer-vacuna-ia/01-titular.jpg",
+        "cancer-vacuna-ia/02-dato.jpg",
+        "cancer-vacuna-ia/03-punto.jpg",
+        "cancer-vacuna-ia/04-pasos.jpg",
+        "cancer-vacuna-ia/05-punto.jpg",
+        "cancer-vacuna-ia/06-punto.jpg",
+        "cancer-vacuna-ia/07-anuncio.jpg"
+      ],
+      "facebook": "1202855116233616_122124972477359279",
+      "instagram": "18471476788116811"
     }
   }
 }

@@ -294,7 +294,16 @@ def cmd_publish_library(args) -> int:
         commit_and_push([p for p in [feed, story_path] if p], f"🖼️  Pieza de redes: {args.key}", args.branch)
 
     meta = Meta(settings)
-    results = [meta.facebook_photo(feed, fb_caption)]
+    fb_result = meta.facebook_photo(feed, fb_caption)
+    results = [fb_result]
+    if fb_result.ok:
+        # Registrar YA (lección 2026-08-21: si el proceso muere a mitad, un
+        # reintento no debe volver a publicar FB).
+        state_mod.record(
+            args.key,
+            {"date": datetime.datetime.now().date().isoformat(), "facebook": fb_result.id},
+            state=state,
+        )
     url = resolve_public_url(public_name(feed), settings, wait=args.wait)
     if url:
         results.append(meta.instagram_image(url, ig_caption))

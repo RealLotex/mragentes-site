@@ -211,6 +211,16 @@ def publish_nota(
     results.append(fb)
     if fb.ok:
         record["facebook"] = fb.id
+        # Registrar YA el id de FB: si el proceso muere a mitad (push roto,
+        # timeout, kill), un reintento ve el registro y no vuelve a publicar.
+        # Lección 2026-08-21: carrusel cancer-vacuna-ia duplicado en FB porque
+        # el 1er intento publicó el álbum y murió sin registrar; el 2º no
+        # encontró registro y publicó de nuevo.
+        state_mod.record(
+            nota.slug,
+            {"date": record["date"], "images": record["images"], "facebook": fb.id},
+            state,
+        )
 
     urls = []
     missing = []
