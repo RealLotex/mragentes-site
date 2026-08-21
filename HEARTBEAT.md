@@ -1,5 +1,8 @@
 # HEARTBEAT
 
+## 🧪 Regla TDD (aplica a TODO, incluidos los crones de este archivo)
+Antes de cualquier desarrollo/feature/script nuevo: PLAN → tests RED → implementar → tests GREEN → confirmación visual. Ver AGENTS.md → "Test-Driven Development" para el detalle. Ninguna mejora de slides, script o cambio se hace "a mano" sin su test primero.
+
 ## Modo Nocturno (00:00 - 07:00 UTC-3)
 Si estamos en horario nocturno, el cron "Modo Nocturno — Mejorar Slides cada 30min" está activo.
 Tu trabajo es mejorar continuamente los templates de slides:

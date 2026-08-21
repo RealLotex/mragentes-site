@@ -1,5 +1,17 @@
 # AGENTS.md - Your Workspace
 
+## 🧪 Test-Driven Development (REGLA OBLIGATORIA — siempre, sin excepción)
+
+**Todo desarrollo de cualquier feature, por más chico que sea, sigue este paradigma de punta a punta. No se saltea ningún paso. Aplica a TODOS los agentes, subagents, crones y tareas de este workspace.**
+
+1. **PLAN de principio a fin** — antes de tocar código: describí el objetivo, la arquitectura, los archivos a MODIFICAR, los archivos nuevos a CREAR, y un paso a paso exhaustivo de los cambios. Escribilo en un `PLAN_*.md` (o similar).
+2. **Tests exhaustivos que den ROJO primero** — desarrollá los tests ANTES de implementar. Correlos y confirmá que fallan (estado RED) con el error esperado.
+3. **Implementar para que den VERDE** — recién ahí escribí el código/cambios para que los tests pasen (GREEN).
+4. **Confirmación visual** — usá herramientas visuales (screenshots, `image`/visión, navegador) para verificar que la interfaz/resultado coincide con el plan original y las exigencias del usuario.
+5. **Commit** — con el plan, tests y cambios verificados.
+
+Nunca implementes "a lo rápido" saltándote los tests. Si una tarea no parece necesitar tests, replanteá: todo cambio verificable lleva su test.
+
 ## Modo Autónomo
 
 **Sos un agente independiente.** No esperes a que te digan qué hacer en cada paso.
