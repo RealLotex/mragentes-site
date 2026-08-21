@@ -2,6 +2,15 @@
 
 Skills define _how_ tools work. This file is for _your_ specifics.
 
+## Visión de imágenes (proveedor)
+
+- **2026-08-21 MIGRADO a DeepSeek vision** (`deepseek/deepseek-v4-flash-vision-exp`). Antes era `google/gemini-3.5-flash-lite` con API key gratuita → se rate-limitea rápido.
+- **No requirió actualizar OpenClaw** (2026.7.1-2 = última). Solo configuración: el core auto-registra modelos custom con `input:["text","image"]`.
+- **Config:** `models.providers.deepseek.models[]` incluye el entry vision (input text+image) · `tools.media.image.models` = deepseek primero, google de fallback · `tools.media.image.attachments` = `{"mode":"all","maxAttachments":10}` (batch).
+- **Ahorro de tokens (guía DeepSeek):** toda imagen se auto-resize a ~800×800 → **máx 384 tokens/imagen**. Batch de imágenes inbound en 1 request (hasta 600). `detail:"low"` NO es pasable vía OpenClaw (serializa image_url string plano) — el auto-resize ya tapa el costo.
+- **Verificar:** `python3 scripts/tests/test_vision_deepseek.py` (11 tests) · `openclaw infer image describe --file <png> --model deepseek/deepseek-v4-flash-vision-exp`.
+- **Backup config:** `~/.openclaw/openclaw.json.bak-vision-*` (no committear `openclaw.json`, vive fuera del repo).
+
 ## Instagram Posts
 
 - Skill: `skills/instagram-post/SKILL.md`
