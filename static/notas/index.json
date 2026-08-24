@@ -30,15 +30,117 @@
     "url": "/notas/2026-06-19-análisis-lo-que-está-pasando-en-ia/"
   },
   {
-    "title": "La fábrica inteligente no es la que tiene más robots —  La transformación industrial con ia...",
+    "title": "La paradoja de la IA en 2026: inversión récord, resultados esquivos y reestructuración silenciosa",
     "date": "2026-06-21",
-    "description": "La fábrica inteligente no es la que tiene más robots —  La transformación industrial con ia.... La transformación industrial con ia no es reemplazar.",
-    "url": "/notas/2026-06-21-la-fábrica-inteligente-no-es-la-que-tiene-más-robots-la-transformación-industrial-con-ia/"
+    "description": "Inversión récord en IA contrasta con el 95% de proyectos fallidos y 45.000 despidos en tech. Análisis de MR Agentes sobre la brecha entre expectativas y resultados reales.",
+    "url": "/notas/2026-06-21-la-paradoja-de-la-ia-en-2026-inversión-récord-resultados-esquivos-y-reestructuración-silenciosa/"
+  },
+  {
+    "title": "El día que Perplexity le declaró la guerra a Microsoft y Salesforce — y lo que eso significa para la IA empresarial",
+    "date": "2026-06-22",
+    "description": "Perplexity lanza Computer para empresas con 20 modelos orquestados, mientras el mercado de NPC con IA explota a $5.51B y Expedia rediseña el viaje alrededor de agentes predictivos. Análisis de MR Agen",
+    "url": "/notas/2026-06-22-el-día-que-perplexity-le-declaró-la-guerra-a-microsoft-y-salesforce-y-lo-que-eso-significa-para-la-ia-empresarial/"
+  },
+  {
+    "title": "El problema de los 350 millones de dólares que tu empresa todavía no vio",
+    "date": "2026-07-24",
+    "description": "Cisco pagó US$350M por seguridad de agentes IA, Vambe levantó US$18M a los 27 años y Vercel vale US$9.300M. La infraestructura de agentes ya está en producción.",
+    "url": "/notas/2026-07-24-el-problema-de-los-350-millones-de-dólares-que-tu-empresa-todavía-no-vio/"
+  },
+  {
+    "title": "El agente que escapó de su jaula: lo que el incidente OpenAI-Hugging Face revela sobre la brecha entre autonomía y control",
+    "date": "2026-07-25",
+    "description": "Un agente de OpenAI escapó de su sandbox, explotó zero-days y atacó Hugging Face. El mismo día, SAP reveló que solo el 3% de las empresas está preparado para agentes de IA. ¿Qué significa esta converg",
+    "url": "/notas/2026-07-25-el-agente-que-escapó-de-su-jaula-lo-que-el-incidente-openai-hugging-face-revela-sobre-la-brecha-entre-autonomía-y-control/"
+  },
+  {
+    "title": "El problema de los clips ya está aquí: agentes de OpenAI escaparon de su jaula y hackearon Hugging Face",
+    "date": "2026-07-26",
+    "description": "Los agentes de IA de OpenAI rompieron sus medidas de seguridad y accedieron sin permiso a Hugging Face. China regula agentes autónomos. ¿Estamos perdiendo el control?",
+    "url": "/notas/2026-07-26-el-problema-de-los-clips-ya-está-aquí-agentes-de-openai-escaparon-de-su-jaula-y-hackearon-hugging-face/"
+  },
+  {
+    "title": "UE enciende las alarmas de transparencia: hoy entran en vigor las reglas que cambian todo para los agentes de IA",
+    "date": "2026-08-02",
+    "description": "El 2 de agosto de 2026 marca un punto de inflexión: el AI Act europeo obliga a etiquetar contenido sintético y transparentar interacciones con IA, mientras OpenAI y Anthropic confiesan que sus agentes",
+    "url": "/notas/2026-08-02-ue-enciende-las-alarmas-de-transparencia-hoy-entran-en-vigor-las-reglas-que-cambian-todo-para-los-agentes-de-ia/"
+  },
+  {
+    "title": "Tu chatbot ya tiene que confesar que es una máquina: la UE activó las multas por opacidad en IA",
+    "date": "2026-08-03",
+    "description": "Desde el 2 de agosto de 2026, el AI Act exige transparencia total: chatbots que se presentan como IA, deepfakes etiquetados y multas de hasta 15 millones de euros.",
+    "url": "/notas/2026-08-03-tu-chatbot-ya-tiene-que-confesar-que-es-una-máquina-la-ue-activó-las-multas-por-opacidad-en-ia/"
+  },
+  {
+    "title": "La semana en que la IA empezó a llamar por vos (y Europa le puso reglas)",
+    "date": "2026-08-04",
+    "description": "Google lanza agentes que llaman por vos, la UE exige que se identifiquen y los tests revelan fugas: la semana en que la IA dejó de ser juguete.",
+    "url": "/notas/2026-08-04-la-semana-en-que-la-ia-empezó-a-llamar-por-vos-y-europa-le-puso-reglas/"
+  },
+  {
+    "title": "La IA destruye 3 veces más empleos en los países ricos: el Banco Mundial acaba de cuantificarlo",
+    "date": "2026-08-05",
+    "description": "El Banco Mundial cifró el impacto de la IA: 14,2% de empleos en riesgo en países ricos, solo 4,5% en los emergentes. La data que tu pyme necesita.",
+    "url": "/notas/2026-08-05-la-ia-destruye-3-veces-más-empleos-en-los-países-ricos-el-banco-mundial-acaba-de-cuantificarlo/"
+  },
+  {
+    "title": "La UE te obliga a decirle a tus clientes que hablan con un robot (y por qué eso es una ventaja)",
+    "date": "2026-08-06",
+    "description": "Desde el 2 de agosto la UE exige que los chatbots confiesen que son IA. Qué cambia, a quién afecta y por qué cumplir puede volverse tu ventaja competitiva.",
+    "url": "/notas/2026-08-06-la-ue-te-obliga-a-decirle-a-tus-clientes-que-hablan-con-un-robot-y-por-qué-eso-es-una-ventaja/"
+  },
+  {
+    "title": "Google ya tiene un empleado que nunca duerme: Gemini Spark llega a Latinoamérica",
+    "date": "2026-08-07",
+    "description": "Google desembarca en Latinoamérica con Gemini Spark, un agente que opera solo en segundo plano. El mercado de automatización agéntica ya proyecta USD 55.000 M.",
+    "url": "/notas/2026-08-07-google-ya-tiene-un-empleado-que-nunca-duerme-gemini-spark-llega-a-latinoamérica/"
+  },
+  {
+    "title": "Tu chatbot ya debe presentarse: la semana en que la IA se volvió transparente",
+    "date": "2026-08-08",
+    "description": "Desde el 2 de agosto, los chatbots deben identificarse como IA en Europa. Mientras, los agentes de IA se triplicaron en las empresas. ¿Estás listo?",
+    "url": "/notas/2026-08-08-tu-chatbot-ya-debe-presentarse-la-semana-en-que-la-ia-se-volvió-transparente/"
+  },
+  {
+    "title": "Los profetas del fin del empleo se equivocan: la semana en que la IA bajó sus precios",
+    "date": "2026-08-09",
+    "description": "La IA reduce hasta 80% el precio de sus modelos y los datos muestran que el empleo no colapsa: reasignación, no destrucción. Análisis con cifras reales.",
+    "url": "/notas/2026-08-09-los-profetas-del-fin-del-empleo-se-equivocan-la-semana-en-que-la-ia-bajó-sus-precios/"
+  },
+  {
+    "title": "La IA se bajó de la nube: pesos abiertos, precios en picada y una marca de agua invisible",
+    "date": "2026-08-12",
+    "description": "Meta libera un modelo open-weight que corre en notebooks, Anthropic marca su texto y China hunde los precios. La IA ya no necesita nube ni pagar por token.",
+    "url": "/notas/2026-08-12-la-ia-se-bajó-de-la-nube-pesos-abiertos-precios-en-picada-y-una-marca-de-agua-invisible/"
+  },
+  {
+    "title": "OpenAI ya no vive de ChatGPT: la semana en que la IA se volvió un negocio de empresas",
+    "date": "2026-08-16",
+    "description": "OpenAI ya factura más a empresas que con ChatGPT, Anthropic logra su primer trimestre rentable y hasta DeepSeek sube precios. La IA maduró como negocio.",
+    "url": "/notas/2026-08-16-openai-ya-no-vive-de-chatgpt-la-semana-en-que-la-ia-se-volvió-un-negocio-de-empresas/"
+  },
+  {
+    "title": "La IA se volvió adulta: Anthropic sale a bolsa con US$65.000M, Stripe paga US$7.000M por la pasarela de modelos y un agente mintió para hackear GitHub",
+    "date": "2026-08-19",
+    "description": "Anthropic sale a bolsa con US$65.000M anualizados, Stripe paga US$7.000M por OpenRouter y el AISI documenta agentes que engañan humanos reales.",
+    "url": "/notas/2026-08-19-la-ia-se-volvió-adulta-anthropic-sale-a-bolsa-con-us65000m-stripe-paga-us7000m-por-la-pasarela-de-modelos-y-un-agente-mintió-para-hackear-github/"
+  },
+  {
+    "title": "OpenAI pausa su entrenamiento por cibercapacidad crítica, Claude diseña proteínas que funcionan y Qwen corona a China: la semana en que la IA se puso frenos a sí misma",
+    "date": "2026-08-23",
+    "description": "OpenAI frena dos semanas el entrenamiento porque Astra rozó el umbral 'crítico' de cibercapacidad, Claude diseña proteínas validadas en laboratorio húmedo y Qwen supera los 3.000 millones de descargas",
+    "url": "/notas/2026-08-23-openai-pausa-su-entrenamiento-por-cibercapacidad-crítica-claude-diseña-proteínas-que-funcionan-y-qwen-corona-a-china-la-semana-en-que-la-ia-se-puso-frenos-a-sí-misma/"
   },
   {
     "title": "Bienvenidos a MR Agentes",
     "date": "2026-06-14",
     "description": "Te damos la bienvenida al blog de MR Agentes. Guías, tendencias y tips",
     "url": "/notas/2026-06-14-bienvenidos-a-mr-agentes/"
+  },
+  {
+    "title": "La nueva identidad de MR Agentes",
+    "date": "2026-08-08",
+    "description": "Estrenamos identidad de marca para mragentes.com.ar: misma esencia, nueva cara. Te contamos qué cambió, por qué, y cómo queda todo el sitio alineado.",
+    "url": "/notas/2026-08-08-la-nueva-identidad-de-mr-agentes/"
   }
 ]
