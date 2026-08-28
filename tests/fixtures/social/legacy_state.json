@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "published": {
+    "nota-historica": {
+      "date": "2026-08-24",
+      "facebook": "fb-note-1",
+      "instagram": "ig-note-1",
+      "images": ["nota-historica/01-nota.jpg"]
+    },
+    "pieza-diaria": {
+      "date": "2026-08-25",
+      "facebook": "fb-daily-1"
+    }
+  }
+}

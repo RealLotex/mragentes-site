@@ -197,6 +197,8 @@ class Palette:
     """Los mismos tokens, resueltos según sobre qué se imprime."""
 
     def __init__(self, ground: str = "paper"):
+        if ground not in {"paper", "ink", "minio"}:
+            raise ValueError(f"Fondo/palette desconocido: {ground!r}")
         self.ground = ground
         if ground == "ink":
             self.bg = INK

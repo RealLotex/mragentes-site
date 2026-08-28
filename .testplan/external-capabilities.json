@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-08-26T13:00:00-03:00",
+  "cloudflare_account_mcp": {
+    "status": "blocked",
+    "reason": "Plugin skills are installed but account search/execute tools are not exposed in this session."
+  },
+  "codex_project_mr_agentes": {
+    "status": "blocked",
+    "reason": "Only OpenclawMigration and mpv-remote are currently registered; no project-registration tool is exposed."
+  },
+  "git_remote_write": {
+    "status": "blocked",
+    "reason": "The local clone has no GitHub credential helper, SSH identity, or gh CLI."
+  },
+  "scheduled_tasks": {
+    "status": "blocked",
+    "reason": "Tasks deliberately remain absent until local and staging gates are GREEN."
+  }
+}

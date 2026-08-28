@@ -83,7 +83,7 @@ En GitHub: *Settings → Secrets and variables → Actions → New repository se
 |---------------------|--------------------------------------------------------------------------|
 | `META_ACCESS_TOKEN` | Token de página de larga duración                                        |
 | `FB_PAGE_ID`        | ID numérico de la página de Facebook                                     |
-| `IG_USER_ID`        | `GET /v21.0/<FB_PAGE_ID>?fields=instagram_business_account`               |
+| `IG_USER_ID`        | `GET /v26.0/<FB_PAGE_ID>?fields=instagram_business_account`               |
 
 Permisos que necesita el token: `pages_manage_posts`, `pages_read_engagement`,
 `instagram_basic`, `instagram_content_publish`. La cuenta de Instagram tiene

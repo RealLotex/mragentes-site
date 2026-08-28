@@ -13,6 +13,7 @@ variedad: no hacen falta treinta plantillas para que no se vean todas iguales.
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -87,7 +88,8 @@ def stack(sheet: Sheet, blocks: list[Block], box=None, align: str = "top") -> No
             y += remaining
 
     for b, h in zip(blocks, heights):
-        b.draw(sheet, int(x0), int(y), w, int(h))
+        if h > 0:
+            b.draw(sheet, int(x0), int(y), w, int(h))
         y += h
 
 
@@ -107,7 +109,13 @@ class Flex(Block):
     weight: float = 1.0
 
     def __post_init__(self):
-        self.flex = self.weight
+        try:
+            weight = float(self.weight)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("El peso flex debe ser un número finito no negativo") from exc
+        if not math.isfinite(weight) or weight < 0:
+            raise ValueError("El peso flex debe ser finito y no negativo")
+        self.flex = weight
 
     def measure(self, sheet, w, budget):
         return 0
@@ -191,6 +199,7 @@ class Heading(Block):
         if not self.text:
             return 0
         cap = min(budget, int(sheet.content_h * self.frac))
+        minimum = max(1, int(self.size_min))
         self._fit = fit_text(
             self.text,
             role=self.role,
@@ -198,8 +207,8 @@ class Heading(Block):
             width=self.width,
             max_w=w,
             max_h=cap,
-            size_max=sc(sheet, self.size_max),
-            size_min=self.size_min,
+            size_max=max(minimum, sc(sheet, self.size_max)),
+            size_min=minimum,
             max_lines=self.max_lines,
             leading=self.leading,
         )
@@ -230,14 +239,15 @@ class Body(Block):
         if not self.text:
             return 0
         cap = min(budget, int(sheet.content_h * self.frac))
+        minimum = max(1, int(self.size_min))
         self._fit = fit_text(
             self.text,
             role=self.role,
             weight=self.weight,
             max_w=w,
             max_h=cap,
-            size_max=sc(sheet, self.size_max),
-            size_min=self.size_min,
+            size_max=max(minimum, sc(sheet, self.size_max)),
+            size_min=minimum,
             max_lines=self.max_lines,
         )
         return min(self._fit.height, budget)
@@ -262,14 +272,15 @@ class Mono(Block):
     def measure(self, sheet, w, budget):
         if not self.text:
             return 0
+        minimum = max(1, max(15, self.size - 10))
         self._fit = fit_text(
             self.text,
             role="data",
             weight=self.weight,
             max_w=w,
             max_h=budget,
-            size_max=sc(sheet, self.size),
-            size_min=max(15, self.size - 10),
+            size_max=max(minimum, sc(sheet, self.size)),
+            size_min=minimum,
             max_lines=self.max_lines,
             tracking=self.tracking,
         )
@@ -408,13 +419,14 @@ class Ledger(Block):
                 )
                 d_fit = None
                 if detail:
+                    detail_minimum = max(1, int(19 * scale))
                     d_fit = fit_text(
                         detail,
                         role="text",
                         max_w=text_w,
                         max_h=budget,
-                        size_max=sc(sheet, 34 * scale),
-                        size_min=int(19 * scale),
+                        size_max=max(detail_minimum, sc(sheet, 34 * scale)),
+                        size_min=detail_minimum,
                         max_lines=3,
                     )
                 row_h = t_fit.height + (d_fit.height + 8 if d_fit else 0) + self._pad * 2
@@ -427,6 +439,8 @@ class Ledger(Block):
         return min(budget, sum(r[2] for r in self._rows))
 
     def draw(self, sheet, x, y, w, h):
+        if h <= 0 or w <= 0:
+            return
         pal = sheet.palette
         cy = y
         for i, (t_fit, d_fit, row_h, num_w) in enumerate(self._rows):
@@ -463,8 +477,10 @@ class Steps(Block):
                 title, detail = (it, "") if isinstance(it, str) else (it[0], it[1] if len(it) > 1 else "")
                 t = fit_text(title, role="display", weight=600, max_w=w - rail, max_h=budget,
                              size_max=sc(sheet, 44 * scale), size_min=int(22 * scale), max_lines=2)
+                detail_minimum = max(1, int(18 * scale))
                 d = fit_text(detail, role="text", max_w=w - rail, max_h=budget,
-                             size_max=sc(sheet, 32 * scale), size_min=int(18 * scale), max_lines=3) if detail else None
+                             size_max=max(detail_minimum, sc(sheet, 32 * scale)),
+                             size_min=detail_minimum, max_lines=3) if detail else None
                 row_h = t.height + (d.height + 6 if d else 0) + 46
                 self._rows.append((t, d, row_h, rail))
                 total += row_h
@@ -511,8 +527,10 @@ class KeyValues(Block):
             self._fits = []
             total = 0
             for key, value in self.rows:
+                key_minimum = 15
                 k = fit_text(str(key), role="data", weight=500, max_w=kw - 16, max_h=budget,
-                             size_max=sc(sheet, 24 * scale), size_min=15, max_lines=2, tracking=2.0)
+                             size_max=max(key_minimum, sc(sheet, 24 * scale)),
+                             size_min=key_minimum, max_lines=2, tracking=2.0)
                 v = fit_text(str(value), role="display", weight=500, max_w=vw, max_h=budget,
                              size_max=sc(sheet, 40 * scale), size_min=int(20 * scale), max_lines=3)
                 row_h = max(k.height, v.height) + pad * 2
@@ -550,6 +568,11 @@ class Quote(Block):
     _mark: int = field(default=0, init=False, repr=False)
 
     def measure(self, sheet, w, budget):
+        self._fit = None
+        self._auth = None
+        self._mark = 0
+        if not self.text or not self.text.strip() or budget <= 0:
+            return 0
         self._mark = int(sheet.surface.w * 0.14)
         cap = min(budget, int(sheet.content_h * self.frac))
         self._fit = fit_text(
@@ -563,9 +586,13 @@ class Quote(Block):
             max_lines=8,
         )
         total = self._mark + self._fit.height
-        if self.author:
+        author_budget = budget - total - 34
+        if self.author and author_budget > 0:
+            author_minimum = 17
             self._auth = fit_text(self.author, role="data", weight=500, max_w=w,
-                                  max_h=max(0, budget - total - 34), size_max=sc(sheet, 25), size_min=17,
+                                  max_h=author_budget,
+                                  size_max=max(author_minimum, sc(sheet, 25)),
+                                  size_min=author_minimum,
                                   max_lines=2, tracking=2.4)
             total += 34 + self._auth.height
         return min(total, budget)
@@ -663,7 +690,8 @@ class Panel(Block):
             sheet.draw.rectangle([x, y, x + w, y + h], outline=pal.rule, width=1)
         if self.accent_edge:
             sheet.draw.rectangle([x, y, x + 5, y + h], fill=pal.accent)
-        stack(sheet, self.blocks, (x + self.pad, y + self.pad, x + w - self.pad, y + h - self.pad))
+        if h > self.pad * 2 and w > self.pad * 2:
+            stack(sheet, self.blocks, (x + self.pad, y + self.pad, x + w - self.pad, y + h - self.pad))
 
 
 # ── Fotografía dentro del flujo ─────────────────────────────────────────────

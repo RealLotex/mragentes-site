@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "name": "MR Agentes — Noticias",
+  "project": "MR Agentes",
+  "worktree": true,
+  "timezone": "America/Cordoba",
+  "weekdays": [0, 1, 2, 3, 4, 5, 6],
+  "local_time": "18:00",
+  "cron": "0 18 * * *",
+  "rrule": "RRULE:FREQ=DAILY;BYHOUR=18;BYMINUTE=0;BYSECOND=0",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "low",
+  "skill": "mragentes-news-scout",
+  "prompt": "Usá $mragentes-news-scout. Ejecutá el relevamiento para la fecha local actual, agregá sólo ítems comprobados y no duplicados a la cola estructurada, validá y reportá. Prepará el cambio únicamente en la rama automation/news del run actual. No redactes una nota ni publiques en canales externos.",
+  "branch_template": "automation/news/{run_id}",
+  "status": "paused",
+  "registered": false,
+  "catch_up": false,
+  "permissions": {
+    "repository_writes": [".automation/news/queue/**", ".automation/reports/**"],
+    "git_push": ["automation/news/{run_id}"],
+    "external_publish": false
+  }
+}

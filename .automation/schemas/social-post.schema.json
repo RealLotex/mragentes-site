@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mragentes.com.ar/schemas/social-post-v1.schema.json",
+  "title": "MR Agentes social post draft",
+  "description": "Closed, remote-result-free contract for daily and blog-note social drafts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "kind",
+    "topic",
+    "topic_hash",
+    "content_hash",
+    "dedupe_key",
+    "asset",
+    "captions",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 250
+    },
+    "kind": {
+      "enum": ["daily_owned", "blog_note"]
+    },
+    "topic": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "topic_hash": {
+      "type": "string",
+      "pattern": "^sha256:[A-Za-z0-9][A-Za-z0-9._:-]*$",
+      "maxLength": 200
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^sha256:[A-Za-z0-9][A-Za-z0-9._:-]*$",
+      "maxLength": 200
+    },
+    "dedupe_key": {
+      "type": "string",
+      "pattern": "^(?:daily_owned|blog_note):\\d{4}-\\d{2}-\\d{2}:.+$",
+      "maxLength": 500
+    },
+    "asset": {
+      "$ref": "#/$defs/asset"
+    },
+    "captions": {
+      "$ref": "#/$defs/captions"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "note_slug": {
+      "type": "string",
+      "pattern": "^[^/\\\\?#\\s]+(?:-[^/\\\\?#\\s]+)*$",
+      "maxLength": 250
+    },
+    "note_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://mragentes\\.com\\.ar/",
+      "maxLength": 2048
+    },
+    "deploy_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    }
+  },
+  "$defs": {
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "alt"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^static/images/(?:social|stock)/[A-Za-z0-9][A-Za-z0-9._/-]*\\.(?:png|jpe?g|webp)$",
+          "maxLength": 512
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "alt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "pattern": "^[^<>]+$"
+        }
+      }
+    },
+    "captions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["facebook", "instagram"],
+      "properties": {
+        "facebook": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 63206
+        },
+        "instagram": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2200
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "blog_note"
+          }
+        },
+        "required": ["kind"]
+      },
+      "then": {
+        "required": ["note_slug", "note_url", "deploy_sha"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "daily_owned"
+          }
+        },
+        "required": ["kind"]
+      },
+      "then": {
+        "not": {
+          "anyOf": [
+            {
+              "required": ["note_slug"]
+            },
+            {
+              "required": ["note_url"]
+            },
+            {
+              "required": ["deploy_sha"]
+            }
+          ]
+        },
+        "properties": {
+          "asset": {
+            "properties": {
+              "path": {
+                "pattern": "^static/images/social/[A-Za-z0-9][A-Za-z0-9._/-]*\\.(?:png|jpe?g|webp)$"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

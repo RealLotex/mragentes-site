@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mragentes.com.ar/schemas/news-item-v1.schema.json",
+  "title": "MR Agentes news item",
+  "description": "Closed contract for one verified item in the durable editorial queue.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "canonical_url",
+    "source",
+    "entity",
+    "published_at",
+    "discovered_at",
+    "status",
+    "evidence",
+    "tags"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^news-v1-[A-Za-z0-9-]+$",
+      "maxLength": 100
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "canonical_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "maxLength": 2048
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "entity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "discovered_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "enum": ["pending", "reserved", "consumed", "rejected"]
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "maxItems": 50,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 100,
+        "pattern": "^[^<>]+$"
+      }
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "language": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20
+    },
+    "geography": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "editorial_notes": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "reserved_by": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "reserved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "consumed_by": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "consumed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rejection_reason": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "reconsider_rejected": {
+      "const": true
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "claim"],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://",
+          "maxLength": 2048
+        },
+        "claim": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "reserved"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["reserved_by", "reserved_at"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "consumed"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["consumed_by", "consumed_at"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "rejected"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["rejection_reason"]
+      }
+    }
+  ]
+}

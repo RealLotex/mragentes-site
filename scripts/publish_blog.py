@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Publicador de blog MR Agentes — v2 simplificada.
-Toma un JSON generado por el agente y crea la nota en Hugo + push.
+Adaptador editorial local heredado de MR Agentes.
+Toma un JSON ya validado y crea una nota Hugo sin efectos remotos.
 
 El agente se encarga de:
   - Investigar tendencias
@@ -11,9 +11,7 @@ El agente se encarga de:
 Este script solo hace:
   - Copiar imagen al directorio de stock
   - Crear archivo Hugo .md
-  - git commit + push
-  - Enviar notificación push (si está configurado)
-  - Trackear estado
+  - Dejar los archivos listos para la transacción Git gobernada
 
 Uso:
   python3 scripts/publish_blog.py post.json
@@ -25,11 +23,9 @@ import os
 import sys
 import json
 import shutil
-import subprocess
 import datetime
 import re
 import argparse
-import urllib.parse
 from pathlib import Path
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -122,44 +118,6 @@ def copy_image_to_stock(image_path):
     return dest_name
 
 
-def git_commit_push(filepath, title):
-    """Commit y push de la nueva nota al repo."""
-    original_cwd = os.getcwd()
-    try:
-        os.chdir(BASE_DIR)
-
-        subprocess.run(["git", "add", filepath], check=True, capture_output=True)
-
-        # También agregar la imagen si se copió
-        subprocess.run(
-            ["git", "add", os.path.join("static", "images", "stock")],
-            check=True, capture_output=True
-        )
-
-        commit_msg = f"📝 Nueva nota: {title}"
-        subprocess.run(
-            ["git", "commit", "-m", commit_msg],
-            check=True, capture_output=True
-        )
-
-        result = subprocess.run(
-            ["git", "push", "origin", "main"],
-            check=True, capture_output=True, text=True
-        )
-
-        print(f"✅ Push exitoso: {commit_msg}")
-        return True
-
-    except subprocess.CalledProcessError as e:
-        err = e.stderr
-        if isinstance(err, bytes):
-            err = err.decode()
-        print(f"❌ Error en git: {err}")
-        return False
-    finally:
-        os.chdir(original_cwd)
-
-
 def _load_dotenv():
     """Carga el .env de la raíz (si existe) para que las claves salgan de ahí."""
     try:
@@ -171,85 +129,6 @@ def _load_dotenv():
         except ImportError:
             return
     load_dotenv()
-
-
-def send_push_notification(title, filepath, image_filename=None):
-    """Enviar notificación push a suscriptores vía Cloudflare Worker."""
-    _load_dotenv()
-    config_file = os.path.join(BASE_DIR, "scripts", "config.local.json")
-    config = {}
-    if os.path.exists(config_file):
-        try:
-            with open(config_file) as f:
-                config = json.load(f)
-        except (json.JSONDecodeError, OSError):
-            pass
-
-    worker_url = config.get("pushWorkerUrl", "") or os.environ.get("PUSH_WORKER_URL", "")
-    api_token = config.get("pushApiToken", "") or os.environ.get("PUSH_API_TOKEN", "")
-
-    if not worker_url or not api_token:
-        print("  ℹ️  Push notification no configurada")
-        return
-
-    # La URL sale del nombre del archivo, que es de donde Hugo saca el permalink
-    # (/notas/:slug/ con :slug = nombre del .md, fecha incluida). Derivarla del
-    # título dejaba afuera la fecha y el aviso llevaba a una página que no existe.
-    slug = os.path.splitext(os.path.basename(filepath))[0]
-    url = f"https://mragentes.com.ar/notas/{urllib.parse.quote(slug)}/"
-    
-    # Short title: max 7 words
-    words = title.split()
-    short_title = ' '.join(words[:7])
-    if len(words) > 7:
-        short_title += '…'
-
-    try:
-        import urllib.request
-        try:
-            from scripts.push_payload import build_payload
-        except ImportError:
-            from push_payload import build_payload
-        payload_data = build_payload(
-            short_title,
-            "Accedé para leer esta nota en nuestra web.",
-            url,
-            f"{STOCK_IMAGES_DIR}{image_filename}" if image_filename else None,
-        )
-        payload_data["token"] = api_token
-        payload = json.dumps(payload_data).encode()
-        req = urllib.request.Request(
-            f"{worker_url}/api/send/",
-            data=payload,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            result = json.loads(resp.read())
-            sent = result.get('sent', 0)
-            failed = result.get('failed', 0)
-            print(f"  🔔 Push: {sent} enviadas, {failed} fallidas")
-    except Exception as e:
-        print(f"  ⚠️  Push notification error: {e}")
-
-
-def announce_on_social(filepath):
-    """Aviso de nota nueva en Facebook e Instagram (ver scripts/social/).
-
-    Compone las piezas con la imagen de portada de la nota. Publica desde acá
-    sólo si SOCIAL_LOCAL_PUBLISH=1; si no, lo hace el workflow de GitHub.
-    Nunca corta el flujo: la nota ya está en la web.
-    """
-    try:
-        from scripts.social.hook import announce
-    except ImportError:
-        sys.path.insert(0, BASE_DIR)  # la raíz del repo, para que `scripts` sea paquete
-        try:
-            from scripts.social.hook import announce
-        except ImportError as exc:
-            print(f"  ⚠️  Redes: no pude cargar el social manager ({exc})")
-            return
-    announce(filepath)
 
 
 # ─── MAIN ─────────────────────────────────────────────────────────────────
@@ -329,39 +208,23 @@ def publish_blog_post(json_path, dry_run=False, force=False):
         print(f"\n🔍 DRY RUN — Nota creada sin push: {filepath}")
         return True
 
-    # 3. Git commit + push
-    success = git_commit_push(filepath, title)
-
-    if success:
-        # 4. Notificación push
-        send_push_notification(title, filepath, image_filename)
-
-        # 4b. Aviso en Facebook e Instagram, con la imagen de la nota
-        announce_on_social(filepath)
-
-        # 5. Actualizar estado
-        state = load_state()
-        if "used_images" not in state:
-            state["used_images"] = []
-        if image_filename not in state["used_images"]:
-            state["used_images"].append(image_filename)
-            # Mantener solo últimas 30 imágenes usadas
-            if len(state["used_images"]) > 30:
-                state["used_images"] = state["used_images"][-30:]
-
-        state["published"] = state.get("published", [])
-        state["published"].append({
-            "title": title,
-            "date": datetime.date.today().isoformat(),
-            "slug": slugify(title),
-            "image": image_filename,
-        })
-        save_state(state)
-        print(f"\n🎉 Nota publicada: {title}")
-    else:
-        print(f"\n⚠️  Nota creada localmente pero falló el push: {filepath}")
-
-    return success
+    # La promoción Git, el despliegue, Meta y push pertenecen a workflows
+    # separados y sólo se habilitan después de sus health gates.
+    state = load_state()
+    state.setdefault("used_images", [])
+    if image_filename not in state["used_images"]:
+        state["used_images"].append(image_filename)
+        state["used_images"] = state["used_images"][-30:]
+    state.setdefault("published", []).append({
+        "title": title,
+        "date": datetime.date.today().isoformat(),
+        "slug": slugify(title),
+        "image": image_filename,
+        "status": "prepared",
+    })
+    save_state(state)
+    print(f"\n✅ Nota preparada localmente: {title}")
+    return True
 
 
 def main():

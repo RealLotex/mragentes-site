@@ -1,0 +1,6 @@
+interface:
+  display_name: "MR Agentes Social Manager"
+  short_description: "Crea y recupera drafts sociales seguros"
+  default_prompt: "Usá $mragentes-social-manager en modo daily_owned y ejecutá primero un dry-run."
+policy:
+  allow_implicit_invocation: true

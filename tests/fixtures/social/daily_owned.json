@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "run_id": "social-daily-owned-2026-08-26",
+  "kind": "daily_owned",
+  "topic": "Cómo validar una automatización antes de publicarla",
+  "topic_hash": "sha256:topic-41b6",
+  "content_hash": "sha256:content-92a1",
+  "dedupe_key": "daily_owned:2026-08-26:sha256:content-92a1",
+  "asset": {
+    "path": "static/images/social/generated/daily-owned-2026-08-26.png",
+    "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "alt": "Lista visual de controles para validar una automatización."
+  },
+  "captions": {
+    "facebook": "Validar antes de publicar evita retrabajo. Más información en el sitio.",
+    "instagram": "Validar antes de publicar evita retrabajo. #Automatización #IA"
+  },
+  "created_at": "2026-08-26T12:00:00Z"
+}

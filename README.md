@@ -1,142 +1,126 @@
-# mragentes.com.ar
+# MR Agentes
 
-Sitio de MR Agentes — automatización de procesos y agentes de IA para pymes.
-Gálvez, provincia de Santa Fe.
+Sitio público de [mragentes.com.ar](https://mragentes.com.ar/) y automatización editorial
+de MR Agentes. Hugo produce la web estática, GitHub Pages la publica y los flujos posteriores
+distribuyen cada cambio validado a Meta y al servicio de Web Push.
 
-Hugo (extended) → GitHub Pages, publicado por GitHub Actions en cada push a `main`.
+El sistema está diseñado para operar con Codex, tareas programadas de ChatGPT, GitHub,
+Cloudflare y Meta. No necesita otro proceso local permanente para publicar.
 
----
+## Resultado operativo
 
-## Arrancar en local
+- Una nota nueva cada miércoles y otra cada domingo: dos notas por semana.
+- Relevamiento diario de noticias; una nota puede seleccionar noticias de días anteriores.
+- Una pieza social original todos los días en Facebook e Instagram.
+- Un anuncio social adicional de cada nota, después de comprobar que ya está desplegada.
+- Una notificación push por nota y una notificación de bienvenida para cada alta nueva.
+- Aplicación de Meta en modo `testing` hasta que el propietario decida promoverla.
+
+Los horarios, recuperación y activación están en [OPERATIONS.md](OPERATIONS.md). Los límites
+de cada componente están en [ARCHITECTURE.md](ARCHITECTURE.md) y el manejo de credenciales
+en [SECURITY.md](SECURITY.md).
+
+## Flujo de una publicación
+
+1. Una tarea de ChatGPT ejecuta la skill correspondiente dentro de un worktree.
+2. La tarea genera únicamente artefactos permitidos y una rama `automation/**`.
+3. `.github/workflows/automation-intake.yml` abre o reutiliza un pull request y solicita
+   merge automático sólo después de CI.
+4. Un merge a `main` ejecuta tests, compila Hugo y publica el artefacto en GitHub Pages.
+5. El health gate confirma URL canónica, marcador de la nota e imagen pública.
+6. Recién entonces GitHub Actions entrega el anuncio a Facebook e Instagram y solicita una
+   única notificación al Cloudflare Worker.
+
+Cada efecto remoto tiene identidad estable. Una reejecución reconcilia lo ya confirmado y
+continúa sólo lo que falta; un resultado incierto se detiene para revisión.
+
+## Estructura
+
+```text
+.agents/skills/              skills nativas para noticias, blog y social
+.automation/
+  schedules/                 contratos de las cuatro tareas de ChatGPT
+  schemas/                   schemas de noticias, notas y publicaciones sociales
+  news/                      cola estructurada y reservas editoriales
+  blog/                      estado transaccional de cada nota
+  social/drafts/             borradores diarios cerrados por fecha
+  reports/                   evidencia operativa sin secretos
+.github/workflows/           CI, intake, Pages, Meta y notificaciones
+assets/                      CSS y JavaScript procesados por Hugo
+  js/push.js                 alta, renovación y baja de Web Push
+content/notas/               fuente canónica de las notas publicadas
+layouts/                     plantillas Hugo
+scripts/automation/          validadores, detección, preflight y simuladores
+scripts/notifications/       contrato cliente para una notificación por nota
+scripts/social/              render, validación, entrega y ledger idempotente
+static/
+  images/stock/              imágenes editoriales públicas
+  images/social/             recursos sociales diarios públicos
+  sw.js                      recepción segura de Web Push
+cf_worker.js                 Worker canónico de suscripciones y fan-out push
+```
+
+`public/` es un artefacto de build y no se versiona. Los assets de presentación que pasan por
+Hugo Pipes viven en `assets/`; las imágenes que debe descargar Meta o un navegador viven en
+`static/`.
+
+## Desarrollo local
+
+Requisitos:
+
+- Python 3.12.
+- Node.js 18.19 o superior.
+- Hugo Extended 0.128.0, igual que el workflow de Pages.
+
+Preparación reproducible:
 
 ```bash
-hugo server -D          # http://localhost:1313
-hugo                    # compila a public/
+python -m venv .venv
+.venv/bin/python -m pip install --require-hashes -r requirements-test.lock.txt
+npm ci
 ```
 
-Requiere Hugo **extended** 0.128 o superior (la versión que usa el workflow está
-fijada en `.github/workflows/deploy.yml`; conviene que la local coincida).
-
----
-
-## Cómo está organizado
-
-```
-assets/          CSS y JS que pasan por Hugo Pipes (se minifican y llevan huella)
-  css/main.css   hoja única, ordenada por secciones numeradas
-  js/site.js     menú angosto + filtro del índice de notas
-  js/push.js     avisos de nota nueva (Web Push)
-content/         markdown de las páginas y las notas
-layouts/         plantillas
-  _default/      baseof, single (páginas sueltas), thanks
-  notas/         list (índice) y single (artículo)
-  tags/          list (todos los temas) y term (un tema)
-  partials/      masthead, colophon, closer, schema
-  shortcodes/    ficha (tabla de especificación), contacto (formulario + canales)
-static/          se copia tal cual: fuentes, imágenes, sw.js, manifest, robots
-scripts/         publicación automática de notas (Python, fuera del build)
-  social/        composición y publicación de las piezas de Instagram y Facebook
-```
-
-### Decisiones que conviene no deshacer sin pensarlo
-
-**Las hojas y los scripts viven en `assets/`, no en `static/`.** Ahí Hugo los
-minifica y les agrega una huella digital al nombre
-(`main.min.<hash>.css`), con su `integrity` correspondiente. Es lo que permite
-cachearlos para siempre sin que nadie quede con una versión vieja. Si se mueven a
-`static/` vuelve el `?v=21` a mano, que es justo lo que esto reemplazó.
-
-**Las fuentes son autoalojadas** (`static/fonts/`, subconjunto latino, WOFF2).
-No hay `@import` a `fonts.googleapis.com`: bloqueaba el dibujado contra un dominio
-ajeno y mandaba la IP de cada visitante a un tercero. Las dos que pintan la primera
-pantalla van con `<link rel="preload">` en `baseof.html`.
-
-**`public/` no se versiona.** Lo genera el workflow. Estuvo commiteado un tiempo;
-se sacó del índice con `git rm -r --cached public/`.
-
-**El front matter de las notas no cambió.** `scripts/publish_daily.py` sigue
-escribiendo `title`, `date`, `description`, `image`, `image_alt` y `tags` igual que
-antes. El campo `image` ya no se pinta arriba del artículo, pero se sigue usando
-para las tarjetas de Facebook, WhatsApp y Twitter al compartir — no lo saques.
-
-**El service worker precarga sólo rutas estables.** Los nombres con huella cambian
-en cada publicación, así que no se pueden precargar por nombre; el resto se guarda
-en el cache a medida que se pide (`static/sw.js`).
-
----
-
-## El sistema visual, en corto
-
-Está documentado para quien lo lea en **[/colofon/](https://mragentes.com.ar/colofon/)**
-(`content/colofon.md`) y comentado en `assets/css/main.css`. Lo mínimo:
-
-- **Referencia:** lámina anatómica y hoja de especificación técnica. Papel hueso,
-  tinta negra cálida, filetes de 1 px, columna de claves al margen, figuras
-  numeradas.
-- **Tipografías:** Archivo y Chivo Mono (Omnibus-Type) y Alegreya (Huerta
-  Tipográfica) — las tres dibujadas en Argentina.
-- **Un solo acento:** `--minio` (#a8391b), el naranja del antióxido.
-- **Sin tarjetas.** Lo que sería una grilla de recuadros con sombra es una lista
-  reglada (`.ledger`, `.index`, `.spec`, `.channels`).
-- **Sin animaciones de entrada.** Sólo se mueve lo que responde a una acción.
-- **Sin analítica ni cookies**, y por eso sin cartel de cookies.
-
-La grilla `.sheet` tiene tres columnas nombradas: `key` (claves al margen), `text`
-(medida de lectura) y `aside` (marginalia). Por debajo de 62rem colapsa a una.
-Ojo con eso: los hijos colocados por nombre de línea necesitan volver a
-`grid-column: auto` en la consulta de medios, y con selectores de igual o mayor
-especificidad — una consulta de medios no agrega especificidad por sí sola.
-
----
-
-## Publicación
-
-`git push` a `main` dispara `.github/workflows/deploy.yml`.
-
-Las notas diarias las escribe `scripts/publish_daily.py`, que crea el archivo en
-`content/notas/`, commitea y pushea. El deploy es el mismo.
-
-### Y el aviso en redes sale solo
-
-El mismo push dispara `.github/workflows/social.yml`: compone cuatro láminas
-4:5 y una historia 9:16 con la imagen de portada de la nota, las publica en
-Facebook e Instagram y deja registro para no repetir. Todo con el sistema
-visual de esta hoja de estilo — mismos colores, mismas tipografías, la misma
-mano grabada.
-
-Está documentado en **[`scripts/social/README.md`](scripts/social/README.md)**.
-Lo mínimo:
+Verificación completa:
 
 ```bash
-pip install -r scripts/requirements.txt
-cp .env.example .env                          # completar las claves de Meta
-python3 -m scripts.social doctor              # ¿está todo?
-python3 -m scripts.social gallery             # muestrario de las 15 plantillas
-python3 -m scripts.social publish-nota --latest --dry-run
+.venv/bin/python -m pytest -q
+npm test
+hugo --quiet --minify --baseURL https://mragentes.com.ar/ --destination /tmp/mragentes-build
 ```
 
-Los tres secretos que necesita el workflow (`META_ACCESS_TOKEN`, `FB_PAGE_ID`,
-`IG_USER_ID`) van en *Settings → Secrets and variables → Actions*. Sin ellos no
-falla nada: compone las piezas, las deja en `static/social/` y avisa qué falta.
-
-### Credenciales
-
-Nada de tokens en el código ni en archivos versionados. Todo sale de `.env`
-(que está en `.gitignore`) o de los secretos de Actions; `.env.example` es la
-plantilla vacía y sí se versiona. Para revisar que no se haya escapado nada:
+Vista previa:
 
 ```bash
-python3 scripts/scan_secrets.py --all    # árbol de trabajo + historial completo
+hugo server -D
 ```
 
----
+Abrí `http://localhost:1313` y revisá como mínimo portada, servicios, índice de notas, una
+nota y contacto a 390 px y 1440 px. No aceptes desborde horizontal, enlaces rotos ni una
+imagen social ausente.
 
-## Antes de dar por cerrada una tanda de cambios
+## Desarrollo por contratos
+
+Todo cambio sigue PLAN → test RED → implementación → test GREEN → verificación proporcional.
+Las suites Python cubren schemas, publicación, seguridad e independencia. Las suites de
+JavaScript cubren Worker, cliente push y service worker. Una prueba local nunca habilita por
+sí sola un efecto externo.
+
+Comandos focalizados útiles:
 
 ```bash
-hugo --quiet --destination /tmp/build   # tiene que salir sin advertencias
+.venv/bin/python -m pytest -q tests/static/test_runtime_independence.py
+.venv/bin/python -m pytest -q tests/unit/social tests/contract/test_meta_api.py
+npm test -- --run tests-js/push-client.test.mjs tests-js/service-worker.test.mjs
 ```
 
-Y revisar a ojo, como mínimo: portada, `/servicios/`, `/notas/`, una nota, y
-`/contacto/` — cada una a 390 px y a 1440 px. El desborde horizontal en pantallas
-angostas es el error que más fácil se cuela.
+## Fuentes de verdad
+
+- `main` es el estado publicable del sitio.
+- `content/notas/*.md` define las notas; su `slug` explícito define la URL canónica.
+- `.automation/schedules/*.json` define horario, skill, permisos y estado de cada tarea.
+- `.automation/schemas/*.json` define la forma de los artefactos automáticos.
+- Los entornos protegidos de GitHub contienen la configuración sensible.
+- Cloudflare conserva suscripciones y estado de notificaciones; Meta conserva publicaciones.
+
+No edites a mano una salida remota para “arreglar” el estado local. Usá el runbook de
+reconciliación de [OPERATIONS.md](OPERATIONS.md).

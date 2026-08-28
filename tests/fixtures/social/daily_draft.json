@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "run_id": "social:daily_owned:2026-08-26",
+  "kind": "daily_owned",
+  "local_date": "2026-08-26",
+  "dedupe_key": "social:daily_owned:2026-08-26",
+  "content_hash": "sha256:8cf76bf86fb425c6c498f96315c72bad273adeebbc1667463f2f5b10c0b4dd31",
+  "asset": {
+    "path": "static/social/drafts/2026-08-26.jpg",
+    "sha256": "1cc9e31b6f5db8a2793f7791b65c44fd95567265401af3a84a31f5d3065b11d8",
+    "alt": "Una hoja de trabajo con pasos de automatización"
+  },
+  "captions": {
+    "facebook": "Una idea propia para automatizar con criterio.",
+    "instagram": "Una idea propia para automatizar con criterio. #MRAgentes"
+  }
+}

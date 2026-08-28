@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "viewports": {
+    "mobile": {"width": 390, "height": 844},
+    "desktop": {"width": 1440, "height": 1000}
+  },
+  "site": [
+    {"page": "home", "path": "/", "viewport": "mobile"},
+    {"page": "home", "path": "/", "viewport": "desktop"},
+    {"page": "notas", "path": "/notas/", "viewport": "mobile"},
+    {"page": "notas", "path": "/notas/", "viewport": "desktop"},
+    {"page": "nota", "path": "/notas/fixture/", "viewport": "mobile"},
+    {"page": "nota", "path": "/notas/fixture/", "viewport": "desktop"},
+    {"page": "colophon", "path": "/colophon/", "viewport": "mobile"},
+    {"page": "colophon", "path": "/colophon/", "viewport": "desktop"}
+  ],
+  "push_states": [
+    "unsupported",
+    "ios-install",
+    "off",
+    "requesting",
+    "on",
+    "welcome-confirmed",
+    "error"
+  ]
+}

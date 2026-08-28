@@ -138,6 +138,8 @@ def prune_old_pieces(keep: int = 10, log=print) -> list[str]:
     minutos que tarda en descargarlas. Guardarlas para siempre engorda el sitio
     y el repositorio sin que nadie las mire: pasada esa ventana, se borran.
     """
+    if isinstance(keep, bool) or not isinstance(keep, int) or keep < 0:
+        raise ValueError("keep debe ser un entero no negativo")
     if not OUT_DIR.exists():
         return []
     import shutil
@@ -146,7 +148,7 @@ def prune_old_pieces(keep: int = 10, log=print) -> list[str]:
         (d for d in OUT_DIR.iterdir() if d.is_dir() and d.name not in RESERVED_DIRS),
         key=lambda d: d.name,
     )
-    stale = dirs[:-keep] if len(dirs) > keep else []
+    stale = dirs if keep == 0 else (dirs[:-keep] if len(dirs) > keep else [])
     removed = []
     for d in stale:
         shutil.rmtree(d, ignore_errors=True)

@@ -1,0 +1,22 @@
+{
+  "runtime": "Pillow-10.2-DejaVuSans",
+  "surface": "test-feed-360x360",
+  "seed": 7,
+  "sha256_prefix": {
+    "nota": "d4dd397e8af0ce63",
+    "titular": "dcaa8bd972ea74e8",
+    "dato": "602bc49bc4e65aa1",
+    "cita": "45dc0b8c43e25aa8",
+    "lista": "0f82e408c38a1509",
+    "mito": "e7c297580179fcf3",
+    "comparativa": "30bfa3deed8ade15",
+    "ficha": "9840c5aeb57205df",
+    "pasos": "54c6ee0e1cf3a20a",
+    "pregunta": "be86dc2d2eb9c3a0",
+    "glosario": "3f36ed3050cb672a",
+    "caso": "54c6ee0e1cf3a20a",
+    "anuncio": "860ee180320be01c",
+    "agenda": "54c6ee0e1cf3a20a",
+    "punto": "4510d26c2c0b1336"
+  }
+}

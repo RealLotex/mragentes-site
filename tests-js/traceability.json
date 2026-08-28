@@ -1,0 +1,1916 @@
+[
+  {
+    "id": "PUSH-AUTH-001",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "tokenOk acepta exclusivamente strings idénticos",
+    "source_symbols": [
+      "workers/push/src/auth.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-AUTH-001] tokenOk acepta exclusivamente strings idénticos"
+    ]
+  },
+  {
+    "id": "PUSH-AUTH-002",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "tokenOk rechaza valores ausentes y tipos no string",
+    "source_symbols": [
+      "workers/push/src/auth.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-AUTH-002] tokenOk rechaza valores ausentes y tipos no string"
+    ]
+  },
+  {
+    "id": "PUSH-AUTH-003",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "tokenOk rechaza diferencias de cualquier posición con igual longitud",
+    "source_symbols": [
+      "workers/push/src/auth.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-AUTH-003] tokenOk rechaza diferencias de cualquier posición con igual longitud"
+    ]
+  },
+  {
+    "id": "PUSH-AUTH-004",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "tokenOk rechaza longitudes distintas y secretos vacíos",
+    "source_symbols": [
+      "workers/push/src/auth.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-AUTH-004] tokenOk rechaza longitudes distintas y secretos vacíos"
+    ]
+  },
+  {
+    "id": "PUSH-AUTH-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "forbidden devuelve un error uniforme que no refleja credenciales",
+    "source_symbols": [
+      "workers/push/src/auth.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-AUTH-005] forbidden devuelve un error uniforme que no refleja credenciales"
+    ]
+  },
+  {
+    "id": "PUSH-AUTH-006",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "validateOrigin usa una allowlist exacta de origins HTTPS",
+    "source_symbols": [
+      "workers/push/src/auth.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-AUTH-006] validateOrigin usa una allowlist exacta de origins HTTPS"
+    ]
+  },
+  {
+    "id": "PUSH-AUTH-007",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "preflight sólo refleja un origin permitido y declara Vary Origin",
+    "source_symbols": [
+      "workers/push/src/auth.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-AUTH-007] preflight sólo refleja un origin permitido y declara Vary Origin"
+    ]
+  },
+  {
+    "id": "PUSH-AUTH-008",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "un origin no permitido recibe 403 sin CORS permisivo",
+    "source_symbols": [
+      "workers/push/src/auth.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-AUTH-008] un origin no permitido recibe 403 sin CORS permisivo"
+    ]
+  },
+  {
+    "id": "PUSH-AUTH-009",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "send autentica sólo con Authorization y nunca con token en JSON",
+    "source_symbols": [
+      "workers/push/src/auth.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-AUTH-009] send autentica sólo con Authorization y nunca con token en JSON"
+    ]
+  },
+  {
+    "id": "PUSH-AUTH-010",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "Authorization ausente, malformado o incorrecto produce la misma respuesta",
+    "source_symbols": [
+      "workers/push/src/auth.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-AUTH-010] Authorization ausente, malformado o incorrecto produce la misma respuesta"
+    ]
+  },
+  {
+    "id": "PUSH-AUTH-011",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "endpoints debug y clear-all son 404 en producción",
+    "source_symbols": [
+      "workers/push/src/auth.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-AUTH-011] endpoints debug y clear-all son 404 en producción"
+    ]
+  },
+  {
+    "id": "PUSH-AUTH-012",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "errores internos incluyen request ID pero no stack, binding ni mensaje sensible",
+    "source_symbols": [
+      "workers/push/src/auth.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-AUTH-012] errores internos incluyen request ID pero no stack, binding ni mensaje sensible"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-001",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "meta distingue ausente y normaliza vacío, whitespace y valor",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-001] meta distingue ausente y normaliza vacío, whitespace y valor"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-002",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "b64ToBytes soporta base64url, padding, vacío, binario y rechaza inválido",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-002] b64ToBytes soporta base64url, padding, vacío, binario y rechaza inválido"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-003",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "iosNeedsInstall cubre iPhone, iPadOS desktop, standalone y matchMedia ausente",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-003] iosNeedsInstall cubre iPhone, iPadOS desktop, standalone y matchMedia ausente"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-004",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "supported evalúa todas las combinaciones sin acceder globals ausentes",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-004] supported evalúa todas las combinaciones sin acceder globals ausentes"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "keyMatches exige claves presentes, verificables y byte a byte iguales",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-005] keyMatches exige claves presentes, verificables y byte a byte iguales"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-006",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "init tolera DOM parcial y bloquea configuración API/VAPID ausente",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-006] init tolera DOM parcial y bloquea configuración API/VAPID ausente"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-007",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "unsupported y permiso denied ocultan botón con feedback accesible",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-007] unsupported y permiso denied ocultan botón con feedback accesible"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-008",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "init no anuncia activo hasta confirmación remota de la suscripción",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-008] init no anuncia activo hasta confirmación remota de la suscripción"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-009",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "init se ejecuta exactamente una vez aunque DOMContentLoaded se observe dos veces",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-009] init se ejecuta exactamente una vez aunque DOMContentLoaded se observe dos veces"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-010",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "render ofrece labels on/off/loading/error, aria-pressed y foco estable",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-010] render ofrece labels on/off/loading/error, aria-pressed y foco estable"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-011",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "revalidate diferencia sin sub y clave igual sin recrearla",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-011] revalidate diferencia sin sub y clave igual sin recrearla"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-012",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "clave VAPID rotada espera drop remoto completo antes de add",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-012] clave VAPID rotada espera drop remoto completo antes de add"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-013",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "KV perdido re-registra silenciosamente y no solicita bienvenida",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-013] KV perdido re-registra silenciosamente y no solicita bienvenida"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-014",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "add pide permiso y subscribe usa userVisibleOnly más VAPID exacta",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-014] add pide permiso y subscribe usa userVisibleOnly más VAPID exacta"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-015",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "rechazo, timeout o red del POST hacen rollback local y feedback de error",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-015] rechazo, timeout o red del POST hacen rollback local y feedback de error"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-016",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "doble click sólo inicia una operación y finally siempre rehabilita botón",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-016] doble click sólo inicia una operación y finally siempre rehabilita botón"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-017",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "drop espera baja remota, hace local una vez y persiste retry ante error",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-017] drop espera baja remota, hace local una vez y persiste retry ante error"
+    ]
+  },
+  {
+    "id": "PUSH-CLIENT-018",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "drop no deja fetch flotante ni muestra off antes de terminar",
+    "source_symbols": [
+      "assets/js/push.js"
+    ],
+    "test_paths": [
+      "tests-js/push-client.test.mjs::[PUSH-CLIENT-018] drop no deja fetch flotante ni muestra off antes de terminar"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-001",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "primera adquisición crea evento pending y devuelve acquired",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-001] primera adquisición crea evento pending y devuelve acquired"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-002",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "mismo eventId y payloadHash es dedupe, no nueva adquisición",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-002] mismo eventId y payloadHash es dedupe, no nueva adquisición"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-003",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "mismo eventId con hash distinto es conflicto 409",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-003] mismo eventId con hash distinto es conflicto 409"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-004",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "adquisiciones seriales de eventos distintos conservan ambos estados",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-004] adquisiciones seriales de eventos distintos conservan ambos estados"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "dos adquisiciones concurrentes del mismo evento producen un único owner",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-005] dos adquisiciones concurrentes del mismo evento producen un único owner"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-006",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "evento complete no se readquiere en re-run",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-006] evento complete no se readquiere en re-run"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-007",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "evento partial permite sólo entregas retryable pendientes",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-007] evento partial permite sólo entregas retryable pendientes"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-008",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "evento uncertain nunca se reenvía automáticamente",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-008] evento uncertain nunca se reenvía automáticamente"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-009",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "estado persiste al construir otra instancia con el mismo storage",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-009] estado persiste al construir otra instancia con el mismo storage"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-010",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "acquireDelivery crea una sola entrega pending por suscripción",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-010] acquireDelivery crea una sola entrega pending por suscripción"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-011",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "transiciones de entrega usan compare-and-set y rechazan orden inválido",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-011] transiciones de entrega usan compare-and-set y rechazan orden inválido"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-012",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "una entrega retryable obtiene como máximo una tentativa automática adicional",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-012] una entrega retryable obtiene como máximo una tentativa automática adicional"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-013",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "crash antes de fetch deja pending reanudable sin consumir tentativa",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-013] crash antes de fetch deja pending reanudable sin consumir tentativa"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-014",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "crash después de iniciar fetch queda uncertain tras recovery",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-014] crash después de iniciar fetch queda uncertain tras recovery"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-015",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "resolución manual de uncertain exige admin y deja auditoría",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-015] resolución manual de uncertain exige admin y deja auditoría"
+    ]
+  },
+  {
+    "id": "PUSH-COORD-016",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "error dentro de transacción no deja estado parcialmente escrito",
+    "source_symbols": [
+      "workers/push/src/coordinator.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-COORD-016] error dentro de transacción no deja estado parcialmente escrito"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-001",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "base64url round-trip cubre vacío y bytes binarios arbitrarios",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-001] base64url round-trip cubre vacío y bytes binarios arbitrarios"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-002",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "decode acepta padding opcional pero encode siempre produce forma canónica",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-002] decode acepta padding opcional pero encode siempre produce forma canónica"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-003",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "decode rechaza alfabeto, padding y longitudes no canónicas",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-003] decode rechaza alfabeto, padding y longitudes no canónicas"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-004",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "concatBytes soporta 0/1/N partes y no muta inputs",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-004] concatBytes soporta 0/1/N partes y no muta inputs"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "hkdf coincide con RFC 5869 caso 1 SHA-256",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-005] hkdf coincide con RFC 5869 caso 1 SHA-256"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-006",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "hkdf retorna exactamente longitudes 0, 1 y 32",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-006] hkdf retorna exactamente longitudes 0, 1 y 32"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-007",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "hkdf rechaza longitud negativa, no entera y mayor a 255 hashLen",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-007] hkdf rechaza longitud negativa, no entera y mayor a 255 hashLen"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-008",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "derLength codifica fronteras 0/127/128/255/256",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-008] derLength codifica fronteras 0/127/128/255/256"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-009",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "derInteger mantiene enteros positivos y padding para 128/255",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-009] derInteger mantiene enteros positivos y padding para 128/255"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-010",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "sequence/octet/bit/tag usan DER corto y largo parseable",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-010] sequence/octet/bit/tag usan DER corto y largo parseable"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-011",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "buildPkcs8PrivateKey produce P-256 importable por WebCrypto",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-011] buildPkcs8PrivateKey produce P-256 importable por WebCrypto"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-012",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "buildPkcs8PrivateKey valida tamaños y no muta claves",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-012] buildPkcs8PrivateKey valida tamaños y no muta claves"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-013",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "VAPID JWT contiene aud exacto, sub y exp no mayor a 12h",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-013] VAPID JWT contiene aud exacto, sub y exp no mayor a 12h"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-014",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "firma VAPID ES256 es verificable y k es la pública canónica",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-014] firma VAPID ES256 es verificable y k es la pública canónica"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-015",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "VAPID rechaza endpoint no HTTPS, subject y claves inválidos",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-015] VAPID rechaza endpoint no HTTPS, subject y claves inválidos"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-016",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "webPushEncrypt hace round-trip sobre el record productivo",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-016] webPushEncrypt hace round-trip sobre el record productivo"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-017",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "webPushEncrypt acepta 0/máximo y rechaza exceso o claves inválidas",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-017] webPushEncrypt acepta 0/máximo y rechaza exceso o claves inválidas"
+    ]
+  },
+  {
+    "id": "PUSH-CRYPTO-018",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "salt/ECDH inyectados hacen vector determinista y otro salt cambia ciphertext",
+    "source_symbols": [
+      "workers/push/src/crypto.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-crypto.test.mjs::[PUSH-CRYPTO-018] salt/ECDH inyectados hacen vector determinista y otro salt cambia ciphertext"
+    ]
+  },
+  {
+    "id": "PUSH-DELIVERY-001",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "classifyPushResponse clasifica 201/202 delivered",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-DELIVERY-001] classifyPushResponse clasifica 201/202 delivered"
+    ]
+  },
+  {
+    "id": "PUSH-DELIVERY-002",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "classifyPushResponse clasifica 404/410 gone",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-DELIVERY-002] classifyPushResponse clasifica 404/410 gone"
+    ]
+  },
+  {
+    "id": "PUSH-DELIVERY-003",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "classifyPushResponse clasifica 408/425/429/5xx retryable",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-DELIVERY-003] classifyPushResponse clasifica 408/425/429/5xx retryable"
+    ]
+  },
+  {
+    "id": "PUSH-DELIVERY-004",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "classifyPushResponse clasifica 400/401/403 invalid sin reintento",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-DELIVERY-004] classifyPushResponse clasifica 400/401/403 invalid sin reintento"
+    ]
+  },
+  {
+    "id": "PUSH-DELIVERY-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "timeout y error de red son uncertain, no retryable",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-DELIVERY-005] timeout y error de red son uncertain, no retryable"
+    ]
+  },
+  {
+    "id": "PUSH-DELIVERY-006",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "recordDelivery persiste outcome, intento y timestamp con reloj fake",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-DELIVERY-006] recordDelivery persiste outcome, intento y timestamp con reloj fake"
+    ]
+  },
+  {
+    "id": "PUSH-DELIVERY-007",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "recordDelivery no persiste endpoint, payload ni provider body",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-DELIVERY-007] recordDelivery no persiste endpoint, payload ni provider body"
+    ]
+  },
+  {
+    "id": "PUSH-DELIVERY-008",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "purgeExpiredDeliveryRecords respeta antes, en y después del cutoff",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-DELIVERY-008] purgeExpiredDeliveryRecords respeta antes, en y después del cutoff"
+    ]
+  },
+  {
+    "id": "PUSH-DELIVERY-009",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "purge usa batch/cursor y se reanuda luego de error parcial",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-DELIVERY-009] purge usa batch/cursor y se reanuda luego de error parcial"
+    ]
+  },
+  {
+    "id": "PUSH-DELIVERY-010",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "purge nunca borra subs, rate limits ni eventos activos",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-DELIVERY-010] purge nunca borra subs, rate limits ni eventos activos"
+    ]
+  },
+  {
+    "id": "PUSH-DELIVERY-011",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "finalizeNotification es idempotente y no altera timestamps al repetir",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-DELIVERY-011] finalizeNotification es idempotente y no altera timestamps al repetir"
+    ]
+  },
+  {
+    "id": "PUSH-DELIVERY-012",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "redactForLog maneja ciclos, Error y headers sin arrojar",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-DELIVERY-012] redactForLog maneja ciclos, Error y headers sin arrojar"
+    ]
+  },
+  {
+    "id": "PUSH-KV-001",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "FakeKV implementa put/get/delete y clona metadata",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-KV-001] FakeKV implementa put/get/delete y clona metadata"
+    ]
+  },
+  {
+    "id": "PUSH-KV-002",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "FakeKV aplica expirationTtl con reloj determinista",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-KV-002] FakeKV aplica expirationTtl con reloj determinista"
+    ]
+  },
+  {
+    "id": "PUSH-KV-003",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "FakeKV pagina en orden determinista y filtra prefijo",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-KV-003] FakeKV pagina en orden determinista y filtra prefijo"
+    ]
+  },
+  {
+    "id": "PUSH-KV-004",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "claves notification, delivery, rate y sub tienen versión y encoding acotado",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-KV-004] claves notification, delivery, rate y sub tienen versión y encoding acotado"
+    ]
+  },
+  {
+    "id": "PUSH-KV-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "listSubscriptionsPaginated tolera valor ausente y reporta corrupto",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-KV-005] listSubscriptionsPaginated tolera valor ausente y reporta corrupto"
+    ]
+  },
+  {
+    "id": "PUSH-KV-006",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "limitedConcurrency procesa 0, 1 y N elementos conservando orden",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-KV-006] limitedConcurrency procesa 0, 1 y N elementos conservando orden"
+    ]
+  },
+  {
+    "id": "PUSH-KV-007",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "limitedConcurrency respeta el máximo y ejecuta cada item una vez",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-KV-007] limitedConcurrency respeta el máximo y ejecuta cada item una vez"
+    ]
+  },
+  {
+    "id": "PUSH-KV-008",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "limitedConcurrency rechaza límite cero/negativo y propaga callback sin flotantes",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-KV-008] limitedConcurrency rechaza límite cero/negativo y propaga callback sin flotantes"
+    ]
+  },
+  {
+    "id": "PUSH-KV-009",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "FetchRouter y ExecutionContextRecorder no permiten red ni promesas ocultas",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-KV-009] FetchRouter y ExecutionContextRecorder no permiten red ni promesas ocultas"
+    ]
+  },
+  {
+    "id": "PUSH-KV-010",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "API productiva no expone clear-all ni listado global de claves",
+    "source_symbols": [
+      "workers/push/src/storage.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-KV-010] API productiva no expone clear-all ni listado global de claves"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-001",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "buildNotificationPayload aplica defaults completos y estables",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-001] buildNotificationPayload aplica defaults completos y estables"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-002",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "conserva Unicode válido sin cortar pares sustitutos",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-002] conserva Unicode válido sin cortar pares sustitutos"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-003",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "URL de destino admite sólo notas del origin canónico",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-003] URL de destino admite sólo notas del origin canónico"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-004",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "publicPostImage acepta imagen stock same-origin con extensión permitida",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-004] publicPostImage acepta imagen stock same-origin con extensión permitida"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "publicPostImage rechaza traversal normal, codificado y backslash",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-005] publicPostImage rechaza traversal normal, codificado y backslash"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-006",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "publicPostImage rechaza protocolo, subdominio, userinfo y puerto alternos",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-006] publicPostImage rechaza protocolo, subdominio, userinfo y puerto alternos"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-007",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "publicPostImage rechaza query, fragmento y extensiones no allowlisted",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-007] publicPostImage rechaza query, fragmento y extensiones no allowlisted"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-008",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "tag y eventId son deterministas y derivan del evento editorial",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-008] tag y eventId son deterministas y derivan del evento editorial"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-009",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "serialización JSON es estable independientemente del orden de input",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-009] serialización JSON es estable independientemente del orden de input"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-010",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "icon y badge son rutas públicas de marca no sobreescribibles",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-010] icon y badge son rutas públicas de marca no sobreescribibles"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-011",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "input con campos extra o tipos estructurados se rechaza",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-011] input con campos extra o tipos estructurados se rechaza"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-012",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "whitespace no cuenta como título, body, URL ni imagen válidos",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-012] whitespace no cuenta como título, body, URL ni imagen válidos"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-013",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "parseRequestBody valida content-type, JSON objeto y body no vacío",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-013] parseRequestBody valida content-type, JSON objeto y body no vacío"
+    ]
+  },
+  {
+    "id": "PUSH-PAYLOAD-014",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "parseRequestBody limita content-length y streams chunked sin leer de más",
+    "source_symbols": [
+      "workers/push/src/payload.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-auth-payload.test.mjs::[PUSH-PAYLOAD-014] parseRequestBody limita content-length y streams chunked sin leer de más"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-001",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "send exige Bearer válido aunque el body contenga token legacy",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-001] send exige Bearer válido aunque el body contenga token legacy"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-002",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "schema exige eventId, payloadHash, title, body y URL de nota",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-002] schema exige eventId, payloadHash, title, body y URL de nota"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-003",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "gate verifica que la URL desplegada responda 200 antes del fan-out",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-003] gate verifica que la URL desplegada responda 200 antes del fan-out"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-004",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "gate 404/redirect/cross-origin aborta sin listar suscripciones",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-004] gate 404/redirect/cross-origin aborta sin listar suscripciones"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "Idempotency-Key y eventId deben coincidir exactamente",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-005] Idempotency-Key y eventId deben coincidir exactamente"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-006",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "cero suscriptores finaliza complete con resumen exacto",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-006] cero suscriptores finaliza complete con resumen exacto"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-007",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "un suscriptor recibe exactamente una entrega",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-007] un suscriptor recibe exactamente una entrega"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-008",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "50 suscriptores se procesan una vez en una página",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-008] 50 suscriptores se procesan una vez en una página"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-009",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "51 suscriptores atraviesan dos páginas sin omitir ni duplicar",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-009] 51 suscriptores atraviesan dos páginas sin omitir ni duplicar"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-010",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "re-run mismo evento y hash responde duplicate sin transporte",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-010] re-run mismo evento y hash responde duplicate sin transporte"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-011",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "mismo eventId con payloadHash distinto devuelve 409 sin fan-out",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-011] mismo eventId con payloadHash distinto devuelve 409 sin fan-out"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-012",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "dos requests concurrentes del mismo evento ejecutan un único fan-out",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-012] dos requests concurrentes del mismo evento ejecutan un único fan-out"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-013",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "edición o deploy CSS no constituyen un nuevo evento de nota",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-013] edición o deploy CSS no constituyen un nuevo evento de nota"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-014",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "resumen cuenta delivered, gone, retryable, uncertain e invalid por separado",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-014] resumen cuenta delivered, gone, retryable, uncertain e invalid por separado"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-015",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "404/410 elimina suscripción; 429/5xx la conserva",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-015] 404/410 elimina suscripción; 429/5xx la conserva"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-016",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "sólo retryable recibe una única reintento automático",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-016] sólo retryable recibe una única reintento automático"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-017",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "valor de suscripción corrupto se cuenta invalid y se elimina sin abortar lote",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-017] valor de suscripción corrupto se cuenta invalid y se elimina sin abortar lote"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-018",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "claves KV ajenas al prefijo sub se ignoran",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-018] claves KV ajenas al prefijo sub se ignoran"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-019",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "cursor cíclico se detecta y falla cerrado",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-019] cursor cíclico se detecta y falla cerrado"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-020",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "límite total impide fan-out accidental ilimitado",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-020] límite total impide fan-out accidental ilimitado"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-021",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "respuesta pública nunca incluye endpoint, provider body ni headers",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-021] respuesta pública nunca incluye endpoint, provider body ni headers"
+    ]
+  },
+  {
+    "id": "PUSH-SEND-022",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "ningún transporte comienza antes de auth, schema, deploy e idempotencia",
+    "source_symbols": [
+      "workers/push/src/index.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-send-coordinator.test.mjs::[PUSH-SEND-022] ningún transporte comienza antes de auth, schema, deploy e idempotencia"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-001",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "validateSubscription normaliza una suscripción Web Push válida sin mutarla",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-001] validateSubscription normaliza una suscripción Web Push válida sin mutarla"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-002",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "validateSubscription exige endpoint HTTPS con host y longitud acotados",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-002] validateSubscription exige endpoint HTTPS con host y longitud acotados"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-003",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "validateSubscription exige p256dh y auth base64url canónicos de tamaño correcto",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-003] validateSubscription exige p256dh y auth base64url canónicos de tamaño correcto"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-004",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "validateSubscription rechaza campos extra y prototipos peligrosos",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-004] validateSubscription rechaza campos extra y prototipos peligrosos"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "subscriptionKey genera hash estable y nunca contiene el endpoint",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-005] subscriptionKey genera hash estable y nunca contiene el endpoint"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-006",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "alta nueva persiste schema versionado bajo clave hasheada y TTL",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-006] alta nueva persiste schema versionado bajo clave hasheada y TTL"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-007",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "upsert idéntico conserva la alta y no programa otra bienvenida",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-007] upsert idéntico conserva la alta y no programa otra bienvenida"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-008",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "rotación de claves actualiza la misma clave sin duplicar suscripción",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-008] rotación de claves actualiza la misma clave sin duplicar suscripción"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-009",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "re-registro por KV perdido se marca revalidation y no envía bienvenida",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-009] re-registro por KV perdido se marca revalidation y no envía bienvenida"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-010",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "body inválido devuelve 400/413/415 sin escribir KV",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-010] body inválido devuelve 400/413/415 sin escribir KV"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-011",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "rate limit permite el límite exacto y rechaza la siguiente alta",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-011] rate limit permite el límite exacto y rechaza la siguiente alta"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-012",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "POST subscribe exige origin permitido incluso siendo endpoint público",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-012] POST subscribe exige origin permitido incluso siendo endpoint público"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-013",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "fallo KV queda redactado y no dispara bienvenida",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-013] fallo KV queda redactado y no dispara bienvenida"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-014",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "bienvenida se entrega exclusivamente mediante ctx.waitUntil",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-014] bienvenida se entrega exclusivamente mediante ctx.waitUntil"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-015",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "logs de alta no contienen endpoint, claves ni body",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-015] logs de alta no contienen endpoint, claves ni body"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-016",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "TTL se renueva en upsert y nunca es cero, negativo ni mayor al máximo",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-016] TTL se renueva en upsert y nunca es cero, negativo ni mayor al máximo"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-017",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "dos altas concurrentes del mismo endpoint programan una sola bienvenida",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-017] dos altas concurrentes del mismo endpoint programan una sola bienvenida"
+    ]
+  },
+  {
+    "id": "PUSH-SUB-018",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "respuesta diferencia alta, upsert y revalidación sin revelar claves",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-SUB-018] respuesta diferencia alta, upsert y revalidación sin revelar claves"
+    ]
+  },
+  {
+    "id": "PUSH-SW-001",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "install llama skipWaiting y captura precache completo en waitUntil",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-001] install llama skipWaiting y captura precache completo en waitUntil"
+    ]
+  },
+  {
+    "id": "PUSH-SW-002",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "precache estable tolera opcionales pero conserva shell esencial visible",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-002] precache estable tolera opcionales pero conserva shell esencial visible"
+    ]
+  },
+  {
+    "id": "PUSH-SW-003",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "activate borra sólo caches MR Agentes obsoletos y reclama clientes",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-003] activate borra sólo caches MR Agentes obsoletos y reclama clientes"
+    ]
+  },
+  {
+    "id": "PUSH-SW-004",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "fetch ignora no-GET, cross-origin y recursos no estáticos",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-004] fetch ignora no-GET, cross-origin y recursos no estáticos"
+    ]
+  },
+  {
+    "id": "PUSH-SW-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "fetch usa cache hit, guarda sólo 200 y captura cache.put en waitUntil",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-005] fetch usa cache hit, guarda sólo 200 y captura cache.put en waitUntil"
+    ]
+  },
+  {
+    "id": "PUSH-SW-006",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "fetch offline entrega hit existente y rechaza miss sin cachear error",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-006] fetch offline entrega hit existente y rechaza miss sin cachear error"
+    ]
+  },
+  {
+    "id": "PUSH-SW-007",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "push JSON válido muestra branding, tag, image y URL same-origin",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-007] push JSON válido muestra branding, tag, image y URL same-origin"
+    ]
+  },
+  {
+    "id": "PUSH-SW-008",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "push ausente o JSON inválido usa defaults de marca y siempre espera showNotification",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-008] push ausente o JSON inválido usa defaults de marca y siempre espera showNotification"
+    ]
+  },
+  {
+    "id": "PUSH-SW-009",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "push bloquea URL e imagen externas, javascript, data y traversal",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-009] push bloquea URL e imagen externas, javascript, data y traversal"
+    ]
+  },
+  {
+    "id": "PUSH-SW-010",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "notificationclick normaliza URL y enfoca cliente existente same-origin",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-010] notificationclick normaliza URL y enfoca cliente existente same-origin"
+    ]
+  },
+  {
+    "id": "PUSH-SW-011",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "click abre same-origin, bloquea externo y acción desconocida no navega",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-011] click abre same-origin, bloquea externo y acción desconocida no navega"
+    ]
+  },
+  {
+    "id": "PUSH-SW-012",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "message sólo acepta tipo/origin/payload allowlisted y usa waitUntil",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-012] message sólo acepta tipo/origin/payload allowlisted y usa waitUntil"
+    ]
+  },
+  {
+    "id": "PUSH-SW-013",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "pushsubscriptionchange renueva con VAPID, registra backend y deja retry durable ante fallo",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-013] pushsubscriptionchange renueva con VAPID, registra backend y deja retry durable ante fallo"
+    ]
+  },
+  {
+    "id": "PUSH-SW-014",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "se retira polling index: no NOTA_LIST_URL, checkForNewContent ni NEW_NOTA",
+    "source_symbols": [
+      "static/sw.js"
+    ],
+    "test_paths": [
+      "tests-js/service-worker.test.mjs::[PUSH-SW-014] se retira polling index: no NOTA_LIST_URL, checkForNewContent ni NEW_NOTA"
+    ]
+  },
+  {
+    "id": "PUSH-UNSUB-001",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "body sin endpoint o con endpoint inválido devuelve 400",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-UNSUB-001] body sin endpoint o con endpoint inválido devuelve 400"
+    ]
+  },
+  {
+    "id": "PUSH-UNSUB-002",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "baja inexistente responde éxito idempotente sin crear estado",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-UNSUB-002] baja inexistente responde éxito idempotente sin crear estado"
+    ]
+  },
+  {
+    "id": "PUSH-UNSUB-003",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "baja existente elimina la clave hasheada correspondiente",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-UNSUB-003] baja existente elimina la clave hasheada correspondiente"
+    ]
+  },
+  {
+    "id": "PUSH-UNSUB-004",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "repetir baja conserva status 200 y removed false",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-UNSUB-004] repetir baja conserva status 200 y removed false"
+    ]
+  },
+  {
+    "id": "PUSH-UNSUB-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "sólo el endpoint propio determina la clave; se rechazan selectors y admin flags",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-UNSUB-005] sólo el endpoint propio determina la clave; se rechazan selectors y admin flags"
+    ]
+  },
+  {
+    "id": "PUSH-UNSUB-006",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "origin ajeno no puede dar de baja un endpoint",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-UNSUB-006] origin ajeno no puede dar de baja un endpoint"
+    ]
+  },
+  {
+    "id": "PUSH-UNSUB-007",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "fallo KV produce 500 genérico sin afirmar que la baja ocurrió",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-UNSUB-007] fallo KV produce 500 genérico sin afirmar que la baja ocurrió"
+    ]
+  },
+  {
+    "id": "PUSH-UNSUB-008",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "respuesta y logs de baja no revelan endpoint ni hash interno",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-UNSUB-008] respuesta y logs de baja no revelan endpoint ni hash interno"
+    ]
+  },
+  {
+    "id": "PUSH-UNSUB-009",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "dos bajas concurrentes son seguras y una sola reporta removed true",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-UNSUB-009] dos bajas concurrentes son seguras y una sola reporta removed true"
+    ]
+  },
+  {
+    "id": "PUSH-UNSUB-010",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "rate limit de baja no comparte bucket global con altas",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-UNSUB-010] rate limit de baja no comparte bucket global con altas"
+    ]
+  },
+  {
+    "id": "PUSH-WELCOME-001",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "bienvenida usa el copy, branding y URL canónicos",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-WELCOME-001] bienvenida usa el copy, branding y URL canónicos"
+    ]
+  },
+  {
+    "id": "PUSH-WELCOME-002",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "201/202 de push se registra como delivered",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-WELCOME-002] 201/202 de push se registra como delivered"
+    ]
+  },
+  {
+    "id": "PUSH-WELCOME-003",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "404/410 de bienvenida marca gone y elimina sólo esa suscripción",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-WELCOME-003] 404/410 de bienvenida marca gone y elimina sólo esa suscripción"
+    ]
+  },
+  {
+    "id": "PUSH-WELCOME-004",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "429 y 5xx de bienvenida son retryable con una tentativa acotada",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-WELCOME-004] 429 y 5xx de bienvenida son retryable con una tentativa acotada"
+    ]
+  },
+  {
+    "id": "PUSH-WELCOME-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "timeout, red y crypto desconocidos quedan uncertain",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-WELCOME-005] timeout, red y crypto desconocidos quedan uncertain"
+    ]
+  },
+  {
+    "id": "PUSH-WELCOME-006",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "fallo de bienvenida no revierte una suscripción ya persistida",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-WELCOME-006] fallo de bienvenida no revierte una suscripción ya persistida"
+    ]
+  },
+  {
+    "id": "PUSH-WELCOME-007",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "dedupe de bienvenida deriva de la clave hasheada de suscripción",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-WELCOME-007] dedupe de bienvenida deriva de la clave hasheada de suscripción"
+    ]
+  },
+  {
+    "id": "PUSH-WELCOME-008",
+    "initial_state": "BASELINE_GREEN",
+    "requirement": "revalidación silenciosa nunca crea evento welcome",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-WELCOME-008] revalidación silenciosa nunca crea evento welcome"
+    ]
+  },
+  {
+    "id": "PUSH-WELCOME-009",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "bienvenida captura toda su vida async en waitUntil sin promesas flotantes",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-WELCOME-009] bienvenida captura toda su vida async en waitUntil sin promesas flotantes"
+    ]
+  },
+  {
+    "id": "PUSH-WELCOME-010",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "feedback de alta dice si la bienvenida quedó programada, no si ya se entregó",
+    "source_symbols": [
+      "workers/push/src/subscriptions.ts"
+    ],
+    "test_paths": [
+      "tests-js/worker-subscriptions.test.mjs::[PUSH-WELCOME-010] feedback de alta dice si la bienvenida quedó programada, no si ya se entregó"
+    ]
+  }
+]

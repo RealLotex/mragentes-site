@@ -141,6 +141,18 @@ def fit_text(
     tracking: float = 0.0,
 ) -> FittedText:
     """El cuerpo más grande que entra en la caja. Si no entra ni el mínimo, corta."""
+    if not math.isfinite(max_w) or max_w <= 0 or not math.isfinite(max_h) or max_h < 0:
+        raise ValueError("Las dimensiones max_w/max_h deben ser finitas y utilizables")
+    if (
+        isinstance(size_min, bool)
+        or isinstance(size_max, bool)
+        or size_min <= 0
+        or size_max <= 0
+        or size_min > size_max
+    ):
+        raise ValueError("El rango de tamaño exige 0 < size_min <= size_max")
+    if isinstance(max_lines, bool) or max_lines < 1:
+        raise ValueError("max_lines debe ser un entero positivo")
     text = brand.sanitize((text or "").strip(), role)
     lead = leading if leading is not None else LEADING.get(role, 1.2)
     if not text:
@@ -227,6 +239,15 @@ def draw_fitted(draw, fitted: FittedText, x: float, y: float, box_w: float, fill
 
 def cover(img: Image.Image, w: int, h: int, focus: tuple[float, float] = (0.5, 0.42)) -> Image.Image:
     """Escala manteniendo proporción y recorta. Jamás deforma."""
+    if w <= 0 or h <= 0:
+        raise ValueError("Las dimensiones de cover deben ser positivas")
+    if (
+        not isinstance(focus, tuple)
+        or len(focus) != 2
+        or any(not isinstance(value, (int, float)) or isinstance(value, bool) for value in focus)
+        or any(not math.isfinite(float(value)) or not 0 <= float(value) <= 1 for value in focus)
+    ):
+        raise ValueError("El foco debe contener dos coordenadas entre 0 y 1")
     img = img.convert("RGB")
     src_w, src_h = img.size
     scale = max(w / src_w, h / src_h)

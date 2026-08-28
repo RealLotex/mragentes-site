@@ -427,6 +427,16 @@ class Template:
     needs: tuple = ()
 
     def render(self, piece: Piece, surface_key: str = "feed", seed: int = 0, ground: str | None = None) -> Sheet:
+        missing = [name for name in self.needs if not getattr(piece, name, None)]
+        if missing:
+            raise ValueError(
+                f"La plantilla {self.key!r} necesita campo(s) requerido(s): {', '.join(missing)}"
+            )
+        if ground is not None and ground not in self.grounds:
+            raise ValueError(
+                f"El fondo {ground!r} no está permitido para {self.key!r}; "
+                f"opciones: {', '.join(self.grounds)}"
+            )
         surf = surface(surface_key)
         g = ground or self.grounds[seed % len(self.grounds)]
         return self.fn(piece, surf, seed, g)

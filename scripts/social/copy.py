@@ -88,6 +88,8 @@ ROTATING_TAGS = [
     "Productividad",
 ]
 
+PLATFORM_LIMITS = {"facebook": 63_206, "instagram": 2_200}
+
 
 def seed_for(text: str) -> int:
     return int(hashlib.sha1(text.encode("utf-8")).hexdigest()[:8], 16)
@@ -128,10 +130,48 @@ def _trim(text: str, limit: int) -> str:
     return cut + "…"
 
 
+def _clip_caption(text: str, limit: int) -> str:
+    """Recorta un copy completo sin dejar un sustituto Unicode incompleto."""
+    if len(text) <= limit:
+        return text
+    cut = text[: limit - 1].rstrip()
+    while cut and 0xD800 <= ord(cut[-1]) <= 0xDBFF:
+        cut = cut[:-1]
+    boundary = max(cut.rfind("\n"), cut.rfind(" "))
+    if boundary >= int(limit * 0.75):
+        cut = cut[:boundary].rstrip()
+    return cut + "…"
+
+
+def _validate_claims(nota: Nota) -> None:
+    """Impide convertir una promesa comercial cuantificada en copy sin fuente."""
+    promotional = f"{nota.title}\n{nota.description}"
+    quantified = re.search(
+        r"(?:\b\d+(?:[.,]\d+)?\s*%|\b\d+(?:[.,]\d+)?\s*(?:x|veces)\b|"
+        r"\b(?:duplicar|triplicar)\b)",
+        promotional,
+        re.I,
+    )
+    promise = re.search(
+        r"\b(?:garantizamos?|aseguramos?|sin riesgo|resultados? garantizados?)\b",
+        promotional,
+        re.I,
+    )
+    sourced = bool(
+        re.search(r"\[[^\]]+\]\(https?://", nota.body, re.I)
+        or re.search(r"^##+\s*(?:Fuentes?|Referencias)\s*$", nota.body, re.I | re.M)
+    )
+    if (quantified or promise) and not sourced:
+        raise ValueError("Afirmación de rendimiento sin fuente ni evidencia verificable")
+
+
 # ── Textos por red ──────────────────────────────────────────────────────────
 
 
 def caption(nota: Nota, network: str = "facebook", base_url: str = "https://mragentes.com.ar") -> str:
+    if network not in PLATFORM_LIMITS:
+        raise ValueError("Red/network inválida: sólo facebook o instagram")
+    _validate_claims(nota)
     seed = seed_for(nota.slug)
     url = nota.url(base_url)
     lead = _trim(nota.lead, 320)
@@ -142,7 +182,7 @@ def caption(nota: Nota, network: str = "facebook", base_url: str = "https://mrag
 
     if network == "instagram":
         body = [
-            nota.title,
+            _trim(nota.title, 420),
             "",
             lead,
         ]
@@ -152,7 +192,7 @@ def caption(nota: Nota, network: str = "facebook", base_url: str = "https://mrag
         if points:
             body += [""] + [f"· {_trim(p, 110)}" for p in points]
         body += ["", _pick(CLOSERS_IG, seed), "", " ".join(hashtags(nota, seed, 12))]
-        return "\n".join(body).strip()
+        return _clip_caption("\n".join(body).strip(), PLATFORM_LIMITS[network])
 
     body = [
         _pick(HOOKS, seed),
@@ -167,7 +207,7 @@ def caption(nota: Nota, network: str = "facebook", base_url: str = "https://mrag
         "",
         " ".join(hashtags(nota, seed, 6)),
     ]
-    return "\n".join(body).strip()
+    return _clip_caption("\n".join(body).strip(), PLATFORM_LIMITS[network])
 
 
 # ── Piezas gráficas derivadas de la nota ────────────────────────────────────
@@ -264,6 +304,8 @@ def closing_piece(nota: Nota) -> Piece:
 
 
 def carousel_for_nota(nota: Nota, base_url: str = "https://mragentes.com.ar", max_slides: int = 4) -> list[tuple[str, Piece]]:
+    if isinstance(max_slides, bool) or not isinstance(max_slides, int) or max_slides < 2:
+        raise ValueError("max_slides debe permitir al menos dos láminas")
     slides: list[tuple[str, Piece]] = [("nota", cover_piece(nota, base_url))]
     slides += support_pieces(nota, limit=max_slides - 2)
     slides.append(("anuncio", closing_piece(nota)))

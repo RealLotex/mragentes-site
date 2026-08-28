@@ -1,0 +1,6 @@
+interface:
+  display_name: "MR Agentes Blog Publisher"
+  short_description: "Prepara notas del blog con gates atómicos"
+  default_prompt: "Usá $mragentes-blog-publisher para preparar la nota prevista en dry-run."
+policy:
+  allow_implicit_invocation: true

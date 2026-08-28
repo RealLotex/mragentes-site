@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mragentes.com.ar/schemas/test-traceability-v1.json",
+  "title": "MR Agentes TDD traceability",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "requirements"],
+  "properties": {
+    "version": {"const": 1},
+    "requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/requirement"}
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {"type": "string", "minLength": 1},
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "not": {"pattern": "^(?:/|.*(?:^|/)\\.\\.(?:/|$)|.*openclaw.*)"}
+    },
+    "expectedRed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "code", "message_regex"],
+      "properties": {
+        "kind": {"const": "assertion"},
+        "code": {"type": "string", "pattern": "^[A-Z][A-Z0-9-]+-[0-9]{3}$"},
+        "message_regex": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    },
+    "externalProbe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "probe", "blocked_reason"],
+      "properties": {
+        "provider": {"enum": ["Codex", "GitHub", "Meta", "Cloudflare"]},
+        "probe": {"$ref": "#/$defs/nonEmptyString"},
+        "blocked_reason": {"$ref": "#/$defs/nonEmptyString"}
+      }
+    },
+    "requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "requirement",
+        "plan_section",
+        "source_symbols",
+        "test_paths",
+        "layer",
+        "side_effect_scope",
+        "initial_state",
+        "owner"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9-]+-[0-9]{3}$"},
+        "requirement": {"$ref": "#/$defs/nonEmptyString"},
+        "plan_section": {"type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+)*$"},
+        "source_symbols": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/relativePath"}
+        },
+        "test_paths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/relativePath"}
+        },
+        "layer": {
+          "enum": ["static", "unit", "property", "contract", "integration", "visual", "e2e", "operational", "soak"]
+        },
+        "side_effect_scope": {
+          "enum": ["none", "filesystem-temp", "git-temp", "staging", "production"]
+        },
+        "initial_state": {
+          "enum": ["RED_EXPECTED", "BASELINE_GREEN", "EXTERNAL_BLOCKED"]
+        },
+        "expected_red": {"$ref": "#/$defs/expectedRed"},
+        "external_probe": {"$ref": "#/$defs/externalProbe"},
+        "red_evidence": {"type": ["object", "null"]},
+        "green_evidence": {"type": ["object", "null"]},
+        "owner": {"enum": ["local", "Codex Scheduled", "GitHub", "Meta", "Cloudflare"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"initial_state": {"const": "RED_EXPECTED"}}},
+          "then": {"required": ["expected_red"]}
+        },
+        {
+          "if": {"properties": {"initial_state": {"const": "EXTERNAL_BLOCKED"}}},
+          "then": {"required": ["external_probe"]}
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "revision": 1,
+  "updated_at": "2026-08-26T12:00:00Z",
+  "items": [
+    {
+      "schema_version": 1,
+      "id": "news-v1-8b714b8c",
+      "title": "Un laboratorio publica un modelo verificable",
+      "canonical_url": "https://example.test/news/modelo",
+      "source": "Example Research",
+      "entity": "Example Lab",
+      "published_at": "2026-08-24T13:30:00Z",
+      "discovered_at": "2026-08-26T12:00:00Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://example.test/research/model-card",
+          "claim": "La ficha técnica identifica el modelo y la fecha de publicación."
+        }
+      ],
+      "tags": ["ia", "modelos"]
+    }
+  ]
+}
