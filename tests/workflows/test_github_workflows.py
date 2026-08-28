@@ -163,8 +163,14 @@ def test_deploy_detects_only_new_notes_and_daily_drafts_from_git_history() -> No
     assert {"note_slugs", "daily_drafts"}.issubset(outputs), trace_message(
         "WF-DEPLOY-004", "detect_changes does not expose both typed output arrays"
     )
-    assert "scripts/automation/detect_changes.py" in source, trace_message(
+    assert "python -m scripts.automation.detect_changes" in source, trace_message(
         "WF-DEPLOY-004", "deploy bypasses the tested Git change detector"
+    )
+    assert "scripts.automation.wait_for_publication" in source, trace_message(
+        "WF-DEPLOY-004", "deploy health gate is not invoked as an import-safe module"
+    )
+    assert "python scripts/automation/" not in source, trace_message(
+        "WF-DEPLOY-004", "deploy invokes a package script with a broken import root"
     )
     assert "fetch-depth: 0" in source, trace_message(
         "WF-DEPLOY-004", "change detection does not fetch the required Git history"
@@ -193,12 +199,12 @@ def test_deploy_dispatches_content_effects_but_never_redeploys_worker_for_a_note
         (
             ".github/workflows/deploy.yml",
             "detect_changes",
-            "scripts/automation/detect_changes.py",
+            "scripts.automation.detect_changes",
         ),
         (
             ".github/workflows/deploy.yml",
             "wait_for_publication",
-            "scripts/automation/wait_for_publication.py",
+            "scripts.automation.wait_for_publication",
         ),
         (
             ".github/workflows/notify-note.yml",

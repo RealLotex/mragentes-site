@@ -54,7 +54,7 @@ jobs:
           AFTER_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          detected_json="$(python scripts/automation/detect_changes.py --repo . --before "$BEFORE_SHA" --after "$AFTER_SHA")"
+          detected_json="$(python -m scripts.automation.detect_changes --repo . --before "$BEFORE_SHA" --after "$AFTER_SHA")"
           export DETECTED_JSON="$detected_json"
           python - <<'PY'
           import json
@@ -140,7 +140,8 @@ jobs:
               raise SystemExit(0)
           command = [
               sys.executable,
-              "scripts/automation/wait_for_publication.py",
+              "-m",
+              "scripts.automation.wait_for_publication",
               "--site",
               "https://mragentes.com.ar",
           ]
