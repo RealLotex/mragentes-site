@@ -45,6 +45,7 @@ jobs:
       META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
       FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
       IG_USER_ID: ${{ secrets.IG_USER_ID }}
+      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v26.0' }}
       META_ENVIRONMENT: testing
       SOCIAL_ENABLED: "1"
       SOCIAL_DRY_RUN: "0"
@@ -54,7 +55,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install social runtime
-        run: python -m pip install -r scripts/requirements.txt
+        run: python -m pip install --require-hashes -r requirements-test.lock.txt
       - name: Publish or recover only the missing blog-note checkpoints
         run: >-
           python -m scripts.social deliver-note

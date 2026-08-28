@@ -58,7 +58,7 @@ def test_meta_post_and_get_build_versioned_urls_copy_payload_and_apply_timeout(
     assert original_params == {"fields": "id"}
     assert transport.post_calls == [
         {
-            "url": "https://graph.facebook.com/v21.0/123/feed",
+            "url": "https://graph.facebook.com/v26.0/123/feed",
             "data": {"message": "hola", "access_token": "sentinel-token"},
             "files": None,
             "timeout": publisher.TIMEOUT,
@@ -66,7 +66,7 @@ def test_meta_post_and_get_build_versioned_urls_copy_payload_and_apply_timeout(
     ]
     assert transport.get_calls == [
         {
-            "url": "https://graph.facebook.com/v21.0/123",
+            "url": "https://graph.facebook.com/v26.0/123",
             "params": {"fields": "id", "access_token": "sentinel-token"},
             "timeout": publisher.TIMEOUT,
         }

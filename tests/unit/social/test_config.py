@@ -98,7 +98,7 @@ def test_settings_derive_graph_root_and_platform_capabilities() -> None:
     facebook = config.Settings(access_token="token", fb_page_id="123")
     instagram = config.Settings(access_token="token", ig_user_id="456")
 
-    assert empty.graph_root == "https://graph.facebook.com/v21.0"
+    assert empty.graph_root == "https://graph.facebook.com/v26.0"
     assert empty.can_post is False
     assert facebook.can_post_facebook is True
     assert facebook.can_post_instagram is False

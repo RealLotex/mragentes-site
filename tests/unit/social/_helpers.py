@@ -93,7 +93,7 @@ def configured_settings(**overrides: Any) -> Settings:
         "access_token": "test-token-never-sent",
         "fb_page_id": "123456",
         "ig_user_id": "654321",
-        "graph_version": "v21.0",
+        "graph_version": "v26.0",
         "enabled": True,
         "dry_run": False,
         "site_base_url": "https://mragentes.example",

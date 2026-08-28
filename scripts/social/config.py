@@ -9,7 +9,7 @@ Variables (ver .env.example):
   META_ACCESS_TOKEN   token de página de larga duración (sirve para FB e IG)
   FB_PAGE_ID          id numérico de la página de Facebook
   IG_USER_ID          id de la cuenta profesional de Instagram vinculada
-  META_GRAPH_VERSION  versión de la Graph API (default v21.0)
+  META_GRAPH_VERSION  versión de la Graph API (default v26.0)
   SOCIAL_ENABLED      1/0 — apagar la publicación sin desinstalar nada
   SOCIAL_DRY_RUN      1/0 — renderizar y mostrar, sin llamar a la API
   SOCIAL_IMAGE_BASE   base pública desde donde Meta descarga las imágenes
@@ -91,7 +91,7 @@ class Settings:
     access_token: str = field(default="", repr=False)
     fb_page_id: str = ""
     ig_user_id: str = ""
-    graph_version: str = "v21.0"
+    graph_version: str = "v26.0"
     enabled: bool = True
     dry_run: bool = False
     site_base_url: str = "https://mragentes.com.ar"
@@ -188,7 +188,7 @@ def load_settings(env_file: Path = ENV_FILE) -> Settings:
         or ""
     ).strip()
 
-    graph_version = (os.environ.get("META_GRAPH_VERSION") or "v21.0").strip()
+    graph_version = (os.environ.get("META_GRAPH_VERSION") or "v26.0").strip()
     fb_page_id = (os.environ.get("FB_PAGE_ID") or "").strip()
     ig_user_id = (os.environ.get("IG_USER_ID") or os.environ.get("IG_BUSINESS_ID") or "").strip()
     meta_environment = (os.environ.get("META_ENVIRONMENT") or "disabled").strip().lower()

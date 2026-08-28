@@ -216,6 +216,16 @@ def test_deploy_dispatches_content_effects_but_never_redeploys_worker_for_a_note
             "send_notification",
             "scripts.notifications.notify_deployed_note",
         ),
+        (
+            ".github/workflows/social-note.yml",
+            "publish_testing_only",
+            "scripts.social deliver-note",
+        ),
+        (
+            ".github/workflows/social-daily.yml",
+            "publish_daily_owned",
+            "scripts.social deliver-draft",
+        ),
     ),
 )
 def test_clean_python_jobs_install_hash_locked_runtime_dependencies(
@@ -252,6 +262,9 @@ def test_social_note_is_reusable_and_testing_only() -> None:
     assert "workflow_call" in source and "meta-testing" in source, trace_message(
         "WF-SOCIAL-NOTE-001", "social-note lacks reusable testing contract"
     )
+    assert "vars.META_GRAPH_VERSION || 'v26.0'" in source, trace_message(
+        "WF-SOCIAL-NOTE-001", "social-note defaults to an obsolete Graph API version"
+    )
 
 
 @pytest.mark.trace("WF-SOCIAL-NOTE-002")
@@ -277,6 +290,9 @@ def test_social_daily_is_separate_and_idempotent() -> None:
     _, source, _ = workflow(".github/workflows/social-daily.yml", "WF-SOCIAL-DAILY-001")
     for term in ("daily_owned", "dedupe", "concurrency", "meta-testing"):
         assert term in source, trace_message("WF-SOCIAL-DAILY-001", f"daily workflow lacks: {term}")
+    assert "vars.META_GRAPH_VERSION || 'v26.0'" in source, trace_message(
+        "WF-SOCIAL-DAILY-001", "daily social flow defaults to an obsolete Graph API version"
+    )
 
 
 @pytest.mark.trace("WF-SOCIAL-DAILY-002")
