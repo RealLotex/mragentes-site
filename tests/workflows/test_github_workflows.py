@@ -154,6 +154,12 @@ def test_deploy_actions_are_pinned_by_commit_sha() -> None:
         "WF-DEPLOY-002",
         "Hugo setup is not pinned to the verified v3.0.0 commit",
     )
+    assert (
+        "actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e" in source
+    ), trace_message(
+        "WF-DEPLOY-002",
+        "Pages deployment is not pinned to the verified v4.0.5 commit",
+    )
 
 
 @pytest.mark.trace("WF-DEPLOY-003")
