@@ -12,7 +12,7 @@
   "reasoning_effort": "low",
   "skill": "mragentes-social-manager",
   "mode": "recovery",
-  "prompt": "Usá $mragentes-social-manager en modo recovery para hoy. Comprobá draft, workflow y ledger. Si todo está completo, informá skipped. Si falta una plataforma, prepará sólo esa recuperación. No generes otra pieza, no uses force y no repitas una publicación incierta.",
+  "prompt": "Usá $mragentes-social-manager en modo recovery para hoy y el conector de GitHub. Inspeccioná las ejecuciones de social-daily.yml y social-note.yml, el draft y la evidencia de reconciliación. Si todo está completo o un workflow sigue in_progress, informá skipped. Si el fallo es retryable y ocurrió antes de un efecto remoto confirmado, usá GitHub para reintentar sólo los jobs fallidos de esa ejecución. Si el estado es uncertain o needs_review, detenete y reportalo: no reintentes. No generes otra pieza, no uses force, no llames directamente a Meta y no accedas a cuentas o procesos retirados.",
   "branch_template": "automation/recovery/{run_id}",
   "status": "paused",
   "registered": false,
@@ -20,6 +20,7 @@
   "permissions": {
     "repository_writes": [".automation/reports/**"],
     "git_push": ["automation/recovery/{run_id}"],
+    "workflow_rerun": ["social-daily.yml", "social-note.yml"],
     "external_publish": false
   }
 }

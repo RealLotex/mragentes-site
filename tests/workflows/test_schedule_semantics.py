@@ -62,3 +62,27 @@ def test_scheduled_tasks_push_only_to_automation_branches() -> None:
     assert all(value.startswith("automation/") and "main" not in value for value in branches), trace_message(
         "TASK-BRANCH-001", f"unsafe task branch templates: {branches}"
     )
+
+
+@pytest.mark.trace("TASK-RECOVERY-002")
+@pytest.mark.red_expected
+def test_recovery_uses_guarded_github_rerun_instead_of_direct_meta_publish() -> None:
+    descriptor = json.loads(
+        require_target(
+            ".automation/schedules/recovery.json", "TASK-RECOVERY-002"
+        ).read_text(encoding="utf-8")
+    )
+    prompt = descriptor["prompt"]
+    assert "conector de GitHub" in prompt and "reintentar sólo los jobs fallidos" in prompt, (
+        trace_message("TASK-RECOVERY-002", "recovery cannot resume a failed guarded workflow")
+    )
+    assert "in_progress" in prompt and "uncertain" in prompt, trace_message(
+        "TASK-RECOVERY-002", "recovery does not fail closed for active or uncertain effects"
+    )
+    assert descriptor["permissions"]["workflow_rerun"] == [
+        "social-daily.yml",
+        "social-note.yml",
+    ], trace_message("TASK-RECOVERY-002", "recovery may rerun an unscoped workflow")
+    assert descriptor["permissions"]["external_publish"] is False, trace_message(
+        "TASK-RECOVERY-002", "recovery is allowed to call Meta directly"
+    )
