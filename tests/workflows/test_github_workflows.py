@@ -36,6 +36,10 @@ def test_ci_workflow_is_read_only_by_default_and_scopes_merge_permissions() -> N
     )
     jobs = parsed.get("jobs", {})
     assert "test" in jobs and "merge_automation" in jobs
+    checkout = jobs["test"].get("steps", [])[0]
+    assert checkout.get("with", {}).get("fetch-depth") == "0", trace_message(
+        "WF-CI-001", "CI shallow checkout cannot prove ancestry from the audited baseline"
+    )
     merge = jobs["merge_automation"]
     assert merge.get("needs") == "test", trace_message(
         "WF-CI-001", "automation merge is not downstream from the complete test job"

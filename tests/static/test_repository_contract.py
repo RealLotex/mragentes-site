@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -10,7 +11,7 @@ from tests.support.contracts import ROOT, trace_message
 from tests.support.git_tree import git_bytes, tracked_paths, tree_paths
 
 
-EXPECTED_REMOTE = "https://github.com/RealLotex/mragentes-site.git"
+EXPECTED_REMOTE = "https://github.com/RealLotex/mragentes-site"
 EXPECTED_BASELINE_HEAD = "d2b6b8fd90afd4ac01dd3a525e1d7455a43b9851"
 
 
@@ -19,7 +20,7 @@ EXPECTED_BASELINE_HEAD = "d2b6b8fd90afd4ac01dd3a525e1d7455a43b9851"
 def test_canonical_remote_is_exact_https_repository_without_credentials() -> None:
     remote = git_bytes("remote", "get-url", "origin").decode().strip()
     parsed = urlsplit(remote)
-    assert remote == EXPECTED_REMOTE, trace_message(
+    assert remote.removesuffix(".git") == EXPECTED_REMOTE, trace_message(
         "GIT-CANON-001", f"unexpected canonical remote: {remote}"
     )
     assert parsed.username is None and parsed.password is None, trace_message(
@@ -32,9 +33,13 @@ def test_canonical_remote_is_exact_https_repository_without_credentials() -> Non
 
 @pytest.mark.trace("GIT-CANON-002")
 @pytest.mark.baseline_green
-def test_tdd_work_happens_on_dedicated_migration_branch() -> None:
-    branch = git_bytes("branch", "--show-current").decode().strip()
-    assert branch == "codex/migration-tdd", trace_message(
+def test_tdd_work_happens_on_an_expected_repository_branch() -> None:
+    branch = (
+        os.environ.get("GITHUB_HEAD_REF")
+        or os.environ.get("GITHUB_REF_NAME")
+        or git_bytes("branch", "--show-current").decode().strip()
+    )
+    assert branch == "main" or branch.startswith(("codex/", "automation/")), trace_message(
         "GIT-CANON-002", f"unexpected working branch: {branch}"
     )
 

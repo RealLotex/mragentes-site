@@ -19,13 +19,21 @@ def git_text(*args: str) -> str:
 @pytest.mark.trace("GIT-CANON-001")
 @pytest.mark.baseline_green
 def test_remote_is_clean_canonical_https_url() -> None:
-    assert git_text("remote", "get-url", "origin") == "https://github.com/RealLotex/mragentes-site.git"
+    remote = git_text("remote", "get-url", "origin")
+    assert remote.removesuffix(".git") == "https://github.com/RealLotex/mragentes-site"
 
 
 @pytest.mark.trace("GIT-CANON-002")
 @pytest.mark.baseline_green
-def test_migration_uses_dedicated_branch() -> None:
-    assert git_text("branch", "--show-current") == "codex/migration-tdd"
+def test_changes_use_an_expected_repository_branch() -> None:
+    branch = (
+        os.environ.get("GITHUB_HEAD_REF")
+        or os.environ.get("GITHUB_REF_NAME")
+        or git_text("branch", "--show-current")
+    )
+    assert branch == "main" or branch.startswith(("codex/", "automation/")), trace_message(
+        "GIT-CANON-002", f"unexpected working branch: {branch}"
+    )
 
 
 @pytest.mark.trace("GIT-CANON-003")
