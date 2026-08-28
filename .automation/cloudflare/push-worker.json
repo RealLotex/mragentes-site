@@ -1,0 +1,63 @@
+{
+  "manifest_version": 1,
+  "deployment": {
+    "provider": "cloudflare",
+    "method": "connector",
+    "worker_name": "mragentes-push",
+    "script": "cf_worker.js",
+    "compatibility_date": "2026-08-27"
+  },
+  "bindings": {
+    "kv_namespaces": [
+      {
+        "binding": "PUSH_SUBS",
+        "lifecycle": "reuse_or_create"
+      }
+    ],
+    "durable_objects": [
+      {
+        "binding": "NOTIFICATION_COORDINATOR",
+        "class_name": "NotificationCoordinator",
+        "storage": "sqlite",
+        "lifecycle": "reuse_or_create"
+      }
+    ],
+    "vars": {
+      "ENVIRONMENT": "production",
+      "ALLOWED_ORIGINS": "https://mragentes.com.ar"
+    }
+  },
+  "exports": {
+    "NotificationCoordinator": {
+      "type": "durable-object",
+      "storage": "sqlite",
+      "state": "created"
+    }
+  },
+  "required_secrets": [
+    "API_TOKEN",
+    "VAPID_PUBLIC_KEY",
+    "VAPID_PRIVATE_KEY"
+  ],
+  "interface": {
+    "site_origin": "https://mragentes.com.ar",
+    "worker_origin": "https://mragentes-push.rosichmarcos.workers.dev",
+    "endpoints": {
+      "subscribe": {
+        "method": "POST",
+        "path": "/api/subscribe/",
+        "authentication": "site_origin"
+      },
+      "unsubscribe": {
+        "method": "POST",
+        "path": "/api/unsubscribe/",
+        "authentication": "site_origin"
+      },
+      "send": {
+        "method": "POST",
+        "path": "/api/send/",
+        "authentication": "bearer"
+      }
+    }
+  }
+}

@@ -1,70 +1,109 @@
 #!/usr/bin/env python3
-"""Elegir la clave de posteo del día para el social manager (reemplaza heredocs del cron).
+"""Valida manualmente una pieza histórica de la biblioteca social.
 
-Rotación: día del año % 15 sobre la lista de keys de library.json.
-Solo imprime la clave elegida + estado (publicada o no) — no publica nada.
+La biblioteca es sólo material de compatibilidad: este comando nunca elige una
+pieza por fecha ni actúa como fuente del contenido diario. La persona u
+orquestación que lo invoque debe indicar una clave de manera explícita.
 """
-import json, sys
-from datetime import datetime
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
 from pathlib import Path
+from typing import Sequence
 
-WORKSPACE = Path("/home/openclaw/.openclaw/workspace")
-LIBRARY = WORKSPACE / "scripts" / "social" / "library.json"
-STATE = WORKSPACE / "scripts" / "social" / "state.json"
 
-KEYS = [
-    "diagnostico", "por-donde-empezar", "mito-chatbots", "dato-tareas",
-    "cita-criterio", "antes-despues-pedidos", "como-trabajamos",
-    "glosario-agente", "pregunta-horas", "caso-turnos", "titular-integracion",
-    "semana-ia", "ficha-asistente", "anuncio-contacto", "punto-ejemplo",
-]
+REPOSITORY = Path(__file__).resolve().parents[2]
+LIBRARY = REPOSITORY / "scripts" / "social" / "library.json"
+STATE = REPOSITORY / "scripts" / "social" / "state.json"
 
-def main():
-    # Si library.json existe, usar sus keys reales (orden estable)
-    keys = KEYS
+
+def _library_items(document: object) -> list[dict]:
+    """Devuelve entradas con forma válida preservando el orden del archivo."""
+    if isinstance(document, list):
+        candidates = document
+    elif isinstance(document, dict):
+        candidates = document.get("posts", document.get("items", []))
+    else:
+        candidates = []
+    if not isinstance(candidates, list):
+        return []
+    return [item for item in candidates if isinstance(item, dict)]
+
+
+def load_keys(path: Path = LIBRARY) -> list[str]:
+    """Carga claves únicas y no vacías desde la biblioteca local."""
+    document = json.loads(path.read_text(encoding="utf-8"))
+    keys: list[str] = []
+    seen: set[str] = set()
+    for item in _library_items(document):
+        key = item.get("key")
+        if not isinstance(key, str):
+            continue
+        key = key.strip()
+        if key and key not in seen:
+            keys.append(key)
+            seen.add(key)
+    return keys
+
+
+def published_keys(path: Path = STATE) -> set[str]:
+    """Lee las claves ya registradas; un estado ausente o corrupto es vacío."""
     try:
-        lib = json.loads(LIBRARY.read_text())
-        if isinstance(lib, dict) and isinstance(lib.get("posts"), list):
-            keys = [it.get("key") for it in lib["posts"] if isinstance(it, dict) and it.get("key")]
-        elif isinstance(lib, dict) and lib.get("items"):
-            keys = [it.get("key") for it in lib["items"] if it.get("key")]
-        elif isinstance(lib, list):
-            keys = [it.get("key") for it in lib if isinstance(it, dict) and it.get("key")]
-    except Exception:
-        pass
+        document = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    if not isinstance(document, dict):
+        return set()
+    published = document.get("published", {})
+    if not isinstance(published, dict):
+        return set()
+    return {key for key in published if isinstance(key, str)}
 
+
+def _parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Valida una clave histórica elegida de forma manual."
+    )
+    parser.add_argument("key", nargs="?", help="clave explícita de library.json")
+    parser.add_argument("--key", dest="named_key", help="equivalente nominal de key")
+    parser.add_argument("--library", type=Path, default=LIBRARY, help=argparse.SUPPRESS)
+    parser.add_argument("--state", type=Path, default=STATE, help=argparse.SUPPRESS)
+    return parser
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    args = _parser().parse_args(argv)
+    if args.key and args.named_key and args.key != args.named_key:
+        print("ERROR: se indicaron dos claves diferentes", file=sys.stderr)
+        return 2
+    requested = args.named_key or args.key
+    if not requested:
+        print("ERROR: indicá una clave explícita con --key <CLAVE>", file=sys.stderr)
+        return 2
+
+    try:
+        keys = load_keys(args.library)
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"ERROR: no se pudo leer la biblioteca: {exc}", file=sys.stderr)
+        return 2
     if not keys:
-        print("ERROR: no hay keys en library.json", file=sys.stderr)
-        sys.exit(2)
+        print("ERROR: la biblioteca no contiene claves válidas", file=sys.stderr)
+        return 2
+    if requested not in keys:
+        print(f"ERROR: clave desconocida: {requested}", file=sys.stderr)
+        return 2
 
-    # Estado publicado
-    published = {}
-    try:
-        published = json.loads(STATE.read_text()).get("published", {})
-    except Exception:
-        pass
+    is_published = requested in published_keys(args.state)
+    print(f"KEY={requested}")
+    print(f"PUBLISHED={str(is_published).lower()}")
+    if is_published:
+        print("NOTE=La pieza ya figura en el estado; no debe volver a publicarse")
+        return 1
+    return 0
 
-    doy = datetime.now().timetuple().tm_yday
-    today = datetime.now().strftime("%Y-%m-%d")
-
-    # ⚠️ Guard anti-doble-poste: si CUALQUIER clave ya se publicó HOY (fecha), abortar.
-    # Evita que un reintento del cron publique una segunda pieza el mismo día
-    # (caso 2026-08-20: rescate manual + reintento = 2 posts).
-    posted_today = [k for k, v in published.items() if str(v.get("date", ""))[:10] == today]
-    if posted_today:
-        print(f"ALREADY_POSTED_TODAY={posted_today[0]}")
-        print(f"NOTE=Ya hay post publicado hoy ({posted_today[0]}) — terminá sin publicar")
-        sys.exit(1)
-
-    key = keys[doy % len(keys)]
-    is_pub = key in published
-
-    print(f"KEY={key}")
-    print(f"PUBLISHED={str(is_pub).lower()}")
-    print(f"DATE={datetime.now().strftime('%Y-%m-%d')}")
-    if is_pub:
-        print(f"NOTE={key} ya está en state.json — elegí otra clave o terminá sin publicar")
-    sys.exit(0 if not is_pub else 1)
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

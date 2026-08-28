@@ -8,6 +8,7 @@ usa, lo que va en la lámina y el texto para cada red.
 
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 
@@ -27,7 +28,10 @@ LIBRARY: list[dict] = _load()
 def entry(key: str) -> dict:
     for item in LIBRARY:
         if item["key"] == key:
-            return item
+            # Library entries are versioned examples, not mutable runtime
+            # state.  Callers may tailor a returned piece or caption without
+            # changing what later runs observe.
+            return copy.deepcopy(item)
     raise KeyError(f"No existe el posteo «{key}». Hay: {', '.join(e['key'] for e in LIBRARY)}")
 
 

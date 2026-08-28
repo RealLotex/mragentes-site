@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "name": "MR Agentes — Recuperación social",
+  "project": "MR Agentes",
+  "worktree": true,
+  "timezone": "America/Cordoba",
+  "weekdays": [0, 1, 2, 3, 4, 5, 6],
+  "local_time": "13:15",
+  "cron": "15 13 * * *",
+  "rrule": "RRULE:FREQ=DAILY;BYHOUR=13;BYMINUTE=15;BYSECOND=0",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "low",
+  "skill": "mragentes-social-manager",
+  "mode": "recovery",
+  "prompt": "Usá $mragentes-social-manager en modo recovery para hoy. Comprobá draft, workflow y ledger. Si todo está completo, informá skipped. Si falta una plataforma, prepará sólo esa recuperación. No generes otra pieza, no uses force y no repitas una publicación incierta.",
+  "branch_template": "automation/recovery/{run_id}",
+  "status": "paused",
+  "registered": false,
+  "catch_up": false,
+  "permissions": {
+    "repository_writes": [".automation/reports/**"],
+    "git_push": ["automation/recovery/{run_id}"],
+    "external_publish": false
+  }
+}

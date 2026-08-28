@@ -1,0 +1,59 @@
+name: Push notification for one deployed note
+
+on:
+  workflow_call:
+    inputs:
+      note_slug:
+        required: true
+        type: string
+      deploy_sha:
+        required: true
+        type: string
+    secrets:
+      PUSH_API_TOKEN:
+        required: true
+  workflow_dispatch:
+    inputs:
+      note_slug:
+        description: Deployed canonical note slug
+        required: true
+        type: string
+      deploy_sha:
+        description: Full deployed commit SHA
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: notify-note-${{ inputs.note_slug }}
+  cancel-in-progress: false
+
+jobs:
+  send_notification:
+    environment: cloudflare-production
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      NOTE_SLUG: ${{ inputs.note_slug }}
+      DEPLOY_SHA: ${{ inputs.deploy_sha }}
+      REPOSITORY_NAME: ${{ github.repository }}
+      PUSH_WORKER_URL: ${{ vars.PUSH_WORKER_URL }}
+      PUSH_API_TOKEN: ${{ secrets.PUSH_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Install locked notification dependencies
+        run: python -m pip install --require-hashes -r requirements-test.lock.txt
+      - name: Send one idempotent notification event
+        run: >-
+          python -m scripts.notifications.notify_deployed_note
+          send-note
+          --worker-url "$PUSH_WORKER_URL"
+          --token-env PUSH_API_TOKEN
+          --note-slug "$NOTE_SLUG"
+          --deploy-sha "$DEPLOY_SHA"
+          --repository "$REPOSITORY_NAME"

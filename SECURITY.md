@@ -1,119 +1,120 @@
-# SECURITY.md — Runbook de Seguridad (mragentes-site)
+# Seguridad
 
-> **⚠️ Este repositorio es PÚBLICO** y sirve mragentes.com.ar. Todo lo que se commitea
-> queda visible para siempre en el historial. Actuá en consecuencia.
-
-Última actualización: 2026-08-10 (tras la purga total del historial).
-
----
-
-## Contexto del incidente (2026-08-10)
-
-- Un `FACEBOOK_ACCESS_TOKEN` real estaba leakeado en el historial (archivo
-  `META API TOKENS.txt`, commit `ba7179b`, de junio).
-- El repo es público → el token quedó expuesto al mundo.
-- Mitigación en dos capas:
-  1. **Rotación** del token (se regeneró un long-lived nuevo vía
-     `fb_exchange_token`; el viejo quedó muerto).
-  2. **Purga total** del historial con `git filter-repo` + force-push
-     (366 → 253 commits).
-- Estado final: rama única `main`, token nuevo en `.env` local + secrets GitHub,
-  token viejo fuera del historial.
-
----
+Este repositorio es público y sirve `mragentes.com.ar`. Todo contenido versionado debe
+considerarse público y permanente. La arquitectura separa generación sin credenciales,
+validación en GitHub y efectos externos dentro de entornos protegidos.
 
 ## Reglas no negociables
 
-1. **NUNCA committear secretos.** `.env`, `META API TOKENS.txt`, tokens, keys,
-   archivos `*hardcoded*` → siempre en `.gitignore`, solo en disco local y en
-   los secrets de GitHub (o secrets del proveedor).
-2. **Antes de `git add`/`git commit`**: revisá `git status` y confirmá que no
-   entran archivos con credenciales.
-3. **Un token que pasó por un chat, un log o un commit quedó quemado** →
-   rotarlo. No alcanza con borrar el archivo.
-4. **Nunca pegar tokens completos en conversaciones** — referenciá por
-   fragmento inicial o por longitud.
-5. **Repo público = asumí que el historial lo lee cualquiera.**
+1. Nunca versiones `.env`, tokens, claves privadas, secretos de aplicación, cookies ni
+   respuestas completas de APIs autenticadas.
+2. Nunca pegues un secreto en una conversación, argumento de proceso, URL, commit, artefacto,
+   captura, excepción o log.
+3. Un secreto expuesto se considera comprometido: detené el flujo, revocalo, rotalo y recién
+   después investigá el alcance.
+4. No intentes leer el valor de un secret administrado. Validá presencia y comportamiento sin
+   imprimirlo.
+5. Ningún job de pull request no confiable recibe secretos ni permisos de escritura.
+6. No relajes `meta-testing`, protecciones de ambiente, CORS, validación de origen, health gates
+   ni controles idempotentes para resolver una urgencia.
+7. Un resultado remoto incierto no se reintenta a ciegas: se reconcilia o pasa a revisión.
 
-## Auditoría de secretos
+## Inventario de configuración sensible
+
+| Autoridad | Nombre | Uso | Exposición permitida |
+|---|---|---|---|
+| GitHub, entorno `meta-testing` | `META_ACCESS_TOKEN` | autenticar Graph API | sólo variable de entorno del job |
+| GitHub, entorno `meta-testing` | `FB_PAGE_ID` | destino Facebook | sólo variable de entorno del job |
+| GitHub, entorno `meta-testing` | `IG_USER_ID` | destino Instagram | sólo variable de entorno del job |
+| GitHub, entorno `cloudflare-production` | `PUSH_API_TOKEN` | autenticar `/api/send/` | sólo variable de entorno del job |
+| GitHub, entorno `cloudflare-production` | `PUSH_WORKER_URL` | URL base del Worker | variable de entorno protegida |
+| Cloudflare | `API_TOKEN` | verificar llamadas del workflow | secret del Worker |
+| Cloudflare | `VAPID_PRIVATE_KEY` | firmar Web Push | secret del Worker |
+| Cloudflare | `VAPID_PUBLIC_KEY` | alta del navegador | binding/configuración pública |
+| Cloudflare | `PUSH_SUBS` | suscripciones y estado | binding KV; nunca artefacto CI |
+
+`PUSH_API_TOKEN` y `API_TOKEN` representan el mismo secreto en lados opuestos del límite. La
+clave privada VAPID nunca entra en GitHub ni en el cliente. El token de Meta nunca entra en una
+tarea de ChatGPT: aparece únicamente en los workflows de entrega.
+
+Los archivos `.env.example` y configuraciones versionadas deben contener nombres y valores
+vacíos o no sensibles. No uses un valor real como “ejemplo”.
+
+## Límites de confianza
+
+### Codex y tareas de ChatGPT
+
+Generan contenido, recursos y reportes en un worktree. No reciben credenciales de Meta o
+Cloudflare y no publican directamente. Sus ramas sólo pueden escribir los prefijos declarados
+en `.automation/schedules/*.json`.
+
+### GitHub
+
+- CI usa `contents: read` siempre que alcanza.
+- El intake usa `contents: write` y `pull-requests: write` sólo para crear/reutilizar el PR y
+  solicitar merge automático protegido.
+- Pages usa `pages: write` e `id-token: write` únicamente en el job de despliegue.
+- Los jobs externos declaran `contents: read`, un environment concreto y sólo sus secrets.
+- Las actions de terceros permanecen fijadas por SHA.
+
+### Meta
+
+`META_ENVIRONMENT=testing` es un control fail-closed del código además del environment de
+GitHub. La aplicación sigue en testing y publica únicamente sobre activos autorizados para el
+propietario. Promoverla requiere una decisión explícita, revisión de permisos y una nueva ronda
+RED→GREEN; cambiar sólo una variable no constituye aprobación.
+
+### Cloudflare y Web Push
+
+El Worker canónico es `cf_worker.js`. Sus rutas públicas de suscripción validan método, origen,
+forma y tamaño; `/api/send/` exige bearer token y evento con identidad estable. Las
+suscripciones se almacenan en `PUSH_SUBS`, no en el repositorio. El navegador sólo recibe la
+clave pública VAPID.
+
+El despliegue del Worker se realiza con el conector de Cloudflare después de tests y validación
+de staging. No agregues tokens de cuenta ni comandos de publicación al repositorio.
+
+## Controles antes de integrar
+
+Ejecutá como mínimo:
 
 ```bash
-# Buscar un fragmento de token en TODO el historial (rápido, pickaxe)
-git log --all --oneline -S "<frag_15_chars>" --
-
-# Buscar archivos con nombres sospechosos
-for b in main; do git ls-tree -r $b --name-only | grep -iE "\.env$|token|secret|TOKENS|credential" | grep -v .example; done
-
-# Script existente (árbol + historial)
-python3 scripts/scan_secrets.py --all
+.venv/bin/python scripts/scan_secrets.py --all
+.venv/bin/python -m pytest -q tests/static/test_repository_contract.py
+.venv/bin/python -m pytest -q tests/static/test_runtime_independence.py
+git diff --cached --name-only
+git diff --cached --check
 ```
 
-> Método rápido y correcto: `git log -S` (pickaxe). El barrido `git grep` por
-> commit es lento.
+Revisá cada ruta preparada explícitamente. Deben quedar fuera archivos con nombres o contenido
+que sugieran credenciales, dumps, backups, sesiones o configuración local. Si un detector da
+un falso positivo, documentá por qué; no desactives globalmente el control.
 
-## Rotación de token de Meta (long-lived)
+## Manejo seguro de errores
 
-```bash
-# Necesitás: FB_APP_ID + FB_APP_SECRET (en social-manager/.env) + short-lived token
-curl -s "https://graph.facebook.com/v25.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${APP_ID}&client_secret=${APP_SECRET}&fb_exchange_token=${SHORT}"
-# Devuelve un access_token long-lived (expires_at=0 en debug_token)
+- Redactá tokens, cabeceras de autorización, cuerpos autenticados e identificadores privados.
+- Limitá el cuerpo leído de una respuesta remota antes de clasificarla.
+- Separá errores retryable, permanentes e inciertos.
+- Conservá sólo hashes, IDs remotos necesarios, timestamps, estado y permalinks públicos.
+- No guardes captions completos ni payloads privados en el ledger operativo.
+- Un `409` sólo cuenta como duplicado confirmado si coincide la identidad y el hash esperados;
+  cualquier conflicto distinto requiere revisión.
 
-# Validar
-curl -s "https://graph.facebook.com/v25.0/debug_token?input_token=<NUEVO>&access_token=<APP_ID>|<APP_SECRET>"
-```
+## Respuesta a un incidente
 
-Actualizar en: `.env` local (raíz) y el secret de GitHub Actions.
+1. Pausá las tareas o environments que puedan repetir el efecto.
+2. Revocá o rotá el secreto en la autoridad que lo emitió.
+3. Actualizá el secret protegido sin mostrar su valor.
+4. Determiná exposición en árbol, índice, historial, logs y artefactos mediante fragmentos
+   mínimos no sensibles.
+5. Si alcanzó Git, coordiná una remediación del historial con backup y autorización explícita;
+   borrar el archivo en un commit nuevo no elimina la exposición previa.
+6. Ejecutá contratos, una prueba controlada y reconciliación remota.
+7. Reactivá de a una etapa y registrá causa, alcance y medidas preventivas sin incluir secretos.
 
-## Actualizar secret de GitHub Actions (no se puede leer)
+## Reporte
 
-Los secrets de GitHub NO se leen por API (solo nombre + fecha). Se actualizan
-cifrando con la public key del repo (NaCl sealed box):
-
-```python
-# pip: pynacl
-import base64, json, urllib.request, nacl.public
-# 1) GET /repos/<repo>/actions/secrets/public-key -> {key_id, key}
-# 2) box = nacl.public.SealedBox(PublicKey(b64decode(key)))
-#    enc = box.encrypt(valor.encode())
-# 3) PUT /repos/<repo>/actions/secrets/<NAME>
-#    body = {"encrypted_value": b64encode(enc), "key_id": key_id}
-```
-
-## Purga total del historial (destructivo — último recurso)
-
-```bash
-# 1) BACKUP COMPLETO obligatorio
-mkdir -p tmp/security_backup
-git bundle create tmp/security_backup/backup_$(date +%Y%m%d).bundle --all
-
-# 2) Trabajar en un MIRROR aparte (nunca en el repo real)
-rm -rf tmp/purge_work && git clone --mirror . tmp/purge_work && cd tmp/purge_work
-
-# 3) Instalar y ejecutar filter-repo
-#    pipx install git-filter-repo
-git filter-repo --force --invert-paths --path "META API TOKENS.txt" --path "<otro_archivo>"
-
-# 4) VERIFICAR: token ausente + estructura web intacta
-git log --all -S "<top_secret>" --          # -> vacío
-git ls-tree --name-only main | grep "<estructura esperada>"
-
-# 5) Force-push desde el mirror
-cd tmp/purge_work && git push --force https://TOKEN@github.com/<owner>/<repo>.git main:main
-
-# 6) Reconstruir el repo local
-cd <workspace> && git fetch origin && git reset --hard origin/main
-
-# 7) Limpiar
-rm -rf tmp/purge_work
-```
-
-> ⚠️ filter-repo reescribe TODOS los SHAs. Cualquier clon/referencia vieja queda
-> inválida → por eso el backup es obligatorio.
-> ⚠️ GitHub mantiene caché de commits viejos (forks/búsqueda). Reportar el
-> secreto en **Settings → Security → Secret scanning** para que GitHub lo invalide.
-
-## Recordatorio operativo
-
-- Rama única: `main`.
-- Git token embebido en el remote local (URL con `ghp_...`): rotarlo por higiene.
-- Backup del estado pre-purga: `tmp/security_backup/repo_backup_20260810_111319.bundle`.
+Para informar una vulnerabilidad, no abras un issue público con datos explotables. Contactá al
+propietario por un canal privado, describí impacto y reproducción con valores redactados, e
+indicá si hubo un efecto externo. No pruebes publicación, borrado o acceso sobre activos que no
+estén expresamente autorizados.

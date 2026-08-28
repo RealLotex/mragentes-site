@@ -30,6 +30,23 @@ def _slugify(title: str) -> str:
     s = unicodedata.normalize("NFKC", title).lower()
     s = re.sub(r"[^a-z0-9áéíóúüñ]+", "-", s).strip("-")
     return s
+
+
+def _explicit_slug(value: object) -> str:
+    """Validate an explicit Hugo slug without changing its Unicode spelling."""
+
+    if value in (None, ""):
+        return ""
+    if not isinstance(value, str) or value != value.strip():
+        raise ValueError("slug explícito inválido")
+    if (
+        value in {".", ".."}
+        or any(character in value for character in "/\\?#")
+        or "://" in value
+        or any(ord(character) < 32 or ord(character) == 127 for character in value)
+    ):
+        raise ValueError("slug explícito inválido")
+    return value
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -84,6 +101,7 @@ class Nota:
     image_alt: str = ""
     tags: list = field(default_factory=list)
     body: str = ""
+    canonical_slug: str = ""
 
     # ── Identidad ───────────────────────────────────────────────────────
     @property
@@ -99,7 +117,7 @@ class Nota:
         Se replica la transformación urlize de Hugo aplicada al ``title`` para
         que el link social coincida exactamente con el permalink publicado.
         """
-        return _slugify(self.title)
+        return self.canonical_slug or _slugify(self.title)
 
     def url(self, base: str = "https://mragentes.com.ar") -> str:
         return f"{base.rstrip('/')}/notas/{urllib.parse.quote(self.slug)}/"
@@ -114,9 +132,15 @@ class Nota:
         """Ruta local de la imagen de portada declarada en el front matter."""
         if not self.image:
             return None
-        rel = self.image.lstrip("/")
-        candidate = BASE_DIR / "static" / rel
-        return candidate if candidate.exists() else None
+        static_root = (BASE_DIR / "static").resolve()
+        raw = self.image.replace("\\", "/")
+        rel = raw.lstrip("/")
+        candidate = (static_root / rel).resolve()
+        try:
+            candidate.relative_to(static_root)
+        except ValueError:
+            return None
+        return candidate if candidate.is_file() else None
 
     # ── Materia prima para el copy ──────────────────────────────────────
     @property
@@ -180,13 +204,19 @@ class Nota:
 
     @property
     def bullets(self) -> list[str]:
+        seen: set[str] = set()
         out = []
         for line in re.findall(r"^[-*]\s+(.+)$", self.main_body, re.M):
-            if "http" in line:
+            line = re.sub(r"\[([^\]]+)\]\(https?://[^)]*\)", r"\1", line, flags=re.I)
+            if re.search(r"https?://", line, re.I) or re.match(
+                r"\s*(?:fuente|referencia|enlace)\b", line, re.I
+            ):
                 continue
             line = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", line)
             line = re.sub(r"[*_`]", "", line).strip()
-            if 12 < len(line) < 200:
+            key = line.casefold()
+            if 12 < len(line) < 200 and key not in seen:
+                seen.add(key)
                 out.append(line)
         return out
 
@@ -223,6 +253,7 @@ def load(path: str | Path) -> Nota:
         image_alt=str(data.get("image_alt", "")),
         tags=list(tags),
         body=body,
+        canonical_slug=_explicit_slug(data.get("slug")),
     )
 
 

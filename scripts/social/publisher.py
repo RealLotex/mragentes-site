@@ -18,10 +18,14 @@ como resultado, no como excepción hacia afuera.
 
 from __future__ import annotations
 
-import time
+import datetime as dt
+import hashlib
 import json
+import re
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 try:
     import requests
@@ -34,7 +38,126 @@ TIMEOUT = 60
 
 
 class PublishError(RuntimeError):
-    pass
+    def __init__(
+        self,
+        message: str,
+        *,
+        category: str = "permanent",
+        error_code: str = "publish_error",
+        retryable: bool = False,
+    ) -> None:
+        super().__init__(message)
+        self.category = category
+        self.error_code = error_code
+        self.retryable = retryable
+
+
+_SENSITIVE_QUERY_KEYS = {
+    "access_token",
+    "token",
+    "authorization",
+    "password",
+    "passwd",
+    "secret",
+    "client_secret",
+}
+
+
+def _redact_message(value: object, max_length: int = 220) -> str:
+    """Convierte diagnósticos remotos en texto acotado sin credenciales."""
+    text = str(value or "")
+    text = re.sub(
+        r"(?i)\b(access[_-]?token|authorization|password|passwd|client[_-]?secret|secret)"
+        r"\s*[=:]\s*[^\s&,;]+",
+        "[REDACTED]",
+        text,
+    )
+    text = re.sub(r"(?i)\bBearer\s+[A-Za-z0-9._~+\-/]+=*", "Bearer [REDACTED]", text)
+    text = re.sub(r"\bEAAB[A-Za-z0-9._~-]{8,}\b", "[REDACTED]", text)
+    text = re.sub(r"(https?://)[^/@\s:]+:[^/@\s]+@", r"\1[REDACTED]@", text)
+    text = " ".join(text.split())
+    if max_length <= 0:
+        return ""
+    if len(text) > max_length:
+        text = text[: max(0, max_length - 1)].rstrip() + "…"
+    return text
+
+
+def _safe_public_url(value: object) -> str:
+    """Conserva un permalink público, quitando userinfo y parámetros sensibles."""
+    raw = str(value or "")
+    try:
+        parsed = urlsplit(raw)
+    except ValueError:
+        return ""
+    if parsed.scheme not in {"http", "https"} or not parsed.hostname:
+        return ""
+    try:
+        port = f":{parsed.port}" if parsed.port is not None else ""
+    except ValueError:
+        return ""
+    host = parsed.hostname
+    if ":" in host and not host.startswith("["):
+        host = f"[{host}]"
+    query = urlencode(
+        [
+            (key, value)
+            for key, value in parse_qsl(parsed.query, keep_blank_values=True)
+            if key.casefold() not in _SENSITIVE_QUERY_KEYS
+        ],
+        doseq=True,
+    )
+    return _redact_message(
+        urlunsplit((parsed.scheme, f"{host}{port}", parsed.path, query, "")), 2048
+    )
+
+
+def classify_publish_error(
+    error: object,
+    *,
+    http_status: int | None = None,
+    request_sent: bool = False,
+) -> dict[str, object]:
+    """Clasifica un fallo sin confundir timeout posenvío con reintento seguro."""
+    if isinstance(error, PublishError):
+        return {
+            "category": error.category,
+            "error_code": error.error_code,
+            "retryable": error.retryable,
+            "message": _redact_message(error),
+        }
+
+    if isinstance(error, (TimeoutError, ConnectionError)):
+        category = "uncertain" if request_sent else "retryable"
+        code = "transport_timeout" if isinstance(error, TimeoutError) else "transport_error"
+        return {
+            "category": category,
+            "error_code": code,
+            "retryable": category == "retryable",
+            "message": _redact_message(error) or code,
+        }
+
+    graph = error.get("error", error) if isinstance(error, dict) else {}
+    graph = graph if isinstance(graph, dict) else {}
+    code = graph.get("code")
+    transient = graph.get("is_transient") is True
+    message = graph.get("message") or error
+    if code in {190, 102}:
+        category, error_code = "authentication", f"graph_{code}"
+    elif transient or http_status == 429 or code in {1, 2, 4, 17, 32, 613}:
+        category, error_code = "retryable", f"graph_{code or http_status or 'transient'}"
+    elif http_status is not None and 500 <= http_status <= 599:
+        category, error_code = "retryable", f"http_{http_status}"
+    elif request_sent and not graph:
+        category, error_code = "uncertain", "transport_uncertain"
+    else:
+        category, error_code = "permanent", f"graph_{code}" if code is not None else "publish_error"
+    return {
+        "category": category,
+        "error_code": error_code,
+        "retryable": category == "retryable",
+        "message": _redact_message(message),
+    }
 
 
 @dataclass
@@ -46,13 +169,29 @@ class Result:
     url: str = ""
     error: str = ""
     skipped: str = ""
+    retryable: bool = False
+    error_code: str = ""
+    category: str = ""
 
     def line(self) -> str:
         if self.skipped:
-            return f"  ○ {self.network} {self.kind}: omitido ({self.skipped})"
+            return f"  ○ {self.network} {self.kind}: omitido ({_redact_message(self.skipped, 180)})"
         if self.ok:
-            return f"  ✔ {self.network} {self.kind}: {self.id}"
-        return f"  ✖ {self.network} {self.kind}: {self.error}"
+            return f"  ✔ {self.network} {self.kind}: {_redact_message(self.id, 200)}"
+        prefix = f"  ✖ {self.network} {self.kind}: "
+        return prefix + _redact_message(self.error, max(1, 300 - len(prefix)))
+
+
+def _failed_result(network: str, kind: str, exc: PublishError) -> Result:
+    return Result(
+        network,
+        kind,
+        False,
+        error=_redact_message(exc),
+        retryable=exc.retryable,
+        error_code=exc.error_code,
+        category=exc.category,
+    )
 
 
 @dataclass
@@ -65,20 +204,47 @@ class Meta:
         if requests is None:
             raise PublishError("Falta `requests`: pip install -r scripts/requirements.txt")
 
+    def _require_testing(self) -> None:
+        if not self.settings.is_testing:
+            raise PublishError(
+                "META_ENVIRONMENT no está en testing; salida remota bloqueada",
+                error_code="environment_not_testing",
+            )
+
     def _post(self, path: str, data: dict, files: dict | None = None) -> dict:
         self._require_requests()
+        self._require_testing()
         url = f"{self.settings.graph_root}/{path.lstrip('/')}"
         payload = dict(data)
         payload["access_token"] = self.settings.access_token
-        resp = requests.post(url, data=payload, files=files, timeout=TIMEOUT)
+        try:
+            resp = requests.post(url, data=payload, files=files, timeout=TIMEOUT)
+        except Exception as exc:  # un POST pudo surtir efecto antes del corte
+            details = classify_publish_error(exc, request_sent=True)
+            raise PublishError(
+                str(details["message"]),
+                category=str(details["category"]),
+                error_code=str(details["error_code"]),
+                retryable=bool(details["retryable"]),
+            ) from exc
         return self._unwrap(resp)
 
     def _get(self, path: str, params: dict | None = None) -> dict:
         self._require_requests()
+        self._require_testing()
         url = f"{self.settings.graph_root}/{path.lstrip('/')}"
         query = dict(params or {})
         query["access_token"] = self.settings.access_token
-        resp = requests.get(url, params=query, timeout=TIMEOUT)
+        try:
+            resp = requests.get(url, params=query, timeout=TIMEOUT)
+        except Exception as exc:
+            details = classify_publish_error(exc, request_sent=False)
+            raise PublishError(
+                str(details["message"]),
+                category=str(details["category"]),
+                error_code=str(details["error_code"]),
+                retryable=bool(details["retryable"]),
+            ) from exc
         return self._unwrap(resp)
 
     @staticmethod
@@ -86,14 +252,31 @@ class Meta:
         try:
             body = resp.json()
         except ValueError:
-            raise PublishError(f"HTTP {resp.status_code}: {resp.text[:200]}")
+            details = classify_publish_error({}, http_status=resp.status_code)
+            raise PublishError(
+                f"HTTP {resp.status_code}: {_redact_message(resp.text)}",
+                category=str(details["category"]),
+                error_code=str(details["error_code"]),
+                retryable=bool(details["retryable"]),
+            )
         if isinstance(body, dict) and body.get("error"):
             err = body["error"]
+            details = classify_publish_error(body, http_status=resp.status_code)
             raise PublishError(
-                f"{err.get('type', 'GraphError')} {err.get('code', '')}: {err.get('message', '')}".strip()
+                f"{err.get('type', 'GraphError')} {err.get('code', '')}: "
+                f"{_redact_message(err.get('message', ''))}".strip(),
+                category=str(details["category"]),
+                error_code=str(details["error_code"]),
+                retryable=bool(details["retryable"]),
             )
         if resp.status_code >= 400:
-            raise PublishError(f"HTTP {resp.status_code}: {str(body)[:200]}")
+            details = classify_publish_error(body, http_status=resp.status_code)
+            raise PublishError(
+                f"HTTP {resp.status_code}: {_redact_message(body)}",
+                category=str(details["category"]),
+                error_code=str(details["error_code"]),
+                retryable=bool(details["retryable"]),
+            )
         return body
 
     # ── Diagnóstico ─────────────────────────────────────────────────────
@@ -130,7 +313,7 @@ class Meta:
             return Result("facebook", "feed", True, id=post_id,
                           url=f"https://facebook.com/{post_id}" if post_id else "")
         except PublishError as exc:
-            return Result("facebook", "feed", False, error=str(exc))
+            return _failed_result("facebook", "feed", exc)
 
     def facebook_album(self, images: list[Path | str], caption: str, link: str = "") -> Result:
         """Publica el carrusel completo en Facebook como álbum.
@@ -178,7 +361,7 @@ class Meta:
             return Result("facebook", "album", True, id=post_id,
                           url=f"https://facebook.com/{post_id}" if post_id else "")
         except PublishError as exc:
-            return Result("facebook", "album", False, error=str(exc))
+            return _failed_result("facebook", "album", exc)
 
     def facebook_story(self, image: Path | str) -> Result:
         """Publica una historia real de Facebook (endpoint /stories).
@@ -203,7 +386,7 @@ class Meta:
             logic_id = str(body.get("logic_id") or body.get("id") or "")
             return Result("facebook", "historia", True, id=logic_id)
         except PublishError as exc:
-            return Result("facebook", "historia", False, error=str(exc))
+            return _failed_result("facebook", "historia", exc)
 
     # ── Instagram ───────────────────────────────────────────────────────
     def _ig_container(self, params: dict) -> str:
@@ -237,11 +420,20 @@ class Meta:
             mid = self._ig_publish(cid)
             return Result("instagram", "feed", True, id=mid)
         except PublishError as exc:
-            return Result("instagram", "feed", False, error=str(exc))
+            return _failed_result("instagram", "feed", exc)
 
     def instagram_carousel(self, image_urls: list[str], caption: str) -> Result:
         if not self.settings.can_post_instagram:
             return Result("instagram", "carrusel", False, skipped="falta IG_USER_ID o token")
+        if not image_urls:
+            return Result(
+                "instagram",
+                "carrusel",
+                False,
+                error="se necesita al menos una imagen",
+                error_code="empty_media",
+                category="permanent",
+            )
         if len(image_urls) < 2:
             return self.instagram_image(image_urls[0], caption)
         try:
@@ -260,7 +452,7 @@ class Meta:
             mid = self._ig_publish(parent)
             return Result("instagram", "carrusel", True, id=mid)
         except PublishError as exc:
-            return Result("instagram", "carrusel", False, error=str(exc))
+            return _failed_result("instagram", "carrusel", exc)
 
     def instagram_story(self, image_url: str) -> Result:
         if not self.settings.can_post_instagram:
@@ -271,7 +463,67 @@ class Meta:
             mid = self._ig_publish(cid)
             return Result("instagram", "historia", True, id=mid)
         except PublishError as exc:
-            return Result("instagram", "historia", False, error=str(exc))
+            return _failed_result("instagram", "historia", exc)
+
+    def recent_publications(
+        self,
+        platform: str,
+        *,
+        since: str,
+        limit: int = 25,
+    ) -> list[dict[str, str]]:
+        """Lee evidencia remota mínima para reconciliar un resultado incierto."""
+        if platform not in {"facebook", "instagram"}:
+            raise ValueError("platform debe ser facebook o instagram")
+        if isinstance(limit, bool) or not isinstance(limit, int) or not 1 <= limit <= 100:
+            raise ValueError("limit debe estar entre 1 y 100")
+        if not isinstance(since, str):
+            raise ValueError("since debe ser una fecha RFC3339")
+        normalized = since[:-1] + "+00:00" if since.endswith("Z") else since
+        try:
+            boundary = dt.datetime.fromisoformat(normalized)
+        except ValueError as exc:
+            raise ValueError("since debe ser una fecha RFC3339 válida") from exc
+        if boundary.tzinfo is None or boundary.utcoffset() is None:
+            raise ValueError("since debe incluir zona horaria")
+
+        if platform == "facebook":
+            path = f"{self.settings.fb_page_id}/posts"
+            fields = "id,created_time,permalink_url,message"
+        else:
+            path = f"{self.settings.ig_user_id}/media"
+            fields = "id,timestamp,permalink,caption"
+        body = self._get(path, {"fields": fields, "since": since, "limit": limit})
+        source = body.get("data", []) if isinstance(body, dict) else []
+        if not isinstance(source, list):
+            raise PublishError("Graph devolvió una colección reciente inválida")
+
+        records: list[dict[str, str]] = []
+        for item in source:
+            if not isinstance(item, dict):
+                continue
+            created_at = item.get("created_time") if platform == "facebook" else item.get("timestamp")
+            permalink = item.get("permalink_url") if platform == "facebook" else item.get("permalink")
+            record = {
+                "platform": platform,
+                "remote_id": _redact_message(item.get("id", ""), 300),
+                "created_at": _redact_message(created_at, 80),
+                "permalink": _safe_public_url(permalink),
+            }
+            raw_copy = item.get("message") if platform == "facebook" else item.get("caption")
+            if isinstance(raw_copy, str) and raw_copy:
+                record["caption_hash"] = (
+                    "sha256:" + hashlib.sha256(raw_copy.encode("utf-8")).hexdigest()
+                )
+            else:
+                synthetic_hash = item.get("caption_hash") or item.get("message_hash")
+                if isinstance(synthetic_hash, str) and synthetic_hash:
+                    record["caption_hash"] = _redact_message(synthetic_hash, 300)
+            asset_hash = item.get("asset_hash")
+            if isinstance(asset_hash, str) and asset_hash:
+                record["asset_hash"] = _redact_message(asset_hash, 300)
+            records.append(record)
+        return records
 
 
 # ── Resolución de la URL pública ────────────────────────────────────────────

@@ -1,0 +1,38 @@
+name: Automation branch intake
+
+on:
+  push:
+    branches:
+      - automation/news/**
+      - automation/blog/**
+      - automation/social/**
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: automation-intake-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  open_or_reuse_pull_request:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_BRANCH: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Require CI-gated pull request into main
+        run: |
+          set -euo pipefail
+          if gh pr view "$SOURCE_BRANCH" --json number >/dev/null 2>&1; then
+            gh pr edit "$SOURCE_BRANCH" --add-label automation
+          else
+            gh pr create --base main --head "$SOURCE_BRANCH" --fill --label automation
+          fi
+          pr_number="$(gh pr view "$SOURCE_BRANCH" --json number --jq .number)"
+          gh pr merge "$pr_number" --auto --squash

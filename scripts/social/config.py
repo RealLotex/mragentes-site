@@ -21,6 +21,7 @@ Variables (ver .env.example):
 from __future__ import annotations
 
 import os
+import re
 import urllib.parse
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -87,7 +88,7 @@ def _bool(name: str, default: bool) -> bool:
 
 @dataclass
 class Settings:
-    access_token: str = ""
+    access_token: str = field(default="", repr=False)
     fb_page_id: str = ""
     ig_user_id: str = ""
     graph_version: str = "v21.0"
@@ -98,6 +99,10 @@ class Settings:
     repository: str = "RealLotex/mragentes-site"
     branch: str = "main"
     handle: str = "@mragentes"
+    # Construir Settings directamente representa una configuración ya
+    # validada. load_settings(), la entrada de producción, reemplaza este
+    # valor por "disabled" salvo que META_ENVIRONMENT=testing sea explícito.
+    meta_environment: str = "testing"
     warnings: list[str] = field(default_factory=list)
 
     # ── Derivados ─────────────────────────────────────────────────────────
@@ -106,12 +111,16 @@ class Settings:
         return f"https://graph.facebook.com/{self.graph_version}"
 
     @property
+    def is_testing(self) -> bool:
+        return self.meta_environment == "testing"
+
+    @property
     def can_post_facebook(self) -> bool:
-        return bool(self.access_token and self.fb_page_id)
+        return bool(self.is_testing and self.access_token and self.fb_page_id)
 
     @property
     def can_post_instagram(self) -> bool:
-        return bool(self.access_token and self.ig_user_id)
+        return bool(self.is_testing and self.access_token and self.ig_user_id)
 
     @property
     def can_post(self) -> bool:
@@ -124,9 +133,34 @@ class Settings:
         cruda de GitHub está disponible apenas se pushea; la del sitio recién
         cuando termina el deploy de Pages. Se prueban en ese orden.
         """
+        if not isinstance(filename, str) or not filename.strip():
+            raise ValueError("El filename de imagen debe ser una ruta relativa segura")
+        raw = filename.strip()
+        decoded = raw
+        for _ in range(3):
+            expanded = urllib.parse.unquote(decoded)
+            if expanded == decoded:
+                break
+            decoded = expanded
+        parsed = urllib.parse.urlsplit(decoded)
+        parts = decoded.split("/")
+        if (
+            raw.startswith(("/", "\\"))
+            or "\\" in decoded
+            or parsed.scheme
+            or parsed.netloc
+            or parsed.username
+            or parsed.password
+            or ":" in decoded
+            or "@" in decoded
+            or any(part in {"", ".", ".."} for part in parts)
+            or "\x00" in decoded
+        ):
+            raise ValueError("La ruta de imagen no es un filename relativo seguro")
+
         # Meta descarga la imagen tal cual: si el nombre trae acentos y no van
         # codificados, la descarga falla y el posteo se cae sin explicación.
-        safe = urllib.parse.quote(filename, safe="/")
+        safe = urllib.parse.quote(decoded, safe="/")
         urls = []
         if self.image_base:
             urls.append(f"{self.image_base.rstrip('/')}/{safe}")
@@ -154,11 +188,24 @@ def load_settings(env_file: Path = ENV_FILE) -> Settings:
         or ""
     ).strip()
 
+    graph_version = (os.environ.get("META_GRAPH_VERSION") or "v21.0").strip()
+    fb_page_id = (os.environ.get("FB_PAGE_ID") or "").strip()
+    ig_user_id = (os.environ.get("IG_USER_ID") or os.environ.get("IG_BUSINESS_ID") or "").strip()
+    meta_environment = (os.environ.get("META_ENVIRONMENT") or "disabled").strip().lower()
+    if not re.fullmatch(r"v\d+\.\d+", graph_version):
+        raise ValueError("Configuración Graph inválida: META_GRAPH_VERSION debe ser vN.N")
+    if fb_page_id and not fb_page_id.isdecimal():
+        raise ValueError("Configuración inválida: FB_PAGE_ID debe ser numérico")
+    if ig_user_id and not ig_user_id.isdecimal():
+        raise ValueError("Configuración inválida: IG_USER_ID debe ser numérico")
+    if meta_environment not in {"testing", "disabled"}:
+        raise ValueError("Configuración inválida: META_ENVIRONMENT debe ser testing o disabled")
+
     settings = Settings(
         access_token=token,
-        fb_page_id=(os.environ.get("FB_PAGE_ID") or "").strip(),
-        ig_user_id=(os.environ.get("IG_USER_ID") or os.environ.get("IG_BUSINESS_ID") or "").strip(),
-        graph_version=(os.environ.get("META_GRAPH_VERSION") or "v21.0").strip(),
+        fb_page_id=fb_page_id,
+        ig_user_id=ig_user_id,
+        graph_version=graph_version,
         enabled=_bool("SOCIAL_ENABLED", True),
         dry_run=_bool("SOCIAL_DRY_RUN", False),
         site_base_url=(os.environ.get("SITE_BASE_URL") or "https://mragentes.com.ar").strip(),
@@ -166,6 +213,7 @@ def load_settings(env_file: Path = ENV_FILE) -> Settings:
         repository=(os.environ.get("GITHUB_REPOSITORY") or "RealLotex/mragentes-site").strip(),
         branch=(os.environ.get("SOCIAL_GIT_BRANCH") or os.environ.get("GITHUB_REF_NAME") or "main").strip(),
         handle=(os.environ.get("SOCIAL_HANDLE") or "@mragentes").strip(),
+        meta_environment=meta_environment,
     )
 
     if not settings.access_token:

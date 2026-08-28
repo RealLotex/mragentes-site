@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import datetime
+import hashlib
 import json
 import subprocess
 import sys
@@ -32,6 +33,7 @@ from . import notas as notas_mod  # noqa: E402
 from . import state as state_mod  # noqa: E402
 from . import templates as tpl  # noqa: E402
 from .config import BASE_DIR, ENV_FILE, OUT_DIR, load_settings  # noqa: E402
+from .delivery import build_blog_note_draft, deliver_draft  # noqa: E402
 from .flow import ascii_slug, commit_and_push, public_name, publish_nota, render_nota_pieces  # noqa: E402
 from .library import LIBRARY, captions as library_captions, library_piece  # noqa: E402
 from .publisher import Meta, PublishError, resolve_public_url  # noqa: E402
@@ -197,6 +199,153 @@ def cmd_nota(args) -> int:
     print("\n── Instagram ────────────────────────────────────────────────")
     print(copywriter.caption(nota, "instagram", settings.site_base_url))
     return 0
+
+
+def cmd_draft_daily(args) -> int:
+    """Crea y valida un borrador diario local; no consulta servicios remotos."""
+    from scripts.automation import social_guard
+
+    local_date = datetime.date.fromisoformat(args.date) if args.date else datetime.date.today()
+    asset = Path(args.asset)
+    asset = asset if asset.is_absolute() else BASE_DIR / asset
+    asset = asset.resolve()
+    try:
+        relative_asset = asset.relative_to(BASE_DIR.resolve()).as_posix()
+    except ValueError as exc:
+        raise ValueError("El asset debe estar dentro del repositorio") from exc
+    if not asset.is_file():
+        raise FileNotFoundError(asset)
+    if not relative_asset.startswith("static/images/social/"):
+        raise ValueError("El asset diario debe estar bajo static/images/social/")
+
+    zone = datetime.datetime.now().astimezone().tzinfo
+    created_at = datetime.datetime.combine(
+        local_date, datetime.time(hour=12), tzinfo=zone
+    ).isoformat()
+    topic_hash = "sha256:" + hashlib.sha256(args.topic.encode("utf-8")).hexdigest()
+    draft = {
+        "schema_version": 1,
+        "run_id": social_guard.social_run_id(local_date.isoformat(), "daily_owned"),
+        "kind": "daily_owned",
+        "topic": args.topic,
+        "topic_hash": topic_hash,
+        "content_hash": "pending",
+        "dedupe_key": "pending",
+        "asset": {
+            "path": relative_asset,
+            "sha256": hashlib.sha256(asset.read_bytes()).hexdigest(),
+            "alt": args.alt,
+        },
+        "captions": {
+            "facebook": args.facebook_caption,
+            "instagram": args.instagram_caption,
+        },
+        "created_at": created_at,
+    }
+    draft["content_hash"] = social_guard.content_hash(draft)
+    draft["dedupe_key"] = (
+        f"daily_owned:{local_date.isoformat()}:{draft['content_hash']}"
+    )
+    validated = social_guard.validate_social_draft(draft)
+    target = (
+        Path(args.out)
+        if args.out
+        else BASE_DIR
+        / ".automation"
+        / "social"
+        / "drafts"
+        / f"{local_date}-daily-owned.json"
+    )
+    target = target if target.is_absolute() else BASE_DIR / target
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(
+        json.dumps(validated, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    print(f"  ✔ borrador local validado: {_show(target)}")
+    return 0
+
+
+def cmd_recover(args) -> int:
+    """Muestra un plan de recuperación desde el ledger, sin ejecutar efectos."""
+    from . import ledger as ledger_mod
+
+    local_date = datetime.date.fromisoformat(args.date).isoformat()
+    ledger_path = Path(args.ledger)
+    ledger_path = ledger_path if ledger_path.is_absolute() else BASE_DIR / ledger_path
+    document = ledger_mod.load_ledger(ledger_path)
+    matches = [
+        entry
+        for entry in document["entries"].values()
+        if entry.get("kind") == args.kind and entry.get("local_date") == local_date
+    ]
+    if args.subject:
+        matches = [entry for entry in matches if args.subject in entry.get("run_id", "")]
+    if not matches:
+        print("○ No hay una ejecución local para recuperar.")
+        return 1
+    if len(matches) > 1:
+        raise ValueError("Hay varias ejecuciones; indicá --subject para desambiguar")
+    plan = ledger_mod.recovery_plan(matches[0])
+    print(json.dumps(plan, ensure_ascii=False, indent=2))
+    return 0 if plan.get("decision") != "needs_review" else 2
+
+
+def _delivery_exit(result: dict) -> int:
+    status = result.get("status")
+    if status == "complete":
+        return 0
+    if status == "partial":
+        return 2
+    if status == "needs_review":
+        return 3
+    raise ValueError(f"Estado de entrega desconocido: {status!r}")
+
+
+def cmd_deliver_draft(args) -> int:
+    """Deliver one committed daily draft through the guarded Meta adapter."""
+
+    draft_path = Path(args.draft)
+    draft_path = draft_path if draft_path.is_absolute() else BASE_DIR / draft_path
+    ledger_path = Path(args.ledger)
+    ledger_path = ledger_path if ledger_path.is_absolute() else BASE_DIR / ledger_path
+    document = json.loads(draft_path.read_text(encoding="utf-8"))
+    if not isinstance(document, dict):
+        raise ValueError("El draft social debe ser un objeto JSON")
+    result = deliver_draft(
+        document,
+        settings=load_settings(),
+        root=BASE_DIR,
+        ledger_path=ledger_path,
+    )
+    print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+    return _delivery_exit(result)
+
+
+def cmd_deliver_note(args) -> int:
+    """Build and deliver the transient contract for one deployed blog note."""
+
+    note = notas_mod.find(args.slug)
+    if note is None:
+        raise ValueError(f"No encontré la nota {args.slug!r}")
+    ledger_path = Path(args.ledger)
+    ledger_path = ledger_path if ledger_path.is_absolute() else BASE_DIR / ledger_path
+    created_at = args.created_at or f"{note.date.isoformat()}T12:00:00-03:00"
+    settings = load_settings()
+    draft = build_blog_note_draft(
+        note,
+        deploy_sha=args.deploy_sha,
+        root=BASE_DIR,
+        created_at=created_at,
+        site_base_url=settings.site_base_url,
+    )
+    result = deliver_draft(
+        draft,
+        settings=settings,
+        root=BASE_DIR,
+        ledger_path=ledger_path,
+    )
+    print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+    return _delivery_exit(result)
 
 
 # ── Publicación ─────────────────────────────────────────────────────────────
@@ -376,6 +525,39 @@ def build_parser() -> argparse.ArgumentParser:
     n.add_argument("--no-story", action="store_true")
     n.add_argument("--no-carousel", action="store_true")
     n.set_defaults(func=cmd_nota)
+
+    dd = sub.add_parser("draft-daily", help="crear un borrador diario local validado")
+    dd.add_argument("--date", help="fecha local YYYY-MM-DD (default: hoy)")
+    dd.add_argument("--topic", required=True)
+    dd.add_argument("--asset", required=True, help="archivo bajo static/images/social/")
+    dd.add_argument("--alt", required=True, help="texto alternativo de la imagen")
+    dd.add_argument("--facebook-caption", required=True)
+    dd.add_argument("--instagram-caption", required=True)
+    dd.add_argument("--out", help="JSON de salida local")
+    dd.set_defaults(func=cmd_draft_daily)
+
+    rc = sub.add_parser("recover", help="inspeccionar un plan local de recuperación")
+    rc.add_argument("--kind", required=True, choices=("daily_owned", "blog_note"))
+    rc.add_argument("--date", required=True, help="fecha local YYYY-MM-DD")
+    rc.add_argument("--subject", help="slug de nota cuando haya más de una ejecución")
+    rc.add_argument("--ledger", default="scripts/social/ledger.json")
+    rc.set_defaults(func=cmd_recover)
+
+    deliver_daily = sub.add_parser(
+        "deliver-draft", help="entregar un draft validado a Meta testing"
+    )
+    deliver_daily.add_argument("--draft", required=True)
+    deliver_daily.add_argument("--ledger", default=".automation/reports/social-delivery.json")
+    deliver_daily.set_defaults(func=cmd_deliver_draft)
+
+    deliver_note = sub.add_parser(
+        "deliver-note", help="entregar el anuncio de una nota ya desplegada"
+    )
+    deliver_note.add_argument("--slug", required=True)
+    deliver_note.add_argument("--deploy-sha", required=True)
+    deliver_note.add_argument("--created-at")
+    deliver_note.add_argument("--ledger", default=".automation/reports/social-delivery.json")
+    deliver_note.set_defaults(func=cmd_deliver_note)
 
     pn = sub.add_parser("publish-nota", help="publicar una nota en Facebook e Instagram")
     pn.add_argument("--slug")

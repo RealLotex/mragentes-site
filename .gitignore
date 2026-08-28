@@ -10,6 +10,7 @@ resources/
 .env.*
 !.env.example
 scripts/config.local.json
+config.local.json
 scripts/push_subscriptions.json
 scripts/push_server.service
 scripts/deploy_worker.sh
@@ -23,6 +24,16 @@ scripts/_browser_enrich_enriched.json
 scripts/_last_trends.json
 __pycache__/
 *.py[cod]
+.venv/
+node_modules/
+.pytest_cache/
+.hypothesis/
+.coverage
+coverage.xml
+htmlcov/
+test-results/
+*.junit.xml
+*.vitest.json
 
 # Fuentes convertidas a TTF y otros temporales del social manager
 scripts/social/.cache/
@@ -37,4 +48,3 @@ cf_worker_hardcoded_token.js
 
 # ── Cerebros Creativos Suite (proyecto privado con secretos del ERP/bot) ──
 cerebros-corp/
-

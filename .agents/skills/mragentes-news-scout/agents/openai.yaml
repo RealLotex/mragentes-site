@@ -1,0 +1,6 @@
+interface:
+  display_name: "MR Agentes News Scout"
+  short_description: "Verifica noticias para la cola editorial"
+  default_prompt: "Usá $mragentes-news-scout para relevar noticias verificables en dry-run."
+policy:
+  allow_implicit_invocation: true
