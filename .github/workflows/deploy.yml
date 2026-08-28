@@ -83,7 +83,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@75d19ec2a7b25a0e69c6dfd6c44f30f1f0b9e057 # v3.0.0
+        uses: peaceiris/actions-hugo@6e295a6a0c9087bf374299e9d67f9d2edab9f18f # v3.0.0
         with:
           hugo-version: '0.128.0'
           extended: true

@@ -74,7 +74,9 @@ def test_automation_merge_happens_only_after_ci_without_auto_merge_dependency() 
         ".github/workflows/automation-intake.yml", "WF-INTAKE-002"
     )
     _, ci_source, parsed_ci = workflow(".github/workflows/ci.yml", "WF-INTAKE-002")
-    assert "contents: read" in intake_source and "pull-requests: write" in intake_source, trace_message(
+    assert (
+        "contents: read" in intake_source and "pull-requests: write" in intake_source
+    ), trace_message(
         "WF-INTAKE-002", "intake lacks least-privilege permissions to open its PR"
     )
     assert "gh pr merge" not in intake_source and "--auto" not in intake_source, trace_message(
@@ -93,7 +95,9 @@ def test_automation_merge_happens_only_after_ci_without_auto_merge_dependency() 
     assert "startsWith(github.head_ref, 'automation/')" in condition, trace_message(
         "WF-INTAKE-002", "merge job is not restricted to automation branches"
     )
-    assert "github.event.pull_request.head.repo.full_name == github.repository" in condition, trace_message(
+    assert (
+        "github.event.pull_request.head.repo.full_name == github.repository" in condition
+    ), trace_message(
         "WF-INTAKE-002", "merge job does not reject branches from other repositories"
     )
     combined = intake_source + "\n" + ci_source
@@ -144,6 +148,12 @@ def test_deploy_actions_are_pinned_by_commit_sha() -> None:
     _, source, _ = workflow(".github/workflows/deploy.yml", "WF-DEPLOY-002")
     unpinned = [ref for ref in action_references(source) if not re.search(r"@[0-9a-f]{40}$", ref)]
     assert not unpinned, trace_message("WF-DEPLOY-002", f"unpinned actions: {unpinned}")
+    assert (
+        "peaceiris/actions-hugo@6e295a6a0c9087bf374299e9d67f9d2edab9f18f" in source
+    ), trace_message(
+        "WF-DEPLOY-002",
+        "Hugo setup is not pinned to the verified v3.0.0 commit",
+    )
 
 
 @pytest.mark.trace("WF-DEPLOY-003")
