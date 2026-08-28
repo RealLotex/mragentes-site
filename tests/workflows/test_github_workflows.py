@@ -109,7 +109,12 @@ def test_automation_merge_happens_only_after_ci_without_auto_merge_dependency() 
 @pytest.mark.red_expected
 def test_deploy_runs_tests_before_uploading_pages_artifact() -> None:
     _, source, parsed = workflow(".github/workflows/deploy.yml", "WF-DEPLOY-001")
-    ci_steps = parsed.get("jobs", {}).get("ci", {}).get("steps", [])
+    ci_job = parsed.get("jobs", {}).get("ci", {})
+    ci_steps = ci_job.get("steps", [])
+    checkout = ci_steps[0]
+    assert checkout.get("with", {}).get("fetch-depth") == "0", trace_message(
+        "WF-DEPLOY-001", "deploy CI shallow checkout cannot execute repository ancestry contracts"
+    )
     ci_commands = "\n".join(
         str(step.get("run", "")) for step in ci_steps if isinstance(step, dict)
     )
