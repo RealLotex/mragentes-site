@@ -29,13 +29,21 @@ def job_run_commands(job: dict) -> str:
 
 @pytest.mark.trace("WF-CI-001")
 @pytest.mark.red_expected
-def test_ci_workflow_exists_and_has_no_write_permission() -> None:
+def test_ci_workflow_is_read_only_by_default_and_scopes_merge_permissions() -> None:
     _, source, parsed = workflow(".github/workflows/ci.yml", "WF-CI-001")
     assert "pull_request" in source and "contents: read" in source, trace_message(
         "WF-CI-001", "CI lacks PR trigger or read-only contents permission"
     )
-    assert "contents: write" not in source
-    assert "jobs" in parsed
+    jobs = parsed.get("jobs", {})
+    assert "test" in jobs and "merge_automation" in jobs
+    merge = jobs["merge_automation"]
+    assert merge.get("needs") == "test", trace_message(
+        "WF-CI-001", "automation merge is not downstream from the complete test job"
+    )
+    assert merge.get("permissions") == {
+        "contents": "write",
+        "pull-requests": "write",
+    }, trace_message("WF-CI-001", "write permissions are not isolated to the merge job")
 
 
 @pytest.mark.trace("WF-INTAKE-001")
@@ -46,6 +54,7 @@ def test_automation_intake_requires_scoped_branches_and_pr_gate() -> None:
         "automation/news/**",
         "automation/blog/**",
         "automation/social/**",
+        "automation/recovery/**",
         "pull-requests: write",
     ):
         assert term in source, trace_message("WF-INTAKE-001", f"intake lacks: {term}")
@@ -56,23 +65,39 @@ def test_automation_intake_requires_scoped_branches_and_pr_gate() -> None:
 
 @pytest.mark.trace("WF-INTAKE-002")
 @pytest.mark.red_expected
-def test_automation_intake_enables_protected_auto_merge_without_git_pushes() -> None:
-    _, source, _ = workflow(".github/workflows/automation-intake.yml", "WF-INTAKE-002")
-    assert "contents: write" in source and "pull-requests: write" in source, trace_message(
-        "WF-INTAKE-002", "intake lacks the scoped permissions required to merge its own PR"
+def test_automation_merge_happens_only_after_ci_without_auto_merge_dependency() -> None:
+    _, intake_source, _ = workflow(
+        ".github/workflows/automation-intake.yml", "WF-INTAKE-002"
     )
-    merge_lines = [line.strip() for line in source.splitlines() if "gh pr merge" in line]
+    _, ci_source, parsed_ci = workflow(".github/workflows/ci.yml", "WF-INTAKE-002")
+    assert "contents: read" in intake_source and "pull-requests: write" in intake_source, trace_message(
+        "WF-INTAKE-002", "intake lacks least-privilege permissions to open its PR"
+    )
+    assert "gh pr merge" not in intake_source and "--auto" not in intake_source, trace_message(
+        "WF-INTAKE-002", "intake still depends on repository auto-merge"
+    )
+    merge_job = parsed_ci.get("jobs", {}).get("merge_automation", {})
+    merge_commands = job_run_commands(merge_job)
+    merge_lines = [line.strip() for line in merge_commands.splitlines() if "gh pr merge" in line]
     assert len(merge_lines) == 1, trace_message(
-        "WF-INTAKE-002", "intake must contain exactly one explicit PR merge command"
+        "WF-INTAKE-002", "CI must contain exactly one explicit automation PR merge command"
     )
-    assert "--auto" in merge_lines[0] and "--squash" in merge_lines[0], trace_message(
-        "WF-INTAKE-002", "intake merge is not gated by GitHub auto-merge and squash"
+    assert "--squash" in merge_lines[0] and "--delete-branch" in merge_lines[0], trace_message(
+        "WF-INTAKE-002", "post-CI merge must squash and delete the automation branch"
     )
-    assert not re.search(r"(?m)^\s*git\s+push\b", source), trace_message(
-        "WF-INTAKE-002", "intake must never push Git commits directly"
+    condition = str(merge_job.get("if", ""))
+    assert "startsWith(github.head_ref, 'automation/')" in condition, trace_message(
+        "WF-INTAKE-002", "merge job is not restricted to automation branches"
     )
-    assert "--force" not in source, trace_message(
-        "WF-INTAKE-002", "intake contains a force option"
+    assert "github.event.pull_request.head.repo.full_name == github.repository" in condition, trace_message(
+        "WF-INTAKE-002", "merge job does not reject branches from other repositories"
+    )
+    combined = intake_source + "\n" + ci_source
+    assert not re.search(r"(?m)^\s*git\s+push\b", combined), trace_message(
+        "WF-INTAKE-002", "workflows must never push Git commits directly"
+    )
+    assert "--force" not in combined, trace_message(
+        "WF-INTAKE-002", "automation merge contains a force option"
     )
 
 

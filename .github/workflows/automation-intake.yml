@@ -6,9 +6,10 @@ on:
       - automation/news/**
       - automation/blog/**
       - automation/social/**
+      - automation/recovery/**
 
 permissions:
-  contents: write
+  contents: read
   pull-requests: write
 
 concurrency:
@@ -34,5 +35,3 @@ jobs:
           else
             gh pr create --base main --head "$SOURCE_BRANCH" --fill --label automation
           fi
-          pr_number="$(gh pr view "$SOURCE_BRANCH" --json number --jq .number)"
-          gh pr merge "$pr_number" --auto --squash
