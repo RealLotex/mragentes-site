@@ -1,0 +1,182 @@
+{
+  "checks": [
+    {
+      "detail": {
+        "authenticated": true,
+        "minimum_permission": "write",
+        "observed_permission": "admin",
+        "repository": "RealLotex/mragentes-site"
+      },
+      "name": "github_connector_preflight",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "base_branch": "main",
+        "base_sha": "b2847ea4c7ac9856c824781cbba5ba8af9cf7a09",
+        "target_branch": "automation/news/news-2026-08-29",
+        "target_branch_absent": true
+      },
+      "name": "remote_base_snapshot",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "local_date": "2026-08-29",
+        "run_id": "news-2026-08-29",
+        "timezone": "America/Cordoba"
+      },
+      "name": "local_date_scope",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "candidate_ids_absent": 4,
+        "expected_failure_recorded": true,
+        "trace": "news-2026-08-29:red-baseline"
+      },
+      "name": "tdd_red_baseline",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "event_dates_confirmed": true,
+        "evidence_records": 4,
+        "items_verified": 4,
+        "primary_sources": 4
+      },
+      "name": "source_verification",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "accepted": 4,
+        "base_items": 3,
+        "candidate_items": 4,
+        "duplicates": 0,
+        "stable_id_collisions": 0
+      },
+      "name": "deduplication",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "accepted_items": 4,
+        "items_validated": 7,
+        "queue_revision": 2,
+        "schema_version": 1
+      },
+      "name": "schema",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "local_git_push": false,
+        "paths": [
+          ".automation/news/queue/news-queue.json",
+          ".automation/reports/news-2026-08-29.json"
+        ],
+        "remote_only_commit": true
+      },
+      "name": "write_scope",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "python_tests": 91,
+        "scope": "news_queue,news_schema,news_migration,report_run,github_egress,schedule"
+      },
+      "name": "test_suite",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "high_confidence_findings": 0
+      },
+      "name": "secret_scan",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "cloudflare": false,
+        "external_publish": false,
+        "local_git_push": false,
+        "meta": false
+      },
+      "name": "external_effects",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "reason": "queue-only run; no site content or asset changed"
+      },
+      "name": "hugo_build",
+      "status": "skipped"
+    },
+    {
+      "detail": {
+        "preserved_outside_remote_scope": true
+      },
+      "name": "preexisting_workspace_changes",
+      "status": "warning"
+    }
+  ],
+  "effects": [
+    {
+      "detail": {
+        "added": 4,
+        "duplicate_count": 0,
+        "from_revision": 1,
+        "sha256": "0f3ae08cffd6c1108d9da541aa7a241003522df87a54bfae7d922bb5081ec2fd",
+        "to_revision": 2
+      },
+      "kind": "queue_artifact",
+      "status": "confirmed",
+      "target": ".automation/news/queue/news-queue.json"
+    },
+    {
+      "detail": {
+        "kind": "news",
+        "local_date": "2026-08-29"
+      },
+      "kind": "report_artifact",
+      "status": "confirmed",
+      "target": ".automation/reports/news-2026-08-29.json"
+    },
+    {
+      "detail": {
+        "base_branch": "main",
+        "commit_count": 1,
+        "fast_forward_only": true,
+        "operation_order": [
+          "create_blob",
+          "create_tree",
+          "create_commit",
+          "update_ref"
+        ],
+        "transport": "github_connector"
+      },
+      "kind": "git_commit",
+      "status": "confirmed",
+      "target": "automation/news/news-2026-08-29"
+    }
+  ],
+  "finished_at": "2026-08-29T21:11:30Z",
+  "kind": "news",
+  "run_id": "news-2026-08-29",
+  "schema_version": 1,
+  "started_at": "2026-08-29T21:11:30Z",
+  "status": "success",
+  "summary": {}
+}

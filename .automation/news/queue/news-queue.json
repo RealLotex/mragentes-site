@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 1,
-  "updated_at": "2026-08-29T06:06:42Z",
+  "revision": 2,
+  "updated_at": "2026-08-29T21:11:30Z",
   "items": [
     {
       "schema_version": 1,
@@ -85,6 +85,110 @@
       "priority": 2,
       "consumed_by": "de-la-demo-al-sistema-automatizar-con-ia-sin-perder-el-control",
       "consumed_at": "2026-08-29T06:06:42Z"
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-e49125e96829732b",
+      "title": "Notion permite que sus agentes sugieran ediciones para aprobación",
+      "canonical_url": "https://www.notion.com/releases/2026-08-28",
+      "source": "Notion",
+      "entity": "Notion",
+      "published_at": "2026-08-28T00:00:00Z",
+      "discovered_at": "2026-08-29T21:11:30Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://www.notion.com/releases/2026-08-28",
+          "claim": "Notion anuncia que sus agentes pueden proponer cambios para que la persona los revise y apruebe línea por línea."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "productividad",
+        "revision"
+      ],
+      "summary": "Los agentes de Notion pasan de editar directamente a proponer cambios revisables, útil para automatizar sin perder control.",
+      "language": "en",
+      "priority": 4
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-76d70601d9b83b13",
+      "title": "AWS lleva su Agent Toolkit al CLI para dar contexto actualizado a agentes de código",
+      "canonical_url": "https://aws.amazon.com/blogs/developer/get-started-with-the-agent-toolkit-for-aws-in-the-aws-cli/",
+      "source": "AWS Developer Tools Blog",
+      "entity": "AWS",
+      "published_at": "2026-08-26T00:00:00Z",
+      "discovered_at": "2026-08-29T21:11:30Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://aws.amazon.com/blogs/developer/get-started-with-the-agent-toolkit-for-aws-in-the-aws-cli/",
+          "claim": "AWS presenta un comando del CLI que instala habilidades curadas y configura su servidor MCP para agentes de código."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "automatizacion",
+        "desarrollo"
+      ],
+      "summary": "El CLI de AWS incorpora habilidades y conexión MCP curadas para que agentes de código trabajen con contexto actualizado.",
+      "language": "en",
+      "priority": 4
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-9854e53c6bd04bb6",
+      "title": "Gemini Live incorpora tareas de productividad activadas por voz",
+      "canonical_url": "https://blog.google/innovation-and-ai/products/gemini-app/productivity-features-gemini-live/",
+      "source": "Google",
+      "entity": "Google",
+      "published_at": "2026-08-26T00:00:00Z",
+      "discovered_at": "2026-08-29T21:11:30Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://blog.google/innovation-and-ai/products/gemini-app/productivity-features-gemini-live/",
+          "claim": "Google anuncia tareas de varios pasos en Gemini Live, con acciones sobre correo, calendario y documentos mediante voz."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "productividad",
+        "voz"
+      ],
+      "summary": "Gemini Live suma tareas de varios pasos para organizar correo, calendario y documentos desde una conversación de voz.",
+      "language": "en",
+      "priority": 4
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-38f6e98f02ef4b35",
+      "title": "Claude in Chrome pasa a disponibilidad general con acciones autónomas verificadas",
+      "canonical_url": "https://claude.com/blog/claude-in-chrome-generally-available",
+      "source": "Claude by Anthropic",
+      "entity": "Anthropic",
+      "published_at": "2026-08-26T00:00:00Z",
+      "discovered_at": "2026-08-29T21:11:30Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://claude.com/blog/claude-in-chrome-generally-available",
+          "claim": "Anthropic abre Claude in Chrome a todos los planes pagos y verifica las acciones del navegador contra la solicitud original."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "automatizacion",
+        "seguridad"
+      ],
+      "summary": "Claude puede operar pestañas y formularios con controles contra instrucciones inyectadas, llevando automatización a portales sin API.",
+      "language": "en",
+      "priority": 4
     }
   ]
 }
