@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "run_id": "blog:2026-08-28:sistemas-de-ia-verificables-para-pymes",
+  "run_id": "blog:2026-08-28:de-la-demo-al-sistema-automatizar-con-ia-sin-perder-el-control",
   "status": "prepared",
   "local_date": "2026-08-28",
-  "created_at": "2026-08-29T06:27:42Z",
+  "created_at": "2026-08-29T06:34:42Z",
   "artifacts": {
     "note": {
-      "path": "content/notas/sistemas-de-ia-verificables-para-pymes.md",
-      "sha256": "8f3574386ded07eafd0615a7b0624683b427c0f88ecb9a7a2239d20891aa7cea"
+      "path": "content/notas/de-la-demo-al-sistema-automatizar-con-ia-sin-perder-el-control.md",
+      "sha256": "74d8ce8041def8b9e0a7a0adc1e9872a6f5ff3ceed31fef042348446f59fb442"
     },
     "asset": {
       "path": "static/images/stock/sistema-ia-verificable-2026-08-29.webp",
@@ -15,7 +15,7 @@
     },
     "queue": {
       "path": ".automation/news/queue/news-queue.json",
-      "sha256": "9a76c784a4221c3f8930c962cc0c3d32661620bb067740462d160cac1d3e2806",
+      "sha256": "946525ae568d489f58c02966cc887a930cec6ab788ff4144b24e560a009de4df",
       "transition": {
         "from": "reserved",
         "to": "consumed",
