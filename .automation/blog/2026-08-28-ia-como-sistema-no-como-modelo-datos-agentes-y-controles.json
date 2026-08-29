@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "run_id": "blog:2026-08-29:ia-como-sistema-no-como-modelo",
+  "run_id": "blog:2026-08-28:ia-como-sistema-no-como-modelo-datos-agentes-y-controles",
   "status": "prepared",
-  "local_date": "2026-08-29",
-  "created_at": "2026-08-29T06:06:42Z",
+  "local_date": "2026-08-28",
+  "created_at": "2026-08-29T06:19:42Z",
   "artifacts": {
     "note": {
-      "path": "content/notas/ia-como-sistema-no-como-modelo.md",
-      "sha256": "7c087fae6e7c69e9b2befa62f2c681f12cf3bb550eba7fa0e22ecedc23a6374f"
+      "path": "content/notas/ia-como-sistema-no-como-modelo-datos-agentes-y-controles.md",
+      "sha256": "69e561c4b8eca467769580bb45bed8a9dc8efba7c5ea97d595033a669e2b89b0"
     },
     "asset": {
       "path": "static/images/stock/sistema-ia-verificable-2026-08-29.webp",
@@ -15,7 +15,7 @@
     },
     "queue": {
       "path": ".automation/news/queue/news-queue.json",
-      "sha256": "41d45aefb9584a73262c32b3a08d09af9758ba1940f2ec433dfe79db2bbd083a",
+      "sha256": "7b8f0012c8434b72243a73f5b8f4b9bf5107719ff7b69d4e72def284980113ac",
       "transition": {
         "from": "reserved",
         "to": "consumed",

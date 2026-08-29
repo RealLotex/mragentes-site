@@ -28,7 +28,7 @@
       "summary": "Vista previa del Model Hardware Standard para operar instrumentos de laboratorio mediante interfaces comunes.",
       "language": "en",
       "priority": 3,
-      "consumed_by": "ia-como-sistema-no-como-modelo",
+      "consumed_by": "ia-como-sistema-no-como-modelo-datos-agentes-y-controles",
       "consumed_at": "2026-08-29T06:06:42Z"
     },
     {
@@ -55,7 +55,7 @@
       "summary": "OpenAI presenta una estrategia de integración de punta a punta para mejorar rendimiento, latencia y eficiencia.",
       "language": "en",
       "priority": 3,
-      "consumed_by": "ia-como-sistema-no-como-modelo",
+      "consumed_by": "ia-como-sistema-no-como-modelo-datos-agentes-y-controles",
       "consumed_at": "2026-08-29T06:06:42Z"
     },
     {
@@ -83,7 +83,7 @@
       "summary": "Nuevas herramientas de IA integradas a Google Ads y Analytics para resumir y explorar datos de marketing.",
       "language": "en",
       "priority": 2,
-      "consumed_by": "ia-como-sistema-no-como-modelo",
+      "consumed_by": "ia-como-sistema-no-como-modelo-datos-agentes-y-controles",
       "consumed_at": "2026-08-29T06:06:42Z"
     }
   ]
