@@ -1,24 +1,28 @@
 {
   "schema_version": 1,
+  "automation_id": "mr-agentes-blog",
   "name": "MR Agentes — Blog",
   "project": "MR Agentes",
-  "worktree": true,
+  "execution_environment": "local",
   "timezone": "America/Cordoba",
   "weekdays": [2, 6],
   "local_time": "12:00",
   "cron": "0 12 * * 0,3",
   "rrule": "RRULE:FREQ=WEEKLY;BYDAY=WE,SU;BYHOUR=12;BYMINUTE=0;BYSECOND=0",
-  "model": "gpt-5.6-terra",
-  "reasoning_effort": "medium",
+  "model": "gpt-5.6-luna",
+  "reasoning_effort": "max",
   "skill": "mragentes-blog-publisher",
-  "prompt": "Usá $mragentes-blog-publisher. Prepará exactamente la nota correspondiente a la fecha local actual usando noticias pendientes, incluso de días anteriores. Reutilizá cualquier borrador o ID de esa fecha, ejecutá todos los quality gates y prepará un único cambio atómico en automation/blog del run actual. No invoques Meta ni Cloudflare.",
+  "prompt": "Usá $mragentes-blog-publisher. Antes de escribir, verificá que el conector de GitHub esté autenticado para RealLotex/mragentes-site y seguí .automation/github/connector-egress.json; si no está disponible, devolvé needs_review sin mutar el repositorio. Prepará exactamente la nota correspondiente a la fecha local actual usando noticias pendientes, incluso de días anteriores. Reutilizá cualquier borrador o ID de esa fecha, ejecutá todos los quality gates y entregá nota, asset y estado como un único commit remoto atómico en la rama automation/blog del run actual mediante el conector; preservá los binarios con base64 y no uses git push local ni credenciales locales. No invoques Meta ni Cloudflare.",
   "branch_template": "automation/blog/{run_id}",
-  "status": "paused",
-  "registered": false,
+  "status": "active",
+  "registered": true,
   "catch_up": false,
   "permissions": {
     "repository_writes": ["content/notas/**", "static/images/stock/**", ".automation/news/**", ".automation/blog/**", ".automation/reports/**"],
-    "git_push": ["automation/blog/{run_id}"],
+    "remote_egress": {
+      "provider": "github_connector",
+      "contract": ".automation/github/connector-egress.json"
+    },
     "external_publish": false
   }
 }

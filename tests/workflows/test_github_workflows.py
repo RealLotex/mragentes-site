@@ -35,19 +35,16 @@ def test_ci_workflow_is_read_only_by_default_and_scopes_merge_permissions() -> N
         "WF-CI-001", "CI lacks PR trigger or read-only contents permission"
     )
     jobs = parsed.get("jobs", {})
-    assert "test" in jobs and "merge_automation" in jobs
+    assert set(jobs) == {"test"}, trace_message(
+        "WF-CI-001", "CI must test only; the trusted workflow_run gate owns merging"
+    )
     checkout = jobs["test"].get("steps", [])[0]
     assert checkout.get("with", {}).get("fetch-depth") == "0", trace_message(
         "WF-CI-001", "CI shallow checkout cannot prove ancestry from the audited baseline"
     )
-    merge = jobs["merge_automation"]
-    assert merge.get("needs") == "test", trace_message(
-        "WF-CI-001", "automation merge is not downstream from the complete test job"
+    assert "gh pr merge" not in source, trace_message(
+        "WF-CI-001", "untrusted pull-request CI still owns repository merge authority"
     )
-    assert merge.get("permissions") == {
-        "contents": "write",
-        "pull-requests": "write",
-    }, trace_message("WF-CI-001", "write permissions are not isolated to the merge job")
 
 
 @pytest.mark.trace("WF-INTAKE-001")
@@ -70,35 +67,56 @@ def test_automation_intake_requires_scoped_branches_and_pr_gate() -> None:
 @pytest.mark.trace("WF-INTAKE-002")
 @pytest.mark.red_expected
 def test_automation_merge_happens_only_after_ci_without_auto_merge_dependency() -> None:
-    _, intake_source, _ = workflow(
+    _, intake_source, parsed_intake = workflow(
         ".github/workflows/automation-intake.yml", "WF-INTAKE-002"
     )
-    _, ci_source, parsed_ci = workflow(".github/workflows/ci.yml", "WF-INTAKE-002")
+    _, ci_source, _ = workflow(".github/workflows/ci.yml", "WF-INTAKE-002")
     assert (
         "contents: read" in intake_source and "pull-requests: write" in intake_source
     ), trace_message(
         "WF-INTAKE-002", "intake lacks least-privilege permissions to open its PR"
     )
-    assert "gh pr merge" not in intake_source and "--auto" not in intake_source, trace_message(
-        "WF-INTAKE-002", "intake still depends on repository auto-merge"
+    assert "workflow_run" in intake_source and "Contract and site CI" in intake_source, (
+        trace_message("WF-INTAKE-002", "intake has no trusted post-CI completion trigger")
     )
-    merge_job = parsed_ci.get("jobs", {}).get("merge_automation", {})
+    merge_job = parsed_intake.get("jobs", {}).get("merge_verified_automation", {})
+    assert merge_job.get("permissions") == {
+        "contents": "write",
+        "pull-requests": "write",
+    }, trace_message("WF-INTAKE-002", "post-CI merge authority is not job-scoped")
     merge_commands = job_run_commands(merge_job)
     merge_lines = [line.strip() for line in merge_commands.splitlines() if "gh pr merge" in line]
     assert len(merge_lines) == 1, trace_message(
-        "WF-INTAKE-002", "CI must contain exactly one explicit automation PR merge command"
+        "WF-INTAKE-002", "trusted intake must contain exactly one explicit PR merge command"
     )
-    assert "--squash" in merge_lines[0] and "--delete-branch" in merge_lines[0], trace_message(
+    assert all(
+        term in merge_lines[0]
+        for term in ("--squash", "--delete-branch", "--match-head-commit")
+    ), trace_message(
         "WF-INTAKE-002", "post-CI merge must squash and delete the automation branch"
     )
     condition = str(merge_job.get("if", ""))
-    assert "startsWith(github.head_ref, 'automation/')" in condition, trace_message(
-        "WF-INTAKE-002", "merge job is not restricted to automation branches"
-    )
-    assert (
-        "github.event.pull_request.head.repo.full_name == github.repository" in condition
-    ), trace_message(
-        "WF-INTAKE-002", "merge job does not reject branches from other repositories"
+    for term in (
+        "github.event.workflow_run.conclusion == 'success'",
+        "github.event.workflow_run.event == 'pull_request'",
+        "startsWith(github.event.workflow_run.head_branch, 'automation/')",
+        "github.event.workflow_run.head_repository.full_name == github.repository",
+    ):
+        assert term in condition, trace_message(
+            "WF-INTAKE-002", f"post-CI merge condition lacks {term}"
+        )
+    for term in (
+        'pr["base"]["ref"] != "main"',
+        'pr["head"]["repo"]["full_name"] != repository',
+        'pr["head"]["ref"] != branch',
+        'pr["head"]["sha"] != head_sha',
+        '"automation" not in labels',
+    ):
+        assert term in merge_commands, trace_message(
+            "WF-INTAKE-002", f"post-CI PR validation lacks {term}"
+        )
+    assert "--auto" not in intake_source, trace_message(
+        "WF-INTAKE-002", "intake depends on disabled repository auto-merge"
     )
     combined = intake_source + "\n" + ci_source
     assert not re.search(r"(?m)^\s*git\s+push\b", combined), trace_message(
@@ -212,6 +230,16 @@ def test_deploy_dispatches_content_effects_but_never_redeploys_worker_for_a_note
     )
 
 
+@pytest.mark.trace("WF-DEPLOY-006")
+@pytest.mark.red_expected
+def test_deploy_never_cancels_an_event_before_its_external_effect_dispatch() -> None:
+    _, _, parsed = workflow(".github/workflows/deploy.yml", "WF-DEPLOY-006")
+    concurrency = parsed.get("concurrency", {})
+    assert concurrency.get("cancel-in-progress") == "false", trace_message(
+        "WF-DEPLOY-006", "a later main push can cancel an earlier publication event"
+    )
+
+
 @pytest.mark.trace("WF-PY-DEPS-001")
 @pytest.mark.red_expected
 @pytest.mark.parametrize(
@@ -241,6 +269,11 @@ def test_deploy_dispatches_content_effects_but_never_redeploys_worker_for_a_note
             ".github/workflows/social-daily.yml",
             "publish_daily_owned",
             "scripts.social deliver-draft",
+        ),
+        (
+            ".github/workflows/meta-preflight.yml",
+            "validate_meta_testing",
+            "scripts.social.meta_preflight",
         ),
     ),
 )
@@ -274,12 +307,16 @@ def test_clean_python_jobs_install_hash_locked_runtime_dependencies(
 @pytest.mark.trace("WF-SOCIAL-NOTE-001")
 @pytest.mark.red_expected
 def test_social_note_is_reusable_and_testing_only() -> None:
-    _, source, _ = workflow(".github/workflows/social-note.yml", "WF-SOCIAL-NOTE-001")
+    _, source, parsed = workflow(".github/workflows/social-note.yml", "WF-SOCIAL-NOTE-001")
     assert "workflow_call" in source and "meta-testing" in source, trace_message(
         "WF-SOCIAL-NOTE-001", "social-note lacks reusable testing contract"
     )
-    assert "vars.META_GRAPH_VERSION || 'v26.0'" in source, trace_message(
-        "WF-SOCIAL-NOTE-001", "social-note defaults to an obsolete Graph API version"
+    env = parsed.get("jobs", {}).get("publish_testing_only", {}).get("env", {})
+    assert env.get("META_GRAPH_VERSION") == "v26.0", trace_message(
+        "WF-SOCIAL-NOTE-001", "social-note does not pin the tested Graph API contract"
+    )
+    assert "vars.META_GRAPH_VERSION" not in source, trace_message(
+        "WF-SOCIAL-NOTE-001", "a stale repository variable can override Graph API v26.0"
     )
 
 
@@ -303,11 +340,58 @@ def test_social_note_delivers_the_exact_deployed_slug_through_guarded_cli() -> N
 @pytest.mark.trace("WF-SOCIAL-DAILY-001")
 @pytest.mark.red_expected
 def test_social_daily_is_separate_and_idempotent() -> None:
-    _, source, _ = workflow(".github/workflows/social-daily.yml", "WF-SOCIAL-DAILY-001")
+    _, source, parsed = workflow(".github/workflows/social-daily.yml", "WF-SOCIAL-DAILY-001")
     for term in ("daily_owned", "dedupe", "concurrency", "meta-testing"):
         assert term in source, trace_message("WF-SOCIAL-DAILY-001", f"daily workflow lacks: {term}")
-    assert "vars.META_GRAPH_VERSION || 'v26.0'" in source, trace_message(
-        "WF-SOCIAL-DAILY-001", "daily social flow defaults to an obsolete Graph API version"
+    env = parsed.get("jobs", {}).get("publish_daily_owned", {}).get("env", {})
+    assert env.get("META_GRAPH_VERSION") == "v26.0", trace_message(
+        "WF-SOCIAL-DAILY-001", "daily social flow does not pin Graph API v26.0"
+    )
+    assert "vars.META_GRAPH_VERSION" not in source, trace_message(
+        "WF-SOCIAL-DAILY-001", "a stale repository variable can override Graph API v26.0"
+    )
+
+
+@pytest.mark.trace("WF-META-PREFLIGHT-001")
+@pytest.mark.red_expected
+def test_meta_preflight_is_manual_read_only_and_fail_closed() -> None:
+    _, source, parsed = workflow(
+        ".github/workflows/meta-preflight.yml", "WF-META-PREFLIGHT-001"
+    )
+    triggers = parsed.get("on", {})
+    assert set(triggers) == {"workflow_dispatch", "push"}, trace_message(
+        "WF-META-PREFLIGHT-001", "Meta preflight has an unexpected trigger surface"
+    )
+    push = triggers.get("push", {})
+    assert push.get("branches") == ["main"], trace_message(
+        "WF-META-PREFLIGHT-001", "automatic Meta preflight is not restricted to main"
+    )
+    assert set(push.get("paths", [])) == {
+        ".github/workflows/meta-preflight.yml",
+        "scripts/social/meta_preflight.py",
+    }, trace_message(
+        "WF-META-PREFLIGHT-001", "automatic Meta preflight can run for unrelated changes"
+    )
+    assert parsed.get("permissions") == {"contents": "read"}, trace_message(
+        "WF-META-PREFLIGHT-001", "Meta preflight has write-capable GitHub permissions"
+    )
+    job = parsed.get("jobs", {}).get("validate_meta_testing", {})
+    assert job.get("environment") == "meta-testing", trace_message(
+        "WF-META-PREFLIGHT-001", "Meta preflight does not bind the testing environment"
+    )
+    env = job.get("env", {})
+    assert env.get("META_GRAPH_VERSION") == "v26.0"
+    assert env.get("META_ENVIRONMENT") == "testing"
+    assert env.get("SOCIAL_ENABLED") == "0"
+    assert env.get("SOCIAL_DRY_RUN") == "1"
+    commands = job_run_commands(job)
+    assert "python -m scripts.social.meta_preflight" in commands
+    assert "${{ secrets." not in commands, trace_message(
+        "WF-META-PREFLIGHT-001", "Meta secret is interpolated into a shell command"
+    )
+    forbidden = ("deliver-note", "deliver-draft", "publish-nota", "publish-library", "curl ")
+    assert not any(term in commands for term in forbidden), trace_message(
+        "WF-META-PREFLIGHT-001", "Meta preflight contains a publication-capable command"
     )
 
 

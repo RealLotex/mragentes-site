@@ -364,6 +364,31 @@ async function subscriptionKey(endpoint) {
   return `sub:v${SCHEMA_VERSION}:${await sha256Hex(endpoint)}`;
 }
 
+function parseCanonicalSubscriptionRecord(raw) {
+  const record = JSON.parse(raw);
+  if (!isPlainObject(record) || record.schemaVersion !== SCHEMA_VERSION) {
+    throw new Error("subscription record schema is invalid");
+  }
+  return {
+    record,
+    subscription: validateSubscription(record.subscription),
+  };
+}
+
+function parseLegacySubscriptionRecord(raw, legacyKey) {
+  const subscription = validateSubscription(JSON.parse(raw));
+  if (subscription.endpoint !== legacyKey) {
+    throw new Error("legacy subscription key does not match endpoint");
+  }
+  return subscription;
+}
+
+function validLegacySubscriptionRecord(raw, legacyKey) {
+  if (raw === null) return null;
+  try { return parseLegacySubscriptionRecord(raw, legacyKey); }
+  catch { return null; }
+}
+
 function keyComponent(value) {
   return base64UrlEncode(encoder.encode(String(value)));
 }
@@ -497,9 +522,15 @@ async function handleSubscribe(request, env, cors, ctx) {
   const key = await subscriptionKey(subscription.endpoint);
   const result = await withBindingLock(env.PUSH_SUBS, key, async () => {
     const existingRaw = await env.PUSH_SUBS.get(key);
+    const legacyRaw = await env.PUSH_SUBS.get(subscription.endpoint);
+    const legacySubscription = validLegacySubscriptionRecord(legacyRaw, subscription.endpoint);
     let existing = null;
     try { existing = existingRaw ? JSON.parse(existingRaw) : null; } catch { existing = null; }
-    const created = !existingRaw;
+    // A legacy URL-keyed record represents an existing browser registration.
+    // Treat even an unparseable value at that exact reserved key as existing so
+    // a repair never emits a second welcome notification. Only a validated
+    // legacy record is removed after the canonical write succeeds.
+    const created = existingRaw === null && legacyRaw === null;
     const timestamp = nowFrom(env);
     await env.PUSH_SUBS.put(key, JSON.stringify({
       schemaVersion: SCHEMA_VERSION,
@@ -510,6 +541,7 @@ async function handleSubscribe(request, env, cors, ctx) {
       expirationTtl: SUBSCRIPTION_TTL_SECONDS,
       metadata: { schemaVersion: SCHEMA_VERSION },
     });
+    if (legacySubscription) await env.PUSH_SUBS.delete(subscription.endpoint);
     return { created };
   });
   const welcomeScheduled = result.created && !revalidated;
@@ -538,9 +570,11 @@ async function handleUnsubscribe(request, env, cors) {
   const endpoint = validateUnsubscribeBody(await parseRequestBody(request));
   const key = await subscriptionKey(endpoint);
   const removed = await withBindingLock(env.PUSH_SUBS, key, async () => {
-    const existing = await env.PUSH_SUBS.get(key);
-    if (existing === null) return false;
-    await env.PUSH_SUBS.delete(key);
+    const canonical = await env.PUSH_SUBS.get(key);
+    const legacy = await env.PUSH_SUBS.get(endpoint);
+    if (canonical === null && legacy === null) return false;
+    if (canonical !== null) await env.PUSH_SUBS.delete(key);
+    if (legacy !== null) await env.PUSH_SUBS.delete(endpoint);
     return true;
   });
   return jsonResponse({ status: "ok", removed }, { headers: cors });
@@ -583,9 +617,14 @@ function summarizeDeliveries(outcomes) {
   return { ...summary, state };
 }
 
-async function applyDeliveryOutcome({ kv, subscriptionKey: key, response }) {
+async function deleteSubscriptionRecords(kv, keys) {
+  const uniqueKeys = [...new Set(keys.filter((key) => typeof key === "string" && key))];
+  for (const key of uniqueKeys) await kv.delete(key);
+}
+
+async function applyDeliveryOutcome({ kv, subscriptionKey: key, subscriptionKeys, response }) {
   const outcome = classifyPushResponse(response);
-  if (outcome === "gone") await kv.delete(key);
+  if (outcome === "gone") await deleteSubscriptionRecords(kv, subscriptionKeys || [key]);
   return outcome;
 }
 
@@ -600,30 +639,74 @@ async function retryDelivery({ outcome, attempt, transport }) {
 async function listSubscriptionsPaginated(kv, { pageSize = DEFAULT_PAGE_SIZE, maxTotal = DEFAULT_MAX_SUBSCRIPTIONS } = {}) {
   if (!Number.isInteger(pageSize) || pageSize <= 0) throw new TypeError("pageSize must be positive");
   if (!Number.isInteger(maxTotal) || maxTotal < 0) throw new TypeError("maxTotal must be non-negative");
-  const items = [];
-  const invalid = [];
-  const seenCursors = new Set();
-  let cursor;
-  while (true) {
-    const page = await kv.list({ prefix: "sub:", cursor, limit: pageSize });
-    for (const { name } of page.keys) {
-      if (items.length + invalid.length >= maxTotal) {
-        throw new HttpError(413, "subscription fan-out maximum exceeded", "too_many_subscriptions");
-      }
-      const raw = await kv.get(name);
-      if (raw === null) { invalid.push(name); continue; }
-      try {
-        const record = JSON.parse(raw);
-        if (!isPlainObject(record) || record.schemaVersion !== SCHEMA_VERSION) throw new Error("schema");
-        items.push({ key: name, subscription: validateSubscription(record.subscription) });
-      } catch { invalid.push(name); }
+  const byEndpoint = new Map();
+  const invalid = new Set();
+
+  function assertUniqueCapacity(endpoint) {
+    if (!byEndpoint.has(endpoint) && byEndpoint.size >= maxTotal) {
+      throw new HttpError(413, "subscription fan-out maximum exceeded", "too_many_subscriptions");
     }
-    if (page.list_complete) break;
-    if (!page.cursor || seenCursors.has(page.cursor)) throw new Error("KV cursor cycle detected");
-    seenCursors.add(page.cursor);
-    cursor = page.cursor;
   }
-  return { items, invalid };
+
+  async function scanPrefix(prefix, legacy) {
+    const seenCursors = new Set();
+    const seenKeys = new Set();
+    let cursor;
+    while (true) {
+      const page = await kv.list({ prefix, cursor, limit: pageSize });
+      for (const { name } of page.keys) {
+        if (typeof name !== "string" || !name.startsWith(prefix) || seenKeys.has(name)) continue;
+        seenKeys.add(name);
+        const raw = await kv.get(name);
+        if (legacy) {
+          const subscription = validLegacySubscriptionRecord(raw, name);
+          if (!subscription) continue;
+          const existing = byEndpoint.get(subscription.endpoint);
+          if (existing) {
+            if (!existing.storageKeys.includes(name)) existing.storageKeys.push(name);
+            continue;
+          }
+          assertUniqueCapacity(subscription.endpoint);
+          byEndpoint.set(subscription.endpoint, {
+            key: await subscriptionKey(subscription.endpoint),
+            storageKeys: [name],
+            subscription,
+          });
+          continue;
+        }
+
+        if (raw === null) {
+          invalid.add(name);
+          continue;
+        }
+        try {
+          const { subscription } = parseCanonicalSubscriptionRecord(raw);
+          const existing = byEndpoint.get(subscription.endpoint);
+          if (existing) {
+            if (!existing.storageKeys.includes(name)) existing.storageKeys.push(name);
+            continue;
+          }
+          assertUniqueCapacity(subscription.endpoint);
+          byEndpoint.set(subscription.endpoint, {
+            key: name,
+            storageKeys: [name],
+            subscription,
+          });
+        } catch { invalid.add(name); }
+      }
+      if (page.list_complete) break;
+      if (!page.cursor || seenCursors.has(page.cursor)) throw new Error("KV cursor cycle detected");
+      seenCursors.add(page.cursor);
+      cursor = page.cursor;
+    }
+  }
+
+  // Canonical records are scanned first, so an endpoint present in both
+  // layouts always uses the versioned hashed record. Prefix scans avoid
+  // traversing unrelated rate-limit, delivery and notification state.
+  await scanPrefix("sub:", false);
+  await scanPrefix("https://", true);
+  return { items: [...byEndpoint.values()], invalid: [...invalid] };
 }
 
 async function limitedConcurrency(items, concurrency, callback) {
@@ -720,7 +803,7 @@ async function handleSend(request, env, cors) {
   const transport = typeof env.PUSH_TRANSPORT === "function"
     ? env.PUSH_TRANSPORT
     : (subscription, payload) => defaultPushTransport(subscription, payload, env);
-  const delivered = await limitedConcurrency(listed.items, Number(env.PUSH_CONCURRENCY || 10), async ({ key, subscription }) => {
+  const delivered = await limitedConcurrency(listed.items, Number(env.PUSH_CONCURRENCY || 10), async ({ key, storageKeys, subscription }) => {
     const coordinator = acquired.coordinator;
     try {
       if (coordinator) {
@@ -734,7 +817,12 @@ async function handleSend(request, env, cors) {
         await coordinator.markAttempting({ eventId: event.eventId, subscriptionKey: key });
       }
       let response = await transport(subscription, event.payload);
-      let outcome = await applyDeliveryOutcome({ kv: env.PUSH_SUBS, subscriptionKey: key, response });
+      let outcome = await applyDeliveryOutcome({
+        kv: env.PUSH_SUBS,
+        subscriptionKey: key,
+        subscriptionKeys: storageKeys,
+        response,
+      });
       if (coordinator) {
         await coordinator.recordOutcome({ eventId: event.eventId, subscriptionKey: key, outcome });
       }
@@ -751,7 +839,7 @@ async function handleSend(request, env, cors) {
           const retried = await retryDelivery({ outcome, attempt: 1, transport: () => transport(subscription, event.payload) });
           outcome = retried.outcome;
           response = retried.response || response;
-          if (outcome === "gone") await env.PUSH_SUBS.delete(key);
+          if (outcome === "gone") await deleteSubscriptionRecords(env.PUSH_SUBS, storageKeys || [key]);
           if (coordinator) {
             await coordinator.recordOutcome({ eventId: event.eventId, subscriptionKey: key, outcome });
           }

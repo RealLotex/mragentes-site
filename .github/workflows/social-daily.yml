@@ -38,7 +38,7 @@ jobs:
       META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
       FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
       IG_USER_ID: ${{ secrets.IG_USER_ID }}
-      META_GRAPH_VERSION: ${{ vars.META_GRAPH_VERSION || 'v26.0' }}
+      META_GRAPH_VERSION: "v26.0"
       META_ENVIRONMENT: testing
       DEDUPE_MODE: daily_owned
       SOCIAL_ENABLED: "1"

@@ -886,12 +886,12 @@ requirements:
     code: BLOG-SLUG-010
     message_regex: \\[BLOG-SLUG-010\\]
 - id: CF-MCP-001
-  requirement: cloudflare account connector block is explicit
+  requirement: cloudflare account connector is ready without persisted credentials
   plan_section: '21.9'
   source_symbols:
   - .testplan/external-capabilities.json
   test_paths:
-  - tests/contract/test_external_capabilities.py::test_cloudflare_account_connector_block_is_explicit
+  - tests/contract/test_external_capabilities.py::test_cloudflare_account_connector_is_ready_without_persisted_credentials
   layer: contract
   side_effect_scope: none
   initial_state: EXTERNAL_BLOCKED
@@ -1154,12 +1154,12 @@ requirements:
     code: EDITORIAL-SEPARATION-003
     message_regex: \\[EDITORIAL-SEPARATION-003\\]
 - id: GIT-AUTH-001
-  requirement: git remote write block is explicit without importing old credentials
+  requirement: git remote write uses github connector without local credentials
   plan_section: '21.1'
   source_symbols:
   - repository/git
   test_paths:
-  - tests/contract/test_external_capabilities.py::test_git_remote_write_block_is_explicit_without_importing_old_credentials
+  - tests/contract/test_external_capabilities.py::test_git_remote_write_uses_github_connector_without_local_credentials
   layer: contract
   side_effect_scope: git-temp
   initial_state: EXTERNAL_BLOCKED
@@ -3126,12 +3126,12 @@ requirements:
     code: PREFLIGHT-012
     message_regex: \\[PREFLIGHT-012\\]
 - id: PROJECT-MR-001
-  requirement: mr agentes project registration block is explicit
+  requirement: mr agentes project is registered for local native automation
   plan_section: '21.9'
   source_symbols:
   - .testplan/external-capabilities.json
   test_paths:
-  - tests/contract/test_external_capabilities.py::test_mr_agentes_project_registration_block_is_explicit
+  - tests/contract/test_external_capabilities.py::test_mr_agentes_project_is_registered_for_local_native_automation
   layer: contract
   side_effect_scope: none
   initial_state: EXTERNAL_BLOCKED
@@ -7896,12 +7896,12 @@ requirements:
     code: TASK-CONTRACT-001
     message_regex: \\[TASK-CONTRACT-001\\]
 - id: TASK-EXTERNAL-001
-  requirement: scheduled creation is deliberately blocked until green
+  requirement: four native automations are active once each
   plan_section: '21.9'
   source_symbols:
   - .automation/schedules
   test_paths:
-  - tests/contract/test_external_capabilities.py::test_scheduled_creation_is_deliberately_blocked_until_green
+  - tests/contract/test_external_capabilities.py::test_four_native_automations_are_active_once_each
   layer: contract
   side_effect_scope: none
   initial_state: EXTERNAL_BLOCKED
@@ -8225,3 +8225,33 @@ requirements:
     kind: assertion
     code: WF-SOCIAL-NOTE-001
     message_regex: \\[WF-SOCIAL-NOTE-001\\]
+- id: DOCS-ARCH-001
+  requirement: architecture documents connector egress and trusted intake
+  plan_section: '21.9'
+  source_symbols:
+  - ARCHITECTURE.md
+  test_paths:
+  - tests/contract/test_operational_docs.py::test_architecture_documents_connector_egress_and_trusted_intake
+  layer: contract
+  side_effect_scope: none
+  initial_state: RED_EXPECTED
+  owner: local
+  expected_red:
+    kind: assertion
+    code: DOCS-ARCH-001
+    message_regex: \\[DOCS-ARCH-001\\]
+- id: DOCS-OPS-001
+  requirement: operations document Meta preflight and legacy push continuity
+  plan_section: '21.9'
+  source_symbols:
+  - OPERATIONS.md
+  test_paths:
+  - tests/contract/test_operational_docs.py::test_operations_documents_meta_preflight_and_legacy_push_continuity
+  layer: contract
+  side_effect_scope: none
+  initial_state: RED_EXPECTED
+  owner: local
+  expected_red:
+    kind: assertion
+    code: DOCS-OPS-001
+    message_regex: \\[DOCS-OPS-001\\]

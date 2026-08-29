@@ -23,10 +23,14 @@ La salida es exactamente una nota nueva o reutilizada, su asset bajo `static/ima
 6. Ejecutá validación de enlaces, schema, asset, pruebas y build de Hugo.
 7. Sólo con todos los gates verdes, aplicá nota + asset + transición a `consumed` en un commit atómico para `automation/blog/<run_id>`.
 
+## Entrega remota
+
+Antes de mutar el repositorio, comprobá que el conector de GitHub esté autenticado y tenga permiso de escritura sobre `RealLotex/mragentes-site`. Si no está disponible, terminá en `needs_review` sin escribir. Para entregar la rama seguí `.automation/github/connector-egress.json`: transmití textos como UTF-8 y el asset binario como base64, creá un único árbol y commit remoto con todos los paths y actualizá la referencia sólo por fast-forward. Git local puede preparar el commit atómico revisado, pero no uses git push local, `gh`, tokens ni credenciales locales como alternativa.
+
 ## Límites
 
 No invoques Meta, Cloudflare ni otro publicador externo. No despliegues, no escribas en `main`, no hagas force push y no leas secretos. Si falla Hugo, un enlace crítico, el schema o el asset, la transacción deja cero cambios parciales.
 
 ## Dry-run y recuperación
 
-En `dry-run`, trabajá en temporal, ejecutá los mismos gates y devolvé el manifiesto del cambio; no escribas el repositorio, no hagas commit ni push. Un reintento conserva `automation_id`, slug y reservas. Un conflicto, una publicación previa ambigua o más de una nota con la misma identidad termina en `needs_review`.
+En `dry-run`, trabajá en temporal, ejecutá los mismos gates y devolvé el manifiesto del cambio; no escribas el repositorio, no hagas commit ni entrega remota. Un reintento conserva `automation_id`, slug y reservas. Un conflicto, una publicación previa ambigua o más de una nota con la misma identidad termina en `needs_review`.

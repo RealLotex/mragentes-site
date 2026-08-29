@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "provider": "github_connector",
+  "repository": "RealLotex/mragentes-site",
+  "base_branch": "main",
+  "target_branch_prefix": "automation/",
+  "preflight": {
+    "require_authenticated_connector": true,
+    "minimum_repository_permission": "write",
+    "on_unavailable": "needs_review"
+  },
+  "local_git": {
+    "commit_allowed": true,
+    "push_allowed": false,
+    "credentials_allowed": false
+  },
+  "branch_initialization": {
+    "operation": "create_branch",
+    "from": "base_branch",
+    "if_absent_only": true
+  },
+  "commit": {
+    "transport": "git_data_objects",
+    "operation_order": ["create_blob", "create_tree", "create_commit", "update_ref"],
+    "max_commits_per_run": 1,
+    "text_encoding": "utf-8",
+    "binary_encoding": "base64",
+    "contents_api_multi_file": false
+  },
+  "ref_update": {
+    "fast_forward_only": true,
+    "force": false,
+    "on_conflict": "needs_review"
+  },
+  "safety": {
+    "paths_source": "schedule.permissions.repository_writes",
+    "require_clean_start": true,
+    "stage_all_allowed": false,
+    "existing_branch_policy": "reuse_only_if_exact",
+    "on_ambiguous_remote_state": "needs_review",
+    "on_binary_transport_failure": "needs_review"
+  }
+}

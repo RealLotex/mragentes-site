@@ -5,7 +5,7 @@
 MR Agentes es un sistema editorial event-driven con cinco autoridades bien separadas:
 
 - Codex ejecuta cambios asistidos y mantiene el código y los contratos.
-- Las tareas programadas de ChatGPT generan entradas editoriales en worktrees aislados.
+- Sus automatizaciones nativas generan entradas editoriales en el entorno local del proyecto.
 - GitHub valida, integra, despliega y coordina efectos posteriores.
 - GitHub Pages es la autoridad de la web pública.
 - Meta Graph API y Cloudflare Worker son autoridades remotas de social y Web Push.
@@ -23,7 +23,7 @@ fail-closed.
 
 ```mermaid
 flowchart LR
-    T[ChatGPT scheduled tasks] -->|skill + worktree| A[artefactos .automation]
+    T[Codex native automations] -->|skill + local execution| A[artefactos .automation]
     A -->|rama automation/**| I[GitHub intake + PR]
     I -->|CI GREEN + merge protegido| M[main]
     M --> D[GitHub Actions deploy]
@@ -44,11 +44,13 @@ imagen esperadas, no se permite ningún anuncio social ni push de esa nota.
 
 ## Plano de control editorial
 
-### Tareas de ChatGPT
+### Automatizaciones nativas de Codex
 
 `.automation/schedules/*.json` es el contrato versionado de cada tarea. Declara zona horaria,
-recurrencia, modelo, skill, prompt, rama y prefijos de escritura permitidos. El registro real de
-la tarea se gestiona desde la aplicación y debe coincidir con ese descriptor.
+recurrencia, modelo, skill, prompt, rama, prefijos de escritura permitidos, ID nativo, estado y
+entorno de ejecución. Las cuatro definiciones están registradas una sola vez, en estado `ACTIVE`
+y con ejecución `local`; el registro real se gestiona desde Codex y debe coincidir con su
+descriptor.
 
 Las skills bajo `.agents/skills/` limitan cada responsabilidad:
 
@@ -72,6 +74,17 @@ Cada ejecución usa un ID y una rama deterministas:
 `.github/workflows/automation-intake.yml` abre o reutiliza el pull request y pide merge
 automático con squash. Las reglas de `main` y CI deciden si el cambio puede entrar. Una
 reejecución sobre la misma identidad reutiliza el artefacto o PR existente.
+
+### Egreso remoto por conectores
+
+`.automation/github/connector-egress.json` es la única autorización de escritura remota de las
+automatizaciones. El agente comprueba la sesión autenticada y el permiso del repositorio, crea
+los blobs (texto UTF-8 y binarios base64), arma un único árbol y commit con
+`create_blob` → `create_tree` → `create_commit` → `update_ref`, y actualiza la rama sólo por
+fast-forward. La automatización no usa git push local, `gh`, tokens ni credenciales guardadas.
+El push de `automation/**` activa `automation-intake.yml`, que crea o reutiliza el PR; la
+autoridad de merge vive en su evento `workflow_run`, exige CI exitosa, mismo repositorio, base,
+rama y SHA, y usa `--match-head-commit` antes del squash.
 
 ## Plano de datos
 
@@ -126,6 +139,9 @@ congelado; un resultado incierto devuelve `needs_review`.
 
 El entorno `meta-testing` de GitHub y `META_ENVIRONMENT=testing` implementan defensa en
 profundidad. El código rechaza cualquier valor que no sea `testing` o `disabled`.
+El workflow `meta-preflight.yml` y `scripts.social.meta_preflight` hacen lecturas GET-only de
+identidad y publicaciones recientes con Graph `v26.0`; nunca publican ni reciben secretos en la
+salida.
 
 ## Web Push
 
@@ -146,6 +162,10 @@ revalidarla.
 El Worker elimina endpoints expirados, limita concurrencia y conserva estado suficiente para
 responder duplicado confirmado o conflicto. El despliegue usa el conector de Cloudflare; el
 workflow `push-worker.yml` aporta tests, staging y el handoff de producción.
+Durante el cutover se detectaron ocho registros históricos con la URL HTTPS como clave KV y el
+objeto Web Push directo como valor. `cf_worker.js` lee tanto esas claves legacy como las claves
+canónicas `sub:v1:<sha256>`, deduplica por endpoint y sólo elimina la legacy después de una alta
+canónica válida; así no se pierde ningún suscriptor ni se duplica un fan-out.
 
 ## Modelo de fallos
 

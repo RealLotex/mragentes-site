@@ -1,20 +1,32 @@
 {
   "schema_version": 1,
-  "captured_at": "2026-08-26T13:00:00-03:00",
+  "captured_at": "2026-08-29T01:11:32-03:00",
   "cloudflare_account_mcp": {
-    "status": "blocked",
-    "reason": "Plugin skills are installed but account search/execute tools are not exposed in this session."
+    "status": "ready",
+    "transport": "official_cloudflare_api_mcp",
+    "authentication": "oauth",
+    "verified_capabilities": ["search", "execute"],
+    "credential_storage": "provider_managed"
   },
   "codex_project_mr_agentes": {
-    "status": "blocked",
-    "reason": "Only OpenclawMigration and mpv-remote are currently registered; no project-registration tool is exposed."
+    "status": "ready",
+    "project": "MR Agentes",
+    "execution_environment": "local",
+    "repository": "RealLotex/mragentes-site"
   },
   "git_remote_write": {
-    "status": "blocked",
-    "reason": "The local clone has no GitHub credential helper, SSH identity, or gh CLI."
+    "status": "ready",
+    "transport": "github_connector",
+    "contract": ".automation/github/connector-egress.json",
+    "local_credentials": "absent_by_design",
+    "local_push": false
   },
   "scheduled_tasks": {
-    "status": "blocked",
-    "reason": "Tasks deliberately remain absent until local and staging gates are GREEN."
+    "status": "ready",
+    "authority": "codex_native_automations",
+    "execution_environment": "local",
+    "registered_count": 4,
+    "active_count": 4,
+    "duplicate_count": 0
   }
 }

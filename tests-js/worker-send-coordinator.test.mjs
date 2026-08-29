@@ -473,8 +473,10 @@ describe("Send fan-out and idempotency", () => {
   test("[PUSH-SEND-017] valor de suscripción corrupto se cuenta invalid y se elimina sin abortar lote", async () => {
     const target = await loadWorkerTarget("PUSH-SEND-017");
     const kv = new FakeKV();
+    const legacySubscription = validSubscription("https://legacy-delivery.example.test/subscription/active");
     await kv.put("sub:v1:a", "not-json");
     await seedSubscriptions(kv, 1);
+    await kv.put(legacySubscription.endpoint, JSON.stringify(legacySubscription));
     const response = await workerHandler(target, "PUSH-SEND-017").fetch(
       sendRequest(),
       pushEnvironment(kv, {
@@ -483,19 +485,38 @@ describe("Send fan-out and idempotency", () => {
       }),
       new ExecutionContextRecorder(),
     );
-    expect(await response.json()).toMatchObject({ delivered: 1, invalid: 1 });
+    expect(await response.json()).toMatchObject({ delivered: 2, invalid: 1 });
     expect(await kv.get("sub:v1:a")).toBeNull();
+    expect(await kv.get(legacySubscription.endpoint)).not.toBeNull();
   });
 
   test("[PUSH-SEND-018] claves KV ajenas al prefijo sub se ignoran", async () => {
     const list = await exported("listSubscriptionsPaginated", "PUSH-SEND-018");
-    const kv = new FakeKV();
+    const kv = new FakeKV({ pageSize: 1 });
+    const legacySubscriptions = Array.from({ length: 8 }, (_, index) => (
+      validSubscription(`https://legacy-${index}.example.test/subscription/${index}`)
+    ));
+    const duplicateEndpoint = legacySubscriptions[0].endpoint;
+    const canonical = validSubscription(duplicateEndpoint);
+    canonical.keys.auth = "zTBZMqHH6r4Tts7J_aSIgg";
     await kv.put("rate:v1:abc", "{}");
     await kv.put("delivery:v1:abc", "{}");
-    await kv.put("sub:v1:abc", JSON.stringify({ schemaVersion: 1, subscription: validSubscription() }));
+    await kv.put("sub:v1:abc", JSON.stringify({ schemaVersion: 1, subscription: canonical }));
+    for (const [index, subscription] of legacySubscriptions.entries()) {
+      await kv.put(
+        subscription.endpoint,
+        JSON.stringify(index === 7 ? { ...subscription, revalidate: true } : subscription),
+      );
+    }
     const result = await list(kv, { pageSize: 50, maxTotal: 100 });
-    expect(result.items).toHaveLength(1);
+    expect(result.items).toHaveLength(8);
     expect(result.items[0].key).toBe("sub:v1:abc");
+    expect(result.items[0].subscription.keys.auth).toBe(canonical.keys.auth);
+    expect(result.items.map(({ subscription }) => subscription.endpoint).sort()).toEqual([
+      ...legacySubscriptions.map(({ endpoint }) => endpoint),
+    ].sort());
+    expect(result.invalid).toEqual([]);
+    expect(kv.calls.filter((call) => call.operation === "list").length).toBeGreaterThan(2);
   });
 
   test("[PUSH-SEND-019] cursor cíclico se detecta y falla cerrado", async () => {
@@ -506,9 +527,16 @@ describe("Send fan-out and idempotency", () => {
 
   test("[PUSH-SEND-020] límite total impide fan-out accidental ilimitado", async () => {
     const list = await exported("listSubscriptionsPaginated", "PUSH-SEND-020");
-    const kv = new FakeKV({ pageSize: 50 });
-    await seedSubscriptions(kv, 51);
-    await expect(list(kv, { pageSize: 50, maxTotal: 50 })).rejects.toMatchObject({ status: 413 });
+    const kv = new FakeKV({ pageSize: 2 });
+    const first = validSubscription("https://limit-one.example.test/subscription");
+    const second = validSubscription("https://limit-two.example.test/subscription");
+    const third = validSubscription("https://limit-three.example.test/subscription");
+    await kv.put("sub:v1:first", JSON.stringify({ schemaVersion: 1, subscription: first }));
+    await kv.put(first.endpoint, JSON.stringify(first));
+    await kv.put(second.endpoint, JSON.stringify(second));
+    expect((await list(kv, { pageSize: 2, maxTotal: 2 })).items).toHaveLength(2);
+    await kv.put(third.endpoint, JSON.stringify(third));
+    await expect(list(kv, { pageSize: 2, maxTotal: 2 })).rejects.toMatchObject({ status: 413 });
   });
 
   test("[PUSH-SEND-021] respuesta pública nunca incluye endpoint, provider body ni headers", async () => {
