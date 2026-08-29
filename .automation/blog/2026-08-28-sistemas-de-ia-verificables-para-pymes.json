@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "run_id": "blog:2026-08-28:ia-como-sistema-no-como-modelo-datos-agentes-y-controles",
+  "run_id": "blog:2026-08-28:sistemas-de-ia-verificables-para-pymes",
   "status": "prepared",
   "local_date": "2026-08-28",
-  "created_at": "2026-08-29T06:19:42Z",
+  "created_at": "2026-08-29T06:27:42Z",
   "artifacts": {
     "note": {
-      "path": "content/notas/ia-como-sistema-no-como-modelo-datos-agentes-y-controles.md",
-      "sha256": "69e561c4b8eca467769580bb45bed8a9dc8efba7c5ea97d595033a669e2b89b0"
+      "path": "content/notas/sistemas-de-ia-verificables-para-pymes.md",
+      "sha256": "8f3574386ded07eafd0615a7b0624683b427c0f88ecb9a7a2239d20891aa7cea"
     },
     "asset": {
       "path": "static/images/stock/sistema-ia-verificable-2026-08-29.webp",
@@ -15,7 +15,7 @@
     },
     "queue": {
       "path": ".automation/news/queue/news-queue.json",
-      "sha256": "7b8f0012c8434b72243a73f5b8f4b9bf5107719ff7b69d4e72def284980113ac",
+      "sha256": "9a76c784a4221c3f8930c962cc0c3d32661620bb067740462d160cac1d3e2806",
       "transition": {
         "from": "reserved",
         "to": "consumed",
