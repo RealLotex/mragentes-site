@@ -230,6 +230,15 @@ def test_deploy_dispatches_content_effects_but_never_redeploys_worker_for_a_note
     )
 
 
+@pytest.mark.trace("WF-DEPLOY-007")
+@pytest.mark.red_expected
+def test_deploy_dispatches_workflows_with_an_explicit_repository_without_checkout() -> None:
+    _, source, _ = workflow(".github/workflows/deploy.yml", "WF-DEPLOY-007")
+    assert '"--repo"' in source and "GITHUB_REPOSITORY" in source, trace_message(
+        "WF-DEPLOY-007", "dispatch job relies on a local git checkout that it does not have"
+    )
+
+
 @pytest.mark.trace("WF-DEPLOY-006")
 @pytest.mark.red_expected
 def test_deploy_never_cancels_an_event_before_its_external_effect_dispatch() -> None:

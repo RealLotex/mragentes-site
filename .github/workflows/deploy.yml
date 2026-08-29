@@ -181,7 +181,19 @@ jobs:
               raise SystemExit("daily_drafts output is not a string array")
 
           def dispatch(workflow, **fields):
-              command = ["gh", "workflow", "run", workflow, "--ref", "main"]
+              repository = os.environ.get("GITHUB_REPOSITORY", "").strip()
+              if not repository:
+                  raise SystemExit("GITHUB_REPOSITORY is required for workflow dispatch")
+              command = [
+                  "gh",
+                  "workflow",
+                  "run",
+                  workflow,
+                  "--repo",
+                  repository,
+                  "--ref",
+                  "main",
+              ]
               for key, value in fields.items():
                   command.extend(["-f", f"{key}={value}"])
               subprocess.run(command, check=True)
