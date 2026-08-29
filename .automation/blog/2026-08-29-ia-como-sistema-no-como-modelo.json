@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-08-29:ia-como-sistema-no-como-modelo",
+  "status": "prepared",
+  "local_date": "2026-08-29",
+  "created_at": "2026-08-29T06:06:42Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/ia-como-sistema-no-como-modelo.md",
+      "sha256": "7c087fae6e7c69e9b2befa62f2c681f12cf3bb550eba7fa0e22ecedc23a6374f"
+    },
+    "asset": {
+      "path": "static/images/stock/sistema-ia-verificable-2026-08-29.webp",
+      "sha256": "7bba84a8e1364759736584f32709f2d87b6c553f54f1ad39c21f9cf5918a7f52"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "41d45aefb9584a73262c32b3a08d09af9758ba1940f2ec433dfe79db2bbd083a",
+      "transition": {
+        "from": "reserved",
+        "to": "consumed",
+        "count": 3,
+        "ids": [
+          "news-v1-4ad8a0dc4890166d",
+          "news-v1-3d09617c86c95df1",
+          "news-v1-0ef2acd821d585ab"
+        ]
+      }
+    }
+  },
+  "sources": [
+    "https://openai.com/index/the-full-stack-behind-abundant-intelligence/",
+    "https://blog.google/products/ads-commerce/google-ads-analytics-ai-updates/",
+    "https://www.anthropic.com/news/model-hardware-standard-research-preview"
+  ]
+}

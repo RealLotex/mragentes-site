@@ -463,10 +463,15 @@ def build_atomic_change(
     queue = Path(queue_path)
     if not queue.is_absolute():
         queue = repository / queue
-    try:
-        queue.resolve(strict=False).relative_to((repository / "data").resolve(strict=False))
-    except ValueError as exc:
-        raise ValueError("queue must stay in the repository data directory") from exc
+    queue_roots = (
+        repository / "data",  # legacy fixture/consumer location
+        repository / ".automation" / "news" / "queue",  # versioned automation contract
+    )
+    queue_resolved = queue.resolve(strict=False)
+    if not any(
+        queue_resolved.is_relative_to(root.resolve(strict=False)) for root in queue_roots
+    ):
+        raise ValueError("queue must stay in an allowlisted repository queue directory")
     if queue.suffix.casefold() != ".json":
         raise ValueError("queue must be JSON")
 
