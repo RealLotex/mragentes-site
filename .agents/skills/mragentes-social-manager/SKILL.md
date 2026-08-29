@@ -21,10 +21,14 @@ Leé [marca](references/brand.md) para crear contenido. Leé [runbook de publica
 
 No generes una nueva pieza. Leé el draft de la fecha, el workflow y el ledger sanitario. Si ambas plataformas están confirmadas, devolvé `skipped`. Si falta una plataforma antes de cualquier creación remota, prepará sólo ese reintento. Si el efecto pudo ocurrir pero no hay checkpoint único, buscá una coincidencia remota mediante el workflow autorizado: coincidencia única reconstruye el checkpoint; cero o varias coincidencias devuelven `needs_review`.
 
+## Entrega remota
+
+Antes de mutar el repositorio o reintentar un workflow, comprobá que el conector de GitHub esté autenticado y tenga permiso de escritura sobre `RealLotex/mragentes-site`. Si no está disponible, terminá en `needs_review` sin escribir ni reintentar. Para entregar una rama seguí `.automation/github/connector-egress.json`: transmití textos como UTF-8 y assets binarios como base64, creá un único árbol y commit remoto con todos los paths y actualizá la referencia sólo por fast-forward. Git local puede preparar el commit revisado, pero no uses git push local, `gh`, tokens ni credenciales locales como alternativa. En `recovery`, el mismo conector sólo puede reintentar los jobs fallidos autorizados por el descriptor.
+
 ## Límites
 
 No llames directamente a Meta ni a Cloudflare. No despliegues, no escribas en `main`, no hagas force push, no repitas una publicación incierta y no leas secretos. Usá únicamente este repositorio y las capacidades nativas autorizadas de Codex y GitHub.
 
 ## Dry-run y fallos
 
-En `dry-run`, validá fixtures o artefactos en temporal y devolvé paths, hashes, gates y plan de recuperación; no escribas, no hagas commit, push, dispatch ni llamadas externas. Schema, hash o asset inválido termina en `failed`. Estado remoto ambiguo, conflicto de IDs o cambios ajenos termina en `needs_review`, siempre sin segunda pieza.
+En `dry-run`, validá fixtures o artefactos en temporal y devolvé paths, hashes, gates y plan de recuperación; no escribas, no hagas commit, entrega remota, dispatch ni llamadas externas. Schema, hash o asset inválido termina en `failed`. Estado remoto ambiguo, conflicto de IDs o cambios ajenos termina en `needs_review`, siempre sin segunda pieza.

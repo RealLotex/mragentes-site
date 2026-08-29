@@ -1,24 +1,28 @@
 {
   "schema_version": 1,
+  "automation_id": "mr-agentes-noticias",
   "name": "MR Agentes — Noticias",
   "project": "MR Agentes",
-  "worktree": true,
+  "execution_environment": "local",
   "timezone": "America/Cordoba",
   "weekdays": [0, 1, 2, 3, 4, 5, 6],
   "local_time": "18:00",
   "cron": "0 18 * * *",
-  "rrule": "RRULE:FREQ=DAILY;BYHOUR=18;BYMINUTE=0;BYSECOND=0",
+  "rrule": "RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA,SU;BYHOUR=18;BYMINUTE=0;BYSECOND=0",
   "model": "gpt-5.6-luna",
-  "reasoning_effort": "low",
+  "reasoning_effort": "max",
   "skill": "mragentes-news-scout",
-  "prompt": "Usá $mragentes-news-scout. Ejecutá el relevamiento para la fecha local actual, agregá sólo ítems comprobados y no duplicados a la cola estructurada, validá y reportá. Prepará el cambio únicamente en la rama automation/news del run actual. No redactes una nota ni publiques en canales externos.",
+  "prompt": "Usá $mragentes-news-scout. Antes de escribir, verificá que el conector de GitHub esté autenticado para RealLotex/mragentes-site y seguí .automation/github/connector-egress.json; si no está disponible, devolvé needs_review sin mutar el repositorio. Ejecutá el relevamiento para la fecha local actual, agregá sólo ítems comprobados y no duplicados a la cola estructurada, validá y reportá. Entregá un único commit remoto únicamente en la rama automation/news del run actual mediante el conector; no uses git push local ni credenciales locales. No redactes una nota ni publiques en canales externos.",
   "branch_template": "automation/news/{run_id}",
-  "status": "paused",
-  "registered": false,
+  "status": "active",
+  "registered": true,
   "catch_up": false,
   "permissions": {
     "repository_writes": [".automation/news/queue/**", ".automation/reports/**"],
-    "git_push": ["automation/news/{run_id}"],
+    "remote_egress": {
+      "provider": "github_connector",
+      "contract": ".automation/github/connector-egress.json"
+    },
     "external_publish": false
   }
 }

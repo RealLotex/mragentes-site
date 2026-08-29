@@ -7,19 +7,26 @@ on:
       - automation/blog/**
       - automation/social/**
       - automation/recovery/**
+  workflow_run:
+    workflows:
+      - Contract and site CI
+    types:
+      - completed
 
 permissions:
   contents: read
-  pull-requests: write
-
-concurrency:
-  group: automation-intake-${{ github.ref }}
-  cancel-in-progress: false
 
 jobs:
   open_or_reuse_pull_request:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+    concurrency:
+      group: automation-intake-${{ github.ref }}
+      cancel-in-progress: false
     env:
       GH_TOKEN: ${{ github.token }}
       SOURCE_BRANCH: ${{ github.ref_name }}
@@ -35,3 +42,78 @@ jobs:
           else
             gh pr create --base main --head "$SOURCE_BRANCH" --fill --label automation
           fi
+
+  merge_verified_automation:
+    if: >-
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      startsWith(github.event.workflow_run.head_branch, 'automation/') &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+    concurrency:
+      group: automation-merge-${{ github.event.workflow_run.head_branch }}
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RUN_HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+      RUN_HEAD_REPOSITORY: ${{ github.event.workflow_run.head_repository.full_name }}
+      RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - name: Resolve one exact same-repository automation pull request
+        id: verified_pr
+        run: |
+          set -euo pipefail
+          case "$RUN_HEAD_BRANCH" in
+            automation/news/*|automation/blog/*|automation/social/*|automation/recovery/*) ;;
+            *) echo "workflow head is outside the automation branch allowlist" >&2; exit 1 ;;
+          esac
+          if [ "$RUN_HEAD_REPOSITORY" != "$GITHUB_REPOSITORY" ]; then
+            echo "workflow head repository does not match the target repository" >&2
+            exit 1
+          fi
+          owner="${GITHUB_REPOSITORY%%/*}"
+          PRS_JSON="$(gh api --method GET "repos/$GITHUB_REPOSITORY/pulls" \
+            -f state=open -f base=main -f "head=$owner:$RUN_HEAD_BRANCH" -f per_page=100)"
+          export PRS_JSON
+          python - <<'PY'
+          import json
+          import os
+
+          prs = json.loads(os.environ["PRS_JSON"])
+          if not isinstance(prs, list) or len(prs) != 1:
+              raise SystemExit("expected exactly one open automation pull request")
+          pr = prs[0]
+          repository = os.environ["GITHUB_REPOSITORY"]
+          branch = os.environ["RUN_HEAD_BRANCH"]
+          head_sha = os.environ["RUN_HEAD_SHA"]
+          labels = {
+              label.get("name")
+              for label in pr.get("labels", [])
+              if isinstance(label, dict)
+          }
+          if pr["base"]["ref"] != "main":
+              raise SystemExit("automation pull request does not target main")
+          if pr["head"]["repo"]["full_name"] != repository:
+              raise SystemExit("automation pull request comes from another repository")
+          if pr["head"]["ref"] != branch:
+              raise SystemExit("automation pull request head branch changed")
+          if pr["head"]["sha"] != head_sha:
+              raise SystemExit("automation pull request advanced after the successful CI run")
+          if "automation" not in labels:
+              raise SystemExit("automation pull request lacks the automation label")
+          if pr.get("draft"):
+              raise SystemExit("automation pull request is still a draft")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"pr_number={int(pr['number'])}\n")
+          PY
+      - name: Squash the exact head verified by successful CI
+        env:
+          PR_NUMBER: ${{ steps.verified_pr.outputs.pr_number }}
+        run: >-
+          gh pr merge "$PR_NUMBER" --repo "$GITHUB_REPOSITORY"
+          --squash --delete-branch --match-head-commit "$RUN_HEAD_SHA"

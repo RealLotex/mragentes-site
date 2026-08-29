@@ -13,21 +13,24 @@ los prompts ni dependas de la zona horaria del runner.
 - Anunciar también cada nota en ambas redes; miércoles y domingo pueden tener la pieza diaria y
   el anuncio de nota como eventos distintos.
 - Mantener la aplicación de Meta en `testing`.
-- Gestionar código y contenido con Codex, tareas de ChatGPT y GitHub sin servidores propios.
+- Gestionar código y contenido con Codex, sus automatizaciones nativas y GitHub sin servidores
+  propios.
 
 ## Calendario canónico
 
-| Tarea | Horario local | Cron de referencia | Skill | Salida |
-|---|---:|---|---|---|
-| MR Agentes — Noticias | todos los días 18:00 | `0 18 * * *` | `mragentes-news-scout` | cola verificada |
-| MR Agentes — Blog | miércoles y domingo 12:00 | `0 12 * * 0,3` | `mragentes-blog-publisher` | nota + imagen |
-| MR Agentes — Social diario | todos los días 13:00 | `0 13 * * *` | `mragentes-social-manager` | draft + imagen |
-| MR Agentes — Recuperación social | todos los días 13:15 | `15 13 * * *` | `mragentes-social-manager` | diagnóstico/recuperación |
+| Tarea | ID nativo | Horario local | Cron de referencia | Skill | Salida |
+|---|---|---:|---|---|---|
+| MR Agentes — Noticias | `mr-agentes-noticias` | todos los días 18:00 | `0 18 * * *` | `mragentes-news-scout` | cola verificada |
+| MR Agentes — Blog | `mr-agentes-blog` | miércoles y domingo 12:00 | `0 12 * * 0,3` | `mragentes-blog-publisher` | nota + imagen |
+| MR Agentes — Social diario | `mr-agentes-social-diario` | todos los días 13:00 | `0 13 * * *` | `mragentes-social-manager` | draft + imagen |
+| MR Agentes — Recuperación social | `mr-agentes-recuperaci-n-social` | todos los días 13:15 | `15 13 * * *` | `mragentes-social-manager` | diagnóstico/recuperación |
 
 Los descriptores completos viven en `.automation/schedules/`. El cron sólo sirve como contrato
-legible; el registro se realiza como tarea programada nativa de ChatGPT desde Codex. `catch_up`
-permanece en `false`: encender la computadora más tarde no debe crear publicaciones atrasadas
-sin revisión.
+legible; el registro se realiza como automatización nativa de Codex. Las cuatro definiciones
+están registradas una sola vez, se muestran como `ACTIVE` en Codex y usan el entorno de ejecución
+`local`. En los descriptores esto corresponde a `status: "active"`, `registered: true` y
+`execution_environment: "local"`. `catch_up` permanece en `false`: encender la computadora más
+tarde no debe crear publicaciones atrasadas sin revisión.
 
 El orden diario es intencional. La nota de las 12:00 usa la cola acumulada, incluida información
 de días anteriores. Social prepara su pieza a las 13:00 y la recuperación la revisa a las 13:15.
@@ -37,7 +40,7 @@ El relevamiento de las 18:00 alimenta próximas notas.
 
 | Capa | Hace | No hace |
 |---|---|---|
-| tarea ChatGPT | investigar, redactar, renderizar, validar, crear rama | usar secretos o publicar remoto |
+| automatización Codex | investigar, redactar, renderizar, validar, crear rama | usar secretos o publicar remoto |
 | pull request + CI | revisar schemas, hashes, tests, build y seguridad | aceptar artefactos inválidos |
 | GitHub Pages | servir el sitio generado desde `main` | disparar antes de CI |
 | workflow Meta | reconciliar y entregar a Facebook/Instagram | generar contenido nuevo |
@@ -45,9 +48,10 @@ El relevamiento de las 18:00 alimenta próximas notas.
 | Cloudflare Worker | alta/baja, bienvenida, dedupe y fan-out | redactar notas |
 | Codex + conectores | mantener tareas y proveedor, auditar, reparar | guardar secretos en el repo |
 
-## Puesta en marcha
+## Verificación de puesta en marcha
 
-No registres tareas hasta completar todos los pasos siguientes.
+Las cuatro automatizaciones ya están registradas y `ACTIVE`. Usá los pasos siguientes para
+auditar ese estado o recuperar la configuración sin crear definiciones duplicadas.
 
 ### 1. Estado local y pruebas
 
@@ -77,20 +81,36 @@ Verificá sin leer valores:
 - las actions siguen fijadas por SHA;
 - ningún workflow de pull request recibe estos secretos.
 
+Las automatizaciones escriben únicamente mediante `.automation/github/connector-egress.json`:
+un commit remoto atómico por ejecución (`create_blob`, `create_tree`, `create_commit`,
+`update_ref`), ramas `automation/**` y fast-forward sin force. El push activa
+`automation-intake.yml`, que abre o reutiliza el PR; el merge se hace sólo desde el
+`workflow_run` confiable después de CI y con `--match-head-commit`. Si el conector no está
+disponible, el resultado correcto es `needs_review`; no se habilita `git push local`.
+
 No ejecutes una publicación para comprobar sólo “presencia”. Los workflows y preflight deben
 fallar cerrados si falta configuración.
 
 ### 3. Cloudflare
 
-Con el conector de Cloudflare, auditá el Worker que sirve `PUSH_WORKER_URL` y confirmá:
+Con el MCP oficial de Cloudflare (sesión OAuth Full Access administrada por el proveedor), auditá
+el Worker que sirve `PUSH_WORKER_URL` y confirmá:
 
-- código desplegado equivalente a `cf_worker.js` del SHA probado;
+- código desplegado equivalente a `cf_worker.js` del SHA probado (versión activa 42);
 - binding KV `PUSH_SUBS`;
+- binding SQLite `NOTIFICATION_COORDINATOR` para el coordinador idempotente;
 - secrets `API_TOKEN` y `VAPID_PRIVATE_KEY`;
 - clave `VAPID_PUBLIC_KEY` coincidente con el meta del sitio;
 - CORS limitado a `https://mragentes.com.ar`;
 - rutas `/api/subscribe/`, `/api/unsubscribe/` y `/api/send/`;
 - observabilidad disponible sin cuerpos ni cabeceras sensibles.
+
+El namespace `PUSH_SUBS` conserva 8 suscripciones activas históricas (ocho en total). Sus claves actuales son
+URLs legacy, con objetos Web Push directos; el código nuevo también reconoce `sub:v1:<sha256>` y
+deduplica ambos formatos. No migres ni borres las legacy mientras no exista una verificación
+posterior: una alta válida las convierte de forma perezosa y una baja elimina ambas copias.
+La auditoría posterior al despliegue debe devolver 404 para los endpoints debug retirados, 401
+para `/api/send/` sin bearer, 204 CORS sólo para el origen del sitio y 403 para otros orígenes.
 
 El release pasa primero por los tests de `.github/workflows/push-worker.yml`, luego staging y
 recién después por el handoff del conector. No instales un publicador alternativo.
@@ -105,24 +125,29 @@ Confirmá en el panel de Meta y en GitHub que:
 - `META_ENVIRONMENT=testing` llega al job;
 - una consulta de identidad controlada devuelve exactamente los activos esperados.
 
+`meta-preflight.yml` ejecuta `scripts.social.meta_preflight` en `meta-testing` con Graph `v26.0`.
+Es una comprobación GET-only de identidad, vínculo Page→Instagram y lecturas de reconciliación;
+no crea contenedores, no hace POST y devuelve sólo booleanos. Se puede lanzar manualmente o al
+cambiar ese contrato en `main`, sin publicar una pieza de prueba.
+
 La primera prueba remota debe usar contenido identificable de test y activos autorizados. Si la
 política no permite eliminar en ambas plataformas, no publiques una pieza desechable: usá el
 modo de validación sin efecto y después el primer evento real aprobado.
 
-### 5. Registrar tareas de ChatGPT
+### 5. Verificar automatizaciones nativas de Codex
 
-En el administrador nativo de tareas de esta aplicación, creá exactamente una tarea por cada
-descriptor de `.automation/schedules/`. Copiá nombre, proyecto, timezone, RRULE, modelo, effort,
-skill, prompt y worktree. Mantenelas pausadas mientras verificás la comparación campo por campo.
+En el administrador nativo de Codex, listá el proyecto `MR Agentes` y compará cada registro con
+su descriptor de `.automation/schedules/`. Los IDs de la tabla son estables: no recrees una
+automatización para corregir sólo un campo.
 
-Antes de habilitar:
-
-1. listá las tareas del proyecto y eliminá cualquier duplicado creado durante pruebas;
-2. confirmá que cada tarea usa este repositorio y su `branch_template`;
-3. confirmá que los prefijos de escritura coinciden con `permissions.repository_writes`;
+1. confirmá que existen exactamente los cuatro `automation_id` de la tabla, sin duplicados;
+2. confirmá proyecto `MR Agentes`, `execution_environment: "local"`, timezone, RRULE, modelo,
+   effort, skill y prompt;
+3. confirmá que cada automatización usa este repositorio, su `branch_template` y sólo los
+   prefijos de `permissions.repository_writes`;
 4. confirmá `external_publish: false` y `catch_up: false`;
-5. habilitá en orden noticias, blog, social diario y recuperación;
-6. volvé a listar y registrá IDs, próxima ejecución y estado en el reporte de cutover.
+5. confirmá que las cuatro continúan `ACTIVE`;
+6. registrá ID, próxima ejecución y estado en el reporte operativo.
 
 El registro se gestiona en esta computadora; GitHub y los proveedores conservan los efectos ya
 integrados aunque la aplicación esté cerrada después de generar una rama.
@@ -131,7 +156,7 @@ integrados aunque la aplicación esté cerrada después de generar una rama.
 
 ### Relevamiento diario
 
-La tarea de las 18:00:
+La automatización de las 18:00:
 
 1. consulta fuentes permitidas y abre la página original;
 2. comprueba fecha, URL, título y evidencia;
@@ -145,7 +170,7 @@ el resultado correcto es `skipped_valid`, no contenido de relleno.
 
 ### Nota de miércoles o domingo
 
-La tarea de las 12:00:
+La automatización de las 12:00:
 
 1. determina fecha local y reserva `blog:{fecha}`;
 2. lee noticias pendientes de hoy o días previos;
@@ -162,7 +187,7 @@ del reloj. Por eso una reejecución del job editorial no puede duplicar efectos.
 
 ### Social diario
 
-La tarea de las 13:00:
+La automatización de las 13:00:
 
 1. reserva `daily_owned:{fecha}`;
 2. elige un tema y una composición distinta de los anuncios de notas;
@@ -177,7 +202,7 @@ La URL de la imagen debe ser pública antes de que Meta intente descargarla.
 
 ### Recuperación de las 13:15
 
-La tarea de recuperación no genera otra pieza. Inspecciona la identidad de hoy, workflow y
+La automatización de recuperación no genera otra pieza. Inspecciona la identidad de hoy, workflow y
 ledger:
 
 - si ambas plataformas están confirmadas, informa `skipped`;
@@ -230,7 +255,7 @@ estado engañoso.
 
 Usá este orden, sin publicar manualmente para “probar”:
 
-1. tarea de ChatGPT: estado, run ID, rama y reporte;
+1. automatización de Codex: estado, run ID, rama y reporte;
 2. pull request: CI y auto-merge;
 3. Pages: workflow y URL pública;
 4. health gate: slug e imagen confirmados;
@@ -244,7 +269,7 @@ No copies captions, tokens o cuerpos de suscripción a reportes. Los hashes y ID
 
 ### No se creó una rama automática
 
-1. Confirmá que la tarea estaba habilitada y que la PC estaba activa a la hora prevista.
+1. Confirmá que la automatización estaba `ACTIVE` y que la PC estaba activa a la hora prevista.
 2. Compará task ID, timezone, próxima ejecución, skill y prompt con el descriptor.
 3. Leé el reporte local y clasificá `skipped_valid`, validación, red o permiso.
 4. Si la fecha aún corresponde y el evento sigue siendo deseado, ejecutá una vez la misma tarea
@@ -312,8 +337,9 @@ social y push.
 
 ### Cambios de skills o schedules
 
-Actualizá descriptor, skill, tests de contrato y este runbook juntos. Después editá la tarea real
-desde Codex, volvé a listar y compará. No dejes dos definiciones activas durante una migración.
+Actualizá descriptor, skill, tests de contrato y este runbook juntos. Después editá la
+automatización real desde Codex conservando su `automation_id`, volvé a listar y compará. No
+dejes dos definiciones activas durante una migración.
 
 ### Cambios del Worker
 
@@ -328,7 +354,8 @@ autoridad y resultado, no el secreto.
 
 ## Pausa y rollback
 
-Para detener nueva generación, pausá las cuatro tareas de ChatGPT; esto no afecta el sitio ya
+Las cuatro automatizaciones permanecen `ACTIVE` durante la operación normal. Para detener nueva
+generación durante un incidente, cambialas temporalmente a `PAUSED`; esto no afecta el sitio ya
 publicado. Para detener efectos remotos, deshabilitá temporalmente los environments protegidos o
 sus workflows con una revisión explícita. No borres suscripciones, posts ni historial como parte
 de una pausa.
@@ -342,7 +369,8 @@ Esos sistemas requieren reconciliación separada.
 El cutover termina cuando:
 
 - suites Python, JavaScript y Hugo están GREEN;
-- los cuatro schedules están registrados una sola vez y habilitados;
+- los cuatro schedules conservan sus IDs, están registrados una sola vez, `ACTIVE` y en entorno
+  `local`;
 - branch protection, auto-merge y Pages funcionan;
 - Meta testing confirma Facebook e Instagram sin duplicados;
 - Cloudflare confirma alta, baja, bienvenida y una notificación de nota idempotente;

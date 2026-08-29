@@ -159,7 +159,7 @@ def test_architecture_assigns_one_authority_to_each_native_system() -> None:
     source = (ROOT / "ARCHITECTURE.md").read_text(encoding="utf-8")
     required = (
         "Codex",
-        "ChatGPT",
+        "automatizaciones nativas",
         "GitHub Actions",
         "GitHub Pages",
         "Cloudflare Worker",

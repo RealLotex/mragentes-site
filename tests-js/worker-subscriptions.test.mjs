@@ -131,6 +131,29 @@ describe("Push subscription validation and persistence", () => {
     expect(second.status).toBe(200);
     expect((await second.json()).created).toBe(false);
     expect(secondCtx.promises).toHaveLength(0);
+
+    const legacyKv = new FakeKV();
+    const legacySubscription = validSubscription("https://legacy-push.example.test/subscription/existing");
+    await legacyKv.put(
+      legacySubscription.endpoint,
+      JSON.stringify({ ...legacySubscription, revalidate: true }),
+    );
+    const legacyCtx = new ExecutionContextRecorder();
+    const migrated = await worker.fetch(
+      request("/api/subscribe/", legacySubscription),
+      env(legacyKv),
+      legacyCtx,
+    );
+    const migratedBody = await migrated.json();
+    const canonicalWrites = legacyKv.calls.filter(
+      (call) => call.operation === "put" && /^sub:v\d+:[a-f0-9]{64}$/.test(call.key),
+    );
+    expect(migrated.status).toBe(200);
+    expect(migratedBody).toMatchObject({ created: false, welcomeScheduled: false });
+    expect(legacyCtx.promises).toHaveLength(0);
+    expect(canonicalWrites).toHaveLength(1);
+    expect(JSON.parse(canonicalWrites[0].value).subscription).toEqual(legacySubscription);
+    expect(await legacyKv.get(legacySubscription.endpoint)).toBeNull();
   });
 
   test("[PUSH-SUB-008] rotación de claves actualiza la misma clave sin duplicar suscripción", async () => {
@@ -416,9 +439,13 @@ describe("Unsubscribe lifecycle", () => {
     const worker = workerHandler(target, "PUSH-UNSUB-003");
     await worker.fetch(request("/api/subscribe/", { ...validSubscription(), revalidate: true }), env(kv), new ExecutionContextRecorder());
     const storedKey = kv.calls.find((call) => call.operation === "put" && call.key.startsWith("sub:")).key;
+    await kv.put(validSubscription().endpoint, JSON.stringify(validSubscription()));
     const response = await worker.fetch(request("/api/unsubscribe/", { endpoint: validSubscription().endpoint }), env(kv), new ExecutionContextRecorder());
     expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ removed: true });
     expect(kv.calls.some((call) => call.operation === "delete" && call.key === storedKey)).toBe(true);
+    expect(await kv.get(storedKey)).toBeNull();
+    expect(await kv.get(validSubscription().endpoint)).toBeNull();
   });
 
   test("[PUSH-UNSUB-004] repetir baja conserva status 200 y removed false", async () => {

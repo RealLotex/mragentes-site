@@ -4,8 +4,10 @@ Sitio público de [mragentes.com.ar](https://mragentes.com.ar/) y automatizació
 de MR Agentes. Hugo produce la web estática, GitHub Pages la publica y los flujos posteriores
 distribuyen cada cambio validado a Meta y al servicio de Web Push.
 
-El sistema está diseñado para operar con Codex, tareas programadas de ChatGPT, GitHub,
-Cloudflare y Meta. No necesita otro proceso local permanente para publicar.
+El sistema está diseñado para operar con Codex, sus automatizaciones nativas, GitHub,
+Cloudflare y Meta. Las cuatro automatizaciones editoriales están registradas, en estado
+`ACTIVE` y configuradas con entorno de ejecución `local`; no necesita otro proceso local
+permanente para publicar.
 
 ## Resultado operativo
 
@@ -22,8 +24,9 @@ en [SECURITY.md](SECURITY.md).
 
 ## Flujo de una publicación
 
-1. Una tarea de ChatGPT ejecuta la skill correspondiente dentro de un worktree.
-2. La tarea genera únicamente artefactos permitidos y una rama `automation/**`.
+1. Una automatización nativa de Codex ejecuta la skill correspondiente en el entorno local del
+   proyecto.
+2. La automatización genera únicamente artefactos permitidos y una rama `automation/**`.
 3. `.github/workflows/automation-intake.yml` abre o reutiliza un pull request y solicita
    merge automático sólo después de CI.
 4. Un merge a `main` ejecuta tests, compila Hugo y publica el artefacto en GitHub Pages.
@@ -39,7 +42,7 @@ continúa sólo lo que falta; un resultado incierto se detiene para revisión.
 ```text
 .agents/skills/              skills nativas para noticias, blog y social
 .automation/
-  schedules/                 contratos de las cuatro tareas de ChatGPT
+  schedules/                 contratos de las cuatro automatizaciones nativas de Codex
   schemas/                   schemas de noticias, notas y publicaciones sociales
   news/                      cola estructurada y reservas editoriales
   blog/                      estado transaccional de cada nota

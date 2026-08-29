@@ -1,25 +1,29 @@
 {
   "schema_version": 1,
+  "automation_id": "mr-agentes-recuperaci-n-social",
   "name": "MR Agentes — Recuperación social",
   "project": "MR Agentes",
-  "worktree": true,
+  "execution_environment": "local",
   "timezone": "America/Cordoba",
   "weekdays": [0, 1, 2, 3, 4, 5, 6],
   "local_time": "13:15",
   "cron": "15 13 * * *",
-  "rrule": "RRULE:FREQ=DAILY;BYHOUR=13;BYMINUTE=15;BYSECOND=0",
+  "rrule": "RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA,SU;BYHOUR=13;BYMINUTE=15;BYSECOND=0",
   "model": "gpt-5.6-luna",
-  "reasoning_effort": "low",
+  "reasoning_effort": "max",
   "skill": "mragentes-social-manager",
   "mode": "recovery",
-  "prompt": "Usá $mragentes-social-manager en modo recovery para hoy y el conector de GitHub. Inspeccioná las ejecuciones de social-daily.yml y social-note.yml, el draft y la evidencia de reconciliación. Si todo está completo o un workflow sigue in_progress, informá skipped. Si el fallo es retryable y ocurrió antes de un efecto remoto confirmado, usá GitHub para reintentar sólo los jobs fallidos de esa ejecución. Si el estado es uncertain o needs_review, detenete y reportalo: no reintentes. No generes otra pieza, no uses force, no llames directamente a Meta y no accedas a cuentas o procesos retirados.",
+  "prompt": "Usá $mragentes-social-manager en modo recovery para hoy y el conector de GitHub. Antes de escribir un reporte versionado o reintentar, verificá que el conector esté autenticado para RealLotex/mragentes-site; para cualquier rama seguí .automation/github/connector-egress.json y no uses git push local ni credenciales locales. Si el conector no está disponible, devolvé needs_review sin mutar el repositorio. Inspeccioná las ejecuciones de social-daily.yml y social-note.yml, el draft y la evidencia de reconciliación. Si todo está completo o un workflow sigue in_progress, informá skipped. Si el fallo es retryable y ocurrió antes de un efecto remoto confirmado, usá GitHub para reintentar sólo los jobs fallidos de esa ejecución. Si el estado es uncertain o needs_review, detenete y reportalo: no reintentes. No generes otra pieza, no uses force, no llames directamente a Meta y no accedas a cuentas o procesos retirados.",
   "branch_template": "automation/recovery/{run_id}",
-  "status": "paused",
-  "registered": false,
+  "status": "active",
+  "registered": true,
   "catch_up": false,
   "permissions": {
     "repository_writes": [".automation/reports/**"],
-    "git_push": ["automation/recovery/{run_id}"],
+    "remote_egress": {
+      "provider": "github_connector",
+      "contract": ".automation/github/connector-egress.json"
+    },
     "workflow_rerun": ["social-daily.yml", "social-note.yml"],
     "external_publish": false
   }

@@ -22,14 +22,18 @@ Antes de investigar, leé [fuentes](references/sources.md) y [reglas de selecci�
 5. Escribí únicamente objetos de schema version 1 con afirmaciones breves y sus URLs de evidencia.
 6. Ejecutá schema, deduplicación, pruebas y preflight. Prepará un commit sólo para la rama `automation/news/<run_id>` si todos los gates pasan.
 
+## Entrega remota
+
+Antes de mutar el repositorio, comprobá que el conector de GitHub esté autenticado y tenga permiso de escritura sobre `RealLotex/mragentes-site`. Si no está disponible, terminá en `needs_review` sin escribir. Para entregar la rama seguí `.automation/github/connector-egress.json`: revisá paths explícitos, creá todos los blobs y un único árbol y commit remoto, y actualizá la referencia sólo por fast-forward. Git local puede preparar el commit revisado, pero no uses git push local, `gh`, tokens ni credenciales locales como alternativa.
+
 ## Límites de seguridad
 
 - **No Meta:** no publiques, consultes ni prepares llamadas a redes sociales.
 - **No Cloudflare:** no invoques despliegues, Workers ni notificaciones.
 - **No nota:** no redactes, modifiques ni publiques una nota del blog.
-- No leas, muestres ni copies secretos. Git y los conectores nativos autorizados son las únicas integraciones permitidas.
+- No leas, muestres ni copies secretos. El conector autorizado es la única integración de escritura remota.
 - Nunca hagas force push ni escribas en `main`.
 
 ## Dry-run y fallos
 
-En `dry-run`, no escribas archivos, no hagas commit ni push: devolvé los ítems candidatos, duplicados, gates y paths que se modificarían. Ante una fuente ambigua, un schema inválido, un conflicto de lock o un segundo rechazo de push, terminá con `needs_review` o `failed` y un reporte corto; nunca relajes la validación.
+En `dry-run`, no escribas archivos, no hagas commit ni entrega remota: devolvé los ítems candidatos, duplicados, gates y paths que se modificarían. Ante una fuente ambigua, un schema inválido, un conflicto de lock o un estado remoto ambiguo, terminá con `needs_review` o `failed` y un reporte corto; nunca relajes la validación.
