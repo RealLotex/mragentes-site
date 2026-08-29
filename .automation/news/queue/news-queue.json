@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "revision": 1,
+  "updated_at": "2026-08-29T06:06:42Z",
+  "items": [
+    {
+      "schema_version": 1,
+      "id": "news-v1-4ad8a0dc4890166d",
+      "title": "Previewing the Model Hardware Standard",
+      "canonical_url": "https://www.anthropic.com/news/model-hardware-standard-research-preview",
+      "source": "Anthropic",
+      "entity": "Anthropic",
+      "published_at": "2026-08-27T15:00:00Z",
+      "discovered_at": "2026-08-29T06:06:42Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.anthropic.com/news/model-hardware-standard-research-preview",
+          "claim": "Anthropic presenta un estándar agnóstico del modelo para conectar agentes con instrumentos mediante protocolos comunes, incluido MCP."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "mcp",
+        "infraestructura"
+      ],
+      "summary": "Vista previa del Model Hardware Standard para operar instrumentos de laboratorio mediante interfaces comunes.",
+      "language": "en",
+      "priority": 3,
+      "consumed_by": "ia-como-sistema-no-como-modelo",
+      "consumed_at": "2026-08-29T06:06:42Z"
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-3d09617c86c95df1",
+      "title": "The full stack behind abundant intelligence",
+      "canonical_url": "https://openai.com/index/the-full-stack-behind-abundant-intelligence/",
+      "source": "OpenAI",
+      "entity": "OpenAI",
+      "published_at": "2026-08-25T15:00:00Z",
+      "discovered_at": "2026-08-29T06:06:42Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://openai.com/index/the-full-stack-behind-abundant-intelligence/",
+          "claim": "OpenAI describe cómo integrar cómputo, software, modelos y productos para acumular mejoras de rendimiento y eficiencia."
+        }
+      ],
+      "tags": [
+        "ia",
+        "infraestructura",
+        "productividad"
+      ],
+      "summary": "OpenAI presenta una estrategia de integración de punta a punta para mejorar rendimiento, latencia y eficiencia.",
+      "language": "en",
+      "priority": 3,
+      "consumed_by": "ia-como-sistema-no-como-modelo",
+      "consumed_at": "2026-08-29T06:06:42Z"
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-0ef2acd821d585ab",
+      "title": "Evolve your marketing with new AI tools",
+      "canonical_url": "https://blog.google/products/ads-commerce/google-ads-analytics-ai-updates/",
+      "source": "Google",
+      "entity": "Google Ads and Analytics",
+      "published_at": "2026-08-10T15:00:00Z",
+      "discovered_at": "2026-08-29T06:06:42Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://blog.google/products/ads-commerce/google-ads-analytics-ai-updates/",
+          "claim": "Google anuncia resúmenes, informes visuales generados desde prompts y comparaciones para Ads y Analytics."
+        }
+      ],
+      "tags": [
+        "ia",
+        "automatizacion",
+        "productividad",
+        "datos"
+      ],
+      "summary": "Nuevas herramientas de IA integradas a Google Ads y Analytics para resumir y explorar datos de marketing.",
+      "language": "en",
+      "priority": 2,
+      "consumed_by": "ia-como-sistema-no-como-modelo",
+      "consumed_at": "2026-08-29T06:06:42Z"
+    }
+  ]
+}

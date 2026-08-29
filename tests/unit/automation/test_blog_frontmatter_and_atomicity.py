@@ -272,6 +272,25 @@ def test_atomic_change_commits_note_asset_and_queue_as_one_local_transaction(tmp
     )
 
 
+@pytest.mark.trace("BLOG-ATOMIC-QUEUE-CONTRACT-001")
+@pytest.mark.red_expected
+def test_atomic_change_accepts_the_versioned_automation_news_queue_path(tmp_path: Path) -> None:
+    """The current repository contract stores the queue under .automation/news/queue."""
+
+    build = planned_callable(TARGET, "build_atomic_change", "BLOG-ATOMIC-QUEUE-CONTRACT-001")
+    values = _atomic_fixture(tmp_path)
+    legacy_queue = Path(values["queue_path"])
+    current_queue = values["root"] / ".automation" / "news" / "queue" / legacy_queue.name
+    current_queue.parent.mkdir(parents=True)
+    current_queue.write_bytes(legacy_queue.read_bytes())
+    values["queue_path"] = current_queue
+    report = build(**values, apply=True)
+    assert report["status"] == "applied", trace_message(
+        "BLOG-ATOMIC-QUEUE-CONTRACT-001", "versioned automation queue path was rejected"
+    )
+    assert json.loads(current_queue.read_text(encoding="utf-8")) == values["queue_document"]
+
+
 @pytest.mark.trace("BLOG-ATOMIC-002")
 @pytest.mark.red_expected
 def test_missing_asset_fails_before_any_destination_is_written(tmp_path: Path) -> None:
