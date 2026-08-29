@@ -1,7 +1,7 @@
 ---
 schema_version: 1
-title: "IA como sistema, no como modelo"
-date: "2026-08-29T12:00:00-03:00"
+title: "IA como sistema, no como modelo — datos, agentes y controles"
+date: "2026-08-28T12:00:00-03:00"
 description: "OpenAI, Google y Anthropic muestran el cambio clave: la ventaja de la IA está en integrar modelos, datos, agentes y controles."
 image: "/images/stock/sistema-ia-verificable-2026-08-29.webp"
 image_alt: "Ilustración editorial de un sistema de inteligencia artificial con datos, agentes y controles verificables"
@@ -16,7 +16,7 @@ sources:
   - "https://openai.com/index/the-full-stack-behind-abundant-intelligence/"
   - "https://blog.google/products/ads-commerce/google-ads-analytics-ai-updates/"
   - "https://www.anthropic.com/news/model-hardware-standard-research-preview"
-automation_id: "blog:2026-08-29:ia-como-sistema-no-como-modelo"
+automation_id: "blog:2026-08-28:ia-como-sistema-no-como-modelo-datos-agentes-y-controles"
 draft: false
 aliases: []
 ---
