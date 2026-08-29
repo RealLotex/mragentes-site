@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "run_id": "social:daily_owned:2026-08-29",
+  "kind": "daily_owned",
+  "topic": "Una buena automatización también sabe decir: esto lo decide una persona",
+  "topic_hash": "sha256:0299a15af0f90cb1b67fb1a9fb9a75a714ad03ac588ef8c54247a0830e1818d8",
+  "content_hash": "sha256:c757c75ce1bd4853cac15d7ff8ac56a9c76c77040546036b9b0827cd88d6d79a",
+  "dedupe_key": "daily_owned:2026-08-29:sha256:c757c75ce1bd4853cac15d7ff8ac56a9c76c77040546036b9b0827cd88d6d79a",
+  "asset": {
+    "path": "static/images/social/generated/daily-owned-2026-08-29.jpg",
+    "sha256": "01029150da7a546db3716947efefa9656ef16c32e9234a560ff88a201922b545",
+    "alt": "Placa editorial de MR Agentes sobre automatizar con criterio y dejar las excepciones a una persona."
+  },
+  "captions": {
+    "facebook": "Una buena automatización también sabe decir: «esto lo decide una persona».\n\nNo todo paso repetido merece ser automático. Si una decisión cambia el precio, compromete al cliente o afecta una excepción, conviene que el sistema prepare la información y deje la última palabra a alguien.\n\nLa automatización útil no reemplaza el criterio: le saca ruido. Menos copiar datos; más contexto para decidir.\n\n¿Qué parte de tu trabajo te gustaría delegar y cuál preferís seguir aprobando vos?\n\n#MRAgentes #Automatizacion #AgentesDeIA #Procesos #Pymes",
+    "instagram": "Una buena automatización también sabe decir: «esto lo decide una persona».\n\nNo todo paso repetido merece ser automático. Cuando una decisión compromete al cliente o se sale de la regla, el sistema puede preparar el contexto y dejar la última palabra a alguien.\n\nAutomatizar no es soltar el volante: es manejar con menos ruido.\n\n¿Vos qué delegarías primero?\n\n#MRAgentes #Automatizacion #AgentesDeIA #IAparaPymes #Procesos #Pymes #Argentina"
+  },
+  "created_at": "2026-08-29T12:00:00-03:00"
+}
