@@ -110,11 +110,19 @@ def test_automation_merge_happens_only_after_ci_without_auto_merge_dependency() 
         'pr["head"]["repo"]["full_name"] != repository',
         'pr["head"]["ref"] != branch',
         'pr["head"]["sha"] != head_sha',
-        '"automation" not in labels',
     ):
         assert term in merge_commands, trace_message(
             "WF-INTAKE-002", f"post-CI PR validation lacks {term}"
         )
+    assert "--label automation" not in intake_source, trace_message(
+        "WF-INTAKE-002", "intake depends on a repository label to open a pull request"
+    )
+    assert "--add-label automation" not in intake_source, trace_message(
+        "WF-INTAKE-002", "intake depends on a repository label to reuse a pull request"
+    )
+    assert '"automation" not in labels' not in merge_commands, trace_message(
+        "WF-INTAKE-002", "post-CI merge treats a decorative label as an authorization boundary"
+    )
     assert "--auto" not in intake_source, trace_message(
         "WF-INTAKE-002", "intake depends on disabled repository auto-merge"
     )
