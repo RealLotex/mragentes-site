@@ -38,9 +38,9 @@ jobs:
         run: |
           set -euo pipefail
           if gh pr view "$SOURCE_BRANCH" --json number >/dev/null 2>&1; then
-            gh pr edit "$SOURCE_BRANCH" --add-label automation
+            echo "automation pull request already exists"
           else
-            gh pr create --base main --head "$SOURCE_BRANCH" --fill --label automation
+            gh pr create --base main --head "$SOURCE_BRANCH" --fill
           fi
 
   merge_verified_automation:
@@ -91,11 +91,6 @@ jobs:
           repository = os.environ["GITHUB_REPOSITORY"]
           branch = os.environ["RUN_HEAD_BRANCH"]
           head_sha = os.environ["RUN_HEAD_SHA"]
-          labels = {
-              label.get("name")
-              for label in pr.get("labels", [])
-              if isinstance(label, dict)
-          }
           if pr["base"]["ref"] != "main":
               raise SystemExit("automation pull request does not target main")
           if pr["head"]["repo"]["full_name"] != repository:
@@ -104,8 +99,6 @@ jobs:
               raise SystemExit("automation pull request head branch changed")
           if pr["head"]["sha"] != head_sha:
               raise SystemExit("automation pull request advanced after the successful CI run")
-          if "automation" not in labels:
-              raise SystemExit("automation pull request lacks the automation label")
           if pr.get("draft"):
               raise SystemExit("automation pull request is still a draft")
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:

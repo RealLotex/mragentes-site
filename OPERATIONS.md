@@ -22,8 +22,8 @@ los prompts ni dependas de la zona horaria del runner.
 |---|---|---:|---|---|---|
 | MR Agentes — Noticias | `mr-agentes-noticias` | todos los días 18:00 | `0 18 * * *` | `mragentes-news-scout` | cola verificada |
 | MR Agentes — Blog | `mr-agentes-blog` | miércoles y domingo 12:00 | `0 12 * * 0,3` | `mragentes-blog-publisher` | nota + imagen |
-| MR Agentes — Social diario | `mr-agentes-social-diario` | todos los días 13:00 | `0 13 * * *` | `mragentes-social-manager` | draft + imagen |
-| MR Agentes — Recuperación social | `mr-agentes-recuperaci-n-social` | todos los días 13:15 | `15 13 * * *` | `mragentes-social-manager` | diagnóstico/recuperación |
+| MR Agentes — Social diario | `mr-agentes-social-diario` | todos los días 15:00 | `0 15 * * *` | `mragentes-social-manager` | draft + imagen |
+| MR Agentes — Recuperación social | `mr-agentes-recuperaci-n-social` | todos los días 15:15 | `15 15 * * *` | `mragentes-social-manager` | diagnóstico/recuperación |
 
 Los descriptores completos viven en `.automation/schedules/`. El cron sólo sirve como contrato
 legible; el registro se realiza como automatización nativa de Codex. Las cuatro definiciones
@@ -33,7 +33,7 @@ están registradas una sola vez, se muestran como `ACTIVE` en Codex y usan el en
 tarde no debe crear publicaciones atrasadas sin revisión.
 
 El orden diario es intencional. La nota de las 12:00 usa la cola acumulada, incluida información
-de días anteriores. Social prepara su pieza a las 13:00 y la recuperación la revisa a las 13:15.
+de días anteriores. Social prepara su pieza a las 15:00 y la recuperación la revisa a las 15:15.
 El relevamiento de las 18:00 alimenta próximas notas.
 
 ## Responsabilidades
@@ -176,7 +176,8 @@ La automatización de las 12:00:
 2. lee noticias pendientes de hoy o días previos;
 3. investiga las seleccionadas en fuentes primarias;
 4. redacta una nota original con enlaces verificables;
-5. asigna slug explícito, imagen stock y alt útil;
+5. asigna slug explícito, una fotografía relevante de stock (Pexels o Unsplash) y alt útil; esa
+   portada alimenta como fondo la plantilla social `nota`;
 6. valida front matter, URL, asset, enlaces, calidad editorial e índice;
 7. genera un único cambio atómico en `content/notas/`, `static/images/stock/` y estado
    permitido;
@@ -187,7 +188,7 @@ del reloj. Por eso una reejecución del job editorial no puede duplicar efectos.
 
 ### Social diario
 
-La automatización de las 13:00:
+La automatización de las 15:00:
 
 1. reserva `daily_owned:{fecha}`;
 2. elige un tema y una composición distinta de los anuncios de notas;
@@ -200,7 +201,7 @@ La automatización de las 13:00:
 Al integrarse, deploy detecta el draft agregado y despacha `social-daily.yml` con esa ruta exacta.
 La URL de la imagen debe ser pública antes de que Meta intente descargarla.
 
-### Recuperación de las 13:15
+### Recuperación de las 15:15
 
 La automatización de recuperación no genera otra pieza. Inspecciona la identidad de hoy, workflow y
 ledger:

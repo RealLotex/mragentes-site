@@ -11,8 +11,8 @@ from tests.support.contracts import require_target, trace_message
 SCHEDULES = [
     ("TASK-NEWS-001", ".automation/schedules/news.json", {0, 1, 2, 3, 4, 5, 6}, "18:00"),
     ("TASK-BLOG-001", ".automation/schedules/blog.json", {2, 6}, "12:00"),
-    ("TASK-SOCIAL-001", ".automation/schedules/social.json", {0, 1, 2, 3, 4, 5, 6}, "13:00"),
-    ("TASK-RECOVERY-001", ".automation/schedules/recovery.json", {0, 1, 2, 3, 4, 5, 6}, "13:15"),
+    ("TASK-SOCIAL-001", ".automation/schedules/social.json", {0, 1, 2, 3, 4, 5, 6}, "15:00"),
+    ("TASK-RECOVERY-001", ".automation/schedules/recovery.json", {0, 1, 2, 3, 4, 5, 6}, "15:15"),
 ]
 
 AUTOMATION_IDS = {
@@ -27,11 +27,11 @@ LIVE_RRULES = {
     "TASK-BLOG-001": "RRULE:FREQ=WEEKLY;BYDAY=WE,SU;BYHOUR=12;BYMINUTE=0;BYSECOND=0",
     "TASK-SOCIAL-001": (
         "RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA,SU;"
-        "BYHOUR=13;BYMINUTE=0;BYSECOND=0"
+        "BYHOUR=15;BYMINUTE=0;BYSECOND=0"
     ),
     "TASK-RECOVERY-001": (
         "RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA,SU;"
-        "BYHOUR=13;BYMINUTE=15;BYSECOND=0"
+        "BYHOUR=15;BYMINUTE=15;BYSECOND=0"
     ),
 }
 
@@ -148,6 +148,23 @@ def test_scheduled_tasks_require_connector_egress_without_local_git_push(case: t
     )
     assert "no uses git push local" in prompt.lower(), trace_message(
         "TASK-EGRESS-001", f"task prompt permits local credential fallback: {case_id}"
+    )
+
+
+@pytest.mark.trace("TASK-BLOG-VISUAL-001")
+@pytest.mark.red_expected
+def test_blog_schedule_requires_a_relevant_stock_photo_for_the_note_template() -> None:
+    descriptor = json.loads(
+        require_target(".automation/schedules/blog.json", "TASK-BLOG-VISUAL-001").read_text(
+            encoding="utf-8"
+        )
+    )
+    prompt = descriptor["prompt"].casefold()
+    assert "proveedor de stock" in prompt and "pexels" in prompt, trace_message(
+        "TASK-BLOG-VISUAL-001", "blog automation can replace the note cover with generated art"
+    )
+    assert "plantilla" in prompt and "nota" in prompt, trace_message(
+        "TASK-BLOG-VISUAL-001", "blog automation does not preserve the note visual identity"
     )
 
 
