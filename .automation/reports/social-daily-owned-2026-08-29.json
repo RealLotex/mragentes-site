@@ -1,0 +1,200 @@
+{
+  "checks": [
+    {
+      "detail": {
+        "authenticated": true,
+        "minimum_permission": "write",
+        "observed_permission": "admin",
+        "repository": "RealLotex/mragentes-site"
+      },
+      "name": "github_connector_preflight",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "base_branch": "main",
+        "base_sha": "b2847ea4c7ac9856c824781cbba5ba8af9cf7a09",
+        "date_draft_absent": true,
+        "target_branch_absent": true
+      },
+      "name": "remote_base_snapshot",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "action": "created_one_draft",
+        "existing": false,
+        "local_date": "2026-08-29"
+      },
+      "name": "draft_reuse",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "records_checked": 39,
+        "status": "fresh",
+        "window_days": 30
+      },
+      "name": "freshness",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "closed": true,
+        "kind": "daily_owned",
+        "schema_version": 1
+      },
+      "name": "schema",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "surfaces_verified": [
+          "feed",
+          "portrait",
+          "story"
+        ],
+        "template": "titular"
+      },
+      "name": "render",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "format": "JPEG",
+        "height": 1350,
+        "mode": "RGB",
+        "path": "static/images/social/generated/daily-owned-2026-08-29.jpg",
+        "sha256": "01029150da7a546db3716947efefa9656ef16c32e9234a560ff88a201922b545",
+        "width": 1080
+      },
+      "name": "asset",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "instagram_limit": 2200,
+        "platforms": [
+          "facebook",
+          "instagram"
+        ],
+        "tailored_separately": true
+      },
+      "name": "captions",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "local_push": false,
+        "paths": [
+          ".automation/social/drafts/2026-08-29-daily-owned.json",
+          "static/images/social/generated/daily-owned-2026-08-29.jpg",
+          ".automation/reports/social-daily-owned-2026-08-29.json"
+        ],
+        "remote_only_commit": true
+      },
+      "name": "write_scope",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "javascript_tests": 174,
+        "python_tests": 523
+      },
+      "name": "test_suite",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "high_confidence_findings": 0
+      },
+      "name": "secret_scan",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "reason": "hugo executable unavailable in runtime",
+        "status": "not_run"
+      },
+      "name": "hugo_build",
+      "status": "warning"
+    },
+    {
+      "detail": {
+        "preserved_outside_remote_scope": true
+      },
+      "name": "preexisting_workspace_changes",
+      "status": "warning"
+    }
+  ],
+  "effects": [
+    {
+      "detail": {
+        "content_hash": "sha256:c757c75ce1bd4853cac15d7ff8ac56a9c76c77040546036b9b0827cd88d6d79a",
+        "dedupe_key": "daily_owned:2026-08-29:sha256:c757c75ce1bd4853cac15d7ff8ac56a9c76c77040546036b9b0827cd88d6d79a",
+        "kind": "daily_owned"
+      },
+      "kind": "draft_artifact",
+      "status": "confirmed",
+      "target": ".automation/social/drafts/2026-08-29-daily-owned.json"
+    },
+    {
+      "detail": {
+        "sha256": "01029150da7a546db3716947efefa9656ef16c32e9234a560ff88a201922b545"
+      },
+      "kind": "asset_artifact",
+      "status": "confirmed",
+      "target": "static/images/social/generated/daily-owned-2026-08-29.jpg"
+    },
+    {
+      "detail": {
+        "base_branch": "main",
+        "commit_count": 1,
+        "fast_forward_only": true,
+        "operation_order": [
+          "create_blob",
+          "create_tree",
+          "create_commit",
+          "update_ref"
+        ],
+        "transport": "github_connector"
+      },
+      "kind": "git_commit",
+      "status": "confirmed",
+      "target": "automation/social/social-daily-owned-2026-08-29"
+    }
+  ],
+  "finished_at": "2026-08-29T13:14:58-03:00",
+  "kind": "social_daily_owned",
+  "run_id": "social:daily_owned:2026-08-29",
+  "schema_version": 1,
+  "started_at": "2026-08-29T13:05:05-03:00",
+  "status": "success",
+  "summary": {
+    "asset_path": "static/images/social/generated/daily-owned-2026-08-29.jpg",
+    "asset_sha256": "01029150da7a546db3716947efefa9656ef16c32e9234a560ff88a201922b545",
+    "branch": "automation/social/social-daily-owned-2026-08-29",
+    "content_hash": "sha256:c757c75ce1bd4853cac15d7ff8ac56a9c76c77040546036b9b0827cd88d6d79a",
+    "dedupe_key": "daily_owned:2026-08-29:sha256:c757c75ce1bd4853cac15d7ff8ac56a9c76c77040546036b9b0827cd88d6d79a",
+    "draft_path": ".automation/social/drafts/2026-08-29-daily-owned.json",
+    "external_publish": false,
+    "hugo_build": "unavailable",
+    "local_date": "2026-08-29",
+    "pr_ci": "pending",
+    "remote_commit_count": 1,
+    "report_path": ".automation/reports/social-daily-owned-2026-08-29.json",
+    "reused_date_draft": false,
+    "topic_hash": "sha256:0299a15af0f90cb1b67fb1a9fb9a75a714ad03ac588ef8c54247a0830e1818d8"
+  }
+}
