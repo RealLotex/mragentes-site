@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 1,
-  "updated_at": "2026-08-29T06:06:42Z",
+  "revision": 2,
+  "updated_at": "2026-08-30T21:10:40Z",
   "items": [
     {
       "schema_version": 1,
@@ -85,6 +85,85 @@
       "priority": 2,
       "consumed_by": "de-la-demo-al-sistema-automatizar-con-ia-sin-perder-el-control",
       "consumed_at": "2026-08-29T06:06:42Z"
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-55ab8c10d48304da",
+      "title": "Google Cloud incorpora controles de gasto para agentes de IA",
+      "canonical_url": "https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents",
+      "source": "Google Cloud Blog",
+      "entity": "Google Cloud",
+      "published_at": "2026-08-26T00:00:00Z",
+      "discovered_at": "2026-08-30T21:10:40Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents",
+          "claim": "Google Cloud anuncia facturación flexible, topes mensuales, alertas y controles de sobregasto para cargas de agentes en Gemini Enterprise."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "productividad",
+        "costos"
+      ],
+      "summary": "Google Cloud agrega opciones de pago, topes y alertas para administrar el costo de agentes y herramientas de desarrollo.",
+      "language": "es",
+      "priority": 4
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-eb8e6b8938da6d89",
+      "title": "Amazon Redshift se integra con Agent Toolkit para tareas de datos asistidas por IA",
+      "canonical_url": "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/",
+      "source": "AWS What's New",
+      "entity": "Amazon Redshift",
+      "published_at": "2026-08-27T00:00:00Z",
+      "discovered_at": "2026-08-30T21:10:40Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/",
+          "claim": "AWS integra Redshift con Agent Toolkit para que agentes como Claude Code, Kiro y Cursor construyan, consulten, diagnostiquen y migren almacenes de datos."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "datos",
+        "mcp"
+      ],
+      "summary": "Redshift suma skills y un servidor MCP administrado para que agentes de código trabajen con datos y migraciones.",
+      "language": "es",
+      "priority": 4
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-2e317619bf64bdac",
+      "title": "Salesforce expande Headless 360 para exponer capacidades gobernadas a agentes",
+      "canonical_url": "https://www.salesforce.com/news/stories/expanding-headless-360-enterprise-capabilities/",
+      "source": "Salesforce News",
+      "entity": "Salesforce",
+      "published_at": "2026-08-19T00:00:00Z",
+      "discovered_at": "2026-08-30T21:10:40Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://www.salesforce.com/news/stories/expanding-headless-360-enterprise-capabilities/",
+          "claim": "Salesforce anuncia servidores MCP, skills e integraciones que permiten a agentes autorizados descubrir y ejecutar capacidades con identidad, permisos y reglas existentes."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "mcp",
+        "crm",
+        "gobernanza"
+      ],
+      "summary": "Headless 360 convierte capacidades de Salesforce en servicios reutilizables por agentes sin perder identidad, permisos ni gobernanza.",
+      "language": "es",
+      "priority": 4
     }
   ]
 }
