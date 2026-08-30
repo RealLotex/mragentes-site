@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "run_id": "social:daily_owned:2026-08-30",
+  "kind": "daily_owned",
+  "topic": "Un agente confiable deja rastros: cada decisión importante debería poder reconstruirse",
+  "topic_hash": "sha256:37beb7c2a50bbeba1077049d0fc2289ff1ad03713898166e47029234dacb54c1",
+  "content_hash": "sha256:8429dfbd048f7068c4cea728746433bfb6560d6c5a5cf9093bd08e0b8d9bceec",
+  "dedupe_key": "daily_owned:2026-08-30:sha256:8429dfbd048f7068c4cea728746433bfb6560d6c5a5cf9093bd08e0b8d9bceec",
+  "asset": {
+    "path": "static/images/social/generated/daily-owned-2026-08-30.jpg",
+    "sha256": "e362257befd42cd2597b00232aa6b5670f7f85bebe8d9e8d4cb986d3b72e6590",
+    "alt": "Flujo visual de tarjetas con puntos de control que conecta un asistente de IA con una persona que revisa el resultado."
+  },
+  "captions": {
+    "facebook": "Un agente confiable deja rastros.\n\nNo alcanza con que responda bien una vez: cuando toma una decisión importante, conviene poder reconstruir qué recibió, qué pasos siguió y qué terminó haciendo.\n\nEse registro no tiene que ser una novela. Puede ser una secuencia breve de entradas: evento, criterio, acción y resultado. Así una persona puede revisar, corregir y mejorar el proceso sin adivinar.\n\nLa trazabilidad convierte una automatización en algo operable. También ayuda a detectar dónde se desvió una regla antes de que el problema se repita.\n\n¿Tu proceso guarda evidencia útil de lo que hace la IA o sólo el resultado final?\n\n#MRAgentes #AgentesDeIA #Automatizacion #Procesos #IAparaPymes",
+    "instagram": "Un agente no debería ser una caja negra.\n\nGuardá cuatro rastros:\n1. qué recibió\n2. qué criterio aplicó\n3. qué acción tomó\n4. qué resultado dejó\n\nLa trazabilidad no es burocracia: es la forma de poder revisar y mejorar.\n\n¿Podés reconstruir la última decisión de tu automatización?\n\n#MRAgentes #AgentesDeIA #Automatizacion #Trazabilidad #IAparaPymes #Procesos"
+  },
+  "created_at": "2026-08-30T12:00:00-03:00"
+}
