@@ -65,6 +65,23 @@ def _text(value: Any, field: str, maximum: int) -> str:
     return value
 
 
+def _caption_text(value: Any, field: str, maximum: int) -> str:
+    """Reject text that was serialized twice before it reaches Meta.
+
+    JSON represents a real paragraph break as ``\\n`` in the file and the
+    JSON decoder turns it back into a newline.  A second serialization leaves
+    the two literal characters ``\\`` and ``n`` in the decoded caption, which
+    Meta correctly publishes verbatim.  Social captions never need that
+    notation, so reject it at the closed-draft boundary instead of silently
+    publishing malformed copy.
+    """
+
+    text = _text(value, field, maximum)
+    if "\\n" in text or "\\r" in text:
+        raise ValueError(f"{field} contains serialized line-break characters")
+    return text
+
+
 def _note_slug(value: Any) -> str:
     slug = _text(value, "note_slug", 250)
     if (
@@ -189,8 +206,8 @@ def validate_social_draft(draft: dict[str, Any]) -> dict[str, Any]:
     captions = result["captions"]
     if not isinstance(captions, dict) or set(captions) != _PLATFORMS:
         raise ValueError("both platform-specific captions are required")
-    facebook = _text(captions["facebook"], "facebook caption", 63_206)
-    instagram = _text(captions["instagram"], "instagram caption", 2_200)
+    facebook = _caption_text(captions["facebook"], "facebook caption", 63_206)
+    instagram = _caption_text(captions["instagram"], "instagram caption", 2_200)
     if facebook.strip() == instagram.strip():
         raise ValueError("platform captions must be tailored separately")
     validate_formal_text(result["topic"], field="social topic")

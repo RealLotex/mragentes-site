@@ -150,6 +150,19 @@ def test_both_platform_captions_are_required_nonempty_and_platform_specific() ->
             validate(dict(base, captions=captions))
 
 
+@pytest.mark.trace("SOCIAL-SCHEMA-006B")
+@pytest.mark.red_expected
+def test_social_captions_reject_double_serialized_line_breaks() -> None:
+    validate = planned_callable(TARGET, "validate_social_draft", "SOCIAL-SCHEMA-006B")
+    base = social_draft()
+    captions = {
+        "facebook": "Primer párrafo.\\n\\nSegundo párrafo.",
+        "instagram": "Texto distinto. #IA",
+    }
+    with pytest.raises(ValueError, match="serialized line-break"):
+        validate(dict(base, captions=captions))
+
+
 @pytest.mark.trace("SOCIAL-SCHEMA-007")
 @pytest.mark.red_expected
 def test_social_asset_requires_allowlisted_relative_path_sha256_and_alt() -> None:
