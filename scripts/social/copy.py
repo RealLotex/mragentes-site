@@ -36,18 +36,18 @@ HOOKS = [
 ]
 
 CLOSERS_FB = [
-    "Se lee en cinco minutos. El enlace, acá arriba.",
-    "Si te toca de cerca, escribinos y lo charlamos sin vueltas.",
-    "¿Lo estás viendo en tu empresa? Contanos.",
-    "Como siempre: sin humo y con las fuentes a la vista.",
-    "Comentanos qué harías vos.",
+    "El artículo completo está disponible en el sitio.",
+    "El análisis puede servir para evaluar este proceso en su organización.",
+    "El caso plantea una cuestión operativa que merece revisión.",
+    "Las fuentes y el alcance metodológico se encuentran al final del artículo.",
+    "Los canales de contacto están disponibles para observaciones técnicas.",
 ]
 
 CLOSERS_IG = [
-    "La nota completa está en el sitio — el enlace está en la bio.",
-    "Enlace en la bio para leerla entera.",
-    "Está entera en mragentes.com.ar (enlace en la bio).",
-    "Te la dejamos completa en el sitio: enlace en la bio.",
+    "El artículo completo está disponible en el sitio; el enlace figura en la bio.",
+    "El enlace de acceso al análisis se encuentra en la bio.",
+    "La nota completa está disponible en mragentes.com.ar; enlace en la bio.",
+    "La versión completa, con fuentes, está disponible en el sitio; enlace en la bio.",
 ]
 
 TAG_MAP = {

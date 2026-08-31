@@ -9,7 +9,11 @@ import pytest
 from scripts.automation import social_guard
 from scripts.social import ledger
 from scripts.social.config import Settings
-from scripts.social.delivery import build_blog_note_draft, deliver_draft
+from scripts.social.delivery import (
+    announcement_asset_relative_path,
+    build_blog_note_draft,
+    deliver_draft,
+)
 from scripts.social.notas import Nota
 from scripts.social.publisher import Result
 
@@ -266,7 +270,7 @@ def test_invalid_asset_or_disabled_testing_configuration_causes_zero_remote_call
 
 @pytest.mark.trace("SOCIAL-DELIVERY-006")
 @pytest.mark.red_expected
-def test_blog_note_draft_uses_deployed_cover_explicit_slug_and_distinct_copy(
+def test_blog_note_draft_requires_a_branded_announcement_asset_and_distinct_copy(
     tmp_path: Path,
 ) -> None:
     cover = tmp_path / "static" / "images" / "stock" / "cover.webp"
@@ -286,6 +290,9 @@ def test_blog_note_draft_uses_deployed_cover_explicit_slug_and_distinct_copy(
         ),
         canonical_slug="automatización-útil-controlada",
     )
+    branded = tmp_path / announcement_asset_relative_path(note)
+    branded.parent.mkdir(parents=True)
+    branded.write_bytes(b"branded-template-render")
     draft = build_blog_note_draft(
         note,
         deploy_sha="b" * 40,
@@ -294,6 +301,32 @@ def test_blog_note_draft_uses_deployed_cover_explicit_slug_and_distinct_copy(
     )
     assert draft["kind"] == "blog_note"
     assert draft["note_slug"] == "automatización-útil-controlada"
-    assert draft["asset"]["path"] == "static/images/stock/cover.webp"
+    assert draft["asset"]["path"] == (
+        "static/images/social/notes/automatizacion-util-controlada.jpg"
+    )
     assert draft["captions"]["facebook"] != draft["captions"]["instagram"]
     assert draft["content_hash"] == social_guard.content_hash(draft)
+
+
+@pytest.mark.trace("SOCIAL-DELIVERY-007")
+@pytest.mark.red_expected
+def test_blog_note_draft_rejects_raw_stock_cover_when_the_branded_render_is_missing(
+    tmp_path: Path,
+) -> None:
+    cover = tmp_path / "static" / "images" / "stock" / "cover.webp"
+    cover.parent.mkdir(parents=True)
+    cover.write_bytes(b"deployed-cover")
+    note = Nota(
+        path=tmp_path / "content" / "notas" / "portable.md",
+        title="Automatización útil con control humano",
+        date=dt.date(2026, 8, 27),
+        image="/images/stock/cover.webp",
+        canonical_slug="automatización-útil-controlada",
+    )
+    with pytest.raises(ValueError, match="branded announcement"):
+        build_blog_note_draft(
+            note,
+            deploy_sha="b" * 40,
+            root=tmp_path,
+            created_at="2026-08-27T12:00:00-03:00",
+        )
