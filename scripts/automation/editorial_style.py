@@ -31,7 +31,7 @@ _COLLOQUIAL_FORMS = (
     r"\beleg[ií]\b",
     r"\bpon[eé]\b",
     r"\bguard[aá]\b",
-    r"\bdej[aá]\b",
+    r"\bdejá\b",
     r"\bhac[eé]\b",
     r"\brevis[aá]\b",
     r"\bescribinos\b",
