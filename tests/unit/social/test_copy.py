@@ -8,7 +8,7 @@ import pytest
 from scripts.social import copy as copywriter
 from scripts.social import templates
 from scripts.social.templates import Piece
-from tests.unit.social._helpers import make_nota
+from tests.unit.social._helpers import install_fast_render, make_nota
 
 
 @pytest.mark.trace("SOCIAL-COPY-001")
@@ -111,7 +111,10 @@ def test_every_social_output_includes_the_share_cta(tmp_path: Path) -> None:
 
 @pytest.mark.trace("SOCIAL-COPY-014")
 @pytest.mark.baseline_green
-def test_method_carousel_and_card_grid_cover_pedagogical_formats(tmp_path: Path) -> None:
+def test_method_carousel_and_card_grid_cover_pedagogical_formats(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    install_fast_render(monkeypatch)
     methods = copywriter.method_carousel(
         "Cómo empezar con automatización",
         [
