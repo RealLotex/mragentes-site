@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-08-30:agentes-de-ia-con-freno-y-mapa-costos-datos-y-permisos",
+  "status": "prepared",
+  "local_date": "2026-08-30",
+  "created_at": "2026-08-31T00:01:51.549Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/agentes-de-ia-con-freno-y-mapa-costos-datos-y-permisos.md",
+      "sha256": "ea8b9ff8b718bfafd5697a9dba5af8ed37cabca316099855b12659d1e34c363c"
+    },
+    "asset": {
+      "path": "static/images/stock/pexels-1181401.jpg",
+      "sha256": "3c27ec364add8902d6ea48483b321b0930a1b095867d947f60c94e72aa85722c"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "dae7c2e01d17d543184daf249c95da8465dda714a47ab7b9c274033d607c8652",
+      "transition": {
+        "from": "pending",
+        "to": "consumed",
+        "count": 3,
+        "ids": [
+          "news-v1-55ab8c10d48304da",
+          "news-v1-eb8e6b8938da6d89",
+          "news-v1-2e317619bf64bdac"
+        ]
+      }
+    }
+  },
+  "sources": [
+    "https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents",
+    "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/",
+    "https://www.salesforce.com/news/stories/expanding-headless-360-enterprise-capabilities/"
+  ]
+}
