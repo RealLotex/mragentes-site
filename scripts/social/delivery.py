@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import datetime as dt
 import hashlib
+import re
+import unicodedata
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
@@ -17,6 +19,24 @@ from .publisher import Meta, Result, head_ok
 
 
 RECONCILIATION_TOLERANCE_SECONDS = 4 * 60 * 60
+
+
+def announcement_asset_relative_path(note: Nota) -> Path:
+    """Return the mandatory, public template render for a blog announcement.
+
+    A note cover is source material: it is not itself a social creative.  The
+    announcement must therefore be committed separately under the social
+    directory after being rendered through the ``nota`` template.
+    """
+
+    if not isinstance(note, Nota):
+        raise TypeError("note must be a parsed Nota")
+    plain = unicodedata.normalize("NFKD", note.slug)
+    plain = "".join(char for char in plain if not unicodedata.combining(char))
+    stem = re.sub(r"[^a-z0-9]+", "-", plain.casefold()).strip("-")
+    if not stem:
+        raise ValueError("note slug cannot produce an announcement asset name")
+    return Path("static/images/social/notes") / f"{stem}.jpg"
 
 
 def build_blog_note_draft(
@@ -33,20 +53,32 @@ def build_blog_note_draft(
         raise TypeError("note must be a parsed Nota")
     if not note.image or not note.image.startswith("/images/stock/"):
         raise ValueError("blog note must declare a deployed stock cover")
-    relative_asset = "static/" + note.image.lstrip("/")
     repository_root = Path(root).resolve()
-    asset_path = (repository_root / relative_asset).resolve()
+    cover_path = (repository_root / "static" / note.image.lstrip("/")).resolve()
     try:
-        asset_path.relative_to(repository_root / "static" / "images" / "stock")
+        cover_path.relative_to(repository_root / "static" / "images" / "stock")
     except ValueError as exc:
         raise ValueError("blog cover escaped the stock image allowlist") from exc
-    if not asset_path.is_file() or asset_path.suffix.casefold() not in {
+    if not cover_path.is_file() or cover_path.suffix.casefold() not in {
         ".png",
         ".jpg",
         ".jpeg",
         ".webp",
     }:
         raise ValueError("blog cover does not exist or has an unsupported format")
+    relative_asset = announcement_asset_relative_path(note)
+    asset_path = (repository_root / relative_asset).resolve()
+    try:
+        asset_path.relative_to(repository_root / "static" / "images" / "social")
+    except ValueError as exc:  # pragma: no cover - the helper is intentionally fixed
+        raise ValueError("branded announcement escaped the social image allowlist") from exc
+    if not asset_path.is_file() or asset_path.suffix.casefold() not in {
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".webp",
+    }:
+        raise ValueError("branded announcement asset is missing or unsupported")
 
     created = _timestamp(created_at)
     if created.date() != note.date:
@@ -63,7 +95,7 @@ def build_blog_note_draft(
         "content_hash": "pending",
         "dedupe_key": "pending",
         "asset": {
-            "path": relative_asset,
+            "path": relative_asset.as_posix(),
             "sha256": hashlib.sha256(asset_path.read_bytes()).hexdigest(),
             "alt": note.image_alt or f"Imagen principal de {note.title}",
         },

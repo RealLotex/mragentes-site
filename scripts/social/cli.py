@@ -33,7 +33,11 @@ from . import notas as notas_mod  # noqa: E402
 from . import state as state_mod  # noqa: E402
 from . import templates as tpl  # noqa: E402
 from .config import BASE_DIR, ENV_FILE, OUT_DIR, load_settings  # noqa: E402
-from .delivery import build_blog_note_draft, deliver_draft  # noqa: E402
+from .delivery import (  # noqa: E402
+    announcement_asset_relative_path,
+    build_blog_note_draft,
+    deliver_draft,
+)
 from .flow import ascii_slug, commit_and_push, public_name, publish_nota, render_nota_pieces  # noqa: E402
 from .library import LIBRARY, captions as library_captions, library_piece  # noqa: E402
 from .publisher import Meta, PublishError, resolve_public_url  # noqa: E402
@@ -148,6 +152,7 @@ def _piece_from_args(args) -> tuple[str, Piece]:
         kicker=args.kicker or "",
         stat=args.stat or "",
         quote=args.quote or "",
+        photo=getattr(args, "photo", None) or None,
     )
     return args.template or "titular", piece
 
@@ -198,6 +203,26 @@ def cmd_nota(args) -> int:
     print(copywriter.caption(nota, "facebook", settings.site_base_url))
     print("\n── Instagram ────────────────────────────────────────────────")
     print(copywriter.caption(nota, "instagram", settings.site_base_url))
+    return 0
+
+
+def cmd_render_note_announcement(args) -> int:
+    """Render the only image a blog-note delivery is allowed to publish."""
+
+    nota = notas_mod.find(args.slug)
+    if nota is None:
+        raise ValueError(f"No encontré la nota {args.slug!r}")
+    if nota.photo is None:
+        raise ValueError("La nota necesita una portada local antes del render de redes")
+    target = Path(args.out) if args.out else BASE_DIR / announcement_asset_relative_path(nota)
+    target = target if target.is_absolute() else BASE_DIR / target
+    rendered = tpl.render(
+        "nota",
+        copywriter.cover_piece(nota, load_settings().site_base_url),
+        "portrait",
+        seed=copywriter.seed_for(nota.slug),
+    ).save(target)
+    print(f"  ✔ anuncio de plantilla nota: {_show(rendered)}")
     return 0
 
 
@@ -511,6 +536,7 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--kicker")
     r.add_argument("--stat")
     r.add_argument("--quote")
+    r.add_argument("--photo", help="foto de fondo local; se compone mediante la plantilla, nunca se publica sin marca")
     r.set_defaults(func=cmd_render)
 
     g = sub.add_parser("gallery", help="muestrario de toda la biblioteca")
@@ -525,6 +551,14 @@ def build_parser() -> argparse.ArgumentParser:
     n.add_argument("--no-story", action="store_true")
     n.add_argument("--no-carousel", action="store_true")
     n.set_defaults(func=cmd_nota)
+
+    rna = sub.add_parser(
+        "render-note-announcement",
+        help="renderizar la pieza social obligatoria de una nota con la plantilla MR Agentes",
+    )
+    rna.add_argument("--slug", required=True)
+    rna.add_argument("--out", help="ruta de salida; por defecto static/images/social/notes/")
+    rna.set_defaults(func=cmd_render_note_announcement)
 
     dd = sub.add_parser("draft-daily", help="crear un borrador diario local validado")
     dd.add_argument("--date", help="fecha local YYYY-MM-DD (default: hoy)")

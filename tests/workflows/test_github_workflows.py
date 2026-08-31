@@ -45,6 +45,9 @@ def test_ci_workflow_is_read_only_by_default_and_scopes_merge_permissions() -> N
     assert "gh pr merge" not in source, trace_message(
         "WF-CI-001", "untrusted pull-request CI still owns repository merge authority"
     )
+    assert "scripts.automation.editorial_style" in source, trace_message(
+        "WF-CI-001", "CI does not enforce the editorial style gate on proposed notes"
+    )
 
 
 @pytest.mark.trace("WF-INTAKE-001")

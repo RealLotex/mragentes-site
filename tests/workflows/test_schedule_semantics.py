@@ -161,10 +161,19 @@ def test_blog_schedule_requires_a_relevant_stock_photo_for_the_note_template() -
     )
     prompt = descriptor["prompt"].casefold()
     assert "proveedor de stock" in prompt and "pexels" in prompt, trace_message(
-        "TASK-BLOG-VISUAL-001", "blog automation can replace the note cover with generated art"
+        "TASK-BLOG-VISUAL-001", "blog automation lacks a relevant stock-photo source"
     )
-    assert "plantilla" in prompt and "nota" in prompt, trace_message(
-        "TASK-BLOG-VISUAL-001", "blog automation does not preserve the note visual identity"
+    assert "fallback" in prompt and "generada" in prompt, trace_message(
+        "TASK-BLOG-VISUAL-001", "blog automation lacks a controlled background fallback"
+    )
+    assert "plantilla nota" in prompt and "nunca" in prompt, trace_message(
+        "TASK-BLOG-VISUAL-001", "blog automation can publish a raw background instead of the branded template"
+    )
+    assert "render-note-announcement" in prompt, trace_message(
+        "TASK-BLOG-VISUAL-001", "blog automation does not render the mandatory branded social asset"
+    )
+    assert "static/images/social/**" in descriptor["permissions"]["repository_writes"], trace_message(
+        "TASK-BLOG-VISUAL-001", "blog automation cannot commit the rendered branded announcement"
     )
 
 

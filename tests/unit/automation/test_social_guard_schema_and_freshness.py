@@ -216,6 +216,21 @@ def test_caption_topic_alt_and_collection_limits_are_enforced() -> None:
             validate(candidate)
 
 
+@pytest.mark.trace("SOCIAL-SCHEMA-011B")
+@pytest.mark.red_expected
+def test_social_copy_rejects_weekly_formulas_and_colloquial_register() -> None:
+    validate = planned_callable(TARGET, "validate_social_draft", "SOCIAL-SCHEMA-011B")
+    base = social_draft()
+    invalid = (
+        dict(base, topic="La semana en que cambió la automatización"),
+        dict(base, captions={"facebook": "No vendemos humo.", "instagram": "Análisis técnico. #IA"}),
+        dict(base, captions={"facebook": "Análisis técnico.", "instagram": "Vos podés revisar el proceso. #IA"}),
+    )
+    for candidate in invalid:
+        with pytest.raises(ValueError):
+            validate(candidate)
+
+
 @pytest.mark.trace("SOCIAL-SCHEMA-012")
 @pytest.mark.red_expected
 def test_social_schema_version_and_kind_enums_are_closed() -> None:

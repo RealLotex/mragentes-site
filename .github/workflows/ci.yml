@@ -28,6 +28,17 @@ jobs:
         run: python -m pip install --require-hashes -r requirements-test.lock.txt
       - name: Run Python contracts
         run: python -m pytest -q
+      - name: Enforce formal analytical style on changed notes
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          git diff --name-only --diff-filter=AM "$BASE_SHA" "$GITHUB_SHA" -- 'content/notas/*.md' |
+          while IFS= read -r note; do
+            test -n "$note" || continue
+            python -m scripts.automation.editorial_style --note "$note"
+          done
       - name: Install locked JavaScript dependencies
         run: npm ci
       - name: Run Worker and browser contracts
