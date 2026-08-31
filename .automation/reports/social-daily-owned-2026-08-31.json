@@ -1,0 +1,236 @@
+{
+  "checks": [
+    {
+      "detail": {
+        "authenticated": true,
+        "minimum_permission": "write",
+        "observed_permission": "admin",
+        "repository": "RealLotex/mragentes-site"
+      },
+      "name": "github_connector_preflight",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "base_branch": "main",
+        "base_sha": "b2847ea4c7ac9856c824781cbba5ba8af9cf7a09",
+        "date_draft_absent": true,
+        "target_branch_absent": true
+      },
+      "name": "remote_base_snapshot",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "action": "created_one_draft",
+        "existing": false,
+        "local_date": "2026-08-31"
+      },
+      "name": "draft_reuse",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "exit_code": 1,
+        "result": "failed_before_artifacts",
+        "test": "absence assertion for today draft"
+      },
+      "name": "tdd_red",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "records_checked": 2,
+        "status": "fresh",
+        "window_days": 30
+      },
+      "name": "freshness",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "closed": true,
+        "kind": "daily_owned",
+        "schema_version": 1
+      },
+      "name": "schema_and_hash",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "background_path": "static/images/social/generated/daily-owned-2026-08-31-background.png",
+        "desktop_dimensions": [
+          1080,
+          1350
+        ],
+        "mobile_dimensions": [
+          360,
+          450
+        ],
+        "surfaces_verified": [
+          "desktop",
+          "mobile"
+        ],
+        "template": "titular"
+      },
+      "name": "render",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "format": "JPEG",
+        "height": 1350,
+        "mode": "RGB",
+        "path": "static/images/social/generated/daily-owned-2026-08-31.jpg",
+        "sha256": "bcbae780d7bcbce1709d5fa76bd0c04c1e8d6604b1c8db58413272a6287a58b4",
+        "width": 1080
+      },
+      "name": "asset",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "format": "PNG",
+        "height": 1402,
+        "mode": "RGB",
+        "path": "static/images/social/generated/daily-owned-2026-08-31-background.png",
+        "sha256": "80ca735222af62f2d730e5f2c5c9903d611a29013e27dff19ae388b9e3929e3f",
+        "width": 1122
+      },
+      "name": "background_asset",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "instagram_limit": 2200,
+        "platforms": [
+          "facebook",
+          "instagram"
+        ],
+        "tailored_separately": true
+      },
+      "name": "captions",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "javascript_tests": "passed",
+        "python_tests": 534
+      },
+      "name": "test_suite",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "high_confidence_findings": 0
+      },
+      "name": "secret_scan",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "status": "clean"
+      },
+      "name": "git_diff_check",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "reason": "hugo executable unavailable in runtime",
+        "status": "not_run"
+      },
+      "name": "hugo_build",
+      "status": "skipped"
+    },
+    {
+      "detail": {
+        "preserved_outside_remote_scope": true
+      },
+      "name": "preexisting_workspace_changes",
+      "status": "warning"
+    }
+  ],
+  "effects": [
+    {
+      "detail": {
+        "content_hash": "sha256:6f7137ce17d8f9486a00413a9b192e10ccd6f6730aa0489e649764deba705b2e",
+        "dedupe_key": "daily_owned:2026-08-31:sha256:6f7137ce17d8f9486a00413a9b192e10ccd6f6730aa0489e649764deba705b2e",
+        "kind": "daily_owned"
+      },
+      "kind": "draft_artifact",
+      "status": "confirmed",
+      "target": ".automation/social/drafts/2026-08-31-daily-owned.json"
+    },
+    {
+      "detail": {
+        "sha256": "80ca735222af62f2d730e5f2c5c9903d611a29013e27dff19ae388b9e3929e3f"
+      },
+      "kind": "background_artifact",
+      "status": "confirmed",
+      "target": "static/images/social/generated/daily-owned-2026-08-31-background.png"
+    },
+    {
+      "detail": {
+        "sha256": "bcbae780d7bcbce1709d5fa76bd0c04c1e8d6604b1c8db58413272a6287a58b4"
+      },
+      "kind": "asset_artifact",
+      "status": "confirmed",
+      "target": "static/images/social/generated/daily-owned-2026-08-31.jpg"
+    },
+    {
+      "detail": {
+        "base_branch": "main",
+        "commit_count": 1,
+        "fast_forward_only": true,
+        "operation_order": [
+          "create_blob",
+          "create_tree",
+          "create_commit",
+          "update_ref"
+        ],
+        "transport": "github_connector"
+      },
+      "kind": "git_commit",
+      "status": "confirmed",
+      "target": "automation/social/social-daily-owned-2026-08-31"
+    }
+  ],
+  "finished_at": "2026-08-31T15:08:00-03:00",
+  "kind": "social_daily_owned",
+  "run_id": "social:daily_owned:2026-08-31",
+  "schema_version": 1,
+  "started_at": "2026-08-31T14:58:00-03:00",
+  "status": "success",
+  "summary": {
+    "asset_path": "static/images/social/generated/daily-owned-2026-08-31.jpg",
+    "asset_sha256": "bcbae780d7bcbce1709d5fa76bd0c04c1e8d6604b1c8db58413272a6287a58b4",
+    "background_path": "static/images/social/generated/daily-owned-2026-08-31-background.png",
+    "background_sha256": "80ca735222af62f2d730e5f2c5c9903d611a29013e27dff19ae388b9e3929e3f",
+    "branch": "automation/social/social-daily-owned-2026-08-31",
+    "content_hash": "sha256:6f7137ce17d8f9486a00413a9b192e10ccd6f6730aa0489e649764deba705b2e",
+    "dedupe_key": "daily_owned:2026-08-31:sha256:6f7137ce17d8f9486a00413a9b192e10ccd6f6730aa0489e649764deba705b2e",
+    "draft_path": ".automation/social/drafts/2026-08-31-daily-owned.json",
+    "external_publish": false,
+    "hugo_build": "unavailable",
+    "local_date": "2026-08-31",
+    "pr_ci": "pending",
+    "remote_commit_count": 1,
+    "report_path": ".automation/reports/social-daily-owned-2026-08-31.json",
+    "reused_date_draft": false,
+    "template": "titular",
+    "topic_hash": "sha256:e2d69f8d96f2862693feba820ed43c49f56284bfdc7534fb83cb96eeaaf04211"
+  }
+}
