@@ -81,6 +81,7 @@ def test_automation_merge_happens_only_after_ci_without_auto_merge_dependency() 
     )
     merge_job = parsed_intake.get("jobs", {}).get("merge_verified_automation", {})
     assert merge_job.get("permissions") == {
+        "actions": "write",
         "contents": "write",
         "pull-requests": "write",
     }, trace_message("WF-INTAKE-002", "post-CI merge authority is not job-scoped")
@@ -132,6 +133,16 @@ def test_automation_merge_happens_only_after_ci_without_auto_merge_dependency() 
     )
     assert "--force" not in combined, trace_message(
         "WF-INTAKE-002", "automation merge contains a force option"
+    )
+    assert "gh workflow run deploy.yml" in merge_commands, trace_message(
+        "WF-INTAKE-002", "automation merge does not dispatch the Pages pipeline after a token-originated merge"
+    )
+    for term in ("before_sha", "after_sha", "commits/main"):
+        assert term in merge_commands, trace_message(
+            "WF-INTAKE-002", f"automation deploy dispatch lacks a verified {term} boundary"
+        )
+    assert merge_commands.find("gh pr merge") < merge_commands.find("gh workflow run deploy.yml"), trace_message(
+        "WF-INTAKE-002", "Pages dispatch must happen only after the exact automation PR merges"
     )
 
 
@@ -221,6 +232,15 @@ def test_deploy_detects_only_new_notes_and_daily_drafts_from_git_history() -> No
     )
     assert "fetch-depth: 0" in source, trace_message(
         "WF-DEPLOY-004", "change detection does not fetch the required Git history"
+    )
+    assert "before_sha" in source and "after_sha" in source, trace_message(
+        "WF-DEPLOY-004", "manual deployment cannot receive the exact merge range for publication detection"
+    )
+    assert "inputs.before_sha || github.event.before || github.sha" in source, trace_message(
+        "WF-DEPLOY-004", "deploy ignores the trusted before SHA supplied after an automation merge"
+    )
+    assert "inputs.after_sha || github.sha" in source, trace_message(
+        "WF-DEPLOY-004", "deploy ignores the trusted after SHA supplied after an automation merge"
     )
 
 

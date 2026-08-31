@@ -4,6 +4,15 @@ on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+    inputs:
+      before_sha:
+        description: Exact main SHA immediately before a trusted automation merge
+        required: false
+        type: string
+      after_sha:
+        description: Exact main SHA produced by a trusted automation merge
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -52,8 +61,8 @@ jobs:
       - name: Detect only newly added publication contracts
         id: changes
         env:
-          BEFORE_SHA: ${{ github.event.before || github.sha }}
-          AFTER_SHA: ${{ github.sha }}
+          BEFORE_SHA: ${{ inputs.before_sha || github.event.before || github.sha }}
+          AFTER_SHA: ${{ inputs.after_sha || github.sha }}
         run: |
           set -euo pipefail
           detected_json="$(python -m scripts.automation.detect_changes --repo . --before "$BEFORE_SHA" --after "$AFTER_SHA")"

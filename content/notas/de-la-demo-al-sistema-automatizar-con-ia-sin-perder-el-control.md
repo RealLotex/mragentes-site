@@ -3,8 +3,8 @@ schema_version: 1
 title: "De la demo al sistema: automatizar con IA sin perder el control"
 date: "2026-08-28T12:00:00-03:00"
 description: "La IA empieza a rendir cuando combina datos, herramientas y controles: un marco simple para automatizar trabajo real en una pyme."
-image: "/images/stock/sistema-ia-verificable-2026-08-29.webp"
-image_alt: "Ilustración editorial de una persona supervisando capas de datos, agentes y controles de un sistema de IA"
+image: "/images/stock/pexels-1181390.jpg"
+image_alt: "Persona usando una tableta con teclado portátil en un entorno de trabajo tecnológico"
 tags:
   - ia
   - automatizacion
