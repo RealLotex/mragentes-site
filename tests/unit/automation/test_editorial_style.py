@@ -17,6 +17,10 @@ def _note(*, body: str = "") -> str:
         + "La evidencia permite comparar riesgos, arquitectura y gobernanza en la operación. " * 120
         + "\n\n## Conclusión\n\n"
         + "La conclusión sintetiza el impacto de los datos y las decisiones de diseño. " * 120
+        + "\n\n## Preguntas frecuentes\n\n"
+        + "### ¿Qué significa este cambio?\n\nUna explicación breve y verificable.\n\n"
+        + "### ¿Por dónde se puede empezar?\n\nUn primer paso concreto y seguro.\n\n"
+        + "### ¿Qué conviene revisar antes?\n\nLos límites y la evidencia disponible.\n\n"
         + "\n\n## Fuentes\n\n"
         + "- https://example.test/a\n- https://example.test/b\n- https://example.test/c\n"
     )
@@ -31,6 +35,7 @@ def test_academic_note_requires_sourced_analytical_structure() -> None:
     assert report["sections"] >= 4
     assert report["sources"] >= 3
     assert report["analytic_markers"] >= 2
+    assert report["faq_questions"] >= 3
 
 
 @pytest.mark.trace("EDITORIAL-STYLE-002")

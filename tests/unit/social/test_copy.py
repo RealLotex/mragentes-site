@@ -89,8 +89,23 @@ def test_cover_story_and_closing_pieces_use_real_nota_metadata(tmp_path: Path) -
     assert cover.meta == "26.08.2026"
     assert cover.url == nota.url("https://site.example")
     assert story.lead and len(story.lead) <= 150
-    assert story.footer_right == "leé la nota »"
+    assert story.footer_right == copywriter.SOCIAL_SHARE_CTA
     assert closing.rows and any("mragentes.com.ar" in value for _, value in closing.rows)
+    assert closing.footer_right == copywriter.SOCIAL_SHARE_CTA
+
+
+@pytest.mark.trace("SOCIAL-COPY-013")
+@pytest.mark.baseline_green
+def test_every_social_output_includes_the_share_cta(tmp_path: Path) -> None:
+    nota = make_nota(tmp_path)
+
+    assert copywriter.SOCIAL_SHARE_CTA in copywriter.caption(nota, "facebook")
+    assert copywriter.SOCIAL_SHARE_CTA in copywriter.caption(nota, "instagram")
+    assert all(
+        piece.footer_right == copywriter.SOCIAL_SHARE_CTA
+        for _, piece in copywriter.carousel_for_nota(nota)
+    )
+    assert Piece().footer_right == copywriter.SOCIAL_SHARE_CTA
 
 
 @pytest.mark.trace("SOCIAL-COPY-007")

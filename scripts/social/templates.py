@@ -67,7 +67,9 @@ class Piece:
     cta: str = ""
     meta: str = ""
     section: str = ""
-    footer_right: str = ""
+    # Pie común para que el CTA esté presente incluso cuando una pieza diaria
+    # se construye directo desde el CLI y no pasa por copy.carousel_for_nota.
+    footer_right: str = brand.SOCIAL_SHARE_CTA
     url: str = ""
 
     @classmethod

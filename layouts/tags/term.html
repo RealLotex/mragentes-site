@@ -5,14 +5,15 @@
     <p class="key col-key">Tema</p>
     <hgroup>
       <h1>{{ .Title }}</h1>
-      <p class="lede">{{ len .Pages }} nota{{ if ne (len .Pages) 1 }}s{{ end }} sobre este tema.</p>
+      <p class="lede">Guías y análisis para entender {{ .Title | lower }} desde lo básico, con ejemplos y fuentes verificables.</p>
     </hgroup>
   </header>
 </section>
 
 <section class="band band--tight sheet">
   <p class="col-wide" style="margin-bottom:var(--s-3)">
-    <a class="arrow-link" href="{{ "/notas/" | relURL }}">Volver al índice de notas</a>
+    {{ len .Pages }} nota{{ if ne (len .Pages) 1 }}s{{ end }} para seguir aprendiendo ·
+    <a class="arrow-link" href="{{ "/notas/" | relURL }}">Ver todas las notas</a>
   </p>
 
   <ul class="index col-wide">

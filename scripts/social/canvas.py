@@ -449,7 +449,7 @@ class Sheet:
         draw_tracked(
             self.draw,
             (m, foot_rule + 14),
-            (footer_right if footer_right is not None else brand.HANDLE),
+            (footer_right if footer_right is not None else brand.SOCIAL_SHARE_CTA),
             foot_font,
             pal.fg_faint,
             tracking=2.4,
