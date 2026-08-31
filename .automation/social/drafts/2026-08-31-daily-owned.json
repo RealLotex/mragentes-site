@@ -4,16 +4,16 @@
   "kind": "daily_owned",
   "topic": "La automatización debe evaluarse por el control que conserva, no por la autonomía que aparenta",
   "topic_hash": "sha256:e2d69f8d96f2862693feba820ed43c49f56284bfdc7534fb83cb96eeaaf04211",
-  "content_hash": "sha256:6f7137ce17d8f9486a00413a9b192e10ccd6f6730aa0489e649764deba705b2e",
-  "dedupe_key": "daily_owned:2026-08-31:sha256:6f7137ce17d8f9486a00413a9b192e10ccd6f6730aa0489e649764deba705b2e",
+  "content_hash": "sha256:6195cae20f1d7a484e04e9090360d195c330bbb2286c7997d8855adb7ebd9c5b",
+  "dedupe_key": "daily_owned:2026-08-31:sha256:6195cae20f1d7a484e04e9090360d195c330bbb2286c7997d8855adb7ebd9c5b",
   "asset": {
     "path": "static/images/social/generated/daily-owned-2026-08-31.jpg",
     "sha256": "bcbae780d7bcbce1709d5fa76bd0c04c1e8d6604b1c8db58413272a6287a58b4",
     "alt": "Placa editorial de MR Agentes sobre evaluar automatizaciones mediante control, trazabilidad y gestión de excepciones."
   },
   "captions": {
-    "facebook": "La automatización debe evaluarse por el control que conserva, no por la autonomía que aparenta.\\n\\nUn sistema confiable puede describir qué recibió, qué regla aplicó y qué acción ejecutó. También debe reconocer los casos que exceden su alcance y derivarlos a una persona con el contexto necesario.\\n\\nTres criterios permiten evaluar su operación: trazabilidad de las decisiones, límites explícitos y recuperación ante errores. Sin estos controles, una demostración convincente no alcanza para sostener un proceso real.\\n\\nLa pregunta técnica no es cuánto decide el sistema, sino si la organización puede revisar, corregir y explicar sus decisiones.\\n\\n#MRAgentes #AgentesDeIA #Automatizacion #Trazabilidad #Procesos #IAparaPymes",
-    "instagram": "Una automatización confiable conserva el control humano.\\n\\nDebe permitir verificar:\\n1. qué recibió\\n2. qué regla aplicó\\n3. qué acción ejecutó\\n4. cuándo derivó una excepción\\n\\nLa autonomía aparente no reemplaza trazabilidad, límites ni recuperación ante errores.\\n\\n#MRAgentes #AgentesDeIA #Automatizacion #Trazabilidad #IAparaPymes #Procesos"
+    "facebook": "La automatización debe evaluarse por el control que conserva, no por la autonomía que aparenta.\n\nUn sistema confiable puede describir qué recibió, qué regla aplicó y qué acción ejecutó. También debe reconocer los casos que exceden su alcance y derivarlos a una persona con el contexto necesario.\n\nTres criterios permiten evaluar su operación: trazabilidad de las decisiones, límites explícitos y recuperación ante errores. Sin estos controles, una demostración convincente no alcanza para sostener un proceso real.\n\nLa pregunta técnica no es cuánto decide el sistema, sino si la organización puede revisar, corregir y explicar sus decisiones.\n\n#MRAgentes #AgentesDeIA #Automatizacion #Trazabilidad #Procesos #IAparaPymes",
+    "instagram": "Una automatización confiable conserva el control humano.\n\nDebe permitir verificar:\n1. qué recibió\n2. qué regla aplicó\n3. qué acción ejecutó\n4. cuándo derivó una excepción\n\nLa autonomía aparente no reemplaza trazabilidad, límites ni recuperación ante errores.\n\n#MRAgentes #AgentesDeIA #Automatizacion #Trazabilidad #IAparaPymes #Procesos"
   },
   "created_at": "2026-08-31T12:00:00-03:00"
 }
