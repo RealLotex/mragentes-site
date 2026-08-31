@@ -14,6 +14,7 @@ sys.path.insert(0, str(ROOT))
 from scripts.social import copy as copywriter  # noqa: E402
 from scripts.social.notas import Nota  # noqa: E402
 from scripts.social.templates import Piece  # noqa: E402
+from scripts.social import templates  # noqa: E402
 
 
 def sample_nota() -> Nota:
@@ -58,6 +59,26 @@ def main() -> None:
     ))
     check("una pieza diaria creada desde una plantilla incluye el CTA", (
         Piece().footer_right == copywriter.SOCIAL_SHARE_CTA
+    ))
+
+    check("existen plantillas para métodos y grillas", {
+        "metodo", "tarjetas"
+    } <= set(templates.TEMPLATES))
+    methods = copywriter.method_carousel(
+        "Cómo empezar con automatización",
+        [
+            ("Elegir una tarea", "Busque una tarea que se repita."),
+            ("Probar en pequeño", "Revise el resultado con una persona."),
+            ("Medir y mejorar", "Anote qué cambió antes de ampliar."),
+        ],
+    )
+    check("el carrusel conserva una lámina por método", [key for key, _ in methods] == [
+        "punto", "metodo", "metodo", "metodo"
+    ])
+    check("la grilla admite sólo 2, 4 o 6 tarjetas", all(
+        templates.render("tarjetas", Piece(title="Prueba", items=[("Paso", "Detalle")] * count), "portrait").img.size
+        == (1080, 1350)
+        for count in (2, 4, 6)
     ))
 
 

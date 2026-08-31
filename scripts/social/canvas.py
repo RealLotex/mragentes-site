@@ -446,17 +446,37 @@ class Sheet:
         self.rule(m, foot_rule, s.w - m, pal.rule)
         foot_font = brand.font("data", 22, 500)
         draw_tracked(self.draw, (m, foot_rule + 14), brand.SITE_HOST, foot_font, pal.fg_soft, tracking=2.4, role="data")
-        draw_tracked(
-            self.draw,
-            (m, foot_rule + 14),
-            (footer_right if footer_right is not None else brand.SOCIAL_SHARE_CTA),
-            foot_font,
-            pal.fg_faint,
-            tracking=2.4,
-            align="right",
-            box_w=s.w - 2 * m,
-            role="data",
-        )
+        footer = footer_right if footer_right is not None else brand.SOCIAL_SHARE_CTA
+        if footer == brand.SOCIAL_SHARE_CTA:
+            # Las fuentes de marca no incluyen ↗. La flecha se dibuja como
+            # vector entre las dos partes del CTA para mantener la acción de
+            # compartir legible en cada plataforma y tamaño de tarjeta.
+            prefix_w = text_width(foot_font, brand.SOCIAL_SHARE_PREFIX, 2.4)
+            suffix_w = text_width(foot_font, brand.SOCIAL_SHARE_SUFFIX, 2.4)
+            arrow_w, arrow_gap = 22, 14
+            start = s.w - m - prefix_w - arrow_gap - arrow_w - arrow_gap - suffix_w
+            fy = foot_rule + 14
+            draw_tracked(self.draw, (start, fy), brand.SOCIAL_SHARE_PREFIX, foot_font,
+                         pal.fg_faint, tracking=2.4, role="data")
+            ax = int(start + prefix_w + arrow_gap)
+            ay = int(fy + 3)
+            self.draw.line([(ax, ay + 15), (ax + 15, ay)], fill=pal.fg_faint, width=2)
+            self.draw.line([(ax + 15, ay), (ax + 8, ay)], fill=pal.fg_faint, width=2)
+            self.draw.line([(ax + 15, ay), (ax + 15, ay + 7)], fill=pal.fg_faint, width=2)
+            draw_tracked(self.draw, (ax + arrow_w + arrow_gap, fy), brand.SOCIAL_SHARE_SUFFIX,
+                         foot_font, pal.fg_faint, tracking=2.4, role="data")
+        else:
+            draw_tracked(
+                self.draw,
+                (m, foot_rule + 14),
+                footer,
+                foot_font,
+                pal.fg_faint,
+                tracking=2.4,
+                align="right",
+                box_w=s.w - 2 * m,
+                role="data",
+            )
         self._footer_top = foot_rule
 
     # ── Área de contenido ───────────────────────────────────────────────

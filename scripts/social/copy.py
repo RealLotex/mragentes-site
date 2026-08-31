@@ -192,6 +192,7 @@ def caption(nota: Nota, network: str = "facebook", base_url: str = "https://mrag
         body += [
             "",
             _pick(CLOSERS_IG, seed),
+            "Enlace en la bio.",
             SOCIAL_SHARE_CTA,
             "",
             " ".join(hashtags(nota, seed, 12)),
@@ -323,3 +324,39 @@ def carousel_for_nota(nota: Nota, base_url: str = "https://mragentes.com.ar", ma
     for _, piece in slides:
         piece.footer_right = SOCIAL_SHARE_CTA
     return slides[:max_slides]
+
+
+def method_carousel(title: str, methods: list[tuple[str, str]], *, kicker: str = "guía simple") -> list[tuple[str, Piece]]:
+    """Crea una portada y una lámina pedagógica por cada método.
+
+    Los métodos se mantienen deliberadamente entre dos y seis: menos no forma
+    un carrusel útil y más obliga a comprimir el texto o a perder el hilo.
+    """
+    if not isinstance(title, str) or not title.strip():
+        raise ValueError("El carrusel necesita un título")
+    if not 2 <= len(methods) <= 6:
+        raise ValueError("El carrusel necesita entre 2 y 6 métodos")
+    slides: list[tuple[str, Piece]] = [(
+        "punto",
+        Piece(
+            title=title.strip(),
+            lead="Una guía simple: un paso por lámina.",
+            kicker=kicker,
+            stat=f"{len(methods):02d}",
+            footer_right=SOCIAL_SHARE_CTA,
+        ),
+    )]
+    for index, method in enumerate(methods, start=1):
+        if not isinstance(method, (tuple, list)) or len(method) != 2:
+            raise ValueError("Cada método debe incluir título y explicación")
+        name, explanation = (str(method[0]).strip(), str(method[1]).strip())
+        if not name or not explanation:
+            raise ValueError("Cada método debe incluir título y explicación")
+        slides.append(("metodo", Piece(
+            title=name,
+            lead=explanation,
+            kicker=f"método {index} de {len(methods)}",
+            stat=f"{index:02d}",
+            footer_right=SOCIAL_SHARE_CTA,
+        )))
+    return slides

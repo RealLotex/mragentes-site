@@ -55,9 +55,11 @@ LOGO_HAND = BASE_DIR / "static" / "faviconhand512.png"
 SITE_HOST = "mragentes.com.ar"
 HANDLE = "@mragentes"
 # Todas las piezas, incluso las de contenido diario, terminan con la misma
-# invitación a compartir. La flecha usa «» porque las fuentes de la marca no
-# contienen el glifo ↗; así evitamos que el CTA se convierta en un cuadrado.
-SOCIAL_SHARE_CTA = "Enviaselo » a alguien que le pueda servir"
+# invitación a compartir. Canvas dibuja ↗ como vector para que el resultado no
+# dependa de que las fuentes de la marca tengan ese glifo.
+SOCIAL_SHARE_CTA = "Enviaselo ↗ a alguien que le pueda servir"
+SOCIAL_SHARE_PREFIX = "Enviaselo"
+SOCIAL_SHARE_SUFFIX = "a alguien que le pueda servir"
 
 
 class FontUnavailable(RuntimeError):

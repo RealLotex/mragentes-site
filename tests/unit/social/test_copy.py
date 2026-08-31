@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from scripts.social import copy as copywriter
+from scripts.social import templates
 from scripts.social.templates import Piece
 from tests.unit.social._helpers import make_nota
 
@@ -106,6 +107,37 @@ def test_every_social_output_includes_the_share_cta(tmp_path: Path) -> None:
         for _, piece in copywriter.carousel_for_nota(nota)
     )
     assert Piece().footer_right == copywriter.SOCIAL_SHARE_CTA
+
+
+@pytest.mark.trace("SOCIAL-COPY-014")
+@pytest.mark.baseline_green
+def test_method_carousel_and_card_grid_cover_pedagogical_formats(tmp_path: Path) -> None:
+    methods = copywriter.method_carousel(
+        "Cómo empezar con automatización",
+        [
+            ("Elegir una tarea", "Identifique una tarea que se repite."),
+            ("Probar en pequeño", "Revise el resultado con una persona."),
+        ],
+    )
+
+    assert [key for key, _ in methods] == ["punto", "metodo", "metodo"]
+    assert all(piece.footer_right == copywriter.SOCIAL_SHARE_CTA for _, piece in methods)
+    assert {"metodo", "tarjetas"} <= set(templates.TEMPLATES)
+
+    for count in (2, 4, 6):
+        rendered = templates.render(
+            "tarjetas",
+            Piece(title="Comparación", items=[("Paso", "Explicación breve")] * count),
+            "portrait",
+        )
+        assert rendered.img.size == (1080, 1350)
+
+    with pytest.raises(ValueError, match="2, 4 o 6"):
+        templates.render(
+            "tarjetas",
+            Piece(title="No permitido", items=[("Paso", "Detalle")] * 3),
+            "portrait",
+        )
 
 
 @pytest.mark.trace("SOCIAL-COPY-007")

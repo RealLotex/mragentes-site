@@ -509,6 +509,99 @@ class Steps(Block):
 
 
 @dataclass
+class CardGrid(Block):
+    """Dos, cuatro o seis tarjetas en una misma lámina.
+
+    Cada tarjeta tiene un título y una explicación breve. La grilla siempre es
+    de dos columnas: 2 tarjetas comparan dos alternativas, 4 muestran un
+    cuadro compacto y 6 permiten ordenar hasta seis pasos sin reducir la
+    tipografía a un tamaño ilegible.
+    """
+
+    items: list = field(default_factory=list)
+    gap: int = 18
+    _cards: list = field(default_factory=list, init=False, repr=False)
+    _card_h: int = field(default=0, init=False, repr=False)
+    _card_w: int = field(default=0, init=False, repr=False)
+
+    def _normalize(self) -> list[tuple[str, str]]:
+        if len(self.items) not in {2, 4, 6}:
+            raise ValueError("La grilla necesita exactamente 2, 4 o 6 tarjetas")
+        rows: list[tuple[str, str]] = []
+        for item in self.items:
+            if isinstance(item, dict):
+                title = str(item.get("title", ""))
+                detail = str(item.get("detail", ""))
+            elif isinstance(item, (tuple, list)):
+                title = str(item[0]) if item else ""
+                detail = str(item[1]) if len(item) > 1 else ""
+            else:
+                title, detail = str(item), ""
+            if not title.strip():
+                raise ValueError("Cada tarjeta necesita un título")
+            rows.append((title, detail))
+        return rows
+
+    def measure(self, sheet, w, budget):
+        rows = self._normalize()
+        row_count = len(rows) // 2
+        cap = min(budget, int(sheet.content_h * 0.62))
+        self._card_w = max(1, (w - self.gap) // 2)
+        self._card_h = max(1, (cap - self.gap * (row_count - 1)) // row_count)
+        pad = max(18, int(self._card_w * 0.075))
+        self._cards = []
+        for title, detail in rows:
+            title_fit = fit_text(
+                title,
+                role="display",
+                weight=650,
+                max_w=self._card_w - pad * 2,
+                max_h=max(30, int(self._card_h * 0.38)),
+                size_max=sc(sheet, 42 if len(rows) <= 4 else 34),
+                size_min=18,
+                max_lines=3,
+            )
+            detail_fit = fit_text(
+                detail,
+                role="text",
+                max_w=self._card_w - pad * 2,
+                max_h=max(24, self._card_h - pad * 2 - title_fit.height - 16),
+                size_max=sc(sheet, 30 if len(rows) <= 4 else 25),
+                size_min=16,
+                max_lines=5 if len(rows) <= 4 else 4,
+            ) if detail else None
+            self._cards.append((title_fit, detail_fit, pad))
+        return min(cap, budget)
+
+    def draw(self, sheet, x, y, w, h):
+        pal = sheet.palette
+        for index, (title_fit, detail_fit, pad) in enumerate(self._cards):
+            row, col = divmod(index, 2)
+            cx = x + col * (self._card_w + self.gap)
+            cy = y + row * (self._card_h + self.gap)
+            sheet.draw.rectangle(
+                [cx, cy, cx + self._card_w, cy + self._card_h],
+                fill=pal.panel,
+                outline=pal.rule_strong,
+                width=1,
+            )
+            label = brand.font("data", sc(sheet, 18), 600)
+            draw_tracked(sheet.draw, (cx + pad, cy + pad), f"{index + 1:02d}", label,
+                         pal.accent, 1.5, role="data")
+            title_y = cy + pad + int(sc(sheet, 18) * 1.7)
+            draw_fitted(sheet.draw, title_fit, cx + pad, title_y, self._card_w - pad * 2, pal.fg)
+            if detail_fit:
+                draw_fitted(
+                    sheet.draw,
+                    detail_fit,
+                    cx + pad,
+                    title_y + title_fit.height + 14,
+                    self._card_w - pad * 2,
+                    pal.fg_soft,
+                )
+
+
+@dataclass
 class KeyValues(Block):
     """Hoja de especificación: clave al margen, valor a la derecha."""
 
