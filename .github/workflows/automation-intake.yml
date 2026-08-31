@@ -53,6 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
+      actions: write
       contents: write
       pull-requests: write
     concurrency:
@@ -105,8 +106,27 @@ jobs:
               output.write(f"pr_number={int(pr['number'])}\n")
           PY
       - name: Squash the exact head verified by successful CI
+        id: merge
         env:
           PR_NUMBER: ${{ steps.verified_pr.outputs.pr_number }}
-        run: >-
-          gh pr merge "$PR_NUMBER" --repo "$GITHUB_REPOSITORY"
-          --squash --delete-branch --match-head-commit "$RUN_HEAD_SHA"
+        run: |
+          set -euo pipefail
+          before_sha="$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq .sha)"
+          gh pr merge "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --squash --delete-branch --match-head-commit "$RUN_HEAD_SHA"
+          after_sha="$(gh api "repos/$GITHUB_REPOSITORY/commits/main" --jq .sha)"
+          if [ "$before_sha" = "$after_sha" ]; then
+            echo "automation merge did not advance main" >&2
+            exit 1
+          fi
+          {
+            echo "before_sha=$before_sha"
+            echo "after_sha=$after_sha"
+          } >> "$GITHUB_OUTPUT"
+      - name: Dispatch the Pages and publication pipeline for the exact merged range
+        env:
+          BEFORE_SHA: ${{ steps.merge.outputs.before_sha }}
+          AFTER_SHA: ${{ steps.merge.outputs.after_sha }}
+        run: |
+          set -euo pipefail
+          gh workflow run deploy.yml --repo "$GITHUB_REPOSITORY" --ref main \
+            -f before_sha="$BEFORE_SHA" -f after_sha="$AFTER_SHA"
