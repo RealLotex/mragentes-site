@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 import pytest
@@ -114,6 +114,7 @@ def test_every_concrete_block_measures_within_budget_and_draws_without_overflow(
         blocks.Stat("42%", unit="menos", caption="Tiempo operativo evitado"),
         blocks.Ledger(items=["uno", ("dos", "detalle"), {"title": "tres", "detail": "dato"}]),
         blocks.Steps(items=[("definir", "el objetivo"), ("medir", "el resultado")]),
+        blocks.CardGrid(items=[("uno", "detalle"), ("dos", "detalle"), ("tres", "detalle"), ("cuatro", "detalle")]),
         blocks.KeyValues(rows=[("kind", "daily_owned"), ("status", "partial")]),
         blocks.Quote("Una automatización responsable debe poder explicarse.", "MR Agentes"),
         blocks.Columns(cols=[[blocks.Body("izquierda")], [blocks.Body("derecha")]]),
@@ -189,8 +190,8 @@ def test_piece_from_dict_filters_unknown_fields_without_mutating_input() -> None
 
 @pytest.mark.trace("SOCIAL-RENDER-TEMPLATE-002")
 @pytest.mark.baseline_green
-def test_template_registry_has_fifteen_unique_complete_templates() -> None:
-    assert len(templates.TEMPLATES) == 15
+def test_template_registry_has_seventeen_unique_complete_templates() -> None:
+    assert len(templates.TEMPLATES) == 17
     assert len(templates.TEMPLATES) == len(set(templates.TEMPLATES))
     for key, template in templates.TEMPLATES.items():
         assert template.key == key
@@ -212,7 +213,11 @@ def test_every_template_renders_every_surface_with_correct_dimensions(
 
     for key in templates.TEMPLATES:
         for surface_key, expected in surfaces.items():
-            sheet = templates.render(key, piece, surface_key, seed=7)
+            render_piece = replace(
+                piece,
+                items=[("Paso", "Explicación breve")] * 4,
+            ) if key == "tarjetas" else piece
+            sheet = templates.render(key, render_piece, surface_key, seed=7)
             assert sheet.surface.key == surface_key
             assert sheet.img.size == (expected.w, expected.h)
             x0, y0, x1, y1 = sheet.content_box

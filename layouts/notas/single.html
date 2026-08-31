@@ -28,9 +28,32 @@
          Pero no se pinta arriba del artículo: son fotos de archivo genéricas que
          no ilustran nada y empujaban el texto media pantalla hacia abajo. */ -}}
 
+  {{- /* El índice deja ver el recorrido antes de empezar. No reemplaza la
+         lectura: permite ir directo a la duda concreta y crea enlaces estables
+         a cada sección para compartirlos o volver a encontrarlos. */ -}}
+  {{- if ge (len (findRE `(?m)^##\s+` .RawContent)) 3 }}
+  <nav class="article-toc" aria-label="Contenido de esta nota">
+    <p class="key">En esta nota</p>
+    {{ .TableOfContents }}
+  </nav>
+  {{- end }}
+
   <div class="prose">
     {{ .Content }}
   </div>
+
+  {{- $shareText := printf "%s — %s" .Title .Permalink }}
+  <aside class="article-share rule-top" aria-labelledby="share-title">
+    <p class="key" id="share-title">Puede servirle a otra persona</p>
+    <p>Enviaselo ↗ a alguien que le pueda servir.</p>
+    <div class="btn-row">
+      <button class="btn btn--minio" type="button" data-share-url="{{ .Permalink }}" data-share-title="{{ .Title }}">
+        Compartir esta nota
+      </button>
+      <a class="arrow-link" href="https://wa.me/?text={{ $shareText | urlquery }}" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+    </div>
+    <p class="form-note" data-share-status aria-live="polite"></p>
+  </aside>
 
   {{- $rel := where (where site.RegularPages "Section" "notas") "Permalink" "!=" .Permalink }}
   {{- with .Params.tags }}
@@ -39,13 +62,16 @@
   {{- end }}
   {{- with first 3 $rel }}
   <aside class="rule-top" style="margin-bottom:var(--s-6)">
-    <p class="key" style="margin-bottom:var(--s-2)">Seguir por acá</p>
+    <p class="key" style="margin-bottom:var(--s-2)">Seguir aprendiendo</p>
     <ul class="index">
       {{- range . }}
       <li>
         <a href="{{ .RelPermalink }}">
           <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
-          <div><h3>{{ .Title }}</h3></div>
+          <div>
+            <h3>{{ .Title }}</h3>
+            <p>{{ .Description | default .Summary | plainify | truncate 150 }}</p>
+          </div>
         </a>
       </li>
       {{- end }}

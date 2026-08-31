@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -65,7 +66,10 @@ def test_each_template_matches_deterministic_characterization_snapshot(
     actual = {}
 
     for key in templates.TEMPLATES:
-        image = templates.render(key, rich_piece(), "feed", seed=manifest["seed"]).img
+        piece = rich_piece()
+        if key == "tarjetas":
+            piece = replace(piece, items=[("Paso", "Explicación breve")] * 4)
+        image = templates.render(key, piece, "feed", seed=manifest["seed"]).img
         actual[key] = hashlib.sha256(image.tobytes()).hexdigest()[:16]
 
     assert actual == expected
@@ -82,7 +86,10 @@ def test_all_templates_render_nonblank_native_story_compositions_inside_safe_can
     expected = surfaces["story"]
 
     for key in templates.TEMPLATES:
-        sheet = templates.render(key, rich_piece(), "story", seed=11)
+        piece = rich_piece()
+        if key == "tarjetas":
+            piece = replace(piece, items=[("Paso", "Explicación breve")] * 4)
+        sheet = templates.render(key, piece, "story", seed=11)
         assert sheet.img.size == (expected.w, expected.h)
         colors = sheet.img.resize((48, 48)).getcolors(maxcolors=48 * 48)
         assert colors is not None and len(colors) >= 8, key

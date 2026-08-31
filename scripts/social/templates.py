@@ -24,6 +24,7 @@ from typing import Callable
 from . import brand
 from .blocks import (
     Body,
+    CardGrid,
     Chips,
     Columns,
     Flex,
@@ -67,7 +68,9 @@ class Piece:
     cta: str = ""
     meta: str = ""
     section: str = ""
-    footer_right: str = ""
+    # Pie común para que el CTA esté presente incluso cuando una pieza diaria
+    # se construye directo desde el CLI y no pasa por copy.carousel_for_nota.
+    footer_right: str = brand.SOCIAL_SHARE_CTA
     url: str = ""
 
     @classmethod
@@ -414,6 +417,40 @@ def t_punto(piece: Piece, surf: Surface, seed: int, ground: str) -> Sheet:
     return sh
 
 
+def t_metodo(piece: Piece, surf: Surface, seed: int, ground: str) -> Sheet:
+    """16 · Una lámina pedagógica por método, para carruseles explicativos."""
+    sh = _new_sheet(surf, ground, seed, section=_label(piece, "un método"), meta=piece.meta,
+                    footer_right=piece.footer_right or brand.SOCIAL_SHARE_CTA)
+    stack(sh, [
+        Kicker(piece.kicker or "paso a paso"),
+        Gap(14),
+        Stat(piece.stat or "01", caption="", frac=0.18),
+        Gap(12),
+        Heading(piece.title, frac=0.30, size_max=88, max_lines=4),
+        Rule(accent=True, pad_top=20, pad_bottom=20, thickness=3),
+        Body(piece.lead, frac=0.28, max_lines=5, size_max=42),
+        Flex(1),
+        KeyValues(rows=piece.rows[:2], key_frac=0.32) if piece.rows else Gap(0),
+    ])
+    return sh
+
+
+def t_tarjetas(piece: Piece, surf: Surface, seed: int, ground: str) -> Sheet:
+    """17 · Grilla 2/4/6 para comparaciones, decisiones o pasos compactos."""
+    sh = _new_sheet(surf, ground, seed, section=_label(piece, "de un vistazo"), meta=piece.meta,
+                    footer_right=piece.footer_right or brand.SOCIAL_SHARE_CTA)
+    stack(sh, [
+        Kicker(piece.kicker or "para comparar"),
+        Gap(10),
+        Heading(piece.title, frac=0.20, size_max=70, max_lines=3),
+        Rule(pad_top=18, pad_bottom=22),
+        CardGrid(items=piece.items),
+        Flex(1),
+        Mono(piece.cta or "Una idea por tarjeta, una decisión más clara", size=22),
+    ])
+    return sh
+
+
 # ── Registro ────────────────────────────────────────────────────────────────
 
 
@@ -473,6 +510,10 @@ TEMPLATES: dict[str, Template] = {t.key: t for t in [
              t_agenda, ("paper", "ruled", "ink"), ("title", "rows")),
     Template("punto", "Punto de carrusel", "Una idea por lámina, para carruseles.",
              t_punto, ("paper", "ruled", "ink", "minio"), ("title",)),
+    Template("metodo", "Método de carrusel", "Un método explicado en una lámina pedagógica.",
+             t_metodo, ("paper", "ruled", "ink", "minio"), ("title", "lead")),
+    Template("tarjetas", "Grilla de tarjetas", "Dos, cuatro o seis tarjetas en una sola imagen.",
+             t_tarjetas, ("paper", "ruled", "ink", "minio"), ("title", "items")),
 ]}
 
 

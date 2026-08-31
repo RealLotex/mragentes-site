@@ -85,6 +85,11 @@ def inspect_note(markdown: str) -> dict[str, int]:
         "sections": len(re.findall(r"(?m)^##\s+\S", body)),
         "sources": len(re.findall(r"https://[^\s)]+", body)),
         "analytic_markers": sum(marker in body.casefold() for marker in _ANALYTIC_MARKERS),
+        "faq_questions": len(
+            re.findall(r"(?mi)^###\s+.+\?\s*$", body.split("## Preguntas frecuentes", 1)[-1])
+            if re.search(r"(?mi)^##\s+Preguntas frecuentes\s*$", body)
+            else []
+        ),
     }
 
 
@@ -101,6 +106,8 @@ def validate_academic_note(markdown: str) -> dict[str, int]:
         raise ValueError("nota must cite at least three public sources")
     if report["analytic_markers"] < 3:
         raise ValueError("nota lacks sufficient analytical framing")
+    if report["faq_questions"] < 3:
+        raise ValueError("nota must answer at least three beginner FAQ questions")
     return report
 
 

@@ -19,35 +19,33 @@ from __future__ import annotations
 import hashlib
 import re
 
+from . import brand
 from .notas import Nota
 from .templates import Piece
 
 # ── Bolsas de texto ─────────────────────────────────────────────────────────
 
 HOOKS = [
-    "Nota nueva en el sitio.",
-    "Lo escribimos hoy:",
-    "Apuntes de esta semana:",
-    "Publicamos algo que nos vienen preguntando:",
-    "Del cuaderno de esta semana:",
-    "Salió nota nueva:",
-    "Para leer con un café:",
-    "Lo que nos ocupó estos días:",
+    "Una guía nueva para empezar:",
+    "Una idea explicada paso a paso:",
+    "Nueva nota para entender el tema desde cero:",
+    "Una explicación práctica para empezar:",
 ]
 
+# Es el mismo CTA visible en las láminas. Mantenerlo como constante evita que
+# el texto del posteo y la pieza gráfica prometan acciones distintas.
+SOCIAL_SHARE_CTA = brand.SOCIAL_SHARE_CTA
+
 CLOSERS_FB = [
+    "La nota completa explica los conceptos y muestra un primer paso posible.",
+    "Las fuentes y las preguntas frecuentes están al final de la nota.",
     "El artículo completo está disponible en el sitio.",
-    "El análisis puede servir para evaluar este proceso en su organización.",
-    "El caso plantea una cuestión operativa que merece revisión.",
-    "Las fuentes y el alcance metodológico se encuentran al final del artículo.",
-    "Los canales de contacto están disponibles para observaciones técnicas.",
 ]
 
 CLOSERS_IG = [
-    "El artículo completo está disponible en el sitio; el enlace figura en la bio.",
-    "El enlace de acceso al análisis se encuentra en la bio.",
-    "La nota completa está disponible en mragentes.com.ar; enlace en la bio.",
-    "La versión completa, con fuentes, está disponible en el sitio; enlace en la bio.",
+    "La nota completa explica el tema paso a paso; el enlace está en la bio.",
+    "La nota completa y las fuentes están en mragentes.com.ar; enlace en la bio.",
+    "Si recién empieza con este tema, la guía completa está en la bio.",
 ]
 
 TAG_MAP = {
@@ -191,7 +189,14 @@ def caption(nota: Nota, network: str = "facebook", base_url: str = "https://mrag
             points = [h for h in nota.headings if 15 < len(h) < 90][:3]
         if points:
             body += [""] + [f"· {_trim(p, 110)}" for p in points]
-        body += ["", _pick(CLOSERS_IG, seed), "", " ".join(hashtags(nota, seed, 12))]
+        body += [
+            "",
+            _pick(CLOSERS_IG, seed),
+            "Enlace en la bio.",
+            SOCIAL_SHARE_CTA,
+            "",
+            " ".join(hashtags(nota, seed, 12)),
+        ]
         return _clip_caption("\n".join(body).strip(), PLATFORM_LIMITS[network])
 
     body = [
@@ -204,6 +209,7 @@ def caption(nota: Nota, network: str = "facebook", base_url: str = "https://mrag
         f"Leé la nota completa: {url}",
         "",
         _pick(CLOSERS_FB, seed, 1),
+        SOCIAL_SHARE_CTA,
         "",
         " ".join(hashtags(nota, seed, 6)),
     ]
@@ -223,13 +229,14 @@ def cover_piece(nota: Nota, base_url: str = "https://mragentes.com.ar") -> Piece
         photo=str(nota.photo) if nota.photo else None,
         url=nota.url(base_url),
         section="nota nueva",
+        footer_right=SOCIAL_SHARE_CTA,
     )
 
 
 def story_piece(nota: Nota, base_url: str = "https://mragentes.com.ar") -> Piece:
     piece = cover_piece(nota, base_url)
     piece.lead = _trim(nota.lead, 150)
-    piece.footer_right = "leé la nota »"
+    piece.footer_right = SOCIAL_SHARE_CTA
     return piece
 
 
@@ -256,6 +263,7 @@ def support_pieces(nota: Nota, limit: int = 3) -> list[tuple[str, Piece]]:
             lead=_trim(tail, 210) if len(tail) > 45 else "",
             kicker="el dato",
             author="Fuente: la nota completa en mragentes.com.ar",
+            footer_right=SOCIAL_SHARE_CTA,
         )))
 
     quotes = [q for q in nota.quotes if 60 <= len(q) <= 240]
@@ -266,6 +274,7 @@ def support_pieces(nota: Nota, limit: int = 3) -> list[tuple[str, Piece]]:
             quote=_trim(quotes[seed % len(quotes)], 230),
             author=f"Citado en la nota del {nota.date_label}",
             kicker="cita",
+            footer_right=SOCIAL_SHARE_CTA,
         )))
 
     headings = [h for h in nota.headings if 12 < len(h) < 90]
@@ -275,6 +284,7 @@ def support_pieces(nota: Nota, limit: int = 3) -> list[tuple[str, Piece]]:
             items=headings[:4],
             kicker="en tres puntos" if len(headings) == 3 else "de un vistazo",
             cta="La nota completa, en el sitio",
+            footer_right=SOCIAL_SHARE_CTA,
         )))
     elif nota.bullets:
         items = [_trim(b, 100) for b in nota.bullets[:4]]
@@ -284,6 +294,7 @@ def support_pieces(nota: Nota, limit: int = 3) -> list[tuple[str, Piece]]:
             items=items,
             kicker="para tener a mano",
             cta="La nota completa, en el sitio",
+            footer_right=SOCIAL_SHARE_CTA,
         )))
 
     return out[:limit]
@@ -300,6 +311,7 @@ def closing_piece(nota: Nota) -> Piece:
             ("whatsapp", "3404 50-2729"),
             ("dónde", "Gálvez, Santa Fe · remoto en todo el país"),
         ],
+        footer_right=SOCIAL_SHARE_CTA,
     )
 
 
@@ -309,4 +321,42 @@ def carousel_for_nota(nota: Nota, base_url: str = "https://mragentes.com.ar", ma
     slides: list[tuple[str, Piece]] = [("nota", cover_piece(nota, base_url))]
     slides += support_pieces(nota, limit=max_slides - 2)
     slides.append(("anuncio", closing_piece(nota)))
+    for _, piece in slides:
+        piece.footer_right = SOCIAL_SHARE_CTA
     return slides[:max_slides]
+
+
+def method_carousel(title: str, methods: list[tuple[str, str]], *, kicker: str = "guía simple") -> list[tuple[str, Piece]]:
+    """Crea una portada y una lámina pedagógica por cada método.
+
+    Los métodos se mantienen deliberadamente entre dos y seis: menos no forma
+    un carrusel útil y más obliga a comprimir el texto o a perder el hilo.
+    """
+    if not isinstance(title, str) or not title.strip():
+        raise ValueError("El carrusel necesita un título")
+    if not 2 <= len(methods) <= 6:
+        raise ValueError("El carrusel necesita entre 2 y 6 métodos")
+    slides: list[tuple[str, Piece]] = [(
+        "punto",
+        Piece(
+            title=title.strip(),
+            lead="Una guía simple: un paso por lámina.",
+            kicker=kicker,
+            stat=f"{len(methods):02d}",
+            footer_right=SOCIAL_SHARE_CTA,
+        ),
+    )]
+    for index, method in enumerate(methods, start=1):
+        if not isinstance(method, (tuple, list)) or len(method) != 2:
+            raise ValueError("Cada método debe incluir título y explicación")
+        name, explanation = (str(method[0]).strip(), str(method[1]).strip())
+        if not name or not explanation:
+            raise ValueError("Cada método debe incluir título y explicación")
+        slides.append(("metodo", Piece(
+            title=name,
+            lead=explanation,
+            kicker=f"método {index} de {len(methods)}",
+            stat=f"{index:02d}",
+            footer_right=SOCIAL_SHARE_CTA,
+        )))
+    return slides

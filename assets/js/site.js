@@ -131,10 +131,39 @@
     apply();
   }
 
+  /* Compartir una nota sin obligar a copiar y pegar. En navegadores con el
+     diálogo nativo se usa ese canal; en escritorio se copia la URL y se lo
+     confirma de forma accesible. El enlace de WhatsApp sigue funcionando sin
+     JavaScript. */
+  function initArticleShare() {
+    var btn = document.querySelector("[data-share-url]");
+    var status = document.querySelector("[data-share-status]");
+    if (!btn) return;
+
+    btn.addEventListener("click", function () {
+      var url = btn.getAttribute("data-share-url") || window.location.href;
+      var title = btn.getAttribute("data-share-title") || document.title;
+      if (navigator.share) {
+        navigator.share({ title: title, text: title, url: url }).catch(function () {});
+        return;
+      }
+      if (!navigator.clipboard || !navigator.clipboard.writeText) {
+        if (status) status.textContent = "Copie este enlace: " + url;
+        return;
+      }
+      navigator.clipboard.writeText(url).then(function () {
+        if (status) status.textContent = "Enlace copiado. Ya puede enviárselo a quien le pueda servir.";
+      }).catch(function () {
+        if (status) status.textContent = "Copie este enlace: " + url;
+      });
+    });
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", function () { initMenu(); initIndexFilter(); });
+    document.addEventListener("DOMContentLoaded", function () { initMenu(); initIndexFilter(); initArticleShare(); });
   } else {
     initMenu();
     initIndexFilter();
+    initArticleShare();
   }
 })();

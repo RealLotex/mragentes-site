@@ -1019,6 +1019,10 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
   .filter-count { display: none; }
 }
 
+@media (max-width: 34rem) {
+  .article-toc ol { columns: 1; }
+}
+
 /* --- Artículo ---------------------------------------------------------- */
 .article-head {
   grid-column: key-start / aside-end;
@@ -1056,6 +1060,34 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 .prose { padding-block: var(--s-4) var(--s-6); }
 
 .prose > * + * { margin-top: var(--s-3); }
+
+/* Índice y CTA de una nota. Son parte del recorrido de lectura, no banners:
+   la misma grilla editorial conserva el foco en el texto y deja una acción
+   clara al terminar. */
+.article-toc,
+.article-share {
+  grid-column: text;
+  margin-top: var(--s-4);
+  padding: var(--s-3) 0;
+  border-block: var(--hair) solid var(--rule);
+}
+
+.article-toc .key,
+.article-share .key { margin-bottom: var(--s-2); }
+
+.article-toc ol {
+  margin: 0;
+  padding-left: 1.25rem;
+  columns: 2;
+  column-gap: var(--s-5);
+}
+
+.article-toc li { break-inside: avoid; margin-bottom: 0.45rem; }
+.article-toc a { text-underline-offset: 0.16em; }
+
+.article-share { margin-bottom: var(--s-5); }
+.article-share > p:not(.key):not(.form-note) { font-size: var(--t-md); max-width: 40ch; }
+.article-share .form-note { min-height: 1.5em; margin-top: var(--s-2); }
 
 .prose h2 {
   font-size: var(--t-lg);
