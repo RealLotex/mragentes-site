@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 2,
-  "updated_at": "2026-08-30T21:10:40Z",
+  "revision": 3,
+  "updated_at": "2026-08-31T00:01:51.549Z",
   "items": [
     {
       "schema_version": 1,
@@ -95,7 +95,7 @@
       "entity": "Google Cloud",
       "published_at": "2026-08-26T00:00:00Z",
       "discovered_at": "2026-08-30T21:10:40Z",
-      "status": "pending",
+      "status": "consumed",
       "evidence": [
         {
           "url": "https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents",
@@ -110,7 +110,9 @@
       ],
       "summary": "Google Cloud agrega opciones de pago, topes y alertas para administrar el costo de agentes y herramientas de desarrollo.",
       "language": "es",
-      "priority": 4
+      "priority": 4,
+      "consumed_by": "agentes-de-ia-con-freno-y-mapa-costos-datos-y-permisos",
+      "consumed_at": "2026-08-31T00:01:51.549Z"
     },
     {
       "schema_version": 1,
@@ -121,7 +123,7 @@
       "entity": "Amazon Redshift",
       "published_at": "2026-08-27T00:00:00Z",
       "discovered_at": "2026-08-30T21:10:40Z",
-      "status": "pending",
+      "status": "consumed",
       "evidence": [
         {
           "url": "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/",
@@ -136,7 +138,9 @@
       ],
       "summary": "Redshift suma skills y un servidor MCP administrado para que agentes de código trabajen con datos y migraciones.",
       "language": "es",
-      "priority": 4
+      "priority": 4,
+      "consumed_by": "agentes-de-ia-con-freno-y-mapa-costos-datos-y-permisos",
+      "consumed_at": "2026-08-31T00:01:51.549Z"
     },
     {
       "schema_version": 1,
@@ -147,7 +151,7 @@
       "entity": "Salesforce",
       "published_at": "2026-08-19T00:00:00Z",
       "discovered_at": "2026-08-30T21:10:40Z",
-      "status": "pending",
+      "status": "consumed",
       "evidence": [
         {
           "url": "https://www.salesforce.com/news/stories/expanding-headless-360-enterprise-capabilities/",
@@ -163,7 +167,9 @@
       ],
       "summary": "Headless 360 convierte capacidades de Salesforce en servicios reutilizables por agentes sin perder identidad, permisos ni gobernanza.",
       "language": "es",
-      "priority": 4
+      "priority": 4,
+      "consumed_by": "agentes-de-ia-con-freno-y-mapa-costos-datos-y-permisos",
+      "consumed_at": "2026-08-31T00:01:51.549Z"
     }
   ]
 }
