@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "run_id": "news-2026-08-31",
+  "kind": "news_scout",
+  "status": "success",
+  "started_at": "2026-08-31T21:02:55Z",
+  "finished_at": "2026-08-31T21:05:00Z",
+  "summary": {
+    "local_date": "2026-08-31",
+    "queue_path": ".automation/news/queue/news-queue.json",
+    "report_path": ".automation/reports/news-2026-08-31.json",
+    "new_items": 4,
+    "duplicates": 0,
+    "queue_revision": 4,
+    "branch": "automation/news/news-2026-08-31",
+    "external_publish": false
+  },
+  "checks": [
+    {
+      "name": "github_connector_preflight",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "authenticated": true,
+        "repository": "RealLotex/mragentes-site",
+        "minimum_permission": "write",
+        "observed_permission": "admin"
+      }
+    },
+    {
+      "name": "remote_base_snapshot",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "base_branch": "main",
+        "base_sha": "1436d5cf4cfae3c17d6998679577141e3dabb110",
+        "target_branch_absent": true
+      }
+    },
+    {
+      "name": "tdd_red",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "exit_code": 1,
+        "assertion": "four candidate IDs absent before mutation"
+      }
+    },
+    {
+      "name": "source_verification",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "items_checked": 4,
+        "primary_sources": 4,
+        "published_at_verifiable": true
+      }
+    },
+    {
+      "name": "schema_and_deduplication",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "schema_version": 1,
+        "items_checked": 10,
+        "new_items": 4,
+        "duplicates": 0,
+        "stable_ids": true
+      }
+    },
+    {
+      "name": "focused_validation",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "queue_loader": "passed",
+        "stable_id_check": "passed",
+        "deduplication_check": "passed"
+      }
+    },
+    {
+      "name": "pytest_suite",
+      "status": "skipped",
+      "required": true,
+      "detail": {
+        "reason": "pytest unavailable in runtime",
+        "command": "python3 -m pytest -q tests/unit/automation/test_news_queue.py tests/unit/automation/test_news_schema_and_ids.py tests/unit/automation/test_news_migration_and_atomicity.py"
+      }
+    },
+    {
+      "name": "secret_scan",
+      "status": "passed",
+      "required": true,
+      "detail": {"scope": "two explicit changed paths", "high_confidence_findings": 0}
+    },
+    {
+      "name": "git_diff_check",
+      "status": "passed",
+      "required": true,
+      "detail": {"status": "clean"}
+    },
+    {
+      "name": "preexisting_workspace_changes",
+      "status": "warning",
+      "detail": {"preserved_outside_remote_scope": true}
+    }
+  ],
+  "items": [
+    "news-v1-fcf09190a9a31771",
+    "news-v1-0c6854b84f118652",
+    "news-v1-417651128ed97dbf",
+    "news-v1-4d42b0479688bb1a"
+  ],
+  "sources": [
+    "https://openai.com/index/expanding-access-to-ai-with-chatgpt-ads/",
+    "https://blog.google/intl/en-au/company-news/google-for-startups-accelerator-introducing-our-2026-australia-new-zealand-ai-cohort/",
+    "https://www.microsoft.com/insidetrack/blog/securing-ai-agents-in-the-enterprise-learnings-from-our-journey-at-microsoft/",
+    "https://www.anthropic.com/news/wellbeing-research-grants"
+  ]
+}

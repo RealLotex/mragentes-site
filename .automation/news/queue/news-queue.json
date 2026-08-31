@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 3,
-  "updated_at": "2026-08-31T00:01:51.549Z",
+  "revision": 4,
+  "updated_at": "2026-08-31T21:02:55Z",
   "items": [
     {
       "schema_version": 1,
@@ -96,18 +96,8 @@
       "published_at": "2026-08-26T00:00:00Z",
       "discovered_at": "2026-08-30T21:10:40Z",
       "status": "consumed",
-      "evidence": [
-        {
-          "url": "https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents",
-          "claim": "Google Cloud anuncia facturación flexible, topes mensuales, alertas y controles de sobregasto para cargas de agentes en Gemini Enterprise."
-        }
-      ],
-      "tags": [
-        "ia",
-        "agentes",
-        "productividad",
-        "costos"
-      ],
+      "evidence": [{"url": "https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents", "claim": "Google Cloud anuncia facturación flexible, topes mensuales, alertas y controles de sobregasto para cargas de agentes en Gemini Enterprise."}],
+      "tags": ["ia", "agentes", "productividad", "costos"],
       "summary": "Google Cloud agrega opciones de pago, topes y alertas para administrar el costo de agentes y herramientas de desarrollo.",
       "language": "es",
       "priority": 4,
@@ -124,18 +114,8 @@
       "published_at": "2026-08-27T00:00:00Z",
       "discovered_at": "2026-08-30T21:10:40Z",
       "status": "consumed",
-      "evidence": [
-        {
-          "url": "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/",
-          "claim": "AWS integra Redshift con Agent Toolkit para que agentes como Claude Code, Kiro y Cursor construyan, consulten, diagnostiquen y migren almacenes de datos."
-        }
-      ],
-      "tags": [
-        "ia",
-        "agentes",
-        "datos",
-        "mcp"
-      ],
+      "evidence": [{"url": "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/", "claim": "AWS integra Redshift con Agent Toolkit para que agentes como Claude Code, Kiro y Cursor construyan, consulten, diagnostiquen y migren almacenes de datos."}],
+      "tags": ["ia", "agentes", "datos", "mcp"],
       "summary": "Redshift suma skills y un servidor MCP administrado para que agentes de código trabajen con datos y migraciones.",
       "language": "es",
       "priority": 4,
@@ -152,24 +132,77 @@
       "published_at": "2026-08-19T00:00:00Z",
       "discovered_at": "2026-08-30T21:10:40Z",
       "status": "consumed",
-      "evidence": [
-        {
-          "url": "https://www.salesforce.com/news/stories/expanding-headless-360-enterprise-capabilities/",
-          "claim": "Salesforce anuncia servidores MCP, skills e integraciones que permiten a agentes autorizados descubrir y ejecutar capacidades con identidad, permisos y reglas existentes."
-        }
-      ],
-      "tags": [
-        "ia",
-        "agentes",
-        "mcp",
-        "crm",
-        "gobernanza"
-      ],
+      "evidence": [{"url": "https://www.salesforce.com/news/stories/expanding-headless-360-enterprise-capabilities/", "claim": "Salesforce anuncia servidores MCP, skills e integraciones que permiten a agentes autorizados descubrir y ejecutar capacidades con identidad, permisos y reglas existentes."}],
+      "tags": ["ia", "agentes", "mcp", "crm", "gobernanza"],
       "summary": "Headless 360 convierte capacidades de Salesforce en servicios reutilizables por agentes sin perder identidad, permisos ni gobernanza.",
       "language": "es",
       "priority": 4,
       "consumed_by": "agentes-de-ia-con-freno-y-mapa-costos-datos-y-permisos",
       "consumed_at": "2026-08-31T00:01:51.549Z"
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-fcf09190a9a31771",
+      "title": "A milestone in expanding access to AI",
+      "canonical_url": "https://openai.com/index/expanding-access-to-ai-with-chatgpt-ads/",
+      "source": "OpenAI",
+      "entity": "ChatGPT Ads",
+      "published_at": "2026-08-31T00:00:00Z",
+      "discovered_at": "2026-08-31T21:02:55Z",
+      "status": "pending",
+      "evidence": [{"url": "https://openai.com/index/expanding-access-to-ai-with-chatgpt-ads/", "claim": "OpenAI informa que ChatGPT Ads alcanzó una tasa anualizada de ingresos de mil millones de dólares y que Ads Manager se expande a India, Europa, Medio Oriente y África del Norte."}],
+      "tags": ["ia", "marketing", "pymes", "productividad"],
+      "summary": "ChatGPT Ads amplía su alcance global y abre herramientas de compra y medición para anunciantes, incluidas pymes.",
+      "language": "en",
+      "priority": 3
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-0c6854b84f118652",
+      "title": "Google for Startups Accelerator: Introducing our 2026 AuNZ AI Cohort",
+      "canonical_url": "https://blog.google/intl/en-au/company-news/google-for-startups-accelerator-introducing-our-2026-australia-new-zealand-ai-cohort/",
+      "source": "Google",
+      "entity": "Google for Startups Accelerator",
+      "published_at": "2026-08-31T00:00:00Z",
+      "discovered_at": "2026-08-31T21:02:55Z",
+      "status": "pending",
+      "evidence": [{"url": "https://blog.google/intl/en-au/company-news/google-for-startups-accelerator-introducing-our-2026-australia-new-zealand-ai-cohort/", "claim": "Google anuncia 15 startups seleccionadas para un programa híbrido de diez semanas, sin participación accionaria, dirigido a compañías seed y Series A que desarrollan IA y aprendizaje automático."}],
+      "tags": ["ia", "startups", "automatizacion", "pymes"],
+      "summary": "Google selecciona 15 startups de Australia y Nueva Zelanda para acelerar productos de IA con un programa sin equity.",
+      "language": "en",
+      "priority": 3
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-417651128ed97dbf",
+      "title": "Securing AI agents in the enterprise: Learnings from our journey at Microsoft",
+      "canonical_url": "https://www.microsoft.com/insidetrack/blog/securing-ai-agents-in-the-enterprise-learnings-from-our-journey-at-microsoft/",
+      "source": "Microsoft Inside Track",
+      "entity": "Microsoft Digital",
+      "published_at": "2026-08-27T00:00:00Z",
+      "discovered_at": "2026-08-31T21:02:55Z",
+      "status": "pending",
+      "evidence": [{"url": "https://www.microsoft.com/insidetrack/blog/securing-ai-agents-in-the-enterprise-learnings-from-our-journey-at-microsoft/", "claim": "Microsoft describe un piloto con cerca de 100 usuarios internos que validó identidades separadas para agentes y controles de endpoint, red, runtime y prevención de pérdida de datos en un entorno empresarial real."}],
+      "tags": ["ia", "agentes", "seguridad", "gobernanza"],
+      "summary": "Microsoft documenta un piloto empresarial que combinó identidad de agentes, controles de red, endpoint y datos para validar despliegues gobernables.",
+      "language": "en",
+      "priority": 4
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-4d42b0479688bb1a",
+      "title": "Funding better evaluations of AI’s impact on wellbeing",
+      "canonical_url": "https://www.anthropic.com/news/wellbeing-research-grants",
+      "source": "Anthropic",
+      "entity": "Anthropic wellbeing evaluations",
+      "published_at": "2026-08-25T00:00:00Z",
+      "discovered_at": "2026-08-31T21:02:55Z",
+      "status": "pending",
+      "evidence": [{"url": "https://www.anthropic.com/news/wellbeing-research-grants", "claim": "Anthropic lanza un programa de subvenciones de cinco millones de dólares para financiar evaluaciones independientes y open source sobre el impacto de la IA en el bienestar de usuarios."}],
+      "tags": ["ia", "evaluacion", "seguridad", "bienestar"],
+      "summary": "Anthropic financia evaluaciones independientes y abiertas para medir impactos de la IA en conversaciones de bienestar.",
+      "language": "en",
+      "priority": 3
     }
   ]
 }
