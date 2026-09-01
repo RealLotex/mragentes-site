@@ -1,0 +1,167 @@
+{
+  "checks": [
+    {
+      "detail": {
+        "authenticated": true,
+        "minimum_permission": "write",
+        "observed_permission": "admin",
+        "repository": "RealLotex/mragentes-site"
+      },
+      "name": "github_connector_preflight",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "base_branch": "main",
+        "base_sha": "dab91316626d2079774e96db01b7b271a3c9904f",
+        "target_branch": "automation/recovery/social-recovery-2026-09-01",
+        "target_branch_absent": true
+      },
+      "name": "remote_base_snapshot",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "local_date": "2026-09-01",
+        "social_daily": {
+          "in_progress": false,
+          "latest_conclusion": "success",
+          "latest_local_date": "2026-08-31",
+          "latest_run_id": 33423741379,
+          "latest_status": "completed",
+          "runs_for_local_date": 0
+        },
+        "social_note": {
+          "in_progress": false,
+          "latest_conclusion": "success",
+          "latest_local_date": "2026-08-31",
+          "latest_run_id": 33398808710,
+          "latest_status": "completed",
+          "runs_for_local_date": 0
+        },
+        "timezone": "America/Cordoba"
+      },
+      "name": "workflow_execution_lookup",
+      "required": true,
+      "status": "warning"
+    },
+    {
+      "detail": {
+        "daily_branch_exists": false,
+        "daily_draft_exists": false,
+        "daily_draft_path": ".automation/social/drafts/2026-09-01-daily-owned.json",
+        "last_daily_confirmation": {
+          "confirmed_platforms": [
+            "facebook",
+            "instagram"
+          ],
+          "job_id": 99592163759,
+          "local_date": "2026-08-31",
+          "run_id": 33423741379
+        },
+        "last_note_confirmation": {
+          "confirmed_platforms": [
+            "facebook",
+            "instagram"
+          ],
+          "job_id": 99509776325,
+          "local_date": "2026-08-31",
+          "run_id": 33398808710
+        },
+        "prior_note_failure_recovered": {
+          "failed_run_id": 33394098998,
+          "successful_followups": [
+            33398734234,
+            33398808710
+          ]
+        },
+        "today_ledger_evidence": false
+      },
+      "name": "draft_and_reconciliation_evidence",
+      "required": true,
+      "status": "warning"
+    },
+    {
+      "detail": {
+        "external_publish": false,
+        "force": false,
+        "retry_attempted": false,
+        "retryable_failed_jobs_for_local_date": 0
+      },
+      "name": "retry_gate",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "local_git_push": false,
+        "local_mutation": false,
+        "preexisting_workspace_changes": true,
+        "preserved_outside_scope": true,
+        "report_transport": "github_connector"
+      },
+      "name": "workspace_safety",
+      "status": "warning"
+    },
+    {
+      "detail": {
+        "meta_called": false,
+        "new_social_piece": false
+      },
+      "name": "external_publish_guard",
+      "required": true,
+      "status": "passed"
+    }
+  ],
+  "effects": [
+    {
+      "detail": {
+        "reason": "no failed retryable execution for 2026-09-01"
+      },
+      "kind": "workflow_rerun",
+      "status": "skipped",
+      "target": "social-daily.yml and social-note.yml"
+    },
+    {
+      "detail": {
+        "reason": "recovery stopped before any external publish"
+      },
+      "kind": "external_publish",
+      "status": "skipped",
+      "target": "Meta"
+    },
+    {
+      "detail": {
+        "reason": "recovery never generates a replacement piece"
+      },
+      "kind": "new_social_piece",
+      "status": "skipped",
+      "target": "daily_owned"
+    }
+  ],
+  "finished_at": "2026-09-01T15:24:30-03:00",
+  "kind": "social_recovery",
+  "run_id": "social:recovery:2026-09-01",
+  "schema_version": 1,
+  "started_at": "2026-09-01T15:15:00-03:00",
+  "status": "needs_review",
+  "summary": {
+    "daily_branch_exists": false,
+    "daily_draft_exists": false,
+    "daily_draft_path": ".automation/social/drafts/2026-09-01-daily-owned.json",
+    "daily_workflow_runs": 0,
+    "decision": "needs_review",
+    "external_publish": false,
+    "latest_daily_run_id": 33423741379,
+    "latest_note_run_id": 33398808710,
+    "local_date": "2026-09-01",
+    "note_workflow_runs": 0,
+    "prior_note_failure_run_id": 33394098998,
+    "reason": "Today's daily_owned draft and social workflow execution are absent; recovery cannot create a piece or infer a remote checkpoint.",
+    "retry": "not_attempted",
+    "timezone": "America/Cordoba",
+    "today_reconciliation_evidence": false
+  }
+}
