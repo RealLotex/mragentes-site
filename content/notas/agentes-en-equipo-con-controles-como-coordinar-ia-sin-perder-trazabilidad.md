@@ -17,6 +17,7 @@ sources:
   - "https://blog.google/innovation-and-ai/technology/developers-tools/antigravity-teamwork-multi-agent/"
   - "https://www.nist.gov/itl/ai-risk-management-framework"
 automation_id: "blog:2026-09-02:agentes-en-equipo-con-controles-como-coordinar-ia-sin-perder-trazabilidad"
+slug: "agentes-en-equipo-con-controles-como-coordinar-ia-sin-perder-trazabilidad"
 draft: false
 aliases: []
 ---
