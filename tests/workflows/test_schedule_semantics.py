@@ -193,9 +193,13 @@ def test_recovery_uses_guarded_github_rerun_instead_of_direct_meta_publish() -> 
         "TASK-RECOVERY-002", "recovery does not fail closed for active or uncertain effects"
     )
     assert descriptor["permissions"]["workflow_rerun"] == [
+        "deploy.yml",
         "social-daily.yml",
         "social-note.yml",
     ], trace_message("TASK-RECOVERY-002", "recovery may rerun an unscoped workflow")
+    assert "wait_for_publication" in prompt and "notify_deployed_note quedó skipped" in prompt, (
+        trace_message("TASK-RECOVERY-002", "recovery cannot safely resume a pre-egress deploy gate")
+    )
     assert descriptor["permissions"]["external_publish"] is False, trace_message(
         "TASK-RECOVERY-002", "recovery is allowed to call Meta directly"
     )
