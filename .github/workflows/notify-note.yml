@@ -9,9 +9,6 @@ on:
       deploy_sha:
         required: true
         type: string
-    secrets:
-      PUSH_API_TOKEN:
-        required: true
   workflow_dispatch:
     inputs:
       note_slug:
@@ -25,6 +22,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 concurrency:
   group: notify-note-${{ inputs.note_slug }}
@@ -39,8 +37,7 @@ jobs:
       NOTE_SLUG: ${{ inputs.note_slug }}
       DEPLOY_SHA: ${{ inputs.deploy_sha }}
       REPOSITORY_NAME: ${{ github.repository }}
-      PUSH_WORKER_URL: ${{ vars.PUSH_WORKER_URL }}
-      PUSH_API_TOKEN: ${{ secrets.PUSH_API_TOKEN }}
+      PUSH_WORKER_URL: https://mragentes-push.rosichmarcos.workers.dev/api/send/
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
@@ -48,6 +45,28 @@ jobs:
           python-version: "3.12"
       - name: Install locked notification dependencies
         run: python -m pip install --require-hashes -r requirements-test.lock.txt
+      - name: Request a short-lived GitHub identity token for the Push Worker
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_ENV"
+          import json
+          import os
+          import urllib.parse
+          import urllib.request
+
+          audience = "mragentes-push-notify"
+          base = os.environ["ACTIONS_ID_TOKEN_REQUEST_URL"]
+          separator = "&" if "?" in base else "?"
+          request = urllib.request.Request(
+              f"{base}{separator}{urllib.parse.urlencode({'audience': audience})}",
+              headers={"Authorization": f"Bearer {os.environ['ACTIONS_ID_TOKEN_REQUEST_TOKEN']}"},
+          )
+          with urllib.request.urlopen(request, timeout=15) as response:
+              token = json.load(response)["value"]
+          if not isinstance(token, str) or not token or any(char.isspace() for char in token):
+              raise SystemExit("GitHub OIDC token is malformed")
+          print(f"PUSH_API_TOKEN={token}")
+          PY
       - name: Send one idempotent notification event
         run: >-
           python -m scripts.notifications.notify_deployed_note

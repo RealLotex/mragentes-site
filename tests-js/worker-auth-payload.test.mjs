@@ -1,4 +1,5 @@
 import { describe, expect, test as vitestTest } from "vitest";
+import { webcrypto } from "node:crypto";
 
 import { FakeKV, ExecutionContextRecorder, jsonRequest, validSubscription } from "./support/fake-worker-env.mjs";
 import {
@@ -11,6 +12,21 @@ import { tracedTest } from "./support/trace-test.mjs";
 const test = tracedTest(vitestTest);
 
 const ORIGIN = "https://mragentes.com.ar";
+
+function b64json(value) {
+  return Buffer.from(JSON.stringify(value), "utf8").toString("base64url");
+}
+
+async function githubOidcToken(claims, privateKey) {
+  const header = b64json({ alg: "RS256", kid: "worker-test-key", typ: "JWT" });
+  const payload = b64json(claims);
+  const signature = await webcrypto.subtle.sign(
+    "RSASSA-PKCS1-v1_5",
+    privateKey,
+    new TextEncoder().encode(`${header}.${payload}`),
+  );
+  return `${header}.${payload}.${Buffer.from(signature).toString("base64url")}`;
+}
 
 async function targetFunction(name, traceId) {
   const target = await loadWorkerTarget(traceId);
@@ -135,6 +151,40 @@ describe("Worker authentication and routing contract", () => {
     }
     expect(new Set(snapshots.map(({ status }) => status))).toEqual(new Set([401]));
     expect(new Set(snapshots.map(({ body }) => body)).size).toBe(1);
+  });
+
+  test("[PUSH-AUTH-013] OIDC acepta sólo un token breve del workflow, entorno y repositorio autorizados", async () => {
+    const { fn } = await targetFunction("githubActionsTokenOk", "PUSH-AUTH-013");
+    const pair = await webcrypto.subtle.generateKey(
+      { name: "RSASSA-PKCS1-v1_5", modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: "SHA-256" },
+      true,
+      ["sign", "verify"],
+    );
+    const publicJwk = await webcrypto.subtle.exportKey("jwk", pair.publicKey);
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async () => new Response(JSON.stringify({
+      keys: [{ ...publicJwk, kid: "worker-test-key", alg: "RS256" }],
+    }), { status: 200, headers: { "Content-Type": "application/json" } });
+    const now = Math.floor(Date.now() / 1000);
+    const claims = {
+      iss: "https://token.actions.githubusercontent.com",
+      aud: "mragentes-push-notify",
+      sub: "repo:RealLotex/mragentes-site:environment:cloudflare-production",
+      repository: "RealLotex/mragentes-site",
+      repository_id: "1270433781",
+      ref: "refs/heads/main",
+      environment: "cloudflare-production",
+      workflow_ref: "RealLotex/mragentes-site/.github/workflows/notify-note.yml@refs/heads/main",
+      iat: now,
+      nbf: now - 1,
+      exp: now + 120,
+    };
+    try {
+      expect(await fn(await githubOidcToken(claims, pair.privateKey), environment())).toBe(true);
+      expect(await fn(await githubOidcToken({ ...claims, workflow_ref: "RealLotex/mragentes-site/.github/workflows/other.yml@refs/heads/main" }, pair.privateKey), environment())).toBe(false);
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
   });
 
   test("[PUSH-AUTH-011] endpoints debug y clear-all son 404 en producción", async () => {

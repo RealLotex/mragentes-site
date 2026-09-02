@@ -19,6 +19,19 @@ const DEFAULT_MAX_SUBSCRIPTIONS = 10_000;
 const MAX_PUSH_PLAINTEXT_BYTES = 3_993;
 const MAX_EVENT_ID_BYTES = 512;
 const BLOG_NOTE_EVENT_RE = /^blog-note:\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01]):[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*$/u;
+const GITHUB_OIDC_ISSUER = "https://token.actions.githubusercontent.com";
+const GITHUB_OIDC_JWKS_URL = `${GITHUB_OIDC_ISSUER}/.well-known/jwks`;
+const GITHUB_OIDC_AUDIENCE = "mragentes-push-notify";
+const GITHUB_OIDC_REPOSITORY = "RealLotex/mragentes-site";
+const GITHUB_OIDC_REPOSITORY_ID = "1270433781";
+const GITHUB_OIDC_REF = "refs/heads/main";
+const GITHUB_OIDC_ENVIRONMENT = "cloudflare-production";
+const GITHUB_OIDC_WORKFLOW_REF = `${GITHUB_OIDC_REPOSITORY}/.github/workflows/notify-note.yml@refs/heads/main`;
+const GITHUB_OIDC_SUBJECT = `repo:${GITHUB_OIDC_REPOSITORY}:environment:${GITHUB_OIDC_ENVIRONMENT}`;
+const GITHUB_OIDC_MAX_TOKEN_BYTES = 16_384;
+const GITHUB_OIDC_MAX_TOKEN_AGE_SECONDS = 600;
+const GITHUB_OIDC_CLOCK_SKEW_SECONDS = 30;
+let githubOidcJwksCache = { expiresAt: 0, keys: [] };
 
 class HttpError extends Error {
   constructor(status, message, publicCode = "bad_request") {
@@ -121,6 +134,103 @@ function bearerToken(request) {
   if (typeof value !== "string") return null;
   const match = /^Bearer ([^\s]+)$/.exec(value);
   return match ? match[1] : null;
+}
+
+function jsonFromBase64Url(value) {
+  try {
+    const parsed = JSON.parse(decoder.decode(base64UrlDecode(value)));
+    return isPlainObject(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function oidcAudienceOk(value) {
+  if (typeof value === "string") return value === GITHUB_OIDC_AUDIENCE;
+  return Array.isArray(value) && value.some((entry) => entry === GITHUB_OIDC_AUDIENCE);
+}
+
+function oidcInteger(value) {
+  return typeof value === "number" && Number.isSafeInteger(value) ? value : null;
+}
+
+async function githubOidcKeys() {
+  const now = Date.now();
+  if (githubOidcJwksCache.expiresAt > now && githubOidcJwksCache.keys.length) {
+    return githubOidcJwksCache.keys;
+  }
+  try {
+    const response = await fetch(GITHUB_OIDC_JWKS_URL, { headers: { Accept: "application/json" } });
+    if (!response.ok) return [];
+    const body = await response.json();
+    if (!isPlainObject(body) || !Array.isArray(body.keys)) return [];
+    const keys = body.keys.filter((key) => (
+      isPlainObject(key)
+      && key.kty === "RSA"
+      && key.alg === "RS256"
+      && typeof key.kid === "string"
+      && key.kid.length > 0
+    ));
+    if (!keys.length) return [];
+    githubOidcJwksCache = { expiresAt: now + 300_000, keys };
+    return keys;
+  } catch {
+    return [];
+  }
+}
+
+async function githubActionsTokenOk(token, env) {
+  if (typeof token !== "string" || !token || encoder.encode(token).byteLength > GITHUB_OIDC_MAX_TOKEN_BYTES) return false;
+  const parts = token.split(".");
+  if (parts.length !== 3 || parts.some((part) => !part)) return false;
+  const [encodedHeader, encodedClaims, encodedSignature] = parts;
+  const header = jsonFromBase64Url(encodedHeader);
+  const claims = jsonFromBase64Url(encodedClaims);
+  if (!header || !claims || header.alg !== "RS256" || typeof header.kid !== "string" || !/^[A-Za-z0-9._-]{1,256}$/.test(header.kid)) return false;
+  const now = Math.floor(nowFrom(env) / 1_000);
+  const exp = oidcInteger(claims.exp);
+  const iat = oidcInteger(claims.iat);
+  const nbf = oidcInteger(claims.nbf);
+  if (
+    claims.iss !== GITHUB_OIDC_ISSUER
+    || !oidcAudienceOk(claims.aud)
+    || claims.sub !== GITHUB_OIDC_SUBJECT
+    || claims.repository !== GITHUB_OIDC_REPOSITORY
+    || String(claims.repository_id) !== GITHUB_OIDC_REPOSITORY_ID
+    || claims.ref !== GITHUB_OIDC_REF
+    || claims.environment !== GITHUB_OIDC_ENVIRONMENT
+    || claims.workflow_ref !== GITHUB_OIDC_WORKFLOW_REF
+    || exp === null || iat === null || nbf === null
+    || exp <= now - GITHUB_OIDC_CLOCK_SKEW_SECONDS
+    || nbf > now + GITHUB_OIDC_CLOCK_SKEW_SECONDS
+    || iat > now + GITHUB_OIDC_CLOCK_SKEW_SECONDS
+    || now - iat > GITHUB_OIDC_MAX_TOKEN_AGE_SECONDS
+  ) return false;
+  const key = (await githubOidcKeys()).find((candidate) => candidate.kid === header.kid);
+  if (!key) return false;
+  try {
+    const cryptoRuntime = await runtimeCrypto();
+    const imported = await cryptoRuntime.subtle.importKey(
+      "jwk",
+      key,
+      { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" },
+      false,
+      ["verify"],
+    );
+    return await cryptoRuntime.subtle.verify(
+      "RSASSA-PKCS1-v1_5",
+      imported,
+      base64UrlDecode(encodedSignature),
+      encoder.encode(`${encodedHeader}.${encodedClaims}`),
+    );
+  } catch {
+    return false;
+  }
+}
+
+async function sendAuthorized(request, env) {
+  const token = bearerToken(request);
+  return tokenOk(token, env?.API_TOKEN) || githubActionsTokenOk(token, env);
 }
 
 function truncateUtf8(value, { maxCodePoints, maxBytes }) {
@@ -1388,7 +1498,7 @@ async function workerFetch(request, env, ctx) {
     if (path === "/api/send/") {
       // Auth precedes parsing and optional browser-origin checks so credential
       // failures remain uniform and server-to-server delivery stays possible.
-      if (!tokenOk(bearerToken(request), env.API_TOKEN)) return unauthorized(baseHeaders);
+      if (!(await sendAuthorized(request, env))) return unauthorized(baseHeaders);
       if (origin && !originAllowed) return forbidden(baseHeaders);
       return await handleSend(request, env, cors);
     }
@@ -1432,6 +1542,7 @@ export const __test = {
   enforceRateLimit,
   finalizeNotification,
   generateVapidHeaders,
+  githubActionsTokenOk,
   hkdf,
   limitedConcurrency,
   listSubscriptionsPaginated,
