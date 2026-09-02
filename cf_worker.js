@@ -27,7 +27,6 @@ const GITHUB_OIDC_REPOSITORY_ID = "1270433781";
 const GITHUB_OIDC_REF = "refs/heads/main";
 const GITHUB_OIDC_ENVIRONMENT = "cloudflare-production";
 const GITHUB_OIDC_WORKFLOW_REF = `${GITHUB_OIDC_REPOSITORY}/.github/workflows/notify-note.yml@refs/heads/main`;
-const GITHUB_OIDC_SUBJECT = `repo:${GITHUB_OIDC_REPOSITORY}:environment:${GITHUB_OIDC_ENVIRONMENT}`;
 const GITHUB_OIDC_MAX_TOKEN_BYTES = 16_384;
 const GITHUB_OIDC_MAX_TOKEN_AGE_SECONDS = 600;
 const GITHUB_OIDC_CLOCK_SKEW_SECONDS = 30;
@@ -194,7 +193,12 @@ async function githubActionsTokenOk(token, env) {
   if (
     claims.iss !== GITHUB_OIDC_ISSUER
     || !oidcAudienceOk(claims.aud)
-    || claims.sub !== GITHUB_OIDC_SUBJECT
+    // GitHub can migrate repositories to immutable subject formats. The
+    // signed repository, repository_id, ref, environment and workflow_ref
+    // claims below are individually pinned, so require only the documented
+    // OIDC subject namespace rather than a legacy concatenation format.
+    || typeof claims.sub !== "string"
+    || !claims.sub.startsWith("repo:")
     || claims.repository !== GITHUB_OIDC_REPOSITORY
     || String(claims.repository_id) !== GITHUB_OIDC_REPOSITORY_ID
     || claims.ref !== GITHUB_OIDC_REF
