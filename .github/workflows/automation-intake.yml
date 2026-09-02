@@ -17,13 +17,13 @@ permissions:
   contents: read
 
 jobs:
-  open_or_reuse_pull_request:
+  await_connector_pull_request:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
       contents: read
-      pull-requests: write
+      pull-requests: read
     concurrency:
       group: automation-intake-${{ github.ref }}
       cancel-in-progress: false
@@ -34,14 +34,18 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           fetch-depth: 0
-      - name: Require CI-gated pull request into main
+      - name: Await the CI-gated pull request created by the GitHub connector
         run: |
           set -euo pipefail
-          if gh pr view "$SOURCE_BRANCH" --json number >/dev/null 2>&1; then
-            echo "automation pull request already exists"
-          else
-            gh pr create --base main --head "$SOURCE_BRANCH" --fill
-          fi
+          for attempt in $(seq 1 36); do
+            if gh pr view "$SOURCE_BRANCH" --repo "$GITHUB_REPOSITORY" --json number >/dev/null 2>&1; then
+              echo "connector-created automation pull request is ready"
+              exit 0
+            fi
+            echo "waiting for the GitHub connector to open the automation pull request ($attempt/36)"
+            sleep 5
+          done
+          echo "::notice::No pull request was created for $SOURCE_BRANCH; leaving the branch untouched without failing the workflow."
 
   merge_verified_automation:
     if: >-

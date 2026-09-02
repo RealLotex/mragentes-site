@@ -53,17 +53,26 @@ def test_ci_workflow_is_read_only_by_default_and_scopes_merge_permissions() -> N
 @pytest.mark.trace("WF-INTAKE-001")
 @pytest.mark.red_expected
 def test_automation_intake_requires_scoped_branches_and_pr_gate() -> None:
-    _, source, _ = workflow(".github/workflows/automation-intake.yml", "WF-INTAKE-001")
+    _, source, parsed = workflow(".github/workflows/automation-intake.yml", "WF-INTAKE-001")
     for term in (
         "automation/news/**",
         "automation/blog/**",
         "automation/social/**",
         "automation/recovery/**",
-        "pull-requests: write",
+        "await_connector_pull_request",
+        "pull-requests: read",
     ):
         assert term in source, trace_message("WF-INTAKE-001", f"intake lacks: {term}")
     assert "git push origin HEAD:main" not in source, trace_message(
         "WF-INTAKE-001", "intake pushes directly to main"
+    )
+    await_job = parsed.get("jobs", {}).get("await_connector_pull_request", {})
+    commands = job_run_commands(await_job)
+    assert "gh pr create" not in commands, trace_message(
+        "WF-INTAKE-001", "GitHub Actions still tries to create a pull request"
+    )
+    assert "gh pr view" in commands and "No pull request was created" in commands, trace_message(
+        "WF-INTAKE-001", "intake does not wait safely for the connector-created PR"
     )
 
 
@@ -74,10 +83,12 @@ def test_automation_merge_happens_only_after_ci_without_auto_merge_dependency() 
         ".github/workflows/automation-intake.yml", "WF-INTAKE-002"
     )
     _, ci_source, _ = workflow(".github/workflows/ci.yml", "WF-INTAKE-002")
-    assert (
-        "contents: read" in intake_source and "pull-requests: write" in intake_source
-    ), trace_message(
-        "WF-INTAKE-002", "intake lacks least-privilege permissions to open its PR"
+    await_job = parsed_intake.get("jobs", {}).get("await_connector_pull_request", {})
+    assert await_job.get("permissions") == {
+        "contents": "read",
+        "pull-requests": "read",
+    }, trace_message(
+        "WF-INTAKE-002", "intake can write PRs instead of waiting for the connector"
     )
     assert "workflow_run" in intake_source and "Contract and site CI" in intake_source, (
         trace_message("WF-INTAKE-002", "intake has no trusted post-CI completion trigger")
