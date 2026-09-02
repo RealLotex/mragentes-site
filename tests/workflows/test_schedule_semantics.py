@@ -198,7 +198,7 @@ def test_recovery_uses_guarded_github_rerun_instead_of_direct_meta_publish() -> 
     assert "wait_for_publication" in prompt and "notify_deployed_note quedó skipped" in prompt, (
         trace_message("TASK-RECOVERY-002", "recovery cannot safely resume a pre-egress deploy gate")
     )
-    assert ".automation/publication/retries/<slug>.json" in prompt and (
+    assert ".automation/publication/retries/<slug>/<run_id>.json" in prompt and (
         ".automation/publication/retries/**" in descriptor["permissions"]["repository_writes"]
     ), trace_message("TASK-RECOVERY-002", "recovery cannot create an audited deploy recovery request")
     assert descriptor["permissions"]["external_publish"] is False, trace_message(

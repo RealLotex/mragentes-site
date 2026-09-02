@@ -35,6 +35,10 @@ SAFE_SLUG_RE = re.compile(r"^[^\W_]+(?:-[^\W_]+)*$", re.UNICODE)
 MAX_EVENT_ID_BYTES = 512
 MAX_RESPONSE_BYTES = 128_000
 RECOVERY_NOTE_PATH_RE = re.compile(
+    r"^\.automation/publication/retries/(?P<slug>[a-z0-9]+(?:-[a-z0-9]+)*)/"
+    r"(?P<retry_id>[a-z0-9]{8,64})\.json$"
+)
+LEGACY_RECOVERY_NOTE_PATH_RE = re.compile(
     r"^\.automation/publication/retries/(?P<slug>[a-z0-9]+(?:-[a-z0-9]+)*)\.json$"
 )
 
@@ -147,21 +151,29 @@ def _added_recovery_note_slugs(repo: Path, before_sha: str, after_sha: str) -> l
             continue
         relative_path = os.fsdecode(raw_path)
         match = RECOVERY_NOTE_PATH_RE.fullmatch(relative_path)
-        if match is None:
+        legacy_match = LEGACY_RECOVERY_NOTE_PATH_RE.fullmatch(relative_path)
+        if match is None and legacy_match is None:
             raise ValueError(f"invalid publication recovery path: {relative_path}")
         try:
             document = json.loads(str(_git(repo, "show", f"{after_sha}:{relative_path}", text=True)))
         except json.JSONDecodeError as exc:
             raise ValueError(f"invalid publication recovery JSON: {relative_path}") from exc
-        if not isinstance(document, dict) or set(document) != {"schema_version", "note_slug", "reason"}:
+        expected_keys = (
+            {"schema_version", "note_slug", "reason", "retry_id"}
+            if match is not None
+            else {"schema_version", "note_slug", "reason"}
+        )
+        if not isinstance(document, dict) or set(document) != expected_keys:
             raise ValueError(f"invalid publication recovery schema: {relative_path}")
         slug = document.get("note_slug")
+        expected_slug = match.group("slug") if match is not None else legacy_match.group("slug")
         if (
             document.get("schema_version") != 1
             or document.get("reason") != "post_deploy_gate_recovered"
             or not isinstance(slug, str)
-            or slug != match.group("slug")
+            or slug != expected_slug
             or slug not in known_slugs
+            or (match is not None and document.get("retry_id") != match.group("retry_id"))
         ):
             raise ValueError(f"invalid publication recovery target: {relative_path}")
         recovered.append(slug)
