@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 5,
-  "updated_at": "2026-09-01T21:02:56Z",
+  "revision": 6,
+  "updated_at": "2026-09-02T16:55:00Z",
   "items": [
     {
       "schema_version": 1,
@@ -149,12 +149,14 @@
       "entity": "Anthropic",
       "published_at": "2026-08-31T00:00:00Z",
       "discovered_at": "2026-09-01T21:02:56Z",
-      "status": "pending",
+      "status": "consumed",
       "evidence": [{"url": "https://www.anthropic.com/news/improving-alignment-security-efforts", "claim": "Anthropic informa que pausó y reanudó evaluaciones con clasificadores en tiempo real, aislamiento reforzado, monitoreo y controles para impedir accesos de red inesperados o escapes de sandbox."}],
       "tags": ["ia", "agentes", "seguridad", "evaluacion", "gobernanza"],
       "summary": "Anthropic documenta controles de defensa en profundidad para evaluaciones y uso interno de agentes tras incidentes de configuración.",
       "language": "es",
-      "priority": 5
+      "priority": 5,
+      "consumed_by": "agentes-en-equipo-con-controles-como-coordinar-ia-sin-perder-trazabilidad",
+      "consumed_at": "2026-09-02T16:55:00Z"
     },
     {
       "schema_version": 1,
@@ -165,12 +167,14 @@
       "entity": "Google Antigravity",
       "published_at": "2026-08-31T00:00:00Z",
       "discovered_at": "2026-09-01T21:02:56Z",
-      "status": "pending",
+      "status": "consumed",
       "evidence": [{"url": "https://blog.google/innovation-and-ai/technology/developers-tools/antigravity-teamwork-multi-agent/", "claim": "Google describe actualizaciones de Teamwork, un marco donde equipos autónomos de agentes colaboran, critican e iteran durante horas o días, con resultados reportados en matemáticas, sistemas y software abierto."}],
       "tags": ["ia", "agentes", "automatizacion", "productividad", "desarrollo"],
       "summary": "Google reporta cómo equipos autónomos de agentes colaboran durante tareas largas de investigación, ingeniería y código abierto.",
       "language": "es",
-      "priority": 4
+      "priority": 4,
+      "consumed_by": "agentes-en-equipo-con-controles-como-coordinar-ia-sin-perder-trazabilidad",
+      "consumed_at": "2026-09-02T16:55:00Z"
     }
   ]
 }
