@@ -193,12 +193,9 @@ async function githubActionsTokenOk(token, env) {
   if (
     claims.iss !== GITHUB_OIDC_ISSUER
     || !oidcAudienceOk(claims.aud)
-    // GitHub can migrate repositories to immutable subject formats. The
-    // signed repository, repository_id, ref, environment and workflow_ref
-    // claims below are individually pinned, so require only the documented
-    // OIDC subject namespace rather than a legacy concatenation format.
-    || typeof claims.sub !== "string"
-    || !claims.sub.startsWith("repo:")
+    // GitHub can change the serialized subject format when immutable claims
+    // are enabled. The signed repository, repository_id, ref, environment
+    // and workflow_ref claims below are independently pinned instead.
     || claims.repository !== GITHUB_OIDC_REPOSITORY
     || String(claims.repository_id) !== GITHUB_OIDC_REPOSITORY_ID
     || claims.ref !== GITHUB_OIDC_REF
