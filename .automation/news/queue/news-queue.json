@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 3,
-  "updated_at": "2026-08-31T00:01:51.549Z",
+  "revision": 5,
+  "updated_at": "2026-09-01T21:02:56Z",
   "items": [
     {
       "schema_version": 1,
@@ -96,18 +96,8 @@
       "published_at": "2026-08-26T00:00:00Z",
       "discovered_at": "2026-08-30T21:10:40Z",
       "status": "consumed",
-      "evidence": [
-        {
-          "url": "https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents",
-          "claim": "Google Cloud anuncia facturación flexible, topes mensuales, alertas y controles de sobregasto para cargas de agentes en Gemini Enterprise."
-        }
-      ],
-      "tags": [
-        "ia",
-        "agentes",
-        "productividad",
-        "costos"
-      ],
+      "evidence": [{"url": "https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents", "claim": "Google Cloud anuncia facturación flexible, topes mensuales, alertas y controles de sobregasto para cargas de agentes en Gemini Enterprise."}],
+      "tags": ["ia", "agentes", "productividad", "costos"],
       "summary": "Google Cloud agrega opciones de pago, topes y alertas para administrar el costo de agentes y herramientas de desarrollo.",
       "language": "es",
       "priority": 4,
@@ -124,18 +114,8 @@
       "published_at": "2026-08-27T00:00:00Z",
       "discovered_at": "2026-08-30T21:10:40Z",
       "status": "consumed",
-      "evidence": [
-        {
-          "url": "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/",
-          "claim": "AWS integra Redshift con Agent Toolkit para que agentes como Claude Code, Kiro y Cursor construyan, consulten, diagnostiquen y migren almacenes de datos."
-        }
-      ],
-      "tags": [
-        "ia",
-        "agentes",
-        "datos",
-        "mcp"
-      ],
+      "evidence": [{"url": "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/", "claim": "AWS integra Redshift con Agent Toolkit para que agentes como Claude Code, Kiro y Cursor construyan, consulten, diagnostiquen y migren almacenes de datos."}],
+      "tags": ["ia", "agentes", "datos", "mcp"],
       "summary": "Redshift suma skills y un servidor MCP administrado para que agentes de código trabajen con datos y migraciones.",
       "language": "es",
       "priority": 4,
@@ -152,24 +132,45 @@
       "published_at": "2026-08-19T00:00:00Z",
       "discovered_at": "2026-08-30T21:10:40Z",
       "status": "consumed",
-      "evidence": [
-        {
-          "url": "https://www.salesforce.com/news/stories/expanding-headless-360-enterprise-capabilities/",
-          "claim": "Salesforce anuncia servidores MCP, skills e integraciones que permiten a agentes autorizados descubrir y ejecutar capacidades con identidad, permisos y reglas existentes."
-        }
-      ],
-      "tags": [
-        "ia",
-        "agentes",
-        "mcp",
-        "crm",
-        "gobernanza"
-      ],
+      "evidence": [{"url": "https://www.salesforce.com/news/stories/expanding-headless-360-enterprise-capabilities/", "claim": "Salesforce anuncia servidores MCP, skills e integraciones que permiten a agentes autorizados descubrir y ejecutar capacidades con identidad, permisos y reglas existentes."}],
+      "tags": ["ia", "agentes", "mcp", "crm", "gobernanza"],
       "summary": "Headless 360 convierte capacidades de Salesforce en servicios reutilizables por agentes sin perder identidad, permisos ni gobernanza.",
       "language": "es",
       "priority": 4,
       "consumed_by": "agentes-de-ia-con-freno-y-mapa-costos-datos-y-permisos",
       "consumed_at": "2026-08-31T00:01:51.549Z"
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-007f76aa4a1bc2f8",
+      "title": "Anthropic endurece la seguridad de sus evaluaciones y agentes internos",
+      "canonical_url": "https://www.anthropic.com/news/improving-alignment-security-efforts",
+      "source": "Anthropic Newsroom",
+      "entity": "Anthropic",
+      "published_at": "2026-08-31T00:00:00Z",
+      "discovered_at": "2026-09-01T21:02:56Z",
+      "status": "pending",
+      "evidence": [{"url": "https://www.anthropic.com/news/improving-alignment-security-efforts", "claim": "Anthropic informa que pausó y reanudó evaluaciones con clasificadores en tiempo real, aislamiento reforzado, monitoreo y controles para impedir accesos de red inesperados o escapes de sandbox."}],
+      "tags": ["ia", "agentes", "seguridad", "evaluacion", "gobernanza"],
+      "summary": "Anthropic documenta controles de defensa en profundidad para evaluaciones y uso interno de agentes tras incidentes de configuración.",
+      "language": "es",
+      "priority": 5
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-1b26776c3eadff7b",
+      "title": "Google presenta resultados de equipos multiagente en Antigravity",
+      "canonical_url": "https://blog.google/innovation-and-ai/technology/developers-tools/antigravity-teamwork-multi-agent/",
+      "source": "Google Blog",
+      "entity": "Google Antigravity",
+      "published_at": "2026-08-31T00:00:00Z",
+      "discovered_at": "2026-09-01T21:02:56Z",
+      "status": "pending",
+      "evidence": [{"url": "https://blog.google/innovation-and-ai/technology/developers-tools/antigravity-teamwork-multi-agent/", "claim": "Google describe actualizaciones de Teamwork, un marco donde equipos autónomos de agentes colaboran, critican e iteran durante horas o días, con resultados reportados en matemáticas, sistemas y software abierto."}],
+      "tags": ["ia", "agentes", "automatizacion", "productividad", "desarrollo"],
+      "summary": "Google reporta cómo equipos autónomos de agentes colaboran durante tareas largas de investigación, ingeniería y código abierto.",
+      "language": "es",
+      "priority": 4
     }
   ]
 }

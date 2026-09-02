@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "run_id": "news-2026-09-01",
+  "kind": "news_scout",
+  "status": "success",
+  "started_at": "2026-09-01T21:02:56Z",
+  "finished_at": "2026-09-01T21:08:00Z",
+  "summary": {
+    "local_date": "2026-09-01",
+    "queue_path": ".automation/news/queue/news-queue.json",
+    "report_path": ".automation/reports/news-2026-09-01.json",
+    "new_items": 2,
+    "duplicates": 0,
+    "queue_revision": 5,
+    "branch": "automation/news/news-2026-09-01",
+    "external_publish": false
+  },
+  "checks": [
+    {
+      "name": "github_connector_preflight",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "authenticated": true,
+        "repository": "RealLotex/mragentes-site",
+        "minimum_permission": "write",
+        "observed_permission": "admin"
+      }
+    },
+    {
+      "name": "remote_base_snapshot",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "base_branch": "main",
+        "base_sha": "dab91316626d2079774e96db01b7b271a3c9904f",
+        "target_branch_absent": true
+      }
+    },
+    {
+      "name": "tdd_red",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "exit_code": 1,
+        "assertion": "two candidate IDs absent before mutation"
+      }
+    },
+    {
+      "name": "source_verification",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "items_checked": 2,
+        "primary_sources": 2,
+        "published_at_verifiable": true
+      }
+    },
+    {
+      "name": "schema_and_deduplication",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "schema_version": 1,
+        "items_checked": 8,
+        "new_items": 2,
+        "duplicates": 0,
+        "stable_ids": true
+      }
+    },
+    {
+      "name": "focused_validation",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "queue_loader": "passed",
+        "stable_id_check": "passed",
+        "deduplication_check": "passed"
+      }
+    },
+    {
+      "name": "pytest_suite",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "tests": 54,
+        "command": "python -m pytest -q tests/unit/automation/test_news_queue.py tests/unit/automation/test_news_schema_and_ids.py tests/unit/automation/test_news_migration_and_atomicity.py"
+      }
+    },
+    {
+      "name": "secret_scan",
+      "status": "passed",
+      "required": true,
+      "detail": {
+        "scope": "queue path",
+        "high_confidence_findings": 0,
+        "note": "repository-wide --all scan was not used because unrelated untracked automation artifacts are present"
+      }
+    },
+    {
+      "name": "git_diff_check",
+      "status": "passed",
+      "required": true,
+      "detail": {"status": "clean"}
+    },
+    {
+      "name": "preexisting_workspace_changes",
+      "status": "warning",
+      "detail": {"preserved_outside_remote_scope": true}
+    }
+  ],
+  "items": [
+    "news-v1-007f76aa4a1bc2f8",
+    "news-v1-1b26776c3eadff7b"
+  ],
+  "sources": [
+    "https://www.anthropic.com/news/improving-alignment-security-efforts",
+    "https://blog.google/innovation-and-ai/technology/developers-tools/antigravity-teamwork-multi-agent/"
+  ]
+}
