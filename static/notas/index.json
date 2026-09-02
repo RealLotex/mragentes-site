@@ -132,10 +132,28 @@
     "url": "/notas/openai-pausa-su-entrenamiento-por-cibercapacidad-crítica-claude-diseña-proteínas-que-funcionan-y-qwen-corona-a-china-la-semana-en-que-la-ia-se-puso-frenos-a-sí-misma/"
   },
   {
+    "title": "Agentes de IA con freno y mapa: costos, datos y permisos",
+    "date": "2026-08-30",
+    "description": "Tres anuncios recientes muestran qué necesita una automatización para escalar en una pyme: presupuesto, contexto confiable y permisos claros.",
+    "url": "/notas/agentes-de-ia-con-freno-y-mapa-costos-datos-y-permisos/"
+  },
+  {
+    "title": "Agentes en equipo con controles: cómo coordinar IA sin perder trazabilidad",
+    "date": "2026-09-02",
+    "description": "Cómo organizar agentes de IA en paralelo con límites, registros y una persona responsable de cada decisión relevante.",
+    "url": "/notas/agentes-en-equipo-con-controles-como-coordinar-ia-sin-perder-trazabilidad/"
+  },
+  {
     "title": "Bienvenidos a MR Agentes",
     "date": "2026-06-14",
     "description": "Te damos la bienvenida al blog de MR Agentes. Guías, tendencias y tips sobre automatización e IA para transformar tu negocio desde Santa Fe.",
     "url": "/notas/bienvenidos-a-mr-agentes/"
+  },
+  {
+    "title": "De la demo al sistema: automatizar con IA sin perder el control",
+    "date": "2026-08-28",
+    "description": "La IA empieza a rendir cuando combina datos, herramientas y controles: un marco simple para automatizar trabajo real en una pyme.",
+    "url": "/notas/de-la-demo-al-sistema-automatizar-con-ia-sin-perder-el-control/"
   },
   {
     "title": "La nueva identidad de MR Agentes",

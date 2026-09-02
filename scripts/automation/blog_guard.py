@@ -34,6 +34,7 @@ _FRONT_MATTER_FIELDS = {
     "tags",
     "sources",
     "automation_id",
+    "slug",
     "draft",
     "aliases",
 }
@@ -253,6 +254,7 @@ def build_front_matter(
         "tags": list(tags),
         "sources": list(sources),
         "automation_id": automation_id,
+        "slug": automation_id.rsplit(":", 1)[-1],
         "draft": False,
         "aliases": list(aliases or []),
     }
@@ -365,6 +367,14 @@ def validate_front_matter(front_matter: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("automation_id has an invalid format")
     if match.group("date") != result["date"][:10]:
         raise ValueError("automation_id date differs from publication date")
+
+    slug = result["slug"]
+    if (
+        not isinstance(slug, str)
+        or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug)
+        or slug != match.group("slug")
+    ):
+        raise ValueError("slug must be the canonical ASCII component in automation_id")
 
     if result["draft"] is not False:
         raise ValueError("automated notes must never be drafts")

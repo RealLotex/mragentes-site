@@ -91,6 +91,7 @@ def test_front_matter_contains_closed_required_schema() -> None:
         "tags",
         "sources",
         "automation_id",
+        "slug",
         "draft",
         "aliases",
     }
@@ -203,6 +204,9 @@ def test_automation_id_has_closed_format_and_cannot_be_blank() -> None:
     valid = _front_matter("BLOG-FM-009")
     assert validate(valid)["automation_id"] == "blog:2026-08-26:modelo-verificable", trace_message(
         "BLOG-FM-009", "valid automation ID changed"
+    )
+    assert valid["slug"] == "modelo-verificable", trace_message(
+        "BLOG-FM-009", "front matter must pin the public Hugo slug to the automation ID"
     )
     for value in ("", "blog/latest", "social:2026-08-26:x", "blog:2026-8-26:x"):
         with pytest.raises(ValueError):
