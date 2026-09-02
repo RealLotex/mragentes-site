@@ -476,11 +476,14 @@ def test_notify_note_sends_one_idempotent_event_with_secrets_only_in_env() -> No
     )
     job = parsed.get("jobs", {}).get("send_notification", {})
     env = job.get("env", {})
-    assert env.get("PUSH_API_TOKEN") == "${{ secrets.PUSH_API_TOKEN }}", trace_message(
-        "WF-PUSH-001", "Push API token is not injected through the job environment"
+    assert "PUSH_API_TOKEN" not in env, trace_message(
+        "WF-PUSH-001", "Push must use a short-lived OIDC identity, not a stored Actions secret"
     )
-    assert env.get("PUSH_WORKER_URL") == "${{ vars.PUSH_WORKER_URL }}", trace_message(
-        "WF-PUSH-001", "public Worker URL is not injected through a scoped Actions variable"
+    assert env.get("PUSH_WORKER_URL") == "https://mragentes-push.rosichmarcos.workers.dev/api/send/", trace_message(
+        "WF-PUSH-001", "public Worker URL is not pinned to the canonical endpoint"
+    )
+    assert parsed.get("permissions", {}).get("id-token") == "write", trace_message(
+        "WF-PUSH-001", "notify-note cannot request its short-lived GitHub OIDC identity"
     )
     run_sources = "\n".join(
         str(step.get("run", "")) for step in job.get("steps", []) if isinstance(step, dict)
@@ -491,7 +494,10 @@ def test_notify_note_sends_one_idempotent_event_with_secrets_only_in_env() -> No
     ), trace_message(
         "WF-PUSH-001", "notify-note bypasses the tested idempotent send-note interface"
     )
-    assert "${{ secrets." not in run_sources and "--token " not in run_sources, trace_message(
+    assert "ACTIONS_ID_TOKEN_REQUEST_URL" in run_sources and "mragentes-push-notify" in run_sources, trace_message(
+        "WF-PUSH-001", "notify-note does not request the Worker-scoped OIDC token"
+    )
+    assert "${{ secrets." not in source and "--token " not in run_sources, trace_message(
         "WF-PUSH-001", "a Push secret is interpolated directly into a command"
     )
 

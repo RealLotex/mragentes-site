@@ -63,6 +63,7 @@ export {
   handleClearAll,
   limitedConcurrency,
   generateVapidHeaders,
+  githubActionsTokenOk,
   webPushEncrypt,
   hkdf,
   buildPkcs8PrivateKey,
