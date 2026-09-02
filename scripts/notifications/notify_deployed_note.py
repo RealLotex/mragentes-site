@@ -34,6 +34,9 @@ EVENT_RE = re.compile(
 SAFE_SLUG_RE = re.compile(r"^[^\W_]+(?:-[^\W_]+)*$", re.UNICODE)
 MAX_EVENT_ID_BYTES = 512
 MAX_RESPONSE_BYTES = 128_000
+RECOVERY_NOTE_PATH_RE = re.compile(
+    r"^\.automation/publication/retries/(?P<slug>[a-z0-9]+(?:-[a-z0-9]+)*)\.json$"
+)
 
 
 class NotificationError(RuntimeError):
@@ -102,11 +105,75 @@ def _added_note_paths(repo: Path, before_sha: str, after_sha: str) -> list[str]:
     )
 
 
-def changed_note_slugs(repo: Path | str, before_sha: str, after_sha: str) -> list[str]:
-    """Return canonical slugs for newly added notes only.
+def _known_note_slugs(repo: Path, commit_sha: str) -> set[str]:
+    """Read the canonical note identities available in one trusted revision."""
 
-    Modifications, deletions and renames are intentionally excluded so a site
-    rebuild or editorial correction can never create a second announcement.
+    output = _git(repo, "ls-tree", "-r", "--name-only", "-z", commit_sha, "--", "content/notas")
+    assert isinstance(output, bytes)
+    slugs: set[str] = set()
+    for raw_path in output.split(b"\0"):
+        if not raw_path or not raw_path.endswith(b".md") or raw_path.endswith(b"/_index.md"):
+            continue
+        relative_path = os.fsdecode(raw_path)
+        source = str(_git(repo, "show", f"{commit_sha}:{relative_path}", text=True))
+        meta = parse_front_matter(source)
+        title = str(meta.get("title", "")).strip()
+        if not title:
+            raise ValueError(f"note has no title: {relative_path}")
+        note_url = canonical_note_url(meta, Path(relative_path).name, title)
+        slugs.add(note_url.removeprefix("/notas/").removesuffix("/"))
+    return slugs
+
+
+def _added_recovery_note_slugs(repo: Path, before_sha: str, after_sha: str) -> list[str]:
+    """Accept a one-shot, versioned retry only for an existing canonical note."""
+
+    output = _git(
+        repo,
+        "diff",
+        "--diff-filter=A",
+        "--name-only",
+        "-z",
+        before_sha,
+        after_sha,
+        "--",
+        ".automation/publication/retries",
+    )
+    assert isinstance(output, bytes)
+    known_slugs = _known_note_slugs(repo, after_sha)
+    recovered: list[str] = []
+    for raw_path in output.split(b"\0"):
+        if not raw_path:
+            continue
+        relative_path = os.fsdecode(raw_path)
+        match = RECOVERY_NOTE_PATH_RE.fullmatch(relative_path)
+        if match is None:
+            raise ValueError(f"invalid publication recovery path: {relative_path}")
+        try:
+            document = json.loads(str(_git(repo, "show", f"{after_sha}:{relative_path}", text=True)))
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"invalid publication recovery JSON: {relative_path}") from exc
+        if not isinstance(document, dict) or set(document) != {"schema_version", "note_slug", "reason"}:
+            raise ValueError(f"invalid publication recovery schema: {relative_path}")
+        slug = document.get("note_slug")
+        if (
+            document.get("schema_version") != 1
+            or document.get("reason") != "post_deploy_gate_recovered"
+            or not isinstance(slug, str)
+            or slug != match.group("slug")
+            or slug not in known_slugs
+        ):
+            raise ValueError(f"invalid publication recovery target: {relative_path}")
+        recovered.append(slug)
+    return sorted(recovered)
+
+
+def changed_note_slugs(repo: Path | str, before_sha: str, after_sha: str) -> list[str]:
+    """Return new notes plus one-shot, audited recovery requests.
+
+    Ordinary modifications, deletions and renames remain excluded. A recovery
+    requires an added, closed-schema manifest that names an existing note,
+    allowing a failed pre-egress deployment gate to resume on the current SHA.
     """
 
     root = Path(repo).resolve()
@@ -130,7 +197,7 @@ def changed_note_slugs(repo: Path | str, before_sha: str, after_sha: str) -> lis
     duplicates = sorted({slug for slug in slugs if slugs.count(slug) > 1})
     if duplicates:
         raise ValueError(f"duplicate canonical note slugs: {duplicates}")
-    return sorted(slugs)
+    return sorted(set(slugs) | set(_added_recovery_note_slugs(root, before_sha, after_sha)))
 
 
 def changed_social_drafts(repo: Path | str, before_sha: str, after_sha: str) -> list[str]:

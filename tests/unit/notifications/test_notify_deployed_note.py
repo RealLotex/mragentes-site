@@ -91,6 +91,48 @@ def test_changed_note_slugs_handles_zero_sha_and_rejects_duplicates(tmp_path: Pa
         changed_note_slugs(repo, "0" * 40, after)
 
 
+@pytest.mark.trace("DEPLOY-DETECT-002B")
+@pytest.mark.red_expected
+def test_changed_note_slugs_accepts_only_a_closed_recovery_manifest_for_an_existing_note(
+    tmp_path: Path,
+) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _git(repo, "init", "-q")
+    note = repo / "content" / "notas" / "nota-segura.md"
+    note.parent.mkdir(parents=True)
+    note.write_text(_note("Nota segura", "nota-segura"), encoding="utf-8")
+    _git(repo, "add", "content")
+    before = _commit(repo, "base")
+
+    retry = repo / ".automation" / "publication" / "retries" / "nota-segura.json"
+    retry.parent.mkdir(parents=True)
+    retry.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "note_slug": "nota-segura",
+                "reason": "post_deploy_gate_recovered",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    _git(repo, "add", ".automation")
+    after = _commit(repo, "recover note")
+
+    assert changed_note_slugs(repo, before, after) == ["nota-segura"]
+
+    retry.write_text(
+        '{"schema_version":1,"note_slug":"other-note","reason":"post_deploy_gate_recovered"}\n',
+        encoding="utf-8",
+    )
+    _git(repo, "add", ".automation")
+    invalid = _commit(repo, "invalid retry")
+    with pytest.raises(ValueError, match="invalid publication recovery target"):
+        changed_note_slugs(repo, before, invalid)
+
+
 @pytest.mark.trace("DEPLOY-DETECT-003")
 @pytest.mark.red_expected
 def test_changed_social_drafts_reports_only_new_canonical_daily_contracts(
