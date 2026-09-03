@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 6,
-  "updated_at": "2026-09-02T16:55:00Z",
+  "revision": 7,
+  "updated_at": "2026-09-03T21:12:00Z",
   "items": [
     {
       "schema_version": 1,
@@ -96,8 +96,18 @@
       "published_at": "2026-08-26T00:00:00Z",
       "discovered_at": "2026-08-30T21:10:40Z",
       "status": "consumed",
-      "evidence": [{"url": "https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents", "claim": "Google Cloud anuncia facturación flexible, topes mensuales, alertas y controles de sobregasto para cargas de agentes en Gemini Enterprise."}],
-      "tags": ["ia", "agentes", "productividad", "costos"],
+      "evidence": [
+        {
+          "url": "https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents",
+          "claim": "Google Cloud anuncia facturación flexible, topes mensuales, alertas y controles de sobregasto para cargas de agentes en Gemini Enterprise."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "productividad",
+        "costos"
+      ],
       "summary": "Google Cloud agrega opciones de pago, topes y alertas para administrar el costo de agentes y herramientas de desarrollo.",
       "language": "es",
       "priority": 4,
@@ -114,8 +124,18 @@
       "published_at": "2026-08-27T00:00:00Z",
       "discovered_at": "2026-08-30T21:10:40Z",
       "status": "consumed",
-      "evidence": [{"url": "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/", "claim": "AWS integra Redshift con Agent Toolkit para que agentes como Claude Code, Kiro y Cursor construyan, consulten, diagnostiquen y migren almacenes de datos."}],
-      "tags": ["ia", "agentes", "datos", "mcp"],
+      "evidence": [
+        {
+          "url": "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/",
+          "claim": "AWS integra Redshift con Agent Toolkit para que agentes como Claude Code, Kiro y Cursor construyan, consulten, diagnostiquen y migren almacenes de datos."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "datos",
+        "mcp"
+      ],
       "summary": "Redshift suma skills y un servidor MCP administrado para que agentes de código trabajen con datos y migraciones.",
       "language": "es",
       "priority": 4,
@@ -132,8 +152,19 @@
       "published_at": "2026-08-19T00:00:00Z",
       "discovered_at": "2026-08-30T21:10:40Z",
       "status": "consumed",
-      "evidence": [{"url": "https://www.salesforce.com/news/stories/expanding-headless-360-enterprise-capabilities/", "claim": "Salesforce anuncia servidores MCP, skills e integraciones que permiten a agentes autorizados descubrir y ejecutar capacidades con identidad, permisos y reglas existentes."}],
-      "tags": ["ia", "agentes", "mcp", "crm", "gobernanza"],
+      "evidence": [
+        {
+          "url": "https://www.salesforce.com/news/stories/expanding-headless-360-enterprise-capabilities/",
+          "claim": "Salesforce anuncia servidores MCP, skills e integraciones que permiten a agentes autorizados descubrir y ejecutar capacidades con identidad, permisos y reglas existentes."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "mcp",
+        "crm",
+        "gobernanza"
+      ],
       "summary": "Headless 360 convierte capacidades de Salesforce en servicios reutilizables por agentes sin perder identidad, permisos ni gobernanza.",
       "language": "es",
       "priority": 4,
@@ -150,8 +181,19 @@
       "published_at": "2026-08-31T00:00:00Z",
       "discovered_at": "2026-09-01T21:02:56Z",
       "status": "consumed",
-      "evidence": [{"url": "https://www.anthropic.com/news/improving-alignment-security-efforts", "claim": "Anthropic informa que pausó y reanudó evaluaciones con clasificadores en tiempo real, aislamiento reforzado, monitoreo y controles para impedir accesos de red inesperados o escapes de sandbox."}],
-      "tags": ["ia", "agentes", "seguridad", "evaluacion", "gobernanza"],
+      "evidence": [
+        {
+          "url": "https://www.anthropic.com/news/improving-alignment-security-efforts",
+          "claim": "Anthropic informa que pausó y reanudó evaluaciones con clasificadores en tiempo real, aislamiento reforzado, monitoreo y controles para impedir accesos de red inesperados o escapes de sandbox."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "seguridad",
+        "evaluacion",
+        "gobernanza"
+      ],
       "summary": "Anthropic documenta controles de defensa en profundidad para evaluaciones y uso interno de agentes tras incidentes de configuración.",
       "language": "es",
       "priority": 5,
@@ -168,13 +210,132 @@
       "published_at": "2026-08-31T00:00:00Z",
       "discovered_at": "2026-09-01T21:02:56Z",
       "status": "consumed",
-      "evidence": [{"url": "https://blog.google/innovation-and-ai/technology/developers-tools/antigravity-teamwork-multi-agent/", "claim": "Google describe actualizaciones de Teamwork, un marco donde equipos autónomos de agentes colaboran, critican e iteran durante horas o días, con resultados reportados en matemáticas, sistemas y software abierto."}],
-      "tags": ["ia", "agentes", "automatizacion", "productividad", "desarrollo"],
+      "evidence": [
+        {
+          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/antigravity-teamwork-multi-agent/",
+          "claim": "Google describe actualizaciones de Teamwork, un marco donde equipos autónomos de agentes colaboran, critican e iteran durante horas o días, con resultados reportados en matemáticas, sistemas y software abierto."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "automatizacion",
+        "productividad",
+        "desarrollo"
+      ],
       "summary": "Google reporta cómo equipos autónomos de agentes colaboran durante tareas largas de investigación, ingeniería y código abierto.",
       "language": "es",
       "priority": 4,
       "consumed_by": "agentes-en-equipo-con-controles-como-coordinar-ia-sin-perder-trazabilidad",
       "consumed_at": "2026-09-02T16:55:00Z"
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-89b4632650b1ed55",
+      "title": "Anthropic desarrolla salvaguardas empresariales para modelos avanzados",
+      "canonical_url": "https://www.anthropic.com/news/enterprise-frontier-safeguards",
+      "source": "Anthropic Newsroom",
+      "entity": "Anthropic",
+      "published_at": "2026-09-01T00:00:00Z",
+      "discovered_at": "2026-09-03T21:02:06Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://www.anthropic.com/news/enterprise-frontier-safeguards",
+          "claim": "Anthropic anuncia Enterprise Frontier Safeguards: monitoreo automatizado de uso indebido y almacenamiento de datos en la infraestructura, claves y controles del cliente."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "seguridad",
+        "gobernanza",
+        "datos"
+      ],
+      "summary": "Salvaguardas para usar modelos avanzados con monitoreo y control de datos dentro de la infraestructura de la empresa.",
+      "language": "es",
+      "priority": 5
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-76b94fe31a79f833",
+      "title": "OpenAI presenta Astra y nuevas salvaguardas para capacidades críticas",
+      "canonical_url": "https://openai.com/index/path-to-astra/",
+      "source": "OpenAI",
+      "entity": "OpenAI",
+      "published_at": "2026-09-01T00:00:00Z",
+      "discovered_at": "2026-09-03T21:02:06Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://openai.com/index/path-to-astra/",
+          "claim": "OpenAI afirma que Astra alcanza el umbral de capacidad crítica en ciberseguridad y despliega monitoreo de desalineación, revisión automática y controles de contención."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "seguridad",
+        "evaluacion",
+        "gobernanza"
+      ],
+      "summary": "OpenAI reporta un nuevo umbral de capacidad y controles adicionales para detectar y contener acciones no alineadas.",
+      "language": "es",
+      "priority": 5
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-c537f0e015700c73",
+      "title": "OpenAI muestra cómo convertir flujos de trabajo en capacidad operativa con agentes",
+      "canonical_url": "https://openai.com/index/ai-native-company-workflows/",
+      "source": "OpenAI",
+      "entity": "OpenAI",
+      "published_at": "2026-09-01T00:00:00Z",
+      "discovered_at": "2026-09-03T21:02:06Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://openai.com/index/ai-native-company-workflows/",
+          "claim": "OpenAI documenta casos de Basis, Clay y Exa donde agentes con contexto, herramientas, pruebas y revisión humana convierten procesos repetibles en ejecución operativa."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "automatizacion",
+        "productividad",
+        "pymes"
+      ],
+      "summary": "Casos de empresas que convierten procesos concretos en flujos repetibles con contexto, herramientas y revisión.",
+      "language": "es",
+      "priority": 4
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-c73c32de0860506a",
+      "title": "AWS hace disponible Agent Registry para descubrir y gobernar agentes",
+      "canonical_url": "https://aws.amazon.com/about-aws/whats-new/2026/08/aws-agent-registry-generally-available/",
+      "source": "AWS What's New",
+      "entity": "AWS Agent Registry",
+      "published_at": "2026-08-31T00:00:00Z",
+      "discovered_at": "2026-09-03T21:02:06Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://aws.amazon.com/about-aws/whats-new/2026/08/aws-agent-registry-generally-available/",
+          "claim": "AWS declara disponibilidad general de un catálogo privado para descubrir y gobernar agentes, herramientas, skills, servidores MCP y recursos personalizados, con flujos de aprobación y auditoría."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "automatizacion",
+        "mcp",
+        "gobernanza"
+      ],
+      "summary": "Un catálogo privado ayuda a las organizaciones a encontrar, aprobar, auditar y reutilizar agentes y herramientas.",
+      "language": "es",
+      "priority": 4
     }
   ]
 }
