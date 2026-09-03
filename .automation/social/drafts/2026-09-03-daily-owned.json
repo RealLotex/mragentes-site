@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "run_id": "social:daily_owned:2026-09-03",
+  "kind": "daily_owned",
+  "topic": "Un agente trabaja mejor cuando puede reconocer cuándo terminó",
+  "topic_hash": "sha256:1b41be042db24cdc4082f1c019057818ebbcf9e917e6c9ef15db5b556ef388a9",
+  "content_hash": "sha256:f31394ee3b4de98b4b572ff94c47ab5770796590b60509f571d65b26c802c6af",
+  "dedupe_key": "daily_owned:2026-09-03:sha256:f31394ee3b4de98b4b572ff94c47ab5770796590b60509f571d65b26c802c6af",
+  "asset": {
+    "path": "static/images/social/generated/daily-owned-2026-09-03.jpg",
+    "sha256": "5ecfb5ba0907235c34113f2a0d6899e11da6539cd75a0f7c99522c3dca643aeb",
+    "alt": "Placa editorial de MR Agentes que explica cómo definir un resultado comprobable antes de pedir una tarea a un agente."
+  },
+  "captions": {
+    "facebook": "Antes de pedirle una tarea a un agente, especificar cómo se reconoce un resultado terminado.\n\nLa instrucción “ordenar estos contactos” deja demasiadas decisiones abiertas. “Entregar una tabla con nombre, empresa y correo; marcar como pendiente cada dato que falte” permite revisar si el trabajo quedó completo.\n\nEse criterio convierte una instrucción general en una comprobación simple. También facilita corregir el proceso cuando aparece un caso distinto.\n\nPrimer paso: escribir una frase que describa la salida esperada y dos ejemplos de lo que sí cuenta como correcto.\n\n#MRAgentes #AgentesDeIA #Automatizacion #Productividad #Procesos #IAparaPymes",
+    "instagram": "Un agente trabaja mejor cuando puede reconocer cuándo terminó.\n\nEn lugar de “ordenar estos contactos”, especificar la salida:\n\n• tabla con nombre, empresa y correo\n• dato faltante marcado como pendiente\n\nEso permite revisar el resultado sin adivinar qué significaba “bien hecho”.\n\nPrimer paso: describir la salida esperada y agregar dos ejemplos correctos.\n\n#MRAgentes #AgentesDeIA #Automatizacion #Productividad #Procesos #IAparaPymes"
+  },
+  "created_at": "2026-09-03T12:00:00-03:00"
+}

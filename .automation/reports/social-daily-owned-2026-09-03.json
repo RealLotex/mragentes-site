@@ -1,0 +1,123 @@
+{
+  "checks": [
+    {
+      "detail": {
+        "authenticated": true,
+        "minimum_permission": "write",
+        "observed_permission": "admin",
+        "repository": "RealLotex/mragentes-site"
+      },
+      "name": "github_connector_preflight",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "base_branch": "main",
+        "base_sha": "b303d4be36e4859d43d8357ca755acc3af749ede",
+        "date_draft_absent": true,
+        "target_branch_absent": true
+      },
+      "name": "remote_base_snapshot",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {"action": "created_one_draft", "existing": false, "local_date": "2026-09-03"},
+      "name": "draft_reuse",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {"exit_code": 1, "result": "failed_before_artifacts", "test": "absence assertion for today asset"},
+      "name": "tdd_red",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {"records_checked": 3, "status": "fresh", "window_days": 30},
+      "name": "freshness",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {"closed": true, "kind": "daily_owned", "schema_version": 1},
+      "name": "schema_and_hash",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "desktop_dimensions": [1080, 1350],
+        "mobile_dimensions": [360, 450],
+        "surfaces_verified": ["desktop", "mobile"],
+        "template": "titular"
+      },
+      "name": "render",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {
+        "format": "JPEG",
+        "height": 1350,
+        "mode": "RGB",
+        "path": "static/images/social/generated/daily-owned-2026-09-03.jpg",
+        "sha256": "5ecfb5ba0907235c34113f2a0d6899e11da6539cd75a0f7c99522c3dca643aeb",
+        "width": 1080
+      },
+      "name": "asset",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {"instagram_limit": 2200, "platforms": ["facebook", "instagram"], "tailored_separately": true},
+      "name": "captions",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {"literal_serialized_line_breaks": false},
+      "name": "caption_serialization",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {"external_publish": false},
+      "name": "external_effects",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "detail": {"preserved_outside_remote_scope": true},
+      "name": "preexisting_workspace_changes",
+      "status": "warning"
+    }
+  ],
+  "effects": [
+    {"kind": "draft_artifact", "status": "confirmed", "target": ".automation/social/drafts/2026-09-03-daily-owned.json"},
+    {"kind": "asset_artifact", "status": "confirmed", "target": "static/images/social/generated/daily-owned-2026-09-03.jpg", "detail": {"sha256": "5ecfb5ba0907235c34113f2a0d6899e11da6539cd75a0f7c99522c3dca643aeb"}}
+  ],
+  "finished_at": "2026-09-03T15:06:25-03:00",
+  "kind": "social_daily_owned",
+  "run_id": "social:daily_owned:2026-09-03",
+  "schema_version": 1,
+  "started_at": "2026-09-03T15:00:00-03:00",
+  "status": "success",
+  "summary": {
+    "asset_path": "static/images/social/generated/daily-owned-2026-09-03.jpg",
+    "asset_sha256": "5ecfb5ba0907235c34113f2a0d6899e11da6539cd75a0f7c99522c3dca643aeb",
+    "branch": "automation/social/social-daily-owned-2026-09-03",
+    "content_hash": "sha256:f31394ee3b4de98b4b572ff94c47ab5770796590b60509f571d65b26c802c6af",
+    "dedupe_key": "daily_owned:2026-09-03:sha256:f31394ee3b4de98b4b572ff94c47ab5770796590b60509f571d65b26c802c6af",
+    "draft_path": ".automation/social/drafts/2026-09-03-daily-owned.json",
+    "external_publish": false,
+    "local_date": "2026-09-03",
+    "pr_ci": "pending",
+    "remote_commit_count": 1,
+    "report_path": ".automation/reports/social-daily-owned-2026-09-03.json",
+    "reused_date_draft": false,
+    "template": "titular",
+    "topic_hash": "sha256:1b41be042db24cdc4082f1c019057818ebbcf9e917e6c9ef15db5b556ef388a9"
+  }
+}
