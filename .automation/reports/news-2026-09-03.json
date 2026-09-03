@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "run_id": "news-2026-09-03",
+  "kind": "news_scout",
+  "status": "success",
+  "started_at": "2026-09-03T21:02:06Z",
+  "finished_at": "2026-09-03T21:12:00Z",
+  "checks": [
+    {
+      "name": "github_connector_authentication",
+      "status": "passed",
+      "detail": {
+        "account": "RealLotex",
+        "repository": "RealLotex/mragentes-site",
+        "permission": "admin"
+      }
+    },
+    {
+      "name": "source_verification",
+      "status": "passed",
+      "detail": {
+        "verified_items": 4,
+        "primary_sources": [
+          "Anthropic",
+          "OpenAI",
+          "AWS"
+        ]
+      }
+    },
+    {
+      "name": "news_item_schema_v1",
+      "status": "passed",
+      "detail": {
+        "validated_items": 4
+      }
+    },
+    {
+      "name": "deduplication",
+      "status": "passed",
+      "detail": {
+        "candidate_items": 4,
+        "duplicates": 0,
+        "queue_revision_before": 6
+      }
+    },
+    {
+      "name": "focused_tests",
+      "status": "passed",
+      "detail": {
+        "command": "pytest news queue and report tests",
+        "passed": 66
+      }
+    },
+    {
+      "name": "repository_contract_tests",
+      "status": "passed",
+      "detail": {
+        "command": "pytest repository contract and runtime independence",
+        "passed": 13
+      }
+    },
+    {
+      "name": "secret_scan",
+      "status": "passed",
+      "detail": {
+        "high_confidence_findings": 0
+      }
+    },
+    {
+      "name": "diff_check",
+      "status": "passed",
+      "detail": {
+        "paths": [
+          ".automation/news/queue/news-queue.json",
+          ".automation/reports/news-2026-09-03.json"
+        ]
+      }
+    }
+  ],
+  "effects": [
+    {
+      "kind": "remote_commit",
+      "status": "confirmed",
+      "target": "automation/news/news-2026-09-03",
+      "detail": {
+        "parent_sha": "8e9847952752cba3735418dbaed6eb3fc5192f1d",
+        "changed_paths": [
+          ".automation/news/queue/news-queue.json",
+          ".automation/reports/news-2026-09-03.json"
+        ],
+        "commit_count": 1
+      }
+    }
+  ],
+  "summary": {
+    "local_date": "2026-09-03",
+    "timezone": "America/Cordoba",
+    "added": 4,
+    "duplicates": 0,
+    "queue_revision": 7,
+    "ids": [
+      "news-v1-89b4632650b1ed55",
+      "news-v1-76b94fe31a79f833",
+      "news-v1-c537f0e015700c73",
+      "news-v1-c73c32de0860506a"
+    ],
+    "external_publication": false
+  }
+}
