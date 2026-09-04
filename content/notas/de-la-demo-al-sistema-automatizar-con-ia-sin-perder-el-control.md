@@ -63,6 +63,20 @@ La evidencia examinada sugiere una transición desde integraciones ad hoc hacia 
 
 La confianza no aparece por elegir la herramienta más nueva. Aparece cuando el sistema sabe qué puede hacer, muestra por qué lo hizo y tiene una salida segura cuando algo no encaja. Ahí es donde una demo de IA se convierte en una capacidad que una pyme puede operar todos los días.
 
+## Preguntas frecuentes
+
+### ¿Qué tarea conviene automatizar primero?
+
+Conviene empezar por una tarea frecuente, de bajo impacto y con un resultado que pueda comprobarse. Por ejemplo, preparar un borrador a partir de fuentes aprobadas. Ese alcance permite medir calidad, tiempo y necesidad de revisión antes de habilitar acciones externas.
+
+### ¿Por qué una demostración no alcanza para decidir?
+
+Una demostración muestra una interacción puntual. Un proceso operativo debe además registrar entradas, permisos, resultado y recuperación ante errores. La diferencia permite evaluar si el resultado se sostiene cuando cambian los datos o falla una herramienta.
+
+### ¿Qué control mínimo debe conservar una pyme?
+
+Debe poder identificar quién autorizó la ejecución, qué información se utilizó y cuál fue el resultado. También necesita una regla para detener o derivar una operación cuando la evidencia sea insuficiente. Esos elementos permiten corregir sin repetir una acción externa.
+
 ## Fuentes
 
 - [OpenAI — The full stack behind abundant intelligence](https://openai.com/index/the-full-stack-behind-abundant-intelligence/)
