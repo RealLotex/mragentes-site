@@ -437,6 +437,9 @@ def t_metodo(piece: Piece, surf: Surface, seed: int, ground: str) -> Sheet:
 
 def t_tarjetas(piece: Piece, surf: Surface, seed: int, ground: str) -> Sheet:
     """17 · Grilla 2/4/6 para comparaciones, decisiones o pasos compactos."""
+    count = len(piece.items)
+    if count not in (2, 4, 6):
+        raise ValueError("La plantilla 'tarjetas' necesita exactamente 2, 4 o 6 tarjetas")
     sh = _new_sheet(surf, ground, seed, section=_label(piece, "de un vistazo"), meta=piece.meta,
                     footer_right=piece.footer_right or brand.SOCIAL_SHARE_CTA)
     stack(sh, [

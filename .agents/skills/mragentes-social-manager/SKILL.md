@@ -15,7 +15,8 @@ Leé [marca](references/brand.md) para crear contenido. Leé [runbook de publica
 2. Leé una ventana acotada de temas, copy y hashes recientes; las piezas agotadas son historial, no una rueda reutilizable.
 3. Redactá captions distintos para Facebook e Instagram y generá un asset original permitido con alt text.
 4. Construí `run_id`, `dedupe_key`, hashes y JSON conforme a `.automation/schemas/social-post.schema.json`.
-5. Ejecutá frescura, schema, render, asset y pruebas. Prepará sólo `automation/social/<run_id>`.
+5. Elegí la forma visual según la idea: `metodo` para un carrusel de 2 a 6 pasos secuenciales (portada + una lámina por paso); `tarjetas` sólo para una lámina única con exactamente 2, 4 o 6 alternativas, comparaciones o pasos. Cada tarjeta debe tener un título breve y una explicación comprensible por sí sola. No uses ambas formas para la misma idea.
+6. Ejecutá frescura, schema, render, asset y pruebas. Prepará sólo `automation/social/<run_id>`.
 
 ## Modo `recovery`
 
