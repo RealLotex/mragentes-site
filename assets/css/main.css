@@ -1948,3 +1948,148 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 
   .colophon { background: none; border-top: 1px solid #000; padding-block: 8pt; }
 }
+
+
+/* ============================================================================
+   CALCULADORA DE IMPACTO
+   Una herramienta de decisión, no una promesa comercial: declara los supuestos,
+   muestra resultados mensuales y pide los controles que faltan antes de ampliar.
+   ========================================================================== */
+
+.impact-calculator {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.72fr);
+  gap: var(--s-5);
+  align-items: start;
+  border-top: 2px solid var(--ink);
+  padding-top: var(--s-4);
+}
+
+.impact-calculator__form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-3);
+}
+
+.impact-field { display: grid; gap: 0.35rem; }
+.impact-field--wide { grid-column: 1 / -1; }
+
+.impact-field label {
+  font-family: var(--f-display);
+  font-size: 0.9375rem;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.impact-field small,
+.impact-note,
+.impact-assumptions {
+  color: var(--ink-55);
+  font-size: var(--t-sm);
+  line-height: 1.45;
+}
+
+.impact-field input {
+  width: 100%;
+  min-height: 2.85rem;
+  padding: 0.5rem 0.65rem;
+  border: var(--hair) solid var(--rule-mid);
+  border-radius: 0;
+  background: var(--bone);
+  font-family: var(--f-data);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.impact-field input:focus-visible {
+  outline: 2px solid var(--minio);
+  outline-offset: 2px;
+  border-color: var(--ink);
+}
+
+.impact-calculator__actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  align-items: center;
+  margin-top: var(--s-1);
+}
+
+.impact-results {
+  border-top: var(--hair) solid var(--rule-ink);
+  border-bottom: var(--hair) solid var(--rule-ink);
+  padding-block: var(--s-3);
+}
+
+.impact-results > h2 { font-size: var(--t-lg); }
+
+.impact-metrics {
+  margin-top: var(--s-3);
+  display: grid;
+  gap: 0;
+}
+
+.impact-metric {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s-2);
+  padding-block: var(--s-2);
+  border-top: var(--hair) solid var(--rule);
+  align-items: baseline;
+}
+
+.impact-metric dt {
+  font-family: var(--f-data);
+  font-size: var(--t-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-55);
+}
+
+.impact-metric dd {
+  margin: 0;
+  font-family: var(--f-display);
+  font-size: var(--t-md);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.impact-controls {
+  margin-top: var(--s-4);
+  padding-top: var(--s-3);
+  border-top: var(--hair) solid var(--rule);
+}
+
+.impact-controls h3 { font-size: 1.05rem; }
+
+.impact-controls ul {
+  display: grid;
+  gap: var(--s-2);
+  margin-top: var(--s-2);
+  list-style: none;
+  padding: 0;
+}
+
+.impact-controls li {
+  position: relative;
+  padding-left: 1.1rem;
+  line-height: 1.4;
+}
+
+.impact-controls li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--minio-ink);
+  font-family: var(--f-data);
+}
+
+@media (max-width: 61.99rem) {
+  .impact-calculator { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
+}
+
+@media (max-width: 34rem) {
+  .impact-calculator__form { grid-template-columns: minmax(0, 1fr); }
+}
