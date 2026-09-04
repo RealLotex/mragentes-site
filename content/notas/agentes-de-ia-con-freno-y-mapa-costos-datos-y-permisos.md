@@ -13,6 +13,7 @@ tags:
   - datos
   - mcp
   - gobernanza
+learning_level: "intermedio"
 sources:
   - "https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents"
   - "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/"
