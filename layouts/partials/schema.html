@@ -7,6 +7,8 @@
   estructurado que miente es peor que no tenerlo: Google lo cruza con la página.
 --------------------------------------------------------------------- */ -}}
 
+{{- $page := . -}}
+
 {{- $org := dict
   "@type" "ProfessionalService"
   "@id" (printf "%s#mragentes" site.BaseURL)
@@ -84,7 +86,7 @@
   {{- if gt (len $questions) 0 -}}
     {{- $faq := dict
       "@type" "FAQPage"
-      "@id" (printf "%s#preguntas" .Permalink)
+      "@id" (printf "%s#preguntas" $page.Permalink)
       "mainEntity" $questions
     -}}
     {{- $graph = $graph | append $faq -}}
