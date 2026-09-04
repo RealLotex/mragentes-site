@@ -1,0 +1,10 @@
+{
+  "name": "mragentes-metrics",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-04",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true, "head_sampling_rate": 0.05 },
+  "analytics_engine_datasets": [
+    { "binding": "METRICS", "dataset": "mragentes_metrics" }
+  ]
+}
