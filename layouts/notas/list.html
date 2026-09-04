@@ -70,6 +70,13 @@
 </section>
 {{- end }}
 
+<aside class="col-wide rule-top" aria-labelledby="checklist-title">
+  <p class="key" id="checklist-title">Recurso gratuito</p>
+  <h2>¿Tu proceso está listo para automatizarse?</h2>
+  <p>Descargá una checklist imprimible para evaluar objetivo, datos, permisos, registro y recuperación antes de ampliar una automatización.</p>
+  <a class="btn btn--minio" href="{{ "/downloads/checklist-automatizacion.pdf" | relURL }}" download>Descargar checklist PDF</a>
+</aside>
+
   <ul class="index col-wide" data-index>
     {{- range $pages }}
     <li data-topics="{{ range $i, $t := .Params.tags }}{{ if $i }}|{{ end }}{{ $t | urlize }}{{ end }}">
