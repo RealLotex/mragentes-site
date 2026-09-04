@@ -25,6 +25,7 @@ def _front_matter(trace_id: str, **overrides: object) -> dict[str, object]:
         "image_alt": "Diagrama abstracto de un modelo y sus controles.",
         "tags": ["ia", "modelos"],
         "pillar": "automatizacion-practica",
+        "learning_level": "inicial",
         "sources": ["https://example.test/research/model-card"],
         "automation_id": "blog:2026-08-26:modelo-verificable",
         "aliases": [],
@@ -91,6 +92,7 @@ def test_front_matter_contains_closed_required_schema() -> None:
         "image_alt",
         "tags",
         "pillar",
+        "learning_level",
         "sources",
         "automation_id",
         "slug",
@@ -267,6 +269,19 @@ def test_pillar_is_closed_and_required_for_each_automated_note() -> None:
         candidate["pillar"] = value
         with pytest.raises((TypeError, ValueError)):
             _validate(candidate, "BLOG-FM-013")
+
+
+
+@pytest.mark.trace("BLOG-FM-014")
+@pytest.mark.red_expected
+def test_learning_level_is_closed_and_required_for_reading_routes() -> None:
+    valid = _front_matter("BLOG-FM-014", learning_level="intermedio")
+    assert _validate(valid, "BLOG-FM-014")["learning_level"] == "intermedio"
+    for value in ("", "experto", "Inicial", None):
+        candidate = dict(valid)
+        candidate["learning_level"] = value
+        with pytest.raises((TypeError, ValueError)):
+            _validate(candidate, "BLOG-FM-014")
 
 
 @pytest.mark.trace("BLOG-ATOMIC-001")
