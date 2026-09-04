@@ -37,6 +37,7 @@ _FRONT_MATTER_FIELDS = {
     "image",
     "image_alt",
     "tags",
+    "pillar",
     "sources",
     "automation_id",
     "slug",
