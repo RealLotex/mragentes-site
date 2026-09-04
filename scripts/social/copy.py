@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+import urllib.parse
 
 from . import brand
 from .notas import Nota
@@ -175,7 +176,7 @@ def tracked_note_url(nota: Nota, network: str, base_url: str = "https://mragente
     if network not in PLATFORM_LIMITS:
         raise ValueError("Red/network inválida: sólo facebook o instagram")
     origin = base_url.rstrip("/")
-    slug = __import__("urllib.parse").parse.quote(nota.slug, safe="-")
+    slug = urllib.parse.quote(nota.slug, safe="-")
     return f"{origin}/r/{slug}?source={network}"
 
 
