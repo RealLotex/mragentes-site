@@ -557,7 +557,7 @@ class CardGrid(Block):
                 weight=650,
                 max_w=self._card_w - pad * 2,
                 max_h=max(30, int(self._card_h * 0.38)),
-                size_max=sc(sheet, 42 if len(rows) <= 4 else 34),
+                size_max=max(18, sc(sheet, 42 if len(rows) <= 4 else 34)),
                 size_min=18,
                 max_lines=3,
             )
@@ -566,7 +566,7 @@ class CardGrid(Block):
                 role="text",
                 max_w=self._card_w - pad * 2,
                 max_h=max(24, self._card_h - pad * 2 - title_fit.height - 16),
-                size_max=sc(sheet, 30 if len(rows) <= 4 else 25),
+                size_max=max(16, sc(sheet, 30 if len(rows) <= 4 else 25)),
                 size_min=16,
                 max_lines=5 if len(rows) <= 4 else 4,
             ) if detail else None
