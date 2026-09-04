@@ -31,6 +31,20 @@
 
 {{- $graph := slice $org -}}
 
+{{- /* El sitio no tiene buscador interno; por eso se declara WebSite sin un
+       SearchAction ficticio. */ -}}
+{{- if .IsHome -}}
+  {{- $site := dict
+    "@type" "WebSite"
+    "@id" (printf "%s#sitio" site.BaseURL)
+    "name" site.Title
+    "url" site.BaseURL
+    "inLanguage" "es-AR"
+    "publisher" (dict "@id" (printf "%s#mragentes" site.BaseURL))
+  -}}
+  {{- $graph = $graph | append $site -}}
+{{- end -}}
+
 {{- if eq .Section "notas" -}}
   {{- $article := dict
     "@type" "BlogPosting"
@@ -50,6 +64,31 @@
   {{- with .Params.tags }}{{ $article = merge $article (dict "keywords" (delimit . ", ")) }}{{ end -}}
   {{- with .Params.image }}{{ $article = merge $article (dict "image" (absURL .)) }}{{ end -}}
   {{- $graph = $graph | append $article -}}
+{{- end -}}
+
+{{- /* Las preguntas aparecen como contenido visible y sólo se serializan si
+       el front matter aporta pares pregunta/respuesta completos. */ -}}
+{{- with .Params.faq -}}
+  {{- $questions := slice -}}
+  {{- range . -}}
+    {{- $question := .question | default "" -}}
+    {{- $answer := .answer | default "" -}}
+    {{- if and $question $answer -}}
+      {{- $questions = $questions | append (dict
+        "@type" "Question"
+        "name" $question
+        "acceptedAnswer" (dict "@type" "Answer" "text" $answer)
+      ) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if gt (len $questions) 0 -}}
+    {{- $faq := dict
+      "@type" "FAQPage"
+      "@id" (printf "%s#preguntas" .Permalink)
+      "mainEntity" $questions
+    -}}
+    {{- $graph = $graph | append $faq -}}
+  {{- end -}}
 {{- end -}}
 
 {{- /* Miga de pan: sólo en páginas internas, y armada desde los ancestros
