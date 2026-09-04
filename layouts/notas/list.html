@@ -77,6 +77,13 @@
   <a class="btn btn--minio" href="{{ "/downloads/checklist-automatizacion.pdf" | relURL }}" download>Descargar checklist PDF</a>
 </aside>
 
+<aside class="col-wide rule-top" aria-labelledby="impact-calculator-title">
+  <p class="key" id="impact-calculator-title">Herramienta local</p>
+  <h2>Estimá el impacto antes de automatizar</h2>
+  <p>Calculá horas, costos y errores evitables con supuestos visibles. No enviamos los datos que ingresás.</p>
+  <a class="btn btn--minio" href="{{ "/calculadora-impacto/" | relURL }}">Abrir calculadora de impacto</a>
+</aside>
+
   <ul class="index col-wide" data-index>
     {{- range $pages }}
     <li data-topics="{{ range $i, $t := .Params.tags }}{{ if $i }}|{{ end }}{{ $t | urlize }}{{ end }}">
