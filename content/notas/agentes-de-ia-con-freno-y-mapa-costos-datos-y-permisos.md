@@ -72,6 +72,20 @@ También conviene separar indicadores de costo de indicadores de valor. El costo
 
 Los modelos y las herramientas van a seguir cambiando. Los tres controles no: presupuesto, contexto y permisos. Cuando esos elementos están presentes, un agente deja de ser una promesa difícil de medir y pasa a ser una parte operable del proceso.
 
+## Preguntas frecuentes
+
+### ¿Qué significa establecer un presupuesto para un agente?
+
+Significa definir un límite verificable de recursos, tiempo o acciones antes de iniciar la tarea. El presupuesto no sustituye la revisión de calidad, pero evita que una ejecución se amplíe sin una decisión explícita.
+
+### ¿Por qué los permisos deben separarse?
+
+Cada función debe tener solamente el acceso que necesita. Un sistema que investiga información no requiere permiso para modificar datos de clientes. Separar lectura, preparación y publicación reduce el impacto de un error y facilita la auditoría.
+
+### ¿Cómo se evalúa si un control funciona?
+
+Se revisan registros de ejecuciones reales: fuentes usadas, límites aplicados, excepciones y resultado final. Un control funciona cuando permite explicar una decisión y corregirla con información suficiente, no sólo cuando bloquea una operación.
+
 ## Fuentes
 
 - [Google Cloud — Flexible billing and cost controls for agents](https://cloud.google.com/blog/products/ai-machine-learning/flexible-billing-and-cost-controls-for-agents)
