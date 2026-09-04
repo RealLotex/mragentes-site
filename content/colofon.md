@@ -74,9 +74,9 @@ JavaScript el sitio funciona completo.
 
 ## Qué datos recoge
 
-Ninguno. No hay Google Analytics, ni píxel de Facebook, ni mapas de calor, ni cookies
-propias ni de terceros. Por eso tampoco hay cartel de cookies: no hay nada que
-consentir.
+No hay Google Analytics, píxel de Facebook, mapas de calor ni cookies propias o de terceros. Por eso no hay cartel de cookies: no hay nada que consentir.
+
+Para saber si el contenido sirve, registramos de forma agregada dos acciones: clics de compartir desde una nota y entradas desde los enlaces de Facebook o Instagram. El registro conserva sólo la acción, la ruta pública, la red y la hora; descarta IP, navegador, parámetros de consulta, texto y cualquier identificador de persona. No crea perfiles y respeta la señal «No rastrear» del navegador.
 
 Dos excepciones, ambas voluntarias y explícitas: el **formulario de contacto**, que se
 procesa con Formspree y manda el mensaje a la casilla de MR Agentes, y los **avisos de

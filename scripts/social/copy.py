@@ -166,12 +166,25 @@ def _validate_claims(nota: Nota) -> None:
 # ── Textos por red ──────────────────────────────────────────────────────────
 
 
+def tracked_note_url(nota: Nota, network: str, base_url: str = "https://mragentes.com.ar") -> str:
+    """URL de red que registra sólo fuente y nota antes de ir a la guía.
+
+    El Worker de métricas descarta todo dato personal y redirige inmediatamente
+    al permalink canónico. No se usan UTMs: Web Analytics no registra queries.
+    """
+    if network not in PLATFORM_LIMITS:
+        raise ValueError("Red/network inválida: sólo facebook o instagram")
+    origin = base_url.rstrip("/")
+    slug = __import__("urllib.parse").parse.quote(nota.slug, safe="-")
+    return f"{origin}/r/{slug}?source={network}"
+
+
 def caption(nota: Nota, network: str = "facebook", base_url: str = "https://mragentes.com.ar") -> str:
     if network not in PLATFORM_LIMITS:
         raise ValueError("Red/network inválida: sólo facebook o instagram")
     _validate_claims(nota)
     seed = seed_for(nota.slug)
-    url = nota.url(base_url)
+    url = tracked_note_url(nota, network, base_url)
     lead = _trim(nota.lead, 320)
     extra = ""
     paras = nota.paragraphs

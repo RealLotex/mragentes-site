@@ -131,6 +131,28 @@
     apply();
   }
 
+
+  /* Métrica agregada y sin cookies: nombre del evento y ruta pública, nada más.
+     Se respeta Do Not Track. El Worker descarta IP, user-agent, query y cuerpo
+     de la nota, por lo que no construye perfiles ni permite identificar visitas. */
+  function recordShareMetric(eventName) {
+    if (navigator.doNotTrack === "1") return;
+    var payload = JSON.stringify({ event: eventName, path: window.location.pathname });
+    try {
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon("/api/metrics/v1/events", new Blob([payload], { type: "application/json" }));
+        return;
+      }
+      window.fetch("/api/metrics/v1/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+        keepalive: true,
+        credentials: "omit"
+      }).catch(function () {});
+    } catch (ignore) {}
+  }
+
   /* Compartir una nota sin obligar a copiar y pegar. En navegadores con el
      diálogo nativo se usa ese canal; en escritorio se copia la URL y se lo
      confirma de forma accesible. El enlace de WhatsApp sigue funcionando sin
@@ -144,7 +166,9 @@
       var url = btn.getAttribute("data-share-url") || window.location.href;
       var title = btn.getAttribute("data-share-title") || document.title;
       if (navigator.share) {
-        navigator.share({ title: title, text: title, url: url }).catch(function () {});
+        navigator.share({ title: title, text: title, url: url }).then(function () {
+          recordShareMetric("share_native");
+        }).catch(function () {});
         return;
       }
       if (!navigator.clipboard || !navigator.clipboard.writeText) {
@@ -153,10 +177,16 @@
       }
       navigator.clipboard.writeText(url).then(function () {
         if (status) status.textContent = "Enlace copiado. Ya puede enviárselo a quien le pueda servir.";
+        recordShareMetric("share_copy");
       }).catch(function () {
         if (status) status.textContent = "Copie este enlace: " + url;
       });
     });
+
+    var whatsapp = document.querySelector("[data-share-whatsapp]");
+    if (whatsapp) {
+      whatsapp.addEventListener("click", function () { recordShareMetric("share_whatsapp"); });
+    }
   }
 
   if (document.readyState === "loading") {

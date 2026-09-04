@@ -70,10 +70,23 @@ def test_caption_has_distinct_facebook_and_instagram_contracts(tmp_path: Path) -
     assert facebook == copywriter.caption(nota, "facebook", "https://site.example/")
     assert instagram == copywriter.caption(nota, "instagram", "https://site.example/")
     assert nota.title in facebook and nota.title in instagram
-    assert "https://site.example/notas/" in facebook
+    assert "https://site.example/r/" in facebook
+    assert "source=facebook" in facebook
     assert "enlace" in instagram.lower() and "https://site.example/notas/" not in instagram
     assert "#MRAgentes" in facebook and "#MRAgentes" in instagram
     assert facebook != instagram
+
+
+@pytest.mark.trace("SOCIAL-COPY-015")
+@pytest.mark.baseline_green
+def test_tracked_note_url_keeps_only_social_source_and_encoded_slug(tmp_path: Path) -> None:
+    nota = make_nota(tmp_path)
+    tracked = copywriter.tracked_note_url(nota, "facebook", "https://site.example/")
+    assert tracked.startswith("https://site.example/r/")
+    assert tracked.endswith("?source=facebook")
+    assert "notas/" not in tracked
+    with pytest.raises(ValueError, match="network|red"):
+        copywriter.tracked_note_url(nota, "otra-red")
 
 
 @pytest.mark.trace("SOCIAL-COPY-006")
