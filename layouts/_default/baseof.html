@@ -35,6 +35,10 @@
 
 {{- $js := slice (resources.Get "js/site.js") (resources.Get "js/push.js") | resources.Concat "js/site.bundle.js" | minify | fingerprint "sha256" }}
 <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+{{- with resources.Get "js/impact-calculator.js" }}
+  {{- $calculator := . | minify | fingerprint "sha256" }}
+<script type="module" src="{{ $calculator.RelPermalink }}" integrity="{{ $calculator.Data.Integrity }}"></script>
+{{- end }}
 
 <link rel="icon" href="/faviconhand512.ico" sizes="any">
 <link rel="icon" href="/faviconhand512.png" type="image/png" sizes="512x512">
