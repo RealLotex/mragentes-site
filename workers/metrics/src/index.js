@@ -29,12 +29,19 @@ function validSlug(slug) {
   return /^[\p{L}0-9-]{1,160}$/u.test(slug);
 }
 
-export function metricPoint(event, dimension) {
-  return { indexes: [], blobs: [event, dimension], doubles: [1] };
+export function metricValues(event, dimension, now = new Date()) {
+  return [event, dimension, now.toISOString()];
+}
+
+async function recordMetric(db, event, dimension) {
+  await db
+    .prepare("INSERT INTO metric_events (event, dimension, occurred_at) VALUES (?1, ?2, ?3)")
+    .bind(...metricValues(event, dimension))
+    .run();
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (request.method === "OPTIONS" && url.pathname === "/api/metrics/v1/events") {
       return new Response(null, {
@@ -61,7 +68,7 @@ export default {
       if (!ALLOWED_EVENTS.has(payload?.event) || !validPath(payload?.path)) {
         return new Response("invalid event", { status: 400, headers: cors(request) });
       }
-      env.METRICS.writeDataPoint(metricPoint(payload.event, payload.path));
+      ctx.waitUntil(recordMetric(env.METRICS_DB, payload.event, payload.path));
       return noContent(request);
     }
 
@@ -72,7 +79,7 @@ export default {
       const source = url.searchParams.get("source");
       if (!validSlug(slug) || !ALLOWED_SOURCES.has(source)) return new Response("not found", { status: 404 });
       const destination = new URL("/notas/" + encodeURIComponent(slug) + "/", ORIGIN);
-      env.METRICS.writeDataPoint(metricPoint("social_referral", source + ":" + destination.pathname));
+      ctx.waitUntil(recordMetric(env.METRICS_DB, "social_referral", source + ":" + destination.pathname));
       return Response.redirect(destination.toString(), 302);
     }
 
