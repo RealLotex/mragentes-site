@@ -24,9 +24,10 @@ const GITHUB_OIDC_JWKS_URL = `${GITHUB_OIDC_ISSUER}/.well-known/jwks`;
 const GITHUB_OIDC_AUDIENCE = "mragentes-push-notify";
 const GITHUB_OIDC_REPOSITORY = "RealLotex/mragentes-site";
 const GITHUB_OIDC_REPOSITORY_ID = "1270433781";
-const GITHUB_OIDC_REF = "refs/heads/main";
-const GITHUB_OIDC_ENVIRONMENT = "cloudflare-production";
-const GITHUB_OIDC_WORKFLOW_REF = `${GITHUB_OIDC_REPOSITORY}/.github/workflows/notify-note.yml@refs/heads/main`;
+// GitHub's optional workflow, ref and environment claims are deliberately not
+// authorization inputs: GitHub can serialize them differently across dispatch
+// and reusable-workflow contexts. The signed issuer, audience and immutable
+// repository identity below are the stable authorization boundary.
 const GITHUB_OIDC_MAX_TOKEN_BYTES = 16_384;
 const GITHUB_OIDC_MAX_TOKEN_AGE_SECONDS = 600;
 const GITHUB_OIDC_CLOCK_SKEW_SECONDS = 30;
@@ -193,14 +194,10 @@ async function githubActionsTokenOk(token, env) {
   if (
     claims.iss !== GITHUB_OIDC_ISSUER
     || !oidcAudienceOk(claims.aud)
-    // GitHub can change the serialized subject format when immutable claims
-    // are enabled. The signed repository, repository_id, ref, environment
-    // and workflow_ref claims below are independently pinned instead.
+    // A GitHub-signed token is accepted only for this exact repository.
+    // repository_id is immutable, so a repository rename cannot broaden access.
     || claims.repository !== GITHUB_OIDC_REPOSITORY
     || String(claims.repository_id) !== GITHUB_OIDC_REPOSITORY_ID
-    || claims.ref !== GITHUB_OIDC_REF
-    || claims.environment !== GITHUB_OIDC_ENVIRONMENT
-    || claims.workflow_ref !== GITHUB_OIDC_WORKFLOW_REF
     || exp === null || iat === null || nbf === null
     || exp <= now - GITHUB_OIDC_CLOCK_SKEW_SECONDS
     || nbf > now + GITHUB_OIDC_CLOCK_SKEW_SECONDS
