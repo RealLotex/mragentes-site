@@ -12,6 +12,7 @@ tags:
   - trazabilidad
   - gobernanza
   - seguridad
+learning_level: "avanzado"
 sources:
   - "https://www.anthropic.com/news/improving-alignment-security-efforts"
   - "https://blog.google/innovation-and-ai/technology/developers-tools/antigravity-teamwork-multi-agent/"

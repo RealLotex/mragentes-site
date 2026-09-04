@@ -1,0 +1,17 @@
+# Rutas internas de aprendizaje. Los slugs permiten enlaces estables y
+# los niveles del front matter mantienen la progresión en futuras notas.
+- level: "Inicial"
+  title: "Entender antes de automatizar"
+  description: "Una entrada para reconocer una tarea, definir un límite y elegir un primer paso."
+  steps:
+    - slug: "de-la-demo-al-sistema-automatizar-con-ia-sin-perder-el-control"
+- level: "Intermedio"
+  title: "Diseñar con evidencia"
+  description: "Cómo evaluar costos, datos y permisos antes de ampliar el alcance."
+  steps:
+    - slug: "agentes-de-ia-con-freno-y-mapa-costos-datos-y-permisos"
+- level: "Avanzado"
+  title: "Coordinar sin perder trazabilidad"
+  description: "Una ruta para arquitectura, controles operativos y recuperación ante errores."
+  steps:
+    - slug: "agentes-en-equipo-con-controles-como-coordinar-ia-sin-perder-trazabilidad"

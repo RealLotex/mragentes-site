@@ -12,6 +12,7 @@ tags:
   - productividad
   - infraestructura
   - seguridad
+learning_level: "inicial"
 sources:
   - "https://openai.com/index/the-full-stack-behind-abundant-intelligence/"
   - "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/"
@@ -61,6 +62,20 @@ La validez de una automatización puede analizarse en tres planos. La validez de
 La evidencia examinada sugiere una transición desde integraciones ad hoc hacia interfaces, habilidades y procedimientos reutilizables. Sin embargo, la estandarización no elimina la responsabilidad de definir límites locales. Un protocolo puede describir una operación y un conector puede autenticarla, pero la organización conserva la obligación de decidir qué operación es admisible, qué evidencia debe conservarse y cuándo debe intervenir una persona. Esa separación entre capacidad técnica y autorización de negocio es la condición para que una demostración se convierta en infraestructura operable.
 
 La confianza no aparece por elegir la herramienta más nueva. Aparece cuando el sistema sabe qué puede hacer, muestra por qué lo hizo y tiene una salida segura cuando algo no encaja. Ahí es donde una demo de IA se convierte en una capacidad que una pyme puede operar todos los días.
+
+## Preguntas frecuentes
+
+### ¿Qué tarea conviene automatizar primero?
+
+Conviene empezar por una tarea frecuente, de bajo impacto y con un resultado que pueda comprobarse. Por ejemplo, preparar un borrador a partir de fuentes aprobadas. Ese alcance permite medir calidad, tiempo y necesidad de revisión antes de habilitar acciones externas.
+
+### ¿Por qué una demostración no alcanza para decidir?
+
+Una demostración muestra una interacción puntual. Un proceso operativo debe además registrar entradas, permisos, resultado y recuperación ante errores. La diferencia permite evaluar si el resultado se sostiene cuando cambian los datos o falla una herramienta.
+
+### ¿Qué control mínimo debe conservar una pyme?
+
+Debe poder identificar quién autorizó la ejecución, qué información se utilizó y cuál fue el resultado. También necesita una regla para detener o derivar una operación cuando la evidencia sea insuficiente. Esos elementos permiten corregir sin repetir una acción externa.
 
 ## Fuentes
 

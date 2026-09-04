@@ -21,6 +21,9 @@
       </span>
       {{- end }}
     </p>
+    {{- with .Params.learning_level }}
+    <p class="article-meta"><span>Nivel {{ . }}</span></p>
+    {{- end }}
     {{- with .Params.pillar }}
     {{- $pillar := index site.Data.editorial.pillars . }}
     {{- with $pillar }}

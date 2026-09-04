@@ -14,6 +14,7 @@
     "image_alt",
     "tags",
     "pillar",
+    "learning_level",
     "sources",
     "automation_id",
     "draft",
@@ -67,6 +68,10 @@
         "control-y-gobernanza",
         "casos-para-pymes"
       ]
+    },
+    "learning_level": {
+      "type": "string",
+      "enum": ["inicial", "intermedio", "avanzado"]
     },
     "sources": {
       "type": "array",

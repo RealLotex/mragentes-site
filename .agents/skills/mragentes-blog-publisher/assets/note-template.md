@@ -8,6 +8,7 @@ image_alt: "Descripción concreta del recurso visual."
 tags:
   - automatizacion
 pillar: "automatizacion-practica"
+learning_level: "inicial"
 sources:
   - "https://example.com/fuente-primaria"
 automation_id: "blog:YYYY-MM-DD:slug-portable"

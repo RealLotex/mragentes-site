@@ -48,6 +48,28 @@
     {{- end }}
   </div>
 
+{{- with site.Data.editorial.learning_routes }}
+<section id="pilares" class="col-wide reading-routes rule-top" aria-labelledby="reading-routes-title">
+  <p class="key" id="reading-routes-title">Rutas de lectura</p>
+  <div class="reading-routes__grid">
+    {{- range . }}
+    <article class="reading-route">
+      <p class="key">{{ .level }}</p>
+      <h2>{{ .title }}</h2>
+      <p>{{ .description }}</p>
+      <ol>
+        {{- range .steps }}
+        {{- with site.GetPage (printf "/notas/%s" .slug) }}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+        {{- end }}
+        {{- end }}
+      </ol>
+    </article>
+    {{- end }}
+  </div>
+</section>
+{{- end }}
+
   <ul class="index col-wide" data-index>
     {{- range $pages }}
     <li data-topics="{{ range $i, $t := .Params.tags }}{{ if $i }}|{{ end }}{{ $t | urlize }}{{ end }}">
