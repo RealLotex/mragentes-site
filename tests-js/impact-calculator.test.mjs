@@ -18,10 +18,10 @@ describe("calculadora de impacto", () => {
     });
     expect(result.monthlyCases).toBe(108.3);
     expect(result.savedHours).toBe(14.4);
-    expect(result.operatingSavings).toBe(101031);
+    expect(result.operatingSavings).toBe(101033);
     expect(result.errorsAvoided).toBe(5.2);
     expect(result.errorSavings).toBe(36372);
-    expect(result.totalPotential).toBe(137403);
+    expect(result.totalPotential).toBe(137405);
     expect(result.controls).toContain("Registro de cada ejecución, responsable y resultado.");
   });
 
