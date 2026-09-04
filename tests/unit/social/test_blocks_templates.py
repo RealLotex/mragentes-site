@@ -290,3 +290,26 @@ def test_template_render_rejects_ground_not_declared_by_template(
 
     with pytest.raises(ValueError, match="ground|fondo|permitido"):
         templates.get("mito").render(rich_piece(), "feed", seed=1, ground="transparent")
+
+
+@pytest.mark.trace("SOCIAL-RENDER-TEMPLATE-008")
+@pytest.mark.baseline_green
+def test_tarjetas_accepts_only_even_card_counts(monkeypatch: pytest.MonkeyPatch) -> None:
+    install_fast_render(monkeypatch)
+    _small_surfaces(monkeypatch)
+
+    for count in (2, 4, 6):
+        piece = templates.Piece(
+            title="Controles del proceso",
+            items=[(f"control {index}", "Explicación breve y verificable.") for index in range(count)],
+        )
+        rendered = templates.render("tarjetas", piece, "portrait", seed=count)
+        assert rendered.surface.key == "portrait"
+
+    for count in (0, 1, 3, 5, 7):
+        piece = templates.Piece(
+            title="Controles del proceso",
+            items=[(f"control {index}", "Explicación breve.") for index in range(count)],
+        )
+        with pytest.raises(ValueError, match="exactamente 2, 4 o 6"):
+            templates.render("tarjetas", piece, "feed", seed=count)
