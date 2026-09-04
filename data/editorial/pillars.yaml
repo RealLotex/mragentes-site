@@ -1,0 +1,14 @@
+# Pilares editoriales de MR Agentes.
+# Cada nota automatizada pertenece a uno y solo uno.
+automatizacion-practica:
+  label: "Automatización práctica"
+  description: "Métodos claros para pasar de una tarea manual a un proceso verificable."
+  audience_question: "¿Cómo se implementa este proceso de forma gradual?"
+control-y-gobernanza:
+  label: "Control y gobernanza"
+  description: "Criterios para conservar trazabilidad, límites y recuperación ante errores."
+  audience_question: "¿Cómo se conserva el control cuando interviene IA?"
+casos-para-pymes:
+  label: "Casos para pymes"
+  description: "Decisiones operativas, resultados observables y aprendizajes transferibles."
+  audience_question: "¿Qué puede aplicar una pyme en un caso semejante?"
