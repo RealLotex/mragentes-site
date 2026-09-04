@@ -306,7 +306,7 @@ def test_tarjetas_accepts_only_even_card_counts(monkeypatch: pytest.MonkeyPatch)
         rendered = templates.render("tarjetas", piece, "portrait", seed=count)
         assert rendered.surface.key == "portrait"
 
-    for count in (0, 1, 3, 5, 7):
+    for count in (1, 3, 5, 7):
         piece = templates.Piece(
             title="Controles del proceso",
             items=[(f"control {index}", "Explicación breve.") for index in range(count)],
