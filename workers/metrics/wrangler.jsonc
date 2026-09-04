@@ -4,7 +4,12 @@
   "compatibility_date": "2026-09-04",
   "compatibility_flags": ["nodejs_compat"],
   "observability": { "enabled": true, "head_sampling_rate": 0.05 },
-  "analytics_engine_datasets": [
-    { "binding": "METRICS", "dataset": "mragentes_metrics" }
+  "d1_databases": [
+    {
+      "binding": "METRICS_DB",
+      "database_name": "mragentes_metrics",
+      "database_id": "aedc62f9-5e08-4722-bf4a-26958b982212",
+      "migrations_dir": "migrations"
+    }
   ]
 }
