@@ -24,6 +24,11 @@ _AUTOMATION_ID_RE = re.compile(
     r"^blog:(?P<date>\d{4}-\d{2}-\d{2}):(?P<slug>[a-z0-9]+(?:-[a-z0-9]+)*)$"
 )
 _TRACKING_QUERY_KEYS = {"fbclid", "gclid", "mc_cid", "mc_eid"}
+_EDITORIAL_PILLARS = frozenset({
+    "automatizacion-practica",
+    "control-y-gobernanza",
+    "casos-para-pymes",
+})
 _FRONT_MATTER_FIELDS = {
     "schema_version",
     "title",
@@ -32,6 +37,7 @@ _FRONT_MATTER_FIELDS = {
     "image",
     "image_alt",
     "tags",
+    "pillar",
     "sources",
     "automation_id",
     "slug",
@@ -238,6 +244,7 @@ def build_front_matter(
     image: str,
     image_alt: str,
     tags: list[str],
+    pillar: str,
     sources: list[str],
     automation_id: str,
     aliases: list[str] | None = None,
@@ -252,6 +259,7 @@ def build_front_matter(
         "image": image,
         "image_alt": image_alt,
         "tags": list(tags),
+        "pillar": pillar,
         "sources": list(sources),
         "automation_id": automation_id,
         "slug": automation_id.rsplit(":", 1)[-1],
@@ -347,6 +355,11 @@ def validate_front_matter(front_matter: dict[str, Any]) -> dict[str, Any]:
         if normalized not in normalized_tags:
             normalized_tags.append(normalized)
     result["tags"] = normalized_tags
+
+    pillar = result["pillar"]
+    if not isinstance(pillar, str) or pillar not in _EDITORIAL_PILLARS:
+        raise ValueError("pillar must be one of the editorial pillars")
+    result["pillar"] = pillar
 
     sources = result["sources"]
     if not isinstance(sources, list) or not sources:

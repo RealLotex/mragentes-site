@@ -24,6 +24,7 @@ def _front_matter(trace_id: str, **overrides: object) -> dict[str, object]:
         "image": "/images/stock/modelo-verificable.webp",
         "image_alt": "Diagrama abstracto de un modelo y sus controles.",
         "tags": ["ia", "modelos"],
+        "pillar": "automatizacion-practica",
         "sources": ["https://example.test/research/model-card"],
         "automation_id": "blog:2026-08-26:modelo-verificable",
         "aliases": [],
@@ -89,6 +90,7 @@ def test_front_matter_contains_closed_required_schema() -> None:
         "image",
         "image_alt",
         "tags",
+        "pillar",
         "sources",
         "automation_id",
         "slug",
@@ -252,6 +254,19 @@ def test_front_matter_validation_is_deterministic_and_non_mutating() -> None:
     second = _validate(value, "BLOG-FM-012")
     assert first == second, trace_message("BLOG-FM-012", "validation is not deterministic")
     assert value == original, trace_message("BLOG-FM-012", "validation mutated caller input")
+
+
+
+@pytest.mark.trace("BLOG-FM-013")
+@pytest.mark.red_expected
+def test_pillar_is_closed_and_required_for_each_automated_note() -> None:
+    valid = _front_matter("BLOG-FM-013", pillar="control-y-gobernanza")
+    assert _validate(valid, "BLOG-FM-013")["pillar"] == "control-y-gobernanza"
+    for value in ("", "novedades", "Automatizacion-Practica", None):
+        candidate = dict(valid)
+        candidate["pillar"] = value
+        with pytest.raises((TypeError, ValueError)):
+            _validate(candidate, "BLOG-FM-013")
 
 
 @pytest.mark.trace("BLOG-ATOMIC-001")

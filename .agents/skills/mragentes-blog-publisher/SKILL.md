@@ -17,7 +17,7 @@ La salida es exactamente una nota nueva o reutilizada, su asset bajo `static/ima
 
 1. Calculá `blog:<fecha>:<slug>` y reutilizá cualquier borrador con esa identidad; nunca generes una segunda nota para la fecha.
 2. Seleccioná 2 o 3 noticias `pending`, aunque hayan sido descubiertas días antes, y reservá sólo para ese identificador.
-3. Confirmá fuentes, nombres, fechas y cifras. Redactá una síntesis original con conclusión accionable.
+3. Elegí exactamente un pilar editorial y declaralo en el front matter: `automatizacion-practica` (métodos, pasos y herramientas), `control-y-gobernanza` (trazabilidad, límites, seguridad) o `casos-para-pymes` (problema, decisión, resultado y aprendizaje). Confirmá fuentes, nombres, fechas y cifras. Redactá una síntesis original con conclusión accionable.
 4. Creá o elegí un asset permitido, optimizado y con texto alternativo. No incluyas credenciales, material sin licencia ni referencias privadas.
 5. Generá front matter conforme a `.automation/schemas/blog-draft.schema.json` y un nombre portable mediante `scripts/automation/blog_guard.py`.
 6. Ejecutá validación de enlaces, schema, asset, pruebas y build de Hugo.

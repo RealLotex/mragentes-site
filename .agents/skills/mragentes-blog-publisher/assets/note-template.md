@@ -7,6 +7,7 @@ image: "/images/stock/archivo-portable.webp"
 image_alt: "Descripción concreta del recurso visual."
 tags:
   - automatizacion
+pillar: "automatizacion-practica"
 sources:
   - "https://example.com/fuente-primaria"
 automation_id: "blog:YYYY-MM-DD:slug-portable"
