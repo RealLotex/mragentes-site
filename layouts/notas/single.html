@@ -62,7 +62,7 @@
       <button class="btn btn--minio" type="button" data-share-url="{{ .Permalink }}" data-share-title="{{ .Title }}">
         Compartir esta nota
       </button>
-      <a class="arrow-link" href="https://wa.me/?text={{ $shareText | urlquery }}" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+      <a class="arrow-link" href="https://wa.me/?text={{ $shareText | urlquery }}" target="_blank" rel="noopener" data-share-whatsapp>Enviar por WhatsApp</a>
     </div>
     <p class="form-note" data-share-status aria-live="polite"></p>
   </aside>
