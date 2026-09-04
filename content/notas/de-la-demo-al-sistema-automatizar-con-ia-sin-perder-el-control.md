@@ -12,6 +12,7 @@ tags:
   - productividad
   - infraestructura
   - seguridad
+learning_level: "inicial"
 sources:
   - "https://openai.com/index/the-full-stack-behind-abundant-intelligence/"
   - "https://aws.amazon.com/about-aws/whats-new/2026/08/redshift-agenttoolkit-for-ai-assisted-datawarehouse-mgmt/"
