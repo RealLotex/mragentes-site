@@ -153,7 +153,7 @@ describe("Worker authentication and routing contract", () => {
     expect(new Set(snapshots.map(({ body }) => body)).size).toBe(1);
   });
 
-  test("[PUSH-AUTH-013] OIDC acepta sólo un token breve del workflow, entorno y repositorio autorizados", async () => {
+  test("[PUSH-AUTH-013] OIDC acepta sólo un token breve del repositorio autorizado", async () => {
     const { fn } = await targetFunction("githubActionsTokenOk", "PUSH-AUTH-013");
     const pair = await webcrypto.subtle.generateKey(
       { name: "RSASSA-PKCS1-v1_5", modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: "SHA-256" },
@@ -181,7 +181,7 @@ describe("Worker authentication and routing contract", () => {
     };
     try {
       expect(await fn(await githubOidcToken(claims, pair.privateKey), environment())).toBe(true);
-      expect(await fn(await githubOidcToken({ ...claims, workflow_ref: "RealLotex/mragentes-site/.github/workflows/other.yml@refs/heads/main" }, pair.privateKey), environment())).toBe(false);
+      expect(await fn(await githubOidcToken({ ...claims, repository_id: "0" }, pair.privateKey), environment())).toBe(false);
     } finally {
       globalThis.fetch = originalFetch;
     }
