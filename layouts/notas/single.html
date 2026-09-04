@@ -21,6 +21,15 @@
       </span>
       {{- end }}
     </p>
+    {{- with .Params.pillar }}
+    {{- $pillar := index site.Data.editorial.pillars . }}
+    {{- with $pillar }}
+    <p class="article-meta">
+      <a class="topic" href="{{ "/notas/#pilares" | relURL }}">{{ .label }}</a>
+      <span>{{ .description }}</span>
+    </p>
+    {{- end }}
+    {{- end }}
   </header>
 
   {{- /* La imagen de portada de cada nota sigue existiendo en el front matter
