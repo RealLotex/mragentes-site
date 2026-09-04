@@ -1,0 +1,78 @@
+{{ define "main" }}
+<article class="sheet">
+  <header class="article-head">
+    <p class="key col-key">Herramienta 01</p>
+    <hgroup>
+      <h1>{{ .Title }}</h1>
+      <p class="lede">Convertí un proceso manual en una estimación explícita. La calculadora no envía ni guarda los datos que ingresás.</p>
+    </hgroup>
+  </header>
+
+  <section class="impact-calculator col-wide" aria-labelledby="calculator-form-title">
+    <form class="impact-calculator__form" data-impact-calculator novalidate>
+      <div class="impact-field impact-field--wide">
+        <h2 id="calculator-form-title">Supuestos del proceso</h2>
+        <p class="impact-note">Usá valores aproximados. El resultado mensual toma 4,33 semanas y separa el tiempo de los errores evitables.</p>
+      </div>
+
+      <div class="impact-field">
+        <label for="weekly-volume">Casos por semana</label>
+        <input id="weekly-volume" name="weekly_volume" type="number" min="0" step="1" inputmode="numeric" value="25">
+        <small>Pedidos, consultas, comprobantes u otra unidad repetible.</small>
+      </div>
+      <div class="impact-field">
+        <label for="manual-minutes">Minutos manuales por caso</label>
+        <input id="manual-minutes" name="manual_minutes" type="number" min="0" step="0.1" inputmode="decimal" value="12">
+        <small>Tiempo actual, incluyendo búsqueda y carga.</small>
+      </div>
+      <div class="impact-field">
+        <label for="automated-minutes">Minutos con automatización por caso</label>
+        <input id="automated-minutes" name="automated_minutes" type="number" min="0" step="0.1" inputmode="decimal" value="4">
+        <small>Incluí la revisión humana que todavía haga falta.</small>
+      </div>
+      <div class="impact-field">
+        <label for="hourly-cost">Costo por hora (ARS)</label>
+        <input id="hourly-cost" name="hourly_cost" type="number" min="0" step="1" inputmode="numeric" value="7000">
+        <small>Costo interno estimado de la hora que hoy absorbe el proceso.</small>
+      </div>
+      <div class="impact-field">
+        <label for="manual-error-rate">Tasa actual de errores (%)</label>
+        <input id="manual-error-rate" name="manual_error_rate" type="number" min="0" max="100" step="0.1" inputmode="decimal" value="8">
+        <small>Porcentaje aproximado de casos que requieren corrección.</small>
+      </div>
+      <div class="impact-field">
+        <label for="error-reduction">Reducción esperada de errores (%)</label>
+        <input id="error-reduction" name="error_reduction" type="number" min="0" max="100" step="0.1" inputmode="decimal" value="60">
+        <small>Hipótesis a validar con una prueba acotada.</small>
+      </div>
+      <div class="impact-field impact-field--wide">
+        <label for="cost-per-error">Costo estimado por error (ARS)</label>
+        <input id="cost-per-error" name="cost_per_error" type="number" min="0" step="1" inputmode="numeric" value="7000">
+        <small>Tiempo de corrección, retrabajo, demoras u otro costo medible por caso.</small>
+      </div>
+
+      <div class="impact-calculator__actions">
+        <button class="btn btn--minio" type="reset">Restablecer supuestos</button>
+        <p class="impact-assumptions">Los cálculos se realizan en este dispositivo. Son una estimación para priorizar una prueba, no una garantía de ahorro.</p>
+      </div>
+    </form>
+
+    <aside class="impact-results" data-impact-results aria-live="polite" aria-atomic="true" aria-label="Resultado estimado">
+      <p class="key">Estimación mensual</p>
+      <h2>Impacto posible</h2>
+      <dl class="impact-metrics">
+        <div class="impact-metric"><dt>Horas recuperables</dt><dd data-impact-hours>—</dd></div>
+        <div class="impact-metric"><dt>Ahorro por operación</dt><dd data-impact-operating>—</dd></div>
+        <div class="impact-metric"><dt>Errores evitables</dt><dd data-impact-errors>—</dd></div>
+        <div class="impact-metric"><dt>Impacto económico posible</dt><dd data-impact-total>—</dd></div>
+      </dl>
+      <div class="impact-controls">
+        <h3>Controles para sostenerlo</h3>
+        <ul data-impact-controls></ul>
+      </div>
+    </aside>
+  </section>
+</article>
+
+{{ partial "closer.html" . }}
+{{ end }}
