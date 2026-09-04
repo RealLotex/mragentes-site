@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "run_id": "news-2026-09-04",
+  "kind": "news_scout",
+  "status": "success",
+  "started_at": "2026-09-04T21:02:41Z",
+  "finished_at": "2026-09-04T21:04:14Z",
+  "checks": [
+    {
+      "name": "github_connector_authentication",
+      "status": "passed",
+      "detail": {
+        "account": "RealLotex",
+        "repository": "RealLotex/mragentes-site",
+        "permission": "admin"
+      },
+      "required": true
+    },
+    {
+      "name": "source_verification",
+      "status": "passed",
+      "detail": {
+        "verified_items": 0,
+        "primary_sources": [
+          "Anthropic",
+          "OpenAI",
+          "Google",
+          "AWS"
+        ],
+        "note": "No eligible primary publication after the already queued 2026-09-01 items."
+      },
+      "required": true
+    },
+    {
+      "name": "news_item_schema_v1",
+      "status": "passed",
+      "detail": {
+        "validated_items": 0
+      },
+      "required": true
+    },
+    {
+      "name": "deduplication",
+      "status": "passed",
+      "detail": {
+        "candidate_items": 0,
+        "duplicates": 0,
+        "queue_revision_before": 7
+      },
+      "required": true
+    },
+    {
+      "name": "focused_tests",
+      "status": "passed",
+      "detail": {
+        "command": "pytest news queue, schema, report, skill, repository contract and runtime independence tests",
+        "passed": 69
+      },
+      "required": true
+    },
+    {
+      "name": "secret_scan",
+      "status": "warning",
+      "detail": {
+        "command": "scan_secrets.py --all",
+        "result": "not completed because unrelated dirty worktree history scan was interrupted; no files from this run were scanned into the commit."
+      }
+    },
+    {
+      "name": "diff_check",
+      "status": "passed",
+      "detail": {
+        "paths": [
+          ".automation/reports/news-2026-09-04.json"
+        ]
+      },
+      "required": true
+    }
+  ],
+  "effects": [
+    {
+      "kind": "remote_commit",
+      "status": "confirmed",
+      "target": "automation/news/news-2026-09-04",
+      "detail": {
+        "parent_sha": "6784ca114fa51f5ac63290ef3e124fedd7e4e101",
+        "changed_paths": [
+          ".automation/reports/news-2026-09-04.json"
+        ],
+        "commit_count": 1
+      }
+    }
+  ],
+  "summary": {
+    "local_date": "2026-09-04",
+    "timezone": "America/Cordoba",
+    "added": 0,
+    "duplicates": 0,
+    "queue_revision": 7,
+    "ids": [],
+    "external_publication": false
+  }
+}
