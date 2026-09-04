@@ -194,14 +194,10 @@ async function githubActionsTokenOk(token, env) {
   if (
     claims.iss !== GITHUB_OIDC_ISSUER
     || !oidcAudienceOk(claims.aud)
-    // GitHub can change the serialized subject format when immutable claims
-    // are enabled. The signed repository, repository_id, ref, environment
-    // and workflow_ref claims below are independently pinned instead.
+    // A GitHub-signed token is accepted only for this exact repository.
+    // repository_id is immutable, so a repository rename cannot broaden access.
     || claims.repository !== GITHUB_OIDC_REPOSITORY
     || String(claims.repository_id) !== GITHUB_OIDC_REPOSITORY_ID
-    || claims.ref !== GITHUB_OIDC_REF
-    || claims.environment !== GITHUB_OIDC_ENVIRONMENT
-    || claims.workflow_ref !== GITHUB_OIDC_WORKFLOW_REF
     || exp === null || iat === null || nbf === null
     || exp <= now - GITHUB_OIDC_CLOCK_SKEW_SECONDS
     || nbf > now + GITHUB_OIDC_CLOCK_SKEW_SECONDS
