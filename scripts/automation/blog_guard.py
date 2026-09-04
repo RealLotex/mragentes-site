@@ -29,6 +29,7 @@ _EDITORIAL_PILLARS = frozenset({
     "control-y-gobernanza",
     "casos-para-pymes",
 })
+_LEARNING_LEVELS = frozenset({"inicial", "intermedio", "avanzado"})
 _FRONT_MATTER_FIELDS = {
     "schema_version",
     "title",
@@ -38,6 +39,7 @@ _FRONT_MATTER_FIELDS = {
     "image_alt",
     "tags",
     "pillar",
+    "learning_level",
     "sources",
     "automation_id",
     "slug",
@@ -245,6 +247,7 @@ def build_front_matter(
     image_alt: str,
     tags: list[str],
     pillar: str,
+    learning_level: str,
     sources: list[str],
     automation_id: str,
     aliases: list[str] | None = None,
@@ -260,6 +263,7 @@ def build_front_matter(
         "image_alt": image_alt,
         "tags": list(tags),
         "pillar": pillar,
+        "learning_level": learning_level,
         "sources": list(sources),
         "automation_id": automation_id,
         "slug": automation_id.rsplit(":", 1)[-1],
@@ -360,6 +364,11 @@ def validate_front_matter(front_matter: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(pillar, str) or pillar not in _EDITORIAL_PILLARS:
         raise ValueError("pillar must be one of the editorial pillars")
     result["pillar"] = pillar
+
+    learning_level = result["learning_level"]
+    if not isinstance(learning_level, str) or learning_level not in _LEARNING_LEVELS:
+        raise ValueError("learning_level must be inicial, intermedio or avanzado")
+    result["learning_level"] = learning_level
 
     sources = result["sources"]
     if not isinstance(sources, list) or not sources:
