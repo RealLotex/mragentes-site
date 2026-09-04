@@ -13,6 +13,7 @@
     "image",
     "image_alt",
     "tags",
+    "pillar",
     "sources",
     "automation_id",
     "draft",
@@ -58,6 +59,14 @@
         "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
         "maxLength": 50
       }
+    },
+    "pillar": {
+      "type": "string",
+      "enum": [
+        "automatizacion-practica",
+        "control-y-gobernanza",
+        "casos-para-pymes"
+      ]
     },
     "sources": {
       "type": "array",
