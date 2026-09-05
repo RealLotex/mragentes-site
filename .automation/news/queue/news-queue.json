@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 7,
-  "updated_at": "2026-09-03T21:12:00Z",
+  "revision": 8,
+  "updated_at": "2026-09-05T21:03:40Z",
   "items": [
     {
       "schema_version": 1,
@@ -335,6 +335,89 @@
       ],
       "summary": "Un catálogo privado ayuda a las organizaciones a encontrar, aprobar, auditar y reutilizar agentes y herramientas.",
       "language": "es",
+      "priority": 4
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-998101fc5c402dc6",
+      "title": "Microsoft informa que India lidera la adopción de equipos humano-agente",
+      "canonical_url": "https://news.microsoft.com/source/asia/2026/09/03/indias-ai-advantage-is-human-microsoft-work-trend-index-2026-finds-india-among-the-worlds-leading-frontier-workforces/",
+      "source": "Microsoft News Centre India",
+      "entity": "Microsoft",
+      "published_at": "2026-09-03T00:00:00Z",
+      "discovered_at": "2026-09-05T21:03:40Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://news.microsoft.com/source/asia/2026/09/03/indias-ai-advantage-is-human-microsoft-work-trend-index-2026-finds-india-among-the-worlds-leading-frontier-workforces/",
+          "claim": "Microsoft reporta que 32% de los usuarios de IA en India son Frontier Professionals que rediseñan su trabajo con agentes, frente a 16% global, y que 63% prioriza el control de calidad humano."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "productividad",
+        "pymes",
+        "gobernanza"
+      ],
+      "summary": "El informe de Microsoft muestra cómo equipos humano-agente combinan automatización, rediseño del trabajo y control de calidad humano.",
+      "language": "es",
+      "geography": "India",
+      "priority": 4
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-5f3366588450dbdb",
+      "title": "AWS presenta un marco de seguridad para detectar y responder a agentes",
+      "canonical_url": "https://aws.amazon.com/blogs/security/agentic-security-detection-and-response-at-machine-speed/",
+      "source": "AWS Security Blog",
+      "entity": "AWS",
+      "published_at": "2026-09-02T00:00:00Z",
+      "discovered_at": "2026-09-05T21:03:40Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://aws.amazon.com/blogs/security/agentic-security-detection-and-response-at-machine-speed/",
+          "claim": "AWS publica junto con SANS un marco práctico para proteger cargas agentic a escala empresarial, con énfasis en agentes que autentican, ejecutan flujos y toman decisiones sobre infraestructura."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "seguridad",
+        "gobernanza",
+        "automatizacion"
+      ],
+      "summary": "AWS y SANS proponen prácticas para detectar y responder a riesgos de agentes que ejecutan flujos con acceso a infraestructura.",
+      "language": "es",
+      "priority": 5
+    },
+    {
+      "schema_version": 1,
+      "id": "news-v1-c6ac5fae21ad3de2",
+      "title": "OpenAI destina mil millones de dólares a defensores de servicios esenciales",
+      "canonical_url": "https://openai.com/index/daybreak-for-frontline-defenders/",
+      "source": "OpenAI",
+      "entity": "OpenAI Daybreak",
+      "published_at": "2026-09-03T00:00:00Z",
+      "discovered_at": "2026-09-05T21:03:40Z",
+      "status": "pending",
+      "evidence": [
+        {
+          "url": "https://openai.com/index/daybreak-for-frontline-defenders/",
+          "claim": "OpenAI anuncia mil millones de dólares en acceso subsidiado a capacidades cibernéticas, capacitación y apoyo para defensores de servicios esenciales, con más de 35 productos y servicios asociados."
+        }
+      ],
+      "tags": [
+        "ia",
+        "seguridad",
+        "automatizacion",
+        "pymes",
+        "infraestructura"
+      ],
+      "summary": "OpenAI amplía el acceso subsidiado a capacidades de ciberdefensa y soporte práctico para organizaciones con recursos limitados.",
+      "language": "es",
+      "geography": "global",
       "priority": 4
     }
   ]
