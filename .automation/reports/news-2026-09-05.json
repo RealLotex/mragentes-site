@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "run_id": "news-2026-09-05",
+  "kind": "news_scout",
+  "status": "success",
+  "started_at": "2026-09-05T21:02:41Z",
+  "finished_at": "2026-09-05T21:03:40Z",
+  "checks": [
+    {
+      "name": "github_connector_authentication",
+      "status": "passed",
+      "detail": {
+        "account": "RealLotex",
+        "repository": "RealLotex/mragentes-site",
+        "permission": "admin"
+      },
+      "required": true
+    },
+    {
+      "name": "source_verification",
+      "status": "passed",
+      "detail": {
+        "verified_items": 3,
+        "primary_sources": [
+          "Microsoft",
+          "AWS",
+          "OpenAI"
+        ],
+        "published_dates": [
+          "2026-09-02",
+          "2026-09-03"
+        ],
+        "note": "Three distinct primary publications verified; no Meta, Cloudflare, blog-note or external publication."
+      },
+      "required": true
+    },
+    {
+      "name": "news_item_schema_v1",
+      "status": "passed",
+      "detail": {
+        "validated_items": 3
+      },
+      "required": true
+    },
+    {
+      "name": "deduplication",
+      "status": "passed",
+      "detail": {
+        "candidate_items": 3,
+        "accepted_items": 3,
+        "duplicates": 0,
+        "queue_revision_before": 7,
+        "queue_revision_after": 8
+      },
+      "required": true
+    },
+    {
+      "name": "focused_tests",
+      "status": "passed",
+      "detail": {
+        "command": "pytest news queue, schema, migration, report, repository contract and runtime independence tests",
+        "passed": 79
+      },
+      "required": true
+    },
+    {
+      "name": "secret_scan",
+      "status": "warning",
+      "detail": {
+        "command": "scan_secrets.py --all",
+        "result": "not completed because the unrelated dirty worktree contains pre-existing changes; only explicit remote paths were prepared and no local files were staged."
+      }
+    },
+    {
+      "name": "diff_check",
+      "status": "passed",
+      "detail": {
+        "paths": [
+          ".automation/news/queue/news-queue.json",
+          ".automation/reports/news-2026-09-05.json"
+        ],
+        "result": "remote JSON payloads validated; no local diff was staged"
+      },
+      "required": true
+    }
+  ],
+  "effects": [
+    {
+      "kind": "remote_commit",
+      "status": "pending",
+      "target": "automation/news/news-2026-09-05",
+      "detail": {
+        "parent_sha": "a8715c5b6568020624a31564064c7001fbd07ca8",
+        "changed_paths": [
+          ".automation/news/queue/news-queue.json",
+          ".automation/reports/news-2026-09-05.json"
+        ],
+        "commit_count": 1
+      }
+    }
+  ],
+  "summary": {
+    "local_date": "2026-09-05",
+    "timezone": "America/Cordoba",
+    "added": 3,
+    "duplicates": 0,
+    "queue_revision": 8,
+    "ids": [
+      "news-v1-998101fc5c402dc6",
+      "news-v1-5f3366588450dbdb",
+      "news-v1-c6ac5fae21ad3de2"
+    ],
+    "external_publication": false
+  }
+}
