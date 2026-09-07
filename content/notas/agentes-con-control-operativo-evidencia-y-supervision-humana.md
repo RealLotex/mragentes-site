@@ -65,7 +65,7 @@ El marco también ayuda a distinguir entre una alerta y un control. Una alerta i
 
 [OpenAI anunció Daybreak para apoyar a defensores de servicios esenciales](https://openai.com/index/daybreak-for-frontline-defenders/), con acceso subsidiado a capacidades cibernéticas, capacitación y servicios asociados. La iniciativa recuerda que la seguridad no se reduce a adquirir un modelo. También depende de que la organización tenga conocimientos, procedimientos y tiempo para interpretar una alerta y responder.
 
-Para una pyme, una primera etapa razonable es elegir un proceso de bajo impacto y documentar el circuito completo. El equipo puede probar qué información necesita el agente, qué salida se considera válida, quién revisa y cómo se detiene la tarea. Sólo después de observar el circuito corresponde ampliar la autonomía o conectar una nueva fuente. El acceso a una capacidad avanzada no elimina la necesidad de un procedimiento local.
+Para una pyme, una primera etapa razonable es elegir un proceso de bajo impacto y documentar el circuito completo. El equipo puede probar qué información necesita el agente, qué salida se considera válida, quién debe revisar y cómo se detiene la tarea. Sólo después de observar el circuito corresponde ampliar la autonomía o conectar una nueva fuente. El acceso a una capacidad avanzada no elimina la necesidad de un procedimiento local.
 
 | Control | Pregunta de revisión | Evidencia mínima |
 | --- | --- | --- |
