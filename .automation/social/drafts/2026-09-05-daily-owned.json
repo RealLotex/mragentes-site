@@ -15,6 +15,5 @@
     "facebook": "Cuando un sistema produce un resultado, también debería conservar la evidencia mínima que permite revisarlo.\n\nEsa evidencia puede incluir la fuente consultada, la regla aplicada, la operación realizada y el estado final. No hace falta guardar información personal ni razonamientos internos para saber qué ocurrió.\n\nEjemplo: si una factura queda en revisión, el registro debe indicar qué campo faltó y quién debe resolverlo.\n\nEnviaselo ↗ a alguien que le pueda servir.\n\n#MRAgentes #AgentesDeIA #Automatizacion #Trazabilidad #Procesos #IAparaPymes",
     "instagram": "Registrar una decisión permite corregirla.\n\nUna evidencia mínima puede incluir:\n\n• fuente consultada\n• regla aplicada\n• operación realizada\n• estado final\n\nSi una factura queda en revisión, el sistema debe indicar qué dato faltó y quién debe resolverlo.\n\nEnviaselo ↗ a alguien que le pueda servir.\n\n#MRAgentes #AgentesDeIA #Automatizacion #Trazabilidad #Procesos #IAparaPymes"
   },
-  "created_at": "2026-09-05T15:00:00-03:00",
-  "recovery": true
+  "created_at": "2026-09-05T15:00:00-03:00"
 }
