@@ -8,7 +8,7 @@
   "dedupe_key": "daily_owned:2026-09-05:sha256:6be23f12b3ce7a703d6db099528300b6afe5c19330065f65dc0d0e7b77f79301",
   "asset": {
     "path": "static/images/social/generated/daily-owned-2026-08-30.jpg",
-    "sha256": "e362257befd42cd2597b00232aa6b5670f7f85bebe8d9e8d4e6590",
+    "sha256": "e362257befd42cd2597b00232aa6b5670f7f85bebe8d9e8d4cb986d3b72e6590",
     "alt": "Placa editorial de MR Agentes sobre evidencia mínima para revisar decisiones automatizadas."
   },
   "captions": {
