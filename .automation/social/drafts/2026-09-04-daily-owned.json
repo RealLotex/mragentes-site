@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "run_id": "social:daily_owned:2026-09-04",
+  "kind": "daily_owned",
+  "topic": "Una automatización necesita un límite verificable",
+  "topic_hash": "sha256:bfdb63122c8d7f9316729926b2f5ced1581b6bfbf5bc2926457b2dc56e9b1241",
+  "content_hash": "sha256:304899a455d6299ff39f01acbdf8991c3be486c568b045d33620fcc97fa2878f",
+  "dedupe_key": "daily_owned:2026-09-04:sha256:304899a455d6299ff39f01acbdf8991c3be486c568b045d33620fcc97fa2878f",
+  "asset": {
+    "path": "static/images/social/generated/daily-owned-2026-08-29.jpg",
+    "sha256": "01029150da7a546db3716947efefa9656ef16c32e9234a560ff88a201922b545",
+    "alt": "Placa editorial de MR Agentes sobre límites verificables para una automatización."
+  },
+  "captions": {
+    "facebook": "Una automatización útil no se mide por cuántas acciones puede ejecutar, sino por las que puede explicar.\n\nDefinir un límite significa indicar qué datos puede leer, qué operación puede preparar y cuándo debe derivar el caso a una persona. Por ejemplo, un sistema puede clasificar una consulta, pero no confirmar un precio que no esté en la información aprobada.\n\nPrimer paso: escribir una lista de tres operaciones permitidas y una condición de derivación.\n\nEnviaselo ↗ a alguien que le pueda servir.\n\n#MRAgentes #AgentesDeIA #Automatizacion #Gobernanza #Procesos #IAparaPymes",
+    "instagram": "Una automatización útil necesita límites verificables.\n\nPuede clasificar una consulta y preparar una respuesta, pero no debería confirmar un precio que no figure en una fuente aprobada.\n\nPrimer paso: listar tres operaciones permitidas y una condición que obligue a derivar el caso a una persona.\n\nEnviaselo ↗ a alguien que le pueda servir.\n\n#MRAgentes #AgentesDeIA #Automatizacion #Gobernanza #Procesos #IAparaPymes"
+  },
+  "created_at": "2026-09-04T15:00:00-03:00",
+  "recovery": true
+}

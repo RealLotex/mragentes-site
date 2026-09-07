@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 8,
-  "updated_at": "2026-09-05T21:03:40Z",
+  "revision": 9,
+  "updated_at": "2026-09-06T19:00:00Z",
   "items": [
     {
       "schema_version": 1,
@@ -238,7 +238,7 @@
       "entity": "Anthropic",
       "published_at": "2026-09-01T00:00:00Z",
       "discovered_at": "2026-09-03T21:02:06Z",
-      "status": "pending",
+      "status": "consumed",
       "evidence": [
         {
           "url": "https://www.anthropic.com/news/enterprise-frontier-safeguards",
@@ -254,7 +254,9 @@
       ],
       "summary": "Salvaguardas para usar modelos avanzados con monitoreo y control de datos dentro de la infraestructura de la empresa.",
       "language": "es",
-      "priority": 5
+      "priority": 5,
+      "consumed_by": "agentes-con-control-operativo-evidencia-y-supervision-humana",
+      "consumed_at": "2026-09-06T19:00:00Z"
     },
     {
       "schema_version": 1,
@@ -265,7 +267,7 @@
       "entity": "OpenAI",
       "published_at": "2026-09-01T00:00:00Z",
       "discovered_at": "2026-09-03T21:02:06Z",
-      "status": "pending",
+      "status": "consumed",
       "evidence": [
         {
           "url": "https://openai.com/index/path-to-astra/",
@@ -281,7 +283,9 @@
       ],
       "summary": "OpenAI reporta un nuevo umbral de capacidad y controles adicionales para detectar y contener acciones no alineadas.",
       "language": "es",
-      "priority": 5
+      "priority": 5,
+      "consumed_by": "agentes-con-control-operativo-evidencia-y-supervision-humana",
+      "consumed_at": "2026-09-06T19:00:00Z"
     },
     {
       "schema_version": 1,
@@ -319,7 +323,7 @@
       "entity": "AWS Agent Registry",
       "published_at": "2026-08-31T00:00:00Z",
       "discovered_at": "2026-09-03T21:02:06Z",
-      "status": "pending",
+      "status": "consumed",
       "evidence": [
         {
           "url": "https://aws.amazon.com/about-aws/whats-new/2026/08/aws-agent-registry-generally-available/",
@@ -335,7 +339,9 @@
       ],
       "summary": "Un catálogo privado ayuda a las organizaciones a encontrar, aprobar, auditar y reutilizar agentes y herramientas.",
       "language": "es",
-      "priority": 4
+      "priority": 4,
+      "consumed_by": "agentes-con-control-operativo-evidencia-y-supervision-humana",
+      "consumed_at": "2026-09-06T19:00:00Z"
     },
     {
       "schema_version": 1,
@@ -346,7 +352,7 @@
       "entity": "Microsoft",
       "published_at": "2026-09-03T00:00:00Z",
       "discovered_at": "2026-09-05T21:03:40Z",
-      "status": "pending",
+      "status": "consumed",
       "evidence": [
         {
           "url": "https://news.microsoft.com/source/asia/2026/09/03/indias-ai-advantage-is-human-microsoft-work-trend-index-2026-finds-india-among-the-worlds-leading-frontier-workforces/",
@@ -363,7 +369,9 @@
       "summary": "El informe de Microsoft muestra cómo equipos humano-agente combinan automatización, rediseño del trabajo y control de calidad humano.",
       "language": "es",
       "geography": "India",
-      "priority": 4
+      "priority": 4,
+      "consumed_by": "agentes-con-control-operativo-evidencia-y-supervision-humana",
+      "consumed_at": "2026-09-06T19:00:00Z"
     },
     {
       "schema_version": 1,
@@ -374,7 +382,7 @@
       "entity": "AWS",
       "published_at": "2026-09-02T00:00:00Z",
       "discovered_at": "2026-09-05T21:03:40Z",
-      "status": "pending",
+      "status": "consumed",
       "evidence": [
         {
           "url": "https://aws.amazon.com/blogs/security/agentic-security-detection-and-response-at-machine-speed/",
@@ -390,7 +398,9 @@
       ],
       "summary": "AWS y SANS proponen prácticas para detectar y responder a riesgos de agentes que ejecutan flujos con acceso a infraestructura.",
       "language": "es",
-      "priority": 5
+      "priority": 5,
+      "consumed_by": "agentes-con-control-operativo-evidencia-y-supervision-humana",
+      "consumed_at": "2026-09-06T19:00:00Z"
     },
     {
       "schema_version": 1,
@@ -401,7 +411,7 @@
       "entity": "OpenAI Daybreak",
       "published_at": "2026-09-03T00:00:00Z",
       "discovered_at": "2026-09-05T21:03:40Z",
-      "status": "pending",
+      "status": "consumed",
       "evidence": [
         {
           "url": "https://openai.com/index/daybreak-for-frontline-defenders/",
@@ -418,7 +428,9 @@
       "summary": "OpenAI amplía el acceso subsidiado a capacidades de ciberdefensa y soporte práctico para organizaciones con recursos limitados.",
       "language": "es",
       "geography": "global",
-      "priority": 4
+      "priority": 4,
+      "consumed_by": "agentes-con-control-operativo-evidencia-y-supervision-humana",
+      "consumed_at": "2026-09-06T19:00:00Z"
     }
   ]
 }
