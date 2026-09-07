@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-09-06:agentes-con-control-operativo-evidencia-y-supervision-humana",
+  "local_date": "2026-09-06",
+  "timezone": "America/Cordoba",
+  "status": "recovered",
+  "reason": "scheduled_run_blocked_by_dirty_openclaw_worktree",
+  "note_slug": "agentes-con-control-operativo-evidencia-y-supervision-humana",
+  "sources_used": [
+    "news-v1-89b4632650b1ed55",
+    "news-v1-76b94fe31a79f833",
+    "news-v1-c73c32de0860506a",
+    "news-v1-998101fc5c402dc6",
+    "news-v1-5f3366588450dbdb",
+    "news-v1-c6ac5fae21ad3de2"
+  ],
+  "external_publish": false,
+  "meta": false,
+  "cloudflare": false,
+  "recovered_by": "Codex",
+  "recovery_path": "/home/marcos/Documents/ChatGPT/mragentes-site"
+}
