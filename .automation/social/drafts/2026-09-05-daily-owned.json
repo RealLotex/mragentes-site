@@ -4,8 +4,8 @@
   "kind": "daily_owned",
   "topic": "Registrar una decisión permite corregirla",
   "topic_hash": "sha256:ce3ccb4921abf6cbcc7d93662a2853821b1feb23fb7b254c4b7272b5b4b06ccd",
-  "content_hash": "sha256:6be23f12b3ce7a703d6db099528300b6afe5c19330065f65dc0d0e7b77f79301",
-  "dedupe_key": "daily_owned:2026-09-05:sha256:6be23f12b3ce7a703d6db099528300b6afe5c19330065f65dc0d0e7b77f79301",
+  "content_hash": "sha256:3855be049c5c56e64277df96993192f4d27dadb714ca9793035283477a354fd1",
+  "dedupe_key": "daily_owned:2026-09-05:sha256:3855be049c5c56e64277df96993192f4d27dadb714ca9793035283477a354fd1",
   "asset": {
     "path": "static/images/social/generated/daily-owned-2026-08-30.jpg",
     "sha256": "e362257befd42cd2597b00232aa6b5670f7f85bebe8d9e8d4cb986d3b72e6590",
