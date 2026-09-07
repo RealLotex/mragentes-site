@@ -21,6 +21,7 @@ sources:
   - "https://aws.amazon.com/blogs/security/agentic-security-detection-and-response-at-machine-speed/"
   - "https://openai.com/index/daybreak-for-frontline-defenders/"
 automation_id: "blog:2026-09-06:agentes-con-control-operativo-evidencia-y-supervision-humana"
+slug: "agentes-con-control-operativo-evidencia-y-supervision-humana"
 draft: false
 aliases: []
 ---
