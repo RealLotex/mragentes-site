@@ -67,6 +67,29 @@ jobs:
               raise SystemExit("GitHub OIDC token is malformed")
           print(f"PUSH_API_TOKEN={token}")
           PY
+      - name: Inspect non-sensitive GitHub identity claims
+        shell: bash
+        env:
+          PUSH_API_TOKEN: ${{ env.PUSH_API_TOKEN }}
+        run: |
+          python - <<'PY'
+          import base64
+          import json
+          import os
+
+          token = os.environ["PUSH_API_TOKEN"]
+          try:
+              encoded_claims = token.split(".")[1]
+              encoded_claims += "=" * (-len(encoded_claims) % 4)
+              claims = json.loads(base64.urlsafe_b64decode(encoded_claims).decode("utf-8"))
+          except (IndexError, ValueError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+              raise SystemExit(f"OIDC claims are not decodable: {exc}")
+          safe = {
+              key: claims.get(key)
+              for key in ("iss", "aud", "repository", "repository_id", "sub", "iat", "nbf", "exp")
+          }
+          print(json.dumps(safe, ensure_ascii=False, sort_keys=True))
+          PY
       - name: Send one idempotent notification event
         run: >-
           python -m scripts.notifications.notify_deployed_note
