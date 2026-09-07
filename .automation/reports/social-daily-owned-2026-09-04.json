@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "run_id": "social:daily_owned:2026-09-04",
+  "local_date": "2026-09-04",
+  "timezone": "America/Cordoba",
+  "status": "recovered",
+  "reason": "scheduled_run_blocked_by_dirty_openclaw_worktree",
+  "external_publish": false,
+  "new_social_piece": true,
+  "asset_reused_from": "existing_brand_template_asset",
+  "platforms": [
+    "facebook",
+    "instagram"
+  ]
+}
