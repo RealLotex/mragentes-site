@@ -4,15 +4,15 @@
   "kind": "daily_owned",
   "topic": "Registrar una decisión permite corregirla",
   "topic_hash": "sha256:ce3ccb4921abf6cbcc7d93662a2853821b1feb23fb7b254c4b7272b5b4b06ccd",
-  "content_hash": "sha256:3855be049c5c56e64277df96993192f4d27dadb714ca9793035283477a354fd1",
-  "dedupe_key": "daily_owned:2026-09-05:sha256:3855be049c5c56e64277df96993192f4d27dadb714ca9793035283477a354fd1",
+  "content_hash": "sha256:34ec540d026e9a8da339a14a368047c1c78e895a8c21887d543f1d31ec591352",
+  "dedupe_key": "daily_owned:2026-09-05:sha256:34ec540d026e9a8da339a14a368047c1c78e895a8c21887d543f1d31ec591352",
   "asset": {
     "path": "static/images/social/generated/daily-owned-2026-08-30.jpg",
     "sha256": "e362257befd42cd2597b00232aa6b5670f7f85bebe8d9e8d4cb986d3b72e6590",
     "alt": "Placa editorial de MR Agentes sobre evidencia mínima para revisar decisiones automatizadas."
   },
   "captions": {
-    "facebook": "Cuando un sistema produce un resultado, también debería conservar la evidencia mínima que permite revisarlo.\n\nEsa evidencia puede incluir la fuente consultada, la regla aplicada, la operación realizada y el estado final. No hace falta guardar información personal ni razonamientos internos para saber qué ocurrió.\n\nEjemplo: si una factura queda en revisión, el registro debe indicar qué campo faltó y quién debe resolverlo.\n\nEnviaselo ↗ a alguien que le pueda servir.\n\n#MRAgentes #AgentesDeIA #Automatizacion #Trazabilidad #Procesos #IAparaPymes",
+    "facebook": "Cuando un sistema produce un resultado, también debería conservar la evidencia mínima que permite revisarlo.\n\nEsa evidencia puede incluir la fuente consultada, la regla aplicada, la operación realizada y el estado final. No es necesario conservar información personal ni razonamientos internos para saber qué ocurrió.\n\nEjemplo: si una factura queda en revisión, el registro debe indicar qué campo faltó y quién debe resolverlo.\n\nEnviaselo ↗ a alguien que le pueda servir.\n\n#MRAgentes #AgentesDeIA #Automatizacion #Trazabilidad #Procesos #IAparaPymes",
     "instagram": "Registrar una decisión permite corregirla.\n\nUna evidencia mínima puede incluir:\n\n• fuente consultada\n• regla aplicada\n• operación realizada\n• estado final\n\nSi una factura queda en revisión, el sistema debe indicar qué dato faltó y quién debe resolverlo.\n\nEnviaselo ↗ a alguien que le pueda servir.\n\n#MRAgentes #AgentesDeIA #Automatizacion #Trazabilidad #Procesos #IAparaPymes"
   },
   "created_at": "2026-09-05T15:00:00-03:00"
