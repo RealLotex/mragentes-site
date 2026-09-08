@@ -56,10 +56,14 @@ export function formatArs(value) {
 export function initImpactCalculator(root = document) {
   const form = root.querySelector("[data-impact-calculator]");
   if (!form || form.dataset.initialized === "true") return;
-  form.dataset.initialized = "true";
 
-  const output = form.querySelector("[data-impact-results]");
-  const controls = form.querySelector("[data-impact-controls]");
+  // El formulario y el panel son columnas hermanas. Buscar desde el contenedor
+  // evita que un cambio de maquetación deje la herramienta sin resultados.
+  const calculator = form.closest(".impact-calculator") || root;
+  const output = calculator.querySelector("[data-impact-results]");
+  const controls = calculator.querySelector("[data-impact-controls]");
+  if (!output || !controls) return;
+  form.dataset.initialized = "true";
   const field = (name) => form.elements.namedItem(name);
 
   function values() {

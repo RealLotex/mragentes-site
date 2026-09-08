@@ -45,9 +45,14 @@ defaultContentLanguage = "es"
   weight = 5
 
 [[menu.main]]
+  name = "Herramientas"
+  url = "/herramientas/"
+  weight = 6
+
+[[menu.main]]
   name = "Contacto"
   url = "/contacto/"
-  weight = 6
+  weight = 7
 
 # SEO
 [permalinks]

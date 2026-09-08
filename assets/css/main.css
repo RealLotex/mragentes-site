@@ -2093,3 +2093,70 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 @media (max-width: 34rem) {
   .impact-calculator__form { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ============================================================================
+   HERRAMIENTAS
+   Recursos y recorridos viven fuera del archivo de notas. Cada bloque conserva
+   su propia superficie y aire para que no parezca un único listado comprimido.
+   ========================================================================== */
+
+.tool-section {
+  margin-top: var(--s-7);
+  padding-top: var(--s-4);
+  border-top: 2px solid var(--ink);
+}
+
+.tool-section__head { max-width: 46rem; }
+.tool-section__head > p:last-child { margin-top: var(--s-2); color: var(--ink-55); }
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-4);
+  margin-top: var(--s-4);
+}
+
+.tool-card {
+  display: grid;
+  align-content: start;
+  gap: var(--s-2);
+  min-height: 19rem;
+  padding: var(--s-4);
+  border: var(--hair) solid var(--rule-ink);
+  background: var(--bone-2);
+}
+
+.tool-card h3 { font-size: var(--t-lg); }
+.tool-card .btn { justify-self: start; margin-top: auto; }
+
+.tool-section--routes { margin-bottom: var(--s-7); }
+
+.route-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-3);
+  margin: var(--s-4) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: route;
+}
+
+.route-list > li {
+  display: grid;
+  align-content: start;
+  gap: var(--s-2);
+  min-height: 16rem;
+  padding: var(--s-3);
+  border-top: var(--hair) solid var(--rule-ink);
+  border-bottom: var(--hair) solid var(--rule);
+}
+
+.route-list h3 { font-size: var(--t-md); }
+.route-list a { align-self: end; font-family: var(--f-display); font-weight: 650; }
+
+@media (max-width: 48rem) {
+  .tool-grid,
+  .route-list { grid-template-columns: minmax(0, 1fr); }
+  .tool-card,
+  .route-list > li { min-height: auto; }
+}

@@ -11,7 +11,7 @@ import shutil
 import tempfile
 import unicodedata
 from copy import deepcopy
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
@@ -185,8 +185,15 @@ def select_news(
     count: int,
     *,
     minimum: int = 1,
+    after: str | None = None,
+    on_or_before: str | None = None,
 ) -> list[dict[str, Any]]:
-    """Choose verified available items deterministically, favouring diversity."""
+    """Choose verified available items deterministically, favouring diversity.
+
+    When a publication interval is supplied, only source items published after
+    the prior note and on or before the current note are eligible. This keeps a
+    later note from silently recycling a news cycle that was already published.
+    """
 
     if not isinstance(items, list):
         raise TypeError("items must be a list")
@@ -198,6 +205,28 @@ def select_news(
         raise ValueError("invalid selection bounds")
     if not isinstance(run_id, str) or not run_id:
         raise ValueError("run_id is required")
+    lower_bound = _validated_local_date(after) if after is not None else None
+    upper_bound = _validated_local_date(on_or_before) if on_or_before is not None else None
+    if lower_bound and upper_bound and lower_bound >= upper_bound:
+        raise ValueError("publication interval must advance in time")
+
+    def is_inside_publication_interval(item: dict[str, Any]) -> bool:
+        if lower_bound is None and upper_bound is None:
+            return True
+        published_at = item.get("published_at")
+        if not isinstance(published_at, str):
+            raise ValueError("bounded selection requires published_at")
+        candidate = published_at[:-1] + "+00:00" if published_at.endswith("Z") else published_at
+        try:
+            published = datetime.fromisoformat(candidate)
+        except ValueError as exc:
+            raise ValueError("published_at must be an RFC3339 timestamp") from exc
+        if published.tzinfo is None or published.utcoffset() is None:
+            raise ValueError("published_at must include a timezone")
+        published_date = published.date().isoformat()
+        return (lower_bound is None or published_date > lower_bound) and (
+            upper_bound is None or published_date <= upper_bound
+        )
 
     available = [
         deepcopy(item)
@@ -207,6 +236,7 @@ def select_news(
             item.get("status") == "pending"
             or (item.get("status") == "reserved" and item.get("reserved_by") == run_id)
         )
+        and is_inside_publication_interval(item)
     ]
     available.sort(key=lambda item: str(item.get("id", "")))
 

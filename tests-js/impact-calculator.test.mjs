@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+import { JSDOM } from "jsdom";
 
 import { importPlannedModule } from "./support/target-loader.mjs";
 
@@ -36,5 +37,41 @@ describe("calculadora de impacto", () => {
     expect(result.errorSavings).toBe(0);
     expect(result.totalPotential).toBe(0);
     expect(result.controls[0]).toMatch(/aún no reduce tiempo/i);
+  });
+
+  test("[IMPACT-CALCULATOR-003] muestra resultados cuando el panel es hermano del formulario", async () => {
+    const dom = new JSDOM(`<!doctype html><body>
+      <section class="impact-calculator">
+        <form data-impact-calculator>
+          <input name="weekly_volume" value="25">
+          <input name="manual_minutes" value="12">
+          <input name="automated_minutes" value="4">
+          <input name="hourly_cost" value="7000">
+          <input name="manual_error_rate" value="8">
+          <input name="error_reduction" value="60">
+          <input name="cost_per_error" value="7000">
+        </form>
+        <aside data-impact-results>
+          <span data-impact-hours>—</span><span data-impact-operating>—</span>
+          <span data-impact-errors>—</span><span data-impact-total>—</span>
+          <ul data-impact-controls></ul>
+        </aside>
+      </section>
+    </body>`, { url: "https://mragentes.com.ar/herramientas/" });
+    const previousDocument = globalThis.document;
+    const previousWindow = globalThis.window;
+    globalThis.document = dom.window.document;
+    globalThis.window = dom.window;
+
+    try {
+      const { initImpactCalculator } = await calculator();
+      initImpactCalculator(dom.window.document);
+      expect(dom.window.document.querySelector("[data-impact-hours]").textContent).toBe("14,4 h");
+      expect(dom.window.document.querySelectorAll("[data-impact-controls] li")).toHaveLength(4);
+    } finally {
+      globalThis.document = previousDocument;
+      globalThis.window = previousWindow;
+      dom.window.close();
+    }
   });
 });
