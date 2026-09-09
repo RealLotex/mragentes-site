@@ -272,6 +272,31 @@ def test_select_news_returns_two_or_three_pending_items_including_older_news() -
     )
 
 
+@pytest.mark.trace("BLOG-SELECT-004B")
+@pytest.mark.red_expected
+def test_select_news_only_uses_the_interval_since_the_previous_note() -> None:
+    """A September 6 note cannot recycle items already available on September 2."""
+
+    items = [
+        news_item(item_id="already-published", published_at="2026-09-02T10:00:00Z", url="https://a.test/old"),
+        news_item(item_id="sep-4", published_at="2026-09-04T10:00:00Z", url="https://b.test/four"),
+        news_item(item_id="sep-5", published_at="2026-09-05T10:00:00Z", url="https://c.test/five"),
+        news_item(item_id="sep-6", published_at="2026-09-06T10:00:00Z", url="https://d.test/six"),
+        news_item(item_id="future", published_at="2026-09-07T10:00:00Z", url="https://e.test/future"),
+    ]
+    selected = _select(
+        items,
+        "BLOG-SELECT-004B",
+        run_id="blog-run-2",
+        count=3,
+        after="2026-09-02",
+        on_or_before="2026-09-06",
+    )
+    assert {item["id"] for item in selected} == {"sep-4", "sep-5", "sep-6"}, trace_message(
+        "BLOG-SELECT-004B", "selection crossed a published-note boundary"
+    )
+
+
 @pytest.mark.trace("BLOG-SELECT-005")
 @pytest.mark.red_expected
 def test_select_news_maximizes_entity_source_and_topic_variety() -> None:

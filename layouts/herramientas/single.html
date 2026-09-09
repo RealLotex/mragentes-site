@@ -1,0 +1,56 @@
+{{ define "main" }}
+<article class="sheet">
+  <header class="article-head">
+    <p class="key col-key">Recursos prácticos</p>
+    <hgroup>
+      <h1>{{ .Title }}</h1>
+      <p class="lede">Recursos para preparar una decisión y recorrerla con calma. Las notas quedan en su archivo editorial.</p>
+    </hgroup>
+  </header>
+
+  <section class="tool-section col-wide" aria-labelledby="herramientas-practicas">
+    <header class="tool-section__head">
+      <p class="key">Para empezar</p>
+      <h2 id="herramientas-practicas">Dos recursos, dos usos distintos</h2>
+    </header>
+    <div class="tool-grid">
+      <article class="tool-card">
+        <p class="key">Herramienta 01</p>
+        <h3>Checklist de automatización</h3>
+        <p>Una guía descargable para ordenar el objetivo, los datos, las excepciones y la revisión humana antes de empezar.</p>
+        <a class="btn btn--minio" href="{{ "/downloads/checklist-automatizacion.pdf" | relURL }}">Descargar checklist <span aria-hidden="true">↓</span></a>
+      </article>
+      <article class="tool-card">
+        <p class="key">Herramienta 02</p>
+        <h3>Calculadora de impacto</h3>
+        <p>Probá supuestos de volumen, tiempos y errores. El cálculo se hace en tu dispositivo y no promete resultados.</p>
+        <a class="btn btn--minio" href="{{ "/calculadora-impacto/" | relURL }}">Abrir calculadora <span aria-hidden="true">→</span></a>
+      </article>
+    </div>
+  </section>
+
+  <section class="tool-section tool-section--routes col-wide" aria-labelledby="hoja-de-ruta">
+    <header class="tool-section__head">
+      <p class="key">Hoja de ruta</p>
+      <h2 id="hoja-de-ruta">Elegí el punto de partida</h2>
+      <p>Cada recorrido propone una sola nota para leer primero. No es parte del índice de notas: es una orientación para usarlo.</p>
+    </header>
+    <ol class="route-list">
+      {{- range site.Data.editorial.learning_routes }}
+      <li>
+        <p class="key">{{ .level }}</p>
+        <h3>{{ .title }}</h3>
+        <p>{{ .description }}</p>
+        {{- range first 1 .steps }}
+        {{- with site.GetPage (printf "/notas/%s" .slug) }}
+        <a href="{{ .RelPermalink }}">Leer: {{ .Title }} <span aria-hidden="true">→</span></a>
+        {{- end }}
+        {{- end }}
+      </li>
+      {{- end }}
+    </ol>
+  </section>
+</article>
+
+{{ partial "closer.html" . }}
+{{ end }}

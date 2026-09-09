@@ -291,6 +291,31 @@ def test_same_recent_topic_is_rejected_even_if_punctuation_changes() -> None:
         ensure(draft, recent, window_days=30)
 
 
+@pytest.mark.trace("SOCIAL-FRESH-002B")
+@pytest.mark.red_expected
+def test_same_recent_decision_boundary_is_rejected_when_reworded() -> None:
+    """A paraphrase must not bypass freshness merely by changing its hash."""
+
+    ensure = planned_callable(TARGET, "ensure_fresh", "SOCIAL-FRESH-002B")
+    draft = social_draft(
+        topic="Automatizar también es elegir cuándo detenerse y derivar una decisión",
+        topic_hash="new-boundary",
+        content_hash="new-copy",
+    )
+    recent = [
+        {
+            "kind": "daily_owned",
+            "topic": "Una automatización sabe cuándo debe parar y dejar decidir a una persona",
+            "topic_hash": "old-boundary",
+            "content_hash": "old-copy",
+            "asset_sha256": "b" * 64,
+            "created_at": "2026-08-25T12:00:00Z",
+        }
+    ]
+    with pytest.raises(ValueError, match="semantic"):
+        ensure(draft, recent, window_days=30)
+
+
 @pytest.mark.trace("SOCIAL-FRESH-003")
 @pytest.mark.red_expected
 def test_same_recent_copy_is_rejected_under_new_topic_label() -> None:

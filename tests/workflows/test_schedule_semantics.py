@@ -177,6 +177,22 @@ def test_blog_schedule_requires_a_relevant_stock_photo_for_the_note_template() -
     )
 
 
+@pytest.mark.trace("TASK-SOCIAL-FRESHNESS-001")
+@pytest.mark.red_expected
+def test_social_schedule_skips_recent_semantic_repetition_before_creating_an_asset() -> None:
+    descriptor = json.loads(
+        require_target(".automation/schedules/social.json", "TASK-SOCIAL-FRESHNESS-001").read_text(
+            encoding="utf-8"
+        )
+    )
+    prompt = descriptor["prompt"].casefold()
+    for requirement in ("ensure_fresh", "30 días", "skipped_valid", "semántic"):
+        assert requirement in prompt, trace_message(
+            "TASK-SOCIAL-FRESHNESS-001",
+            f"social automation does not enforce semantic freshness: {requirement}",
+        )
+
+
 @pytest.mark.trace("TASK-RECOVERY-002")
 @pytest.mark.red_expected
 def test_recovery_uses_guarded_github_rerun_instead_of_direct_meta_publish() -> None:

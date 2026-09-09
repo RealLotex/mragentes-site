@@ -17,6 +17,11 @@ from scripts.automation.editorial_style import validate_formal_text
 
 _KINDS = {"daily_owned", "blog_note"}
 _PLATFORMS = {"facebook", "instagram"}
+_TOPIC_STOPWORDS = frozenset({
+    "a", "al", "ante", "con", "como", "de", "del", "el", "en", "es", "esta",
+    "esto", "la", "las", "lo", "los", "para", "por", "que", "se", "si", "su",
+    "tambien", "un", "una", "y",
+})
 _BASE_FIELDS = {
     "schema_version",
     "run_id",
@@ -267,6 +272,25 @@ def _normalize_topic(value: Any) -> str:
     return " ".join(re.findall(r"[a-z0-9]+", normalized.casefold()))
 
 
+def _semantic_topic_signature(value: Any) -> frozenset[str]:
+    """Return narrow editorial concepts that must not repeat inside one window.
+
+    Exact hashes catch copied text. This small, conservative vocabulary catches
+    the costly near-duplicate where a post says the same thing about stopping an
+    automation and escalating a decision, only with different phrasing.
+    """
+
+    words = set(_normalize_topic(value).split()) - _TOPIC_STOPWORDS
+    concepts: set[str] = set()
+    if any(word.startswith("automatiz") for word in words):
+        concepts.add("automatizacion")
+    if any(word.startswith(("par", "deten", "fren", "limit")) for word in words):
+        concepts.add("limite_operativo")
+    if any(word.startswith(("decid", "deriv", "persona", "human")) for word in words):
+        concepts.add("decision_humana")
+    return frozenset(concepts)
+
+
 def ensure_fresh(
     draft: dict[str, Any],
     recent_records: Iterable[dict[str, Any]] | str | Path,
@@ -298,6 +322,7 @@ def ensure_fresh(
 
     draft_topic = _normalize_topic(draft.get("topic"))
     draft_topic_hash = draft.get("topic_hash")
+    draft_signature = _semantic_topic_signature(draft.get("topic"))
     for record in relevant:
         same_topic_hash = record.get("topic_hash") == draft_topic_hash
         record_topic = _normalize_topic(record.get("topic"))
@@ -311,6 +336,13 @@ def ensure_fresh(
             raise ValueError("topic hash collision requires review")
         if same_topic_hash or (record_topic and draft_topic and record_topic == draft_topic):
             raise ValueError("topic was used inside the freshness window")
+        record_signature = _semantic_topic_signature(record.get("topic"))
+        if {
+            "automatizacion",
+            "limite_operativo",
+            "decision_humana",
+        } <= draft_signature.intersection(record_signature):
+            raise ValueError("semantic topic was used inside the freshness window")
         if record.get("kind") != draft.get("kind"):
             continue
         if record.get("content_hash") == draft.get("content_hash"):
