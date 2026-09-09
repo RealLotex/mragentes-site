@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "run_id": "news-2026-09-09",
+  "kind": "news_scout",
+  "status": "success",
+  "started_at": "2026-09-09T21:02:34Z",
+  "finished_at": "2026-09-09T21:04:42Z",
+  "checks": [
+    {
+      "name": "github_connector_authentication",
+      "status": "passed",
+      "detail": {
+        "account": "RealLotex",
+        "repository": "RealLotex/mragentes-site",
+        "permission": "admin"
+      },
+      "required": true
+    },
+    {
+      "name": "local_date_and_cutoff",
+      "status": "passed",
+      "detail": {
+        "local_date": "2026-09-09",
+        "timezone": "America/Cordoba",
+        "previous_note_date": "2026-09-06",
+        "rule": "accepted published_at values are strictly later than the previous note"
+      },
+      "required": true
+    },
+    {
+      "name": "source_verification",
+      "status": "passed",
+      "detail": {
+        "verified_items": 3,
+        "primary_sources": [
+          "OpenAI",
+          "Microsoft News Centre Asia"
+        ],
+        "published_dates": [
+          "2026-09-08",
+          "2026-09-09"
+        ],
+        "note": "Three distinct official publications verified; Meta, Cloudflare, blog-note and external publication were not consulted or triggered."
+      },
+      "required": true
+    },
+    {
+      "name": "news_item_schema_v1",
+      "status": "passed",
+      "detail": {
+        "validated_items": 3
+      },
+      "required": true
+    },
+    {
+      "name": "deduplication",
+      "status": "passed",
+      "detail": {
+        "candidate_items": 3,
+        "accepted_items": 3,
+        "duplicates": 0,
+        "queue_revision_before": 10,
+        "queue_revision_after": 11,
+        "previous_pending_items_preserved": true
+      },
+      "required": true
+    },
+    {
+      "name": "focused_tests",
+      "status": "passed",
+      "detail": {
+        "command": "pytest news queue, schema, migration, report, GitHub egress and secret-scan tests",
+        "passed": 79,
+        "note": "The valid focalized suite completed GREEN."
+      },
+      "required": true
+    },
+    {
+      "name": "secret_scan",
+      "status": "passed",
+      "detail": {
+        "command": "scan_secrets.py --paths .automation/news/queue/news-queue.json .automation/reports/news-2026-09-09.json",
+        "result": "0 findings"
+      },
+      "required": true
+    },
+    {
+      "name": "diff_check",
+      "status": "passed",
+      "detail": {
+        "paths": [
+          ".automation/news/queue/news-queue.json",
+          ".automation/reports/news-2026-09-09.json"
+        ],
+        "result": "clean"
+      },
+      "required": true
+    }
+  ],
+  "effects": [
+    {
+      "kind": "remote_commit",
+      "status": "confirmed",
+      "target": "automation/news/news-2026-09-09",
+      "detail": {
+        "parent_sha": "ee5c371c9321bf514befbaf1f7f338140aa4e019",
+        "changed_paths": [
+          ".automation/news/queue/news-queue.json",
+          ".automation/reports/news-2026-09-09.json"
+        ],
+        "commit_count": 1,
+        "transport": "github_connector_git_data_objects"
+      }
+    }
+  ],
+  "summary": {
+    "local_date": "2026-09-09",
+    "timezone": "America/Cordoba",
+    "added": 3,
+    "duplicates": 0,
+    "queue_revision": 11,
+    "ids": [
+      "news-v1-7402d8e5e22f5936",
+      "news-v1-3acbb268d8082630",
+      "news-v1-f014814422ffd1e9"
+    ],
+    "external_publication": false,
+    "previous_pending_items_preserved": true
+  }
+}
