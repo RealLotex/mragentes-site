@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "run_id": "news-2026-09-08",
+  "kind": "news_scout",
+  "status": "success",
+  "started_at": "2026-09-09T02:19:08Z",
+  "finished_at": "2026-09-09T02:26:09Z",
+  "checks": [
+    {
+      "name": "github_connector_authentication",
+      "status": "passed",
+      "detail": {
+        "account": "RealLotex",
+        "repository": "RealLotex/mragentes-site",
+        "permission": "admin"
+      },
+      "required": true
+    },
+    {
+      "name": "local_date_and_cutoff",
+      "status": "passed",
+      "detail": {
+        "local_date": "2026-09-08",
+        "timezone": "America/Cordoba",
+        "previous_note_date": "2026-09-06",
+        "rule": "accepted published_at values are strictly later than the previous note"
+      },
+      "required": true
+    },
+    {
+      "name": "source_verification",
+      "status": "passed",
+      "detail": {
+        "verified_items": 3,
+        "primary_sources": [
+          "UK National Cyber Security Centre",
+          "UK Department for Science, Innovation and Technology",
+          "UK Department for Energy Security and Net Zero"
+        ],
+        "published_dates": [
+          "2026-09-07",
+          "2026-09-08"
+        ],
+        "note": "Three distinct official publications verified; Meta, Cloudflare, blog-note and external publication were not consulted or triggered."
+      },
+      "required": true
+    },
+    {
+      "name": "news_item_schema_v1",
+      "status": "passed",
+      "detail": {
+        "validated_items": 3
+      },
+      "required": true
+    },
+    {
+      "name": "deduplication",
+      "status": "passed",
+      "detail": {
+        "candidate_items": 3,
+        "accepted_items": 3,
+        "duplicates": 0,
+        "queue_revision_before": 9,
+        "queue_revision_after": 10,
+        "previous_pending_item_preserved": true
+      },
+      "required": true
+    },
+    {
+      "name": "focused_tests",
+      "status": "passed",
+      "detail": {
+        "command": "pytest news queue, schema, migration, report, repository contract and runtime independence tests",
+        "passed": 79,
+        "note": "The run-specific RED test failed before the queue change and passed after it; it was temporary and removed after GREEN."
+      },
+      "required": true
+    },
+    {
+      "name": "secret_scan",
+      "status": "passed",
+      "detail": {
+        "command": "scan_secrets.py --paths .automation/news/queue/news-queue.json .automation/reports/news-2026-09-08.json",
+        "result": "0 findings"
+      },
+      "required": true
+    },
+    {
+      "name": "diff_check",
+      "status": "passed",
+      "detail": {
+        "paths": [
+          ".automation/news/queue/news-queue.json",
+          ".automation/reports/news-2026-09-08.json"
+        ],
+        "result": "clean"
+      },
+      "required": true
+    }
+  ],
+  "effects": [
+    {
+      "kind": "remote_commit",
+      "status": "pending",
+      "target": "automation/news/news-2026-09-08",
+      "detail": {
+        "parent_sha": "b382815aca9b36481bd1ee72d06d627c6fe4f50d",
+        "changed_paths": [
+          ".automation/news/queue/news-queue.json",
+          ".automation/reports/news-2026-09-08.json"
+        ],
+        "commit_count": 1
+      }
+    }
+  ],
+  "summary": {
+    "local_date": "2026-09-08",
+    "timezone": "America/Cordoba",
+    "added": 3,
+    "duplicates": 0,
+    "queue_revision": 10,
+    "ids": [
+      "news-v1-cf05853a4d10b13a",
+      "news-v1-f50677ff0d835690",
+      "news-v1-bf6ed1f35b248b19"
+    ],
+    "external_publication": false
+  }
+}
