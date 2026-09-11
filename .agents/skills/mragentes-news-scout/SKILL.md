@@ -26,6 +26,15 @@ Antes de investigar, leé [fuentes](references/sources.md) y [reglas de selecci�
 
 Antes de mutar el repositorio, comprobá que el conector de GitHub esté autenticado y tenga permiso de escritura sobre `RealLotex/mragentes-site`. Si no está disponible, terminá en `needs_review` sin escribir. Para entregar la rama seguí `.automation/github/connector-egress.json`: revisá paths explícitos, creá todos los blobs y un único árbol y commit remoto, y actualizá la referencia sólo por fast-forward. Git local puede preparar el commit revisado, pero no uses git push local, `gh`, tokens ni credenciales locales como alternativa.
 
+## Orquestación editorial diaria
+
+La tarea `mr-agentes-noticias` puede ejecutar esta skill primero y, si la cola queda con al
+menos dos ítems elegibles, invocar inmediatamente `mragentes-blog-publisher` en la misma
+corrida. Esa orquestación no habilita Meta, Cloudflare ni efectos externos: el publicador
+mantiene sus guards, su identidad `blog:<fecha>:<slug>` y el commit atómico definido por el
+descriptor de la tarea. Ejecutada de forma independiente, esta skill sigue dejando sólo la
+cola y su reporte.
+
 ## Límites de seguridad
 
 - **No Meta:** no publiques, consultes ni prepares llamadas a redes sociales.

@@ -6,7 +6,7 @@ los prompts ni dependas de la zona horaria del runner.
 
 ## Objetivo de servicio
 
-- Publicar una nota cada miércoles y otra cada domingo: dos notas por semana.
+- Publicar una nota cada día, después de un relevamiento editorial válido.
 - Enviar una notificación push por cada nota, sólo después de verla desplegada.
 - Mantener el push de bienvenida al crear una suscripción.
 - Publicar una pieza original todos los días en Facebook e Instagram.
@@ -20,21 +20,22 @@ los prompts ni dependas de la zona horaria del runner.
 
 | Tarea | ID nativo | Horario local | Cron de referencia | Skill | Salida |
 |---|---|---:|---|---|---|
-| MR Agentes — Noticias | `mr-agentes-noticias` | todos los días 18:00 | `0 18 * * *` | `mragentes-news-scout` | cola verificada |
-| MR Agentes — Blog | `mr-agentes-blog` | miércoles y domingo 12:00 | `0 12 * * 0,3` | `mragentes-blog-publisher` | nota + imagen |
+| MR Agentes — Noticias + Blog | `mr-agentes-noticias` | todos los días 18:00 | `0 18 * * *` | `mragentes-news-scout` → `mragentes-blog-publisher` | cola + nota + imagen |
+| MR Agentes — Blog (fallback) | `mr-agentes-blog` | pausada | — | `mragentes-blog-publisher` | sólo recuperación manual |
 | MR Agentes — Social diario | `mr-agentes-social-diario` | todos los días 15:00 | `0 15 * * *` | `mragentes-social-manager` | draft + imagen |
 | MR Agentes — Recuperación social | `mr-agentes-recuperaci-n-social` | todos los días 15:15 | `15 15 * * *` | `mragentes-social-manager` | diagnóstico/recuperación |
 
 Los descriptores completos viven en `.automation/schedules/`. El cron sólo sirve como contrato
 legible; el registro se realiza como automatización nativa de Codex. Las cuatro definiciones
-están registradas una sola vez, se muestran como `ACTIVE` en Codex y usan el entorno de ejecución
-`local`. En los descriptores esto corresponde a `status: "active"`, `registered: true` y
+están registradas una sola vez: tres se muestran como `ACTIVE` y la del blog queda `PAUSED` como
+fallback, todas con ejecución `local`. En los descriptores esto corresponde a `status: "active"`
+para noticias, social y recuperación, `status: "paused"` para el fallback, `registered: true` y
 `execution_environment: "local"`. `catch_up` permanece en `false`: encender la computadora más
 tarde no debe crear publicaciones atrasadas sin revisión.
 
-El orden diario es intencional. La nota de las 12:00 usa la cola acumulada, incluida información
-de días anteriores. Social prepara su pieza a las 15:00 y la recuperación la revisa a las 15:15.
-El relevamiento de las 18:00 alimenta próximas notas.
+El orden diario es intencional. Social prepara su pieza a las 15:00 y la recuperación la revisa a
+las 15:15. A las 18:00 el relevamiento alimenta la cola y, dentro de la misma ejecución, el blog
+reserva los ítems válidos y prepara la nota del día.
 
 ## Responsabilidades
 
@@ -50,7 +51,8 @@ El relevamiento de las 18:00 alimenta próximas notas.
 
 ## Verificación de puesta en marcha
 
-Las cuatro automatizaciones ya están registradas y `ACTIVE`. Usá los pasos siguientes para
+Las cuatro automatizaciones ya están registradas; tres están `ACTIVE` y el blog independiente
+está `PAUSED`. Usá los pasos siguientes para
 auditar ese estado o recuperar la configuración sin crear definiciones duplicadas.
 
 ### 1. Estado local y pruebas
@@ -142,13 +144,15 @@ En el administrador nativo de Codex, listá el proyecto `MR Agentes` y compará 
 su descriptor de `.automation/schedules/`. Los IDs de la tabla son estables: no recrees una
 automatización para corregir sólo un campo.
 
-1. confirmá que existen exactamente los cuatro `automation_id` de la tabla, sin duplicados;
+1. confirmá que existen exactamente los cuatro `automation_id` de la tabla, sin duplicados, y
+   que sólo `mr-agentes-blog` está pausado;
 2. confirmá proyecto `MR Agentes`, `execution_environment: "local"`, timezone, RRULE, modelo,
    effort, skill y prompt;
 3. confirmá que cada automatización usa este repositorio, su `branch_template` y sólo los
    prefijos de `permissions.repository_writes`;
 4. confirmá `external_publish: false` y `catch_up: false`;
-5. confirmá que las cuatro continúan `ACTIVE`;
+5. confirmá que noticias, social y recuperación continúan `ACTIVE` y que el blog independiente
+   continúa `PAUSED`;
 6. registrá ID, próxima ejecución y estado en el reporte operativo.
 
 El registro se gestiona en esta computadora; GitHub y los proveedores conservan los efectos ya
@@ -156,37 +160,32 @@ integrados aunque la aplicación esté cerrada después de generar una rama.
 
 ## Ejecución normal
 
-### Relevamiento diario
+### Relevamiento y nota diaria
 
-La automatización de las 18:00:
+La automatización de las 18:00 ejecuta ambas skills en orden:
 
 1. consulta fuentes permitidas y abre la página original;
 2. comprueba fecha, URL, título y evidencia;
 3. normaliza y deduplica contra la cola estructurada;
 4. agrega sólo noticias pertinentes, incluso si servirán días después;
-5. valida el schema y escribe un reporte sin contenido sensible;
-6. publica una rama `automation/news/{run_id}`.
-
-No redacta una nota, no toca social y no produce efectos externos. Si no hay hallazgos válidos,
-el resultado correcto es `skipped_valid`, no contenido de relleno.
-
-### Nota de miércoles o domingo
-
-La automatización de las 12:00:
-
-1. determina fecha local y reserva `blog:{fecha}`;
-2. lee noticias pendientes de hoy o días previos;
-3. investiga las seleccionadas en fuentes primarias;
-4. redacta una nota original con enlaces verificables;
-5. asigna slug explícito, una fotografía relevante de stock (Pexels o Unsplash) y alt útil; esa
+5. valida el schema y, si hay al menos dos ítems elegibles, invoca en la misma corrida a
+   `mragentes-blog-publisher`;
+6. el publicador determina la fecha local, reserva `blog:{fecha}`, investiga las seleccionadas
+   en fuentes primarias y redacta una nota original con enlaces verificables;
+7. asigna slug explícito, una fotografía relevante de stock (Pexels o Unsplash) y alt útil; esa
    portada alimenta como fondo la plantilla social `nota`;
-6. valida front matter, URL, asset, enlaces, calidad editorial e índice;
-7. genera un único cambio atómico en `content/notas/`, `static/images/stock/` y estado
-   permitido;
-8. publica `automation/blog/{run_id}`.
+8. valida front matter, URL, asset, enlaces, calidad editorial e índice;
+9. genera un único cambio atómico en la cola, `content/notas/`, `static/images/stock/`,
+   `static/images/social/` y estado permitido;
+10. publica `automation/blog/{run_id}`.
 
-No llama a Meta o Cloudflare. El anuncio y el push nacen del cambio recién agregado a `main`, no
-del reloj. Por eso una reejecución del job editorial no puede duplicar efectos.
+Si no hay al menos dos hallazgos elegibles, el resultado correcto es `skipped_valid`, sin nota de
+relleno. La corrida no llama a Meta o Cloudflare. El anuncio y el push nacen del cambio recién
+agregado a `main`, no del reloj. Por eso una reejecución del job editorial no puede duplicar
+efectos.
+
+La automatización `mr-agentes-blog` queda pausada como fallback manual; nunca corre en paralelo
+con la corrida diaria ni puede crear una segunda nota para la misma fecha.
 
 ### Social diario
 
@@ -374,8 +373,8 @@ Esos sistemas requieren reconciliación separada.
 El cutover termina cuando:
 
 - suites Python, JavaScript y Hugo están GREEN;
-- los cuatro schedules conservan sus IDs, están registrados una sola vez, `ACTIVE` y en entorno
-  `local`;
+- los cuatro schedules conservan sus IDs, están registrados una sola vez, con noticias/social/
+  recuperación `ACTIVE`, blog fallback `PAUSED` y todos en entorno `local`;
 - branch protection, merge confiable y Pages funcionan;
 - Meta testing confirma Facebook e Instagram sin duplicados;
 - Cloudflare confirma alta, baja, bienvenida y una notificación de nota idempotente;
