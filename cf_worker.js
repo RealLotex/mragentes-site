@@ -543,7 +543,7 @@ async function enforceRateLimit(store, { bucket, identity, limit, windowSeconds,
 // should bind the NotificationCoordinator Durable Object for global ordering.
 const bindingLocks = new WeakMap();
 
-async function withBindingLock(binding, identity, operation) {
+async function acquireBindingLock(binding, identity) {
   let locks = bindingLocks.get(binding);
   if (!locks) {
     locks = new Map();
@@ -555,11 +555,16 @@ async function withBindingLock(binding, identity, operation) {
   const tail = previous.catch(() => undefined).then(() => gate);
   locks.set(identity, tail);
   await previous.catch(() => undefined);
-  try { return await operation(); }
-  finally {
+  return () => {
     release();
     if (locks.get(identity) === tail) locks.delete(identity);
-  }
+  };
+}
+
+async function withBindingLock(binding, identity, operation) {
+  const release = await acquireBindingLock(binding, identity);
+  try { return await operation(); }
+  finally { release(); }
 }
 
 function classifyPushResponse(value) {
@@ -917,10 +922,28 @@ async function handleSend(request, env, cors) {
   }
   await runWorkerStage("deployment_gate", () => deploymentGate(event.payload.url, env));
   const acquired = await runWorkerStage("acquire_fanout", () => acquireFanout(env, event));
-  if (!acquired.acquired) {
-    const previous = acquired.record.summary || summarizeDeliveries([]);
-    return jsonResponse({ eventId: event.eventId, ...previous, duplicate: true }, { headers: cors });
-  }
+  const releaseFanout = acquired.coordinator
+    ? null
+    : await acquireBindingLock(env.PUSH_SUBS, `${acquired.key}:fanout`);
+  try {
+    // A runtime failure can leave a coordinator event pending before fan-out.
+    // Resume that state idempotently; only finalized events are duplicates.
+    if (!acquired.acquired && !acquired.coordinator && acquired.record?.state === "pending") {
+      const latestRaw = await env.PUSH_SUBS.get(acquired.key);
+      if (latestRaw !== null) {
+        let latest;
+        try { latest = JSON.parse(latestRaw); }
+        catch { throw new HttpError(409, "notification state is corrupt", "conflict"); }
+        if (latest.state !== "pending" || latest.summary) {
+          const previous = latest.summary || summarizeDeliveries([]);
+          return jsonResponse({ eventId: event.eventId, ...previous, duplicate: true }, { headers: cors });
+        }
+      }
+    }
+    if (!acquired.acquired && acquired.record?.state !== "pending") {
+      const previous = acquired.record.summary || summarizeDeliveries([]);
+      return jsonResponse({ eventId: event.eventId, ...previous, duplicate: true }, { headers: cors });
+    }
   const listed = await runWorkerStage("list_subscriptions", () => listSubscriptionsPaginated(env.PUSH_SUBS, {
     pageSize: Number(env.PUSH_PAGE_SIZE || DEFAULT_PAGE_SIZE),
     maxTotal: Number(env.MAX_SUBSCRIPTIONS || DEFAULT_MAX_SUBSCRIPTIONS),
@@ -1001,7 +1024,10 @@ async function handleSend(request, env, cors) {
       { expirationTtl: 90 * 86_400 },
     )));
   }
-  return jsonResponse({ eventId: event.eventId, ...summary, duplicate: false }, { headers: cors });
+    return jsonResponse({ eventId: event.eventId, ...summary, duplicate: false }, { headers: cors });
+  } finally {
+    if (releaseFanout) releaseFanout();
+  }
 }
 
 // Historical debug names remain private stubs for the legacy test loader. They
