@@ -577,6 +577,7 @@ function classifyPushResponse(value) {
 
 function markWorkerStage(error, stage) {
   if (!error || typeof error !== "object") return error;
+  if (typeof error.workerStage === "string") return error;
   try {
     Object.defineProperty(error, "workerStage", {
       value: stage,
@@ -870,13 +871,22 @@ function notificationCoordinatorStub(env, eventId) {
 }
 
 async function acquireFanout(env, event) {
-  const coordinator = notificationCoordinatorStub(env, event.eventId);
+  const coordinator = await runWorkerStage(
+    "coordinator_binding",
+    () => notificationCoordinatorStub(env, event.eventId),
+  );
   if (coordinator) {
-    const result = await coordinator.acquireNotification({
-      eventId: event.eventId,
-      payloadHash: event.payloadHash,
+    const result = await runWorkerStage(
+      "coordinator_acquire",
+      () => coordinator.acquireNotification({
+        eventId: event.eventId,
+        payloadHash: event.payloadHash,
+      }),
+    );
+    const record = await runWorkerStage("coordinator_record", async () => {
+      if (!result || typeof result !== "object") throw new TypeError("coordinator result is invalid");
+      return result.record || await coordinator.getNotification(event.eventId);
     });
-    const record = result.record || await coordinator.getNotification(event.eventId);
     return { ...result, record, coordinator, key: null };
   }
   const key = fanoutRecordKey(event.eventId);
