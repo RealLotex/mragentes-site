@@ -1823,9 +1823,11 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 
   .masthead nav {
     display: none;
-    position: absolute;
+    position: fixed;
     inset-inline: 0;
-    top: 100%;
+    top: var(--header-h);
+    max-height: calc(100svh - var(--header-h));
+    overflow-y: auto;
     flex-direction: column;
     gap: 0;
     background: var(--bone);
