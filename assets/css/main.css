@@ -1376,8 +1376,8 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 }
 
 .social a {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   border: var(--hair) solid var(--rule-mid);
@@ -1814,7 +1814,7 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
   .portrait img { max-width: 11rem; }
 }
 
-@media (max-width: 47.99rem) {
+@media (max-width: 61.99rem) {
   :root {
     --t-base: 1.0625rem;
     --s-6: 3.5rem;
@@ -1832,6 +1832,7 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
     border-bottom: var(--hair) solid var(--ink);
     padding: var(--s-2) var(--pad) var(--s-3);
     box-shadow: 0 14px 24px -18px rgba(23, 19, 14, 0.6);
+    justify-self: stretch;
   }
 
   .masthead nav.open { display: flex; }
@@ -2138,7 +2139,7 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 
 .readiness-assessment__form { display: grid; gap: var(--s-3); align-content: start; }
 .readiness-assessment__form label { display: grid; gap: 0.45rem; font-family: var(--f-display); font-size: 0.9375rem; font-weight: 650; }
-.readiness-assessment select { min-height: 2.85rem; padding: 0.5rem 2rem 0.5rem 0.65rem; border: var(--hair) solid var(--rule-mid); border-radius: 0; background: var(--bone); color: var(--ink); font: inherit; }
+.readiness-assessment select { width: 100%; min-height: 2.85rem; padding: 0.5rem 2rem 0.5rem 0.65rem; border: var(--hair) solid var(--rule-mid); border-radius: 0; background: var(--bone); color: var(--ink); font: inherit; }
 .readiness-assessment select:focus-visible { outline: 2px solid var(--minio); outline-offset: 2px; border-color: var(--ink); }
 .readiness-assessment__form .btn { justify-self: start; margin-top: var(--s-1); }
 
@@ -2177,7 +2178,7 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 .route-list h3 { font-size: var(--t-md); }
 .route-list a { align-self: end; font-family: var(--f-display); font-weight: 650; }
 
-@media (max-width: 48rem) {
+@media (max-width: 61.99rem) {
   .tool-grid,
   .route-list,
   .readiness-assessment { grid-template-columns: minmax(0, 1fr); }

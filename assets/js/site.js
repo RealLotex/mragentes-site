@@ -42,7 +42,7 @@
 
     // Al pasar a escritorio el menú vuelve a estar siempre visible: hay que
     // limpiar el estado o queda un aria-expanded mintiendo.
-    var wide = window.matchMedia("(min-width: 48rem)");
+    var wide = window.matchMedia("(min-width: 62rem)");
     (wide.addEventListener ? wide.addEventListener.bind(wide, "change") : wide.addListener.bind(wide))(
       function (e) { if (e.matches) setOpen(false); }
     );
