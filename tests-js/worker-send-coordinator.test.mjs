@@ -594,6 +594,33 @@ describe("Send fan-out and idempotency", () => {
     expect(response.status).toBe(409);
     expect(calls).toEqual(["gate"]);
   });
+
+  test("[PUSH-SEND-023] un fallo interno conserva sólo la fase operativa segura", async () => {
+    const target = await loadWorkerTarget("PUSH-SEND-023");
+    const kv = new FakeKV();
+    kv.failNext("list", new TypeError("secret implementation detail"));
+    const gate = new FetchRouter().respond(
+      "HEAD",
+      `${SITE_ORIGIN}/notas/ia-segura/`,
+      new Response("", { status: 200 }),
+    );
+    const errors = [];
+    const errorSpy = vi.spyOn(console, "error").mockImplementation((message) => errors.push(message));
+    try {
+      const response = await workerHandler(target, "PUSH-SEND-023").fetch(
+        sendRequest(),
+        pushEnvironment(kv, { FETCH: gate.fetch }),
+        new ExecutionContextRecorder(),
+      );
+      expect(response.status).toBe(500);
+      expect(JSON.parse(errors[0])).toMatchObject({
+        event: "worker_error",
+        error: { name: "TypeError", stage: "list_subscriptions" },
+      });
+    } finally {
+      errorSpy.mockRestore();
+    }
+  });
 });
 
 describe("Delivery classification, retention and redaction", () => {

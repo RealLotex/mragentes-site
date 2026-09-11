@@ -570,6 +570,26 @@ function classifyPushResponse(value) {
   return "invalid";
 }
 
+function markWorkerStage(error, stage) {
+  if (!error || typeof error !== "object") return error;
+  try {
+    Object.defineProperty(error, "workerStage", {
+      value: stage,
+      configurable: true,
+      enumerable: false,
+    });
+  } catch { /* preserve the original failure when the error is immutable */ }
+  return error;
+}
+
+async function runWorkerStage(stage, operation) {
+  try {
+    return await operation();
+  } catch (error) {
+    throw markWorkerStage(error, stage);
+  }
+}
+
 async function defaultPushTransport(subscription, payload, env) {
   if (!env?.VAPID_PRIVATE_KEY || !env?.VAPID_PUBLIC_KEY) throw new Error("push transport is not configured");
   const vapidHeaders = await generateVapidHeaders(
@@ -895,22 +915,22 @@ async function handleSend(request, env, cors) {
   if (request.headers.get("Idempotency-Key") !== event.eventId) {
     throw new HttpError(409, "Idempotency-Key conflicts with eventId", "conflict");
   }
-  await deploymentGate(event.payload.url, env);
-  const acquired = await acquireFanout(env, event);
+  await runWorkerStage("deployment_gate", () => deploymentGate(event.payload.url, env));
+  const acquired = await runWorkerStage("acquire_fanout", () => acquireFanout(env, event));
   if (!acquired.acquired) {
     const previous = acquired.record.summary || summarizeDeliveries([]);
     return jsonResponse({ eventId: event.eventId, ...previous, duplicate: true }, { headers: cors });
   }
-  const listed = await listSubscriptionsPaginated(env.PUSH_SUBS, {
+  const listed = await runWorkerStage("list_subscriptions", () => listSubscriptionsPaginated(env.PUSH_SUBS, {
     pageSize: Number(env.PUSH_PAGE_SIZE || DEFAULT_PAGE_SIZE),
     maxTotal: Number(env.MAX_SUBSCRIPTIONS || DEFAULT_MAX_SUBSCRIPTIONS),
-  });
+  }));
   for (const key of listed.invalid) await env.PUSH_SUBS.delete(key);
   const outcomes = listed.invalid.map(() => "invalid");
   const transport = typeof env.PUSH_TRANSPORT === "function"
     ? env.PUSH_TRANSPORT
     : (subscription, payload) => defaultPushTransport(subscription, payload, env);
-  const delivered = await limitedConcurrency(listed.items, Number(env.PUSH_CONCURRENCY || 10), async ({ key, storageKeys, subscription }) => {
+  const delivered = await runWorkerStage("fanout", () => limitedConcurrency(listed.items, Number(env.PUSH_CONCURRENCY || 10), async ({ key, storageKeys, subscription }) => {
     const coordinator = acquired.coordinator;
     try {
       if (coordinator) {
@@ -968,18 +988,18 @@ async function handleSend(request, env, cors) {
       }
       return "uncertain";
     }
-  });
+  }));
   outcomes.push(...delivered);
   const summary = summarizeDeliveries(outcomes);
   const record = { ...acquired.record, state: summary.state, summary, updatedAt: nowFrom(env) };
   if (acquired.coordinator) {
-    await acquired.coordinator.completeFanout({ eventId: event.eventId, summary });
+    await runWorkerStage("complete_fanout", () => acquired.coordinator.completeFanout({ eventId: event.eventId, summary }));
   } else {
-    await withBindingLock(env.PUSH_SUBS, acquired.key, () => env.PUSH_SUBS.put(
+    await runWorkerStage("complete_fanout", () => withBindingLock(env.PUSH_SUBS, acquired.key, () => env.PUSH_SUBS.put(
       acquired.key,
       JSON.stringify(record),
       { expirationTtl: 90 * 86_400 },
-    ));
+    )));
   }
   return jsonResponse({ eventId: event.eventId, ...summary, duplicate: false }, { headers: cors });
 }
@@ -1454,7 +1474,11 @@ function redactForLog(value) {
   const seen = new WeakSet();
   const sensitive = /^(?:authorization|body|endpoint|error|headers|keys|message|payload|providerbody|secret|stack|token)$/i;
   function visit(current, key = "") {
-    if (current instanceof Error) return { name: current.name || "Error" };
+    if (current instanceof Error) {
+      const result = { name: current.name || "Error" };
+      if (typeof current.workerStage === "string") result.stage = current.workerStage;
+      return result;
+    }
     if (sensitive.test(key)) return "[redacted]";
     if (current === null || typeof current === "number" || typeof current === "boolean") return current;
     if (typeof current === "string") {
