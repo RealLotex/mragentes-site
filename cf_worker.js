@@ -885,8 +885,9 @@ async function acquireFanout(env, event) {
     );
     const record = await runWorkerStage("coordinator_record", async () => {
       if (!result || typeof result !== "object") throw new TypeError("coordinator result is invalid");
-      return result.record || await coordinator.getNotification(event.eventId);
+      return coordinator.getNotification(event.eventId);
     });
+    if (!record || typeof record !== "object") throw new TypeError("coordinator record is invalid");
     return { ...result, record, coordinator, key: null };
   }
   const key = fanoutRecordKey(event.eventId);
@@ -1351,7 +1352,7 @@ export class NotificationCoordinator {
       const existing = await storage.get(key);
       if (existing) {
         if (existing.payloadHash !== input.payloadHash) throw conflict("eventId payloadHash conflict");
-        return { acquired: false, duplicate: true, state: existing.state, record: existing };
+        return { acquired: false, duplicate: true, state: existing.state };
       }
       const timestamp = this.now();
       const record = {
@@ -1364,7 +1365,7 @@ export class NotificationCoordinator {
       };
       await storage.put(key, record);
       if (input.failpoint === "after-insert") throw new Error("coordinator failpoint after-insert");
-      return { acquired: true, duplicate: false, state: "pending", record };
+      return { acquired: true, duplicate: false, state: "pending" };
     }));
   }
 
