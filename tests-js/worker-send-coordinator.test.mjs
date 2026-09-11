@@ -654,6 +654,35 @@ describe("Send fan-out and idempotency", () => {
       errorSpy.mockRestore();
     }
   });
+
+  test("[PUSH-SEND-025] el fallo de adquisición del coordinador conserva una fase segura", async () => {
+    const target = await loadWorkerTarget("PUSH-SEND-025");
+    const namespace = {
+      idFromName: (eventId) => eventId,
+      get: () => ({ acquireNotification: async () => { throw new TypeError("secret coordinator detail"); } }),
+    };
+    const gate = new FetchRouter().respond(
+      "HEAD",
+      `${SITE_ORIGIN}/notas/ia-segura/`,
+      new Response("", { status: 200 }),
+    );
+    const errors = [];
+    const errorSpy = vi.spyOn(console, "error").mockImplementation((message) => errors.push(message));
+    try {
+      const response = await workerHandler(target, "PUSH-SEND-025").fetch(
+        sendRequest(),
+        pushEnvironment(new FakeKV(), { FETCH: gate.fetch, NOTIFICATION_COORDINATOR: namespace }),
+        new ExecutionContextRecorder(),
+      );
+      expect(response.status).toBe(500);
+      expect(JSON.parse(errors[0])).toMatchObject({
+        event: "worker_error",
+        error: { name: "TypeError", stage: "coordinator_acquire" },
+      });
+    } finally {
+      errorSpy.mockRestore();
+    }
+  });
 });
 
 describe("Delivery classification, retention and redaction", () => {
