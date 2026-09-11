@@ -1,7 +1,7 @@
 import { describe, expect, test as vitestTest } from "vitest";
 import { webcrypto } from "node:crypto";
 
-import { FakeKV, ExecutionContextRecorder, jsonRequest, validSubscription } from "./support/fake-worker-env.mjs";
+import { FakeKV, ExecutionContextRecorder, FetchRouter, jsonRequest, validSubscription } from "./support/fake-worker-env.mjs";
 import {
   loadWorkerTarget,
   requireFunction,
@@ -182,6 +182,58 @@ describe("Worker authentication and routing contract", () => {
     try {
       expect(await fn(await githubOidcToken(claims, pair.privateKey), environment())).toBe(true);
       expect(await fn(await githubOidcToken({ ...claims, repository_id: "0" }, pair.privateKey), environment())).toBe(false);
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  test("[PUSH-AUTH-014] el endpoint send acepta el OIDC autorizado sin exigir el secreto legacy", async () => {
+    const target = await loadWorkerTarget("PUSH-AUTH-014");
+    const pair = await webcrypto.subtle.generateKey(
+      { name: "RSASSA-PKCS1-v1_5", modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: "SHA-256" },
+      true,
+      ["sign", "verify"],
+    );
+    const publicJwk = await webcrypto.subtle.exportKey("jwk", pair.publicKey);
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async () => new Response(JSON.stringify({
+      keys: [{ ...publicJwk, kid: "worker-test-key", alg: "RS256" }],
+    }), { status: 200, headers: { "Content-Type": "application/json" } });
+    const now = Math.floor(Date.now() / 1000);
+    const claims = {
+      iss: "https://token.actions.githubusercontent.com",
+      aud: "mragentes-push-notify",
+      repository: "RealLotex/mragentes-site",
+      repository_id: "1270433781",
+      iat: now,
+      nbf: now - 1,
+      exp: now + 120,
+    };
+    const eventId = "blog-note:2026-08-26:ia-segura";
+    const deployment = new FetchRouter()
+      .respond("HEAD", `${ORIGIN}/notas/ia-segura/`, new Response("", { status: 200 }));
+    try {
+      const response = await workerHandler(target, "PUSH-AUTH-014").fetch(
+        jsonRequest("https://push.mragentes.test/api/send/", {
+          eventId,
+          payloadHash: `sha256:${"a".repeat(64)}`,
+          payload: {
+            title: "IA segura",
+            body: "Nueva nota disponible",
+            url: `${ORIGIN}/notas/ia-segura/`,
+          },
+        }, {
+          headers: {
+            Origin: ORIGIN,
+            Authorization: `Bearer ${await githubOidcToken(claims, pair.privateKey)}`,
+            "Idempotency-Key": eventId,
+          },
+        }),
+        environment({ API_TOKEN: "legacy-secret-not-used", FETCH: deployment.fetch }),
+        new ExecutionContextRecorder(),
+      );
+      expect(response.status).toBe(200);
+      expect(await response.json()).toMatchObject({ eventId, total: 0, state: "complete" });
     } finally {
       globalThis.fetch = originalFetch;
     }

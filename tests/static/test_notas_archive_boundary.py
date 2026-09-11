@@ -35,3 +35,21 @@ def test_tools_have_a_dedicated_entrypoint_and_navigation_link() -> None:
     assert "checklist-automatizacion.pdf" in layout
     assert "calculadora-impacto" in layout
     assert 'url = "/herramientas/"' in config
+
+
+@pytest.mark.trace("TOOLS-SECTION-002")
+@pytest.mark.red_expected
+def test_resource_pages_select_their_section_templates() -> None:
+    """Resource pages must not silently fall back to the empty default template."""
+
+    for relative_path, page_type in (
+        ("content/herramientas.md", "herramientas"),
+        ("content/calculadora-impacto.md", "calculadora-impacto"),
+    ):
+        source = require_target(relative_path, "TOOLS-SECTION-002").read_text(encoding="utf-8")
+        assert f'type: "{page_type}"' in source, trace_message(
+            "TOOLS-SECTION-002", f"{relative_path} does not select type {page_type}"
+        )
+        assert 'layout: "single"' in source, trace_message(
+            "TOOLS-SECTION-002", f"{relative_path} does not select its section single template"
+        )

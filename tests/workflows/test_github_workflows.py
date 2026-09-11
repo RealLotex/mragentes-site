@@ -50,6 +50,20 @@ def test_ci_workflow_is_read_only_by_default_and_scopes_merge_permissions() -> N
     )
 
 
+@pytest.mark.trace("WF-CI-002")
+@pytest.mark.red_expected
+def test_ci_validates_changed_social_drafts_and_their_asset_hashes() -> None:
+    _, source, _ = workflow(".github/workflows/ci.yml", "WF-CI-002")
+    for term in (
+        "validate_social_draft",
+        "content_hash",
+        "sha256",
+        ".automation/social/drafts/*.json",
+        "asset does not exist",
+    ):
+        assert term in source, trace_message("WF-CI-002", f"CI lacks social draft gate: {term}")
+
+
 @pytest.mark.trace("WF-INTAKE-001")
 @pytest.mark.red_expected
 def test_automation_intake_requires_scoped_branches_and_pr_gate() -> None:

@@ -39,6 +39,10 @@
   {{- $calculator := . | minify | fingerprint "sha256" }}
 <script type="module" src="{{ $calculator.RelPermalink }}" integrity="{{ $calculator.Data.Integrity }}"></script>
 {{- end }}
+{{- with resources.Get "js/readiness-assessment.js" }}
+  {{- $assessment := . | minify | fingerprint "sha256" }}
+<script type="module" src="{{ $assessment.RelPermalink }}" integrity="{{ $assessment.Data.Integrity }}"></script>
+{{- end }}
 
 <link rel="icon" href="/faviconhand512.ico" sizes="any">
 <link rel="icon" href="/faviconhand512.png" type="image/png" sizes="512x512">

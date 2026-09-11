@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """
-Publicador diario MR Agentes — Hugo Website + Investigación Online
-Crea una nueva nota con imagen única y hace push al repo.
+Generador legado de notas diarias de MR Agentes.
+
+Este módulo conserva únicamente el modo de ensayo para inspección local. La
+publicación real pertenece a la cola editorial y a los workflows de GitHub;
+este entrypoint no tiene autoridad para hacer push, enviar Web Push ni llamar
+a Meta.
 
 Reglas:
   - TODOS los días investiga tendencias online reales + análisis propio impredecible
@@ -13,9 +17,7 @@ Reglas:
   - Sin contenido estático: cada nota es única por investigación real
 
 Uso:
-  python3 scripts/publish_daily.py                  # Publicación automática
-  python3 scripts/publish_daily.py --dry-run        # Solo crear archivo, sin git push
-  python3 scripts/publish_daily.py --force          # Forzar publicación aunque ya exista nota hoy
+  python3 scripts/publish_daily.py --dry-run        # Crear un borrador local
 """
 
 import os
@@ -1697,33 +1699,6 @@ tags:
     return filepath
 
 
-def git_commit_push(filepath, title):
-    """Hacer commit y push de la nueva nota."""
-    try:
-        os.chdir(BASE_DIR)
-
-        subprocess.run(["git", "add", filepath], check=True, capture_output=True)
-
-        commit_msg = f"📝 Nueva nota: {title}"
-        subprocess.run(
-            ["git", "commit", "-m", commit_msg],
-            check=True, capture_output=True
-        )
-
-        result = subprocess.run(
-            ["git", "push", "origin", "main"],
-            check=True, capture_output=True, text=True
-        )
-
-        print(f"✅ Push exitoso: {commit_msg}")
-        return True
-
-    except subprocess.CalledProcessError as e:
-        err = e.stderr.decode() if isinstance(e.stderr, bytes) else str(e.stderr)
-        print(f"❌ Error en git: {err}")
-        return False
-
-
 def _generate_description(title, tags, body):
     """Generar meta description coherente a partir del título y tema.
     Máximo 155 caracteres. NO usa el body crudo (tiene markdown, citas, URLs)."""
@@ -1739,98 +1714,6 @@ def _generate_description(title, tags, body):
     if not desc.endswith('.') and not desc.endswith('?'):
         desc += '.'
     return desc.strip()[:157].rsplit(' ', 1)[0] + '.'
-
-
-def _load_dotenv():
-    """Carga el .env de la raíz (si existe) para que las claves salgan de ahí."""
-    try:
-        from scripts.social.config import load_dotenv
-    except ImportError:
-        sys.path.insert(0, BASE_DIR)
-        try:
-            from scripts.social.config import load_dotenv
-        except ImportError:
-            return
-    load_dotenv()
-
-
-def _send_push_notification(title, filepath, worker_url=None, image_filename=None):
-    """Envía notificación push a suscriptores via Cloudflare Worker."""
-    _load_dotenv()
-    # Cargar config local para el token y worker URL
-    config = {}
-    config_file = os.path.join(BASE_DIR, "scripts", "config.local.json")
-    if os.path.exists(config_file):
-        try:
-            with open(config_file) as f:
-                config = json.load(f)
-        except (json.JSONDecodeError, OSError):
-            pass
-
-    worker_url = worker_url or config.get("pushWorkerUrl", "") or os.environ.get("PUSH_WORKER_URL", "")
-    api_token = config.get("pushApiToken", "") or os.environ.get("PUSH_API_TOKEN", "")
-
-    if not worker_url or not api_token:
-        print("  ℹ️  Push no configurado (falta pushWorkerUrl o pushApiToken)")
-        return
-
-    slug = os.path.splitext(os.path.basename(filepath))[0]
-    url = f"https://mragentes.com.ar/notas/{slug}/"
-
-    print(f"  🔔 Enviando notificación push via {worker_url}/api/send/...")
-    try:
-        import urllib.request
-        try:
-            from scripts.push_payload import build_payload
-        except ImportError:
-            from push_payload import build_payload
-        payload_data = build_payload(
-            title,
-            "Acabamos de publicar una nueva nota en MR Agentes.",
-            url,
-            f"{STOCK_IMAGES_DIR}{image_filename}" if image_filename else None,
-        )
-        payload_data["token"] = api_token
-        payload = json.dumps(payload_data).encode()
-        req = urllib.request.Request(
-            f"{worker_url}/api/send/",
-            data=payload,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            result = json.loads(resp.read())
-            sent = result.get('sent', 0)
-            failed = result.get('failed', 0)
-            removed = result.get('removed', 0)
-            errors = result.get('errors', [])
-            print(f"  🔔 Push: {sent} enviadas, {failed} fallidas, {removed} removidas")
-            if errors:
-                for e in errors[:2]:
-                    print(f"    ⚠️  Error: {e.get('status', '?')} - {e.get('detail', e.get('error', '?'))[:100]}")
-            if sent == 0 and failed > 0 and removed == 0:
-                print("    ❌ Todas las entregas fallaron — puede haber problema de VAPID keys o suscripciones vencidas")
-    except Exception as e:
-        print(f"  ⚠️  Push notification HTTP error: {e}")
-
-
-def _announce_on_social(filepath):
-    """Aviso de nota nueva en Facebook e Instagram.
-
-    La pieza se compone con la imagen de portada de la nota y el sistema visual
-    del sitio (ver scripts/social/). Si algo falla, se avisa y se sigue: la nota
-    ya está publicada en la web.
-    """
-    try:
-        from scripts.social.hook import announce
-    except ImportError:
-        sys.path.insert(0, BASE_DIR)  # la raíz del repo, para que `scripts` sea paquete
-        try:
-            from scripts.social.hook import announce
-        except ImportError as exc:
-            print(f"  ⚠️  Redes: no pude cargar el social manager ({exc})")
-            return
-    announce(filepath)
 
 
 def _generate_image_alt(image_filename):
@@ -1863,11 +1746,14 @@ def _generate_image_alt(image_filename):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Publicar nota diaria en MR Agentes website")
-    parser.add_argument("--dry-run", action="store_true", help="Solo crear el archivo, sin git push")
+    parser.add_argument("--dry-run", action="store_true", help="Crear un borrador local, sin efectos remotos")
     parser.add_argument("--force", action="store_true", help="Forzar publicación aunque ya exista nota hoy")
-    parser.add_argument("--push-worker", type=str, default="", help="URL del Cloudflare Worker para push")
     parser.add_argument("--browser-enrich", action="store_true", help="Guardar JSON con URLs reales para enriquecer con browser tool")
     args = parser.parse_args()
+
+    if not args.dry_run:
+        print("⛔ Publicación directa deshabilitada: use la cola editorial y los workflows de GitHub.")
+        return 2
 
     # Cargar estado persistente
     state = load_state()
@@ -1939,31 +1825,10 @@ def main():
         with open(enrich_file, "w", encoding="utf-8") as f:
             json.dump(enrich_data, f, ensure_ascii=False, indent=2)
         print(f"  🖥️  Browser enrich file: {enrich_file}")
-        print(f"  🔍 Pendiente: browser enrich + commit/push manual")
+        print("  🔍 Pendiente: browser enrich y envío del borrador por la cola editorial")
         return
 
-    if args.dry_run:
-        print(f"🏁 Dry run - archivo creado sin push: {filepath}")
-        return
-
-    # Generar index.json para SW
-    print("📋 Generando index.json para service worker...")
-    gen_index = os.path.join(BASE_DIR, "scripts", "generate_notas_index.py")
-    if os.path.exists(gen_index):
-        subprocess.run([sys.executable, gen_index])
-
-    # Commit y push
-    print("⬆️  Pusheando a GitHub...")
-    success = git_commit_push(filepath, entry["title"])
-
-    if success:
-        print(f"🎉 Nota publicada exitosamente: {entry['title']}")
-        # Enviar notificación push
-        _send_push_notification(entry["title"], filepath, args.push_worker, entry.get("image"))
-        # Aviso en Facebook e Instagram con la imagen de la nota
-        _announce_on_social(filepath)
-    else:
-        print(f"⚠️  Nota creada localmente pero hubo error al pushear: {filepath}")
+    print(f"🏁 Dry run - archivo creado sin efectos remotos: {filepath}")
 
 
 if __name__ == "__main__":

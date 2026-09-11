@@ -1,19 +1,13 @@
-"""
-El circuito completo: de la nota publicada al posteo.
+"""Composición local de piezas sociales para el sistema editorial.
 
-  nota en content/notas/  →  piezas en static/social/<slug>/  →  commit + push
-  →  URL pública  →  Facebook (multipart) + Instagram (carrusel e historia)
-  →  registro en state.json
-
-Lo usan tanto el CLI como el enganche automático de `publish_daily.py` y
-`publish_blog.py`, así que la lógica vive una sola vez.
+La publicación remota, el push y el ledger pertenecen a los workflows de
+GitHub. Este módulo sólo renderiza piezas para inspección o para que otro
+proceso las empaquete como artefacto versionado.
 """
 
 from __future__ import annotations
 
 import re
-import subprocess
-import time
 import unicodedata
 from pathlib import Path
 
@@ -22,7 +16,6 @@ from . import state as state_mod
 from . import templates as tpl
 from .config import BASE_DIR, OUT_DIR, Settings
 from .notas import Nota
-from .publisher import Meta, resolve_public_url
 
 
 def ascii_slug(text: str, limit: int = 72) -> str:
@@ -37,51 +30,6 @@ def ascii_slug(text: str, limit: int = 72) -> str:
     plain = "".join(c for c in plain if not unicodedata.combining(c))
     plain = re.sub(r"[^A-Za-z0-9._-]+", "-", plain).strip("-.")
     return (plain[:limit].rstrip("-.") or "nota").lower()
-
-
-# ── git ─────────────────────────────────────────────────────────────────────
-
-
-def _git(*args: str, check: bool = True) -> subprocess.CompletedProcess:
-    return subprocess.run(["git", *args], cwd=BASE_DIR, check=check, capture_output=True, text=True)
-
-
-def commit_and_push(paths: list[Path], message: str, branch: str = "", log=print) -> bool:
-    """Publica las piezas en el repo. Instagram las baja por URL, no por subida."""
-    rels = []
-    for p in paths:
-        try:
-            rels.append(str(p.relative_to(BASE_DIR)))
-        except ValueError:
-            continue
-    if not rels:
-        return False
-
-    try:
-        _git("add", "--", *rels)
-        if not _git("diff", "--cached", "--quiet", "--", *rels, check=False).returncode:
-            return True  # no había nada nuevo que commitear
-        _git("commit", "-m", message)
-    except subprocess.CalledProcessError as exc:
-        log(f"  ⚠️  git commit falló: {(exc.stderr or '').strip()[:200]}")
-        return False
-
-    target = branch or _git("rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
-    delay = 2
-    for attempt in range(4):
-        try:
-            _git("push", "-u", "origin", f"HEAD:{target}")
-            return True
-        except subprocess.CalledProcessError as exc:
-            err = (exc.stderr or "").strip()
-            log(f"  ⚠️  push falló ({attempt + 1}/4): {err[:160]}")
-            time.sleep(delay)
-            delay *= 2
-            try:
-                _git("pull", "--rebase", "origin", target)
-            except subprocess.CalledProcessError:
-                pass
-    return False
 
 
 # ── Composición ─────────────────────────────────────────────────────────────
@@ -173,11 +121,13 @@ def publish_nota(
     force: bool = False,
     log=print,
 ) -> dict:
-    """Devuelve {'status', 'results', 'pieces', 'captions'}. Nunca levanta excepción."""
+    """Renderiza un ensayo; la entrega remota sólo existe en GitHub Actions."""
+    del commit, branch, wait, force
+    if not settings.dry_run:
+        log("⛔ Publicación directa deshabilitada: use la cola editorial y los workflows de GitHub.")
+        return {"status": "deshabilitada", "results": [], "pieces": {}, "captions": {}}
+
     state = state_mod.load()
-    if state_mod.is_published(nota.slug, state) and not force:
-        log(f"○ «{nota.title}» ya se había publicado. Usá --force para repetir.")
-        return {"status": "ya-publicada", "results": [], "pieces": {}, "captions": {}}
 
     pieces = render_nota_pieces(nota, settings, carousel=carousel, story=story)
     for p in pieces["all"]:
@@ -188,90 +138,9 @@ def publish_nota(
         "instagram": copywriter.caption(nota, "instagram", settings.site_base_url),
     }
 
-    if settings.dry_run or not settings.can_post:
-        return {
-            "status": "ensayo" if settings.dry_run else "sin-credenciales",
-            "results": [],
-            "pieces": pieces,
-            "captions": captions,
-        }
-
-    if commit:
-        prune_old_pieces(log=log)
-        # Se commitea el directorio entero para que la limpieza viaje en el
-        # mismo commit que las piezas nuevas.
-        if not commit_and_push([*pieces["all"], OUT_DIR], f"🖼️  Piezas de redes: {nota.title}", branch, log):
-            log("  ⚠️  No pude publicar las imágenes en el repo; Instagram puede fallar.")
-
-    meta = Meta(settings)
-    results = []
-    record: dict = {"date": nota.date.isoformat(), "images": [public_name(p) for p in pieces["all"]]}
-
-    # Facebook: publicar el álbum completo (todas las láminas del feed), no
-    # la portada sola.
-    fb = meta.facebook_album(pieces["feed"], captions["facebook"], link=nota.url(settings.site_base_url))
-    results.append(fb)
-    if fb.ok:
-        record["facebook"] = fb.id
-        # Registrar YA el id de FB: si el proceso muere a mitad (push roto,
-        # timeout, kill), un reintento ve el registro y no vuelve a publicar.
-        # Lección 2026-08-21: carrusel cancer-vacuna-ia duplicado en FB porque
-        # el 1er intento publicó el álbum y murió sin registrar; el 2º no
-        # encontró registro y publicó de nuevo.
-        state_mod.record(
-            nota.slug,
-            {"date": record["date"], "images": record["images"], "facebook": fb.id},
-            state,
-        )
-
-    urls = []
-    missing = []
-    for path in pieces["feed"]:
-        url = resolve_public_url(public_name(path), settings, wait=wait)
-        if url:
-            urls.append(url)
-        else:
-            missing.append(public_name(path))
-            log(f"  ⚠️  {public_name(path)} no respondió por URL; se intenta igual vía raw.")
-
-    # Si alguna no resolvió, reintentamos con espera extra antes de rendirnos:
-    # un carrusel incompleto no es aceptable.
-    for _path in list(missing):
-        url = resolve_public_url(_path, settings, wait=120)
-        if url:
-            urls.append(url)
-            missing.remove(_path)
-
-    if urls:
-        ig = (
-            meta.instagram_carousel(urls[:10], captions["instagram"])
-            if len(urls) > 1
-            else meta.instagram_image(urls[0], captions["instagram"])
-        )
-        results.append(ig)
-        if ig.ok:
-            record["instagram"] = ig.id
-        elif missing:
-            log(f"  ✖ Instagram: faltaron láminas -> {', '.join(missing)}")
-    else:
-        log("  ✖ Instagram: ninguna pieza quedó accesible por URL pública.")
-
-    if pieces["story"]:
-        story_url = resolve_public_url(public_name(pieces["story"]), settings, wait=wait)
-        if story_url:
-            st = meta.instagram_story(story_url)
-            results.append(st)
-            if st.ok:
-                record["story"] = st.id
-            # La historia de Facebook no se publica por Graph API: Meta no
-            # expone el edge para apps de terceros (verificado: /stories da
-            # "Unsupported post request" con o sin pages_manage_metadata).
-            # La historia queda solo en Instagram, donde sí funciona.
-
-    state_mod.record(nota.slug, record, state)
     return {
-        "status": "publicada" if any(r.ok for r in results) else "falló",
-        "results": results,
+        "status": "ensayo",
+        "results": [],
         "pieces": pieces,
         "captions": captions,
     }

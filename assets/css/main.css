@@ -2111,7 +2111,7 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 
 .tool-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--s-4);
   margin-top: var(--s-4);
 }
@@ -2128,6 +2128,29 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 
 .tool-card h3 { font-size: var(--t-lg); }
 .tool-card .btn { justify-self: start; margin-top: auto; }
+
+.readiness-assessment {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.75fr);
+  gap: var(--s-5);
+  margin-top: var(--s-4);
+}
+
+.readiness-assessment__form { display: grid; gap: var(--s-3); align-content: start; }
+.readiness-assessment__form label { display: grid; gap: 0.45rem; font-family: var(--f-display); font-size: 0.9375rem; font-weight: 650; }
+.readiness-assessment select { min-height: 2.85rem; padding: 0.5rem 2rem 0.5rem 0.65rem; border: var(--hair) solid var(--rule-mid); border-radius: 0; background: var(--bone); color: var(--ink); font: inherit; }
+.readiness-assessment select:focus-visible { outline: 2px solid var(--minio); outline-offset: 2px; border-color: var(--ink); }
+.readiness-assessment__form .btn { justify-self: start; margin-top: var(--s-1); }
+
+.readiness-result { padding: var(--s-4); border-top: 2px solid var(--ink); background: var(--bone-2); }
+.readiness-result h3 { font-size: var(--t-lg); }
+.readiness-score { margin-top: var(--s-1); font-family: var(--f-data); font-size: var(--t-sm); color: var(--ink-55); text-transform: uppercase; letter-spacing: 0.06em; }
+.readiness-result > p:not(.key):not(.readiness-score) { margin-top: var(--s-3); }
+.readiness-result h4 { margin-top: var(--s-4); font-size: 1rem; }
+.readiness-result ul { display: grid; gap: var(--s-2); margin: var(--s-2) 0 var(--s-3); padding: 0; list-style: none; }
+.readiness-result li { position: relative; padding-left: 1.1rem; line-height: 1.4; }
+.readiness-result li::before { content: "→"; position: absolute; left: 0; color: var(--minio-ink); font-family: var(--f-data); }
+.readiness-result > a { font-family: var(--f-display); font-weight: 650; }
 
 .tool-section--routes { margin-bottom: var(--s-7); }
 
@@ -2156,7 +2179,8 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 
 @media (max-width: 48rem) {
   .tool-grid,
-  .route-list { grid-template-columns: minmax(0, 1fr); }
+  .route-list,
+  .readiness-assessment { grid-template-columns: minmax(0, 1fr); }
   .tool-card,
   .route-list > li { min-height: auto; }
 }
