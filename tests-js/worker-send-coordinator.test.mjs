@@ -322,6 +322,35 @@ describe("Send fan-out and idempotency", () => {
     });
   });
 
+  test("[PUSH-SEND-COORD-001] fan-out usa el Durable Object y completa un evento sin suscriptores", async () => {
+    const target = await loadWorkerTarget("PUSH-SEND-COORD-001");
+    const Coordinator = requireExport(target, "NotificationCoordinator", "PUSH-SEND-COORD-001");
+    const storage = new FakeDurableStorage();
+    const coordinator = new Coordinator(new FakeDurableObjectState(storage), { CLOCK: () => FIXED_NOW });
+    const namespace = {
+      idFromName: (eventId) => eventId,
+      get: () => coordinator,
+    };
+    const transport = new FetchRouter().respond(
+      "HEAD",
+      `${SITE_ORIGIN}/notas/ia-segura/`,
+      new Response("", { status: 200 }),
+    );
+    const response = await workerHandler(target, "PUSH-SEND-COORD-001").fetch(
+      sendRequest(),
+      pushEnvironment(new FakeKV(), { FETCH: transport.fetch, NOTIFICATION_COORDINATOR: namespace }),
+      new ExecutionContextRecorder(),
+    );
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({
+      eventId: notification().eventId,
+      state: "complete",
+      total: 0,
+      duplicate: false,
+    });
+    expect(await coordinator.getNotification(notification().eventId)).toMatchObject({ state: "complete" });
+  });
+
   test("[PUSH-SEND-007] un suscriptor recibe exactamente una entrega", async () => {
     const target = await loadWorkerTarget("PUSH-SEND-007");
     const kv = new FakeKV();
@@ -551,6 +580,7 @@ describe("Send fan-out and idempotency", () => {
     const result = JSON.stringify(redact(sensitive));
     expect(result).not.toMatch(/push\.example|provider secret|Authorization|secret/);
     expect(result).toContain("410");
+    expect(JSON.stringify(redact({ error: new TypeError("secret implementation detail") }))).toContain("TypeError");
   });
 
   test("[PUSH-SEND-022] ningún transporte comienza antes de auth, schema, deploy e idempotencia", async () => {

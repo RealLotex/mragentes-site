@@ -104,7 +104,8 @@ el Worker que sirve `PUSH_WORKER_URL` y confirmá:
 - clave `VAPID_PUBLIC_KEY` coincidente con el meta del sitio;
 - CORS limitado a `https://mragentes.com.ar`;
 - rutas `/api/subscribe/`, `/api/unsubscribe/` y `/api/send/`;
-- observabilidad disponible sin cuerpos ni cabeceras sensibles.
+- observabilidad habilitada con logs y trazas persistentes al 100%, redacción de query strings y
+  sin cuerpos ni cabeceras sensibles.
 
 El namespace `PUSH_SUBS` conserva 8 suscripciones activas históricas (ocho en total). Sus claves actuales son
 URLs legacy, con objetos Web Push directos; el código nuevo también reconoce `sub:v1:<sha256>` y
