@@ -93,6 +93,7 @@ describe("Durable Object notification coordinator", () => {
     const { instance } = await makeCoordinator("PUSH-COORD-001");
     const result = await instance.acquireNotification(notification());
     expect(result).toMatchObject({ acquired: true, duplicate: false, state: "pending" });
+    expect(result.record).toBeUndefined();
   });
 
   test("[PUSH-COORD-002] mismo eventId y payloadHash es dedupe, no nueva adquisición", async () => {
