@@ -621,6 +621,39 @@ describe("Send fan-out and idempotency", () => {
       errorSpy.mockRestore();
     }
   });
+
+  test("[PUSH-SEND-024] un evento pending reanuda el fan-out tras un fallo interno", async () => {
+    const target = await loadWorkerTarget("PUSH-SEND-024");
+    const Coordinator = requireExport(target, "NotificationCoordinator", "PUSH-SEND-024");
+    const coordinator = new Coordinator(
+      new FakeDurableObjectState(new FakeDurableStorage()),
+      { CLOCK: () => FIXED_NOW },
+    );
+    const namespace = { idFromName: (eventId) => eventId, get: () => coordinator };
+    const kv = new FakeKV();
+    kv.failNext("list", new TypeError("transient list failure"));
+    const gate = new FetchRouter().respond(
+      "HEAD",
+      `${SITE_ORIGIN}/notas/ia-segura/`,
+      new Response("", { status: 200 }),
+    );
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      const worker = workerHandler(target, "PUSH-SEND-024");
+      const environment = pushEnvironment(kv, {
+        FETCH: gate.fetch,
+        NOTIFICATION_COORDINATOR: namespace,
+      });
+      const first = await worker.fetch(sendRequest(), environment, new ExecutionContextRecorder());
+      expect(first.status).toBe(500);
+      const resumed = await worker.fetch(sendRequest(), environment, new ExecutionContextRecorder());
+      expect(resumed.status).toBe(200);
+      expect(await resumed.json()).toMatchObject({ duplicate: false, state: "complete" });
+      expect(await coordinator.getNotification(notification().eventId)).toMatchObject({ state: "complete" });
+    } finally {
+      errorSpy.mockRestore();
+    }
+  });
 });
 
 describe("Delivery classification, retention and redaction", () => {
