@@ -135,6 +135,7 @@ def _added_recovery_note_slugs(repo: Path, before_sha: str, after_sha: str) -> l
     output = _git(
         repo,
         "diff",
+        "--no-renames",
         "--diff-filter=A",
         "--name-only",
         "-z",

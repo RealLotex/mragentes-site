@@ -167,6 +167,54 @@ def test_changed_note_slugs_accepts_distinct_versioned_recovery_attempts(
     assert changed_note_slugs(repo, before, after) == ["nota-versionada"]
 
 
+@pytest.mark.trace("DEPLOY-DETECT-002D")
+@pytest.mark.red_expected
+def test_changed_note_slugs_detects_recovery_manifest_replacement_even_as_rename(
+    tmp_path: Path,
+) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _git(repo, "init", "-q")
+    note = repo / "content" / "notas" / "nota-reemplazada.md"
+    note.parent.mkdir(parents=True)
+    note.write_text(_note("Nota reemplazada", "nota-reemplazada"), encoding="utf-8")
+    _git(repo, "add", "content")
+    before = _commit(repo, "base")
+
+    retries = repo / ".automation" / "publication" / "retries" / "nota-reemplazada"
+    retries.mkdir(parents=True)
+    old_retry = retries / "retryold01.json"
+    old_retry.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "note_slug": "nota-reemplazada",
+                "reason": "post_deploy_gate_recovered",
+                "retry_id": "retryold01",
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    _git(repo, "add", ".automation")
+    recovery_started = _commit(repo, "start recovery")
+
+    old_retry_source = old_retry.read_text(encoding="utf-8")
+    old_retry.unlink()
+    new_retry = retries / "retrynew01.json"
+    new_retry.write_text(
+        old_retry_source.replace("retryold01", "retrynew01"),
+        encoding="utf-8",
+    )
+    _git(repo, "add", "-A")
+    _git(repo, "config", "diff.renames", "true")
+    after = _commit(repo, "replace recovery")
+
+    assert recovery_started != after
+    assert changed_note_slugs(repo, recovery_started, after) == ["nota-reemplazada"]
+
+
 @pytest.mark.trace("DEPLOY-DETECT-003")
 @pytest.mark.red_expected
 def test_changed_social_drafts_reports_only_new_canonical_daily_contracts(
