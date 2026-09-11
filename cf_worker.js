@@ -1454,8 +1454,8 @@ function redactForLog(value) {
   const seen = new WeakSet();
   const sensitive = /^(?:authorization|body|endpoint|error|headers|keys|message|payload|providerbody|secret|stack|token)$/i;
   function visit(current, key = "") {
-    if (sensitive.test(key)) return "[redacted]";
     if (current instanceof Error) return { name: current.name || "Error" };
+    if (sensitive.test(key)) return "[redacted]";
     if (current === null || typeof current === "number" || typeof current === "boolean") return current;
     if (typeof current === "string") {
       if (/https?:\/\/|bearer\s|secret|token/i.test(current)) return "[redacted]";
@@ -1467,7 +1467,7 @@ function redactForLog(value) {
     if (Array.isArray(current)) return current.map((entry) => visit(entry));
     const result = {};
     for (const [childKey, child] of Object.entries(current)) {
-      if (sensitive.test(childKey)) continue;
+      if (sensitive.test(childKey) && !(child instanceof Error)) continue;
       result[childKey] = visit(child, childKey);
     }
     return result;
