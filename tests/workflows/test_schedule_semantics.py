@@ -49,8 +49,9 @@ def test_scheduled_descriptor_is_active_registered_and_scoped(case: tuple) -> No
     assert descriptor["timezone"] == "America/Cordoba", trace_message(
         "TASK-CONTRACT-001", f"wrong timezone: {case_id}"
     )
-    assert descriptor.get("status") == "active", trace_message(
-        "TASK-CONTRACT-001", f"task is not active: {case_id}"
+    expected_status = "paused" if case_id == "TASK-BLOG-001" else "active"
+    assert descriptor.get("status") == expected_status, trace_message(
+        "TASK-CONTRACT-001", f"task status differs from contract: {case_id}"
     )
     assert descriptor.get("registered") is True, trace_message(
         "TASK-CONTRACT-001", f"task is not registered: {case_id}"
@@ -100,6 +101,11 @@ def test_scheduled_descriptor_matches_weekdays_and_local_time(case: tuple) -> No
     descriptor = json.loads(
         require_target(relative_path, "TASK-SCHEDULE-001").read_text(encoding="utf-8")
     )
+    if descriptor.get("status") == "paused":
+        assert descriptor.get("trigger_mode") == "manual_fallback", trace_message(
+            "TASK-SCHEDULE-001", f"paused task lacks an explicit fallback mode: {case_id}"
+        )
+        return
     assert set(descriptor["weekdays"]) == weekdays, trace_message(
         "TASK-SCHEDULE-001", f"wrong weekdays: {case_id}"
     )
@@ -111,6 +117,32 @@ def test_scheduled_descriptor_matches_weekdays_and_local_time(case: tuple) -> No
     )
     datetime.fromisoformat(f"2026-08-26T{local_time}:00").replace(tzinfo=ZoneInfo("America/Cordoba"))
 
+
+
+
+@pytest.mark.trace("TASK-NEWS-BLOG-001")
+@pytest.mark.red_expected
+def test_news_automation_orchestrates_daily_blog_without_a_second_trigger() -> None:
+    news = json.loads(
+        require_target(".automation/schedules/news.json", "TASK-NEWS-BLOG-001")
+        .read_text(encoding="utf-8")
+    )
+    blog = json.loads(
+        require_target(".automation/schedules/blog.json", "TASK-NEWS-BLOG-001")
+        .read_text(encoding="utf-8")
+    )
+    assert news["pipeline"] == ["mragentes-news-scout", "mragentes-blog-publisher"], trace_message(
+        "TASK-NEWS-BLOG-001", "news automation does not own the daily news-to-blog pipeline"
+    )
+    assert news["branch_template"] == "automation/blog/{run_id}", trace_message(
+        "TASK-NEWS-BLOG-001", "combined editorial change must use the blog intake branch"
+    )
+    assert "misma ejecución" in news["prompt"].lower(), trace_message(
+        "TASK-NEWS-BLOG-001", "news prompt does not require blog publication in the same run"
+    )
+    assert blog["status"] == "paused" and blog["trigger_mode"] == "manual_fallback", trace_message(
+        "TASK-NEWS-BLOG-001", "independent blog schedule can duplicate the daily publication"
+    )
 
 @pytest.mark.trace("TASK-BRANCH-001")
 @pytest.mark.red_expected

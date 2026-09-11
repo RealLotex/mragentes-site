@@ -5,7 +5,9 @@ description: Prepara una nota automatizada de MR Agentes desde la cola editorial
 
 # Publicación editorial del blog
 
-Usá esta skill únicamente para la nota prevista en miércoles o domingo según `America/Cordoba`, o para un fixture de prueba explícito. La ejecución local prepara una rama de automatización; GitHub Pages sigue siendo la autoridad que publica el sitio.
+Usá esta skill para la nota diaria del pipeline editorial de `America/Cordoba` cuando la
+invoque `mr-agentes-noticias`, o para un fixture de prueba explícito. La ejecución local
+prepara una rama de automatización; GitHub Pages sigue siendo la autoridad que publica el sitio.
 
 ## Entradas y salidas
 
@@ -21,7 +23,9 @@ La salida es exactamente una nota nueva o reutilizada, su asset bajo `static/ima
 4. Creá o elegí un asset permitido, optimizado y con texto alternativo. No incluyas credenciales, material sin licencia ni referencias privadas.
 5. Generá front matter conforme a `.automation/schemas/blog-draft.schema.json` y un nombre portable mediante `scripts/automation/blog_guard.py`.
 6. Ejecutá validación de enlaces, schema, asset, pruebas y build de Hugo.
-7. Sólo con todos los gates verdes, aplicá nota + asset + transición a `consumed` en un commit atómico para `automation/blog/<run_id>`.
+7. Sólo con todos los gates verdes, aplicá nota + asset + transición a `consumed` en un commit
+   atómico para `automation/blog/<run_id>`. Si la invocación viene de la corrida combinada de
+   noticias, incluí también la actualización de la cola en ese mismo commit.
 
 ## Entrega remota
 

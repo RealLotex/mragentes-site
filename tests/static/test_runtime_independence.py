@@ -136,7 +136,6 @@ def test_operations_documents_the_complete_schedule_and_delivery_contract() -> N
     required = (
         "America/Cordoba",
         "0 18 * * *",
-        "0 12 * * 0,3",
         "0 15 * * *",
         "15 15 * * *",
         "miércoles",
@@ -147,6 +146,8 @@ def test_operations_documents_the_complete_schedule_and_delivery_contract() -> N
         "testing",
         "bienvenida",
         "idempotente",
+        "misma ejecución",
+        "pausada",
     )
     assert all(token in source for token in required), trace_message(
         "CUT-INDEP-006", f"OPERATIONS.md is missing one of the required contracts: {required}"

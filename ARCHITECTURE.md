@@ -48,13 +48,14 @@ imagen esperadas, no se permite ningún anuncio social ni push de esa nota.
 
 `.automation/schedules/*.json` es el contrato versionado de cada tarea. Declara zona horaria,
 recurrencia, modelo, skill, prompt, rama, prefijos de escritura permitidos, ID nativo, estado y
-entorno de ejecución. Las cuatro definiciones están registradas una sola vez, en estado `ACTIVE`
-y con ejecución `local`; el registro real se gestiona desde Codex y debe coincidir con su
-descriptor.
+entorno de ejecución. Las cuatro definiciones están registradas una sola vez: noticias, social y
+recuperación están `ACTIVE`, mientras que el blog independiente queda `PAUSED` como fallback;
+el registro real se gestiona desde Codex y debe coincidir con su descriptor.
 
-Las skills bajo `.agents/skills/` limitan cada responsabilidad:
+Las skills bajo `.agents/skills/` limitan cada responsabilidad y el pipeline diario las encadena:
 
-- `mragentes-news-scout`: verifica fuentes y agrega noticias no duplicadas a la cola.
+- `mragentes-news-scout`: verifica fuentes y agrega noticias no duplicadas a la cola; después
+  entrega la corrida a `mragentes-blog-publisher` cuando hay material suficiente.
 - `mragentes-blog-publisher`: reserva una fecha, selecciona noticias disponibles, escribe una
   nota y deja el recurso editorial correspondiente.
 - `mragentes-social-manager`: construye un draft diario o inspecciona una recuperación.
@@ -66,7 +67,6 @@ un cambio Git revisable, no un efecto remoto.
 
 Cada ejecución usa un ID y una rama deterministas:
 
-- `automation/news/{run_id}`
 - `automation/blog/{run_id}`
 - `automation/social/{run_id}`
 - `automation/recovery/{run_id}` para evidencia, sin publicación directa
@@ -90,7 +90,7 @@ rama y SHA, y usa `--match-head-commit` antes del squash.
 
 | Dato | Fuente de verdad | Escritor autorizado | Consumidor |
 |---|---|---|---|
-| noticias candidatas | `.automation/news/queue/` | news scout | blog publisher |
+| noticias candidatas | `.automation/news/queue/` | news scout | blog publisher en la misma corrida |
 | reserva y borrador de nota | `.automation/blog/` | blog publisher | guards/CI |
 | nota publicada | `content/notas/` | blog publisher vía PR | Hugo y social-note |
 | imagen editorial | `static/images/stock/` | blog publisher vía PR | Hugo, Meta, push |
