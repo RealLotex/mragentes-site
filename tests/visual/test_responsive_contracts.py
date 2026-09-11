@@ -36,8 +36,12 @@ def test_navigation_uses_the_same_tablet_breakpoint_as_the_collapsed_layout() ->
 @pytest.mark.visual
 def test_mobile_menu_stretches_to_the_viewport_instead_of_its_content_width() -> None:
     css = _css()
-    assert "justify-self: stretch" in css, trace_message(
+    mobile_nav = css.split(".masthead nav {\n    display: none;", 1)[1].split("}", 1)[0]
+    assert "justify-self: stretch" in mobile_nav, trace_message(
         "UX-RESP-002", "open mobile navigation must be a full-width, scannable menu"
+    )
+    assert "position: fixed" in mobile_nav, trace_message(
+        "UX-RESP-002", "mobile navigation must escape the header grid when it opens"
     )
 
 
