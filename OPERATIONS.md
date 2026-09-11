@@ -97,7 +97,7 @@ fallar cerrados si falta configuración.
 Con el MCP oficial de Cloudflare (sesión OAuth Full Access administrada por el proveedor), auditá
 el Worker que sirve `PUSH_WORKER_URL` y confirmá:
 
-- código desplegado equivalente a `cf_worker.js` del SHA probado (versión activa 42);
+- código desplegado equivalente a `cf_worker.js` del SHA probado (versión activa informada por Cloudflare);
 - binding KV `PUSH_SUBS`;
 - binding SQLite `NOTIFICATION_COORDINATOR` para el coordinador idempotente;
 - secrets `API_TOKEN` y `VAPID_PRIVATE_KEY`;
