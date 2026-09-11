@@ -42,3 +42,15 @@ def test_operations_documents_meta_preflight_and_legacy_push_continuity() -> Non
     assert all(term in source for term in required), trace_message(
         "DOCS-OPS-001", "operations do not document provider preflight and legacy KV continuity"
     )
+
+
+@pytest.mark.trace("DOCS-OPS-002")
+@pytest.mark.red_expected
+def test_operations_does_not_pin_a_stale_cloudflare_worker_version() -> None:
+    source = require_target("OPERATIONS.md", "DOCS-OPS-002").read_text(encoding="utf-8")
+    assert "versión activa 42" not in source, trace_message(
+        "DOCS-OPS-002", "operations pins a stale Cloudflare version instead of requiring an API audit"
+    )
+    assert "versión activa informada por Cloudflare" in source, trace_message(
+        "DOCS-OPS-002", "operations does not require the active version reported by Cloudflare"
+    )
