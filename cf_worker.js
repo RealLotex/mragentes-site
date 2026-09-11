@@ -5,6 +5,8 @@
 //   ALLOWED_ORIGINS. Optional adapters used by tests/local development:
 //   FETCH, PUSH_TRANSPORT and CLOCK.
 
+import { DurableObject } from "cloudflare:workers";
+
 const encoder = new TextEncoder();
 const decoder = new TextDecoder("utf-8", { fatal: true });
 
@@ -1322,8 +1324,9 @@ async function finalizeNotification(storage, { eventId, expectedDeliveries, now 
 
 function conflict(message) { return new HttpError(409, message, "conflict"); }
 
-export class NotificationCoordinator {
+export class NotificationCoordinator extends DurableObject {
   constructor(state, env) {
+    super(state, env);
     this.state = state;
     this.storage = state.storage;
     this.env = env;

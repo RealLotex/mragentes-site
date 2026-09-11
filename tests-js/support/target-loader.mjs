@@ -42,6 +42,10 @@ async function loadInstrumentedLegacyWorker(traceId) {
   let source = await readProjectFile(relativePath, traceId);
   const defaultMarker = /export\s+default\s+\{/;
   traceAssert(defaultMarker.test(source), traceId, `${relativePath} no expone un Worker default instrumentable`);
+  source = source.replace(
+    /import\s*\{\s*DurableObject\s*\}\s*from\s*["']cloudflare:workers["']\s*;?/,
+    "class DurableObject { constructor() {} }",
+  );
   source = source.replace(defaultMarker, "const __workerDefault = {");
   source = source.replace(
     /export\s*\{\s*webPushEncrypt\s*,\s*generateVapidHeaders\s*,\s*buildNotificationPayload\s*\}\s*;?/g,

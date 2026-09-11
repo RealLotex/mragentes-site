@@ -12,6 +12,7 @@ import {
 } from "./support/fake-worker-env.mjs";
 import {
   loadWorkerTarget,
+  readProjectFile,
   requireExport,
   requireFunction,
   workerHandler,
@@ -89,6 +90,13 @@ async function seedSubscriptions(kv, count) {
 }
 
 describe("Durable Object notification coordinator", () => {
+  test("[PUSH-COORD-017] el coordinador usa la base RPC oficial de Durable Objects", async () => {
+    const source = await readProjectFile("cf_worker.js", "PUSH-COORD-017");
+    expect(source).toMatch(/import\s*\{\s*DurableObject\s*\}\s*from\s*[\"']cloudflare:workers[\"']/);
+    expect(source).toMatch(/export class NotificationCoordinator extends DurableObject/);
+    expect(source).toMatch(/constructor\(state, env\)\s*\{\s*super\(state, env\)/s);
+  });
+
   test("[PUSH-COORD-001] primera adquisición crea evento pending y devuelve acquired", async () => {
     const { instance } = await makeCoordinator("PUSH-COORD-001");
     const result = await instance.acquireNotification(notification());
