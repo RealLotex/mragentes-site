@@ -26,6 +26,37 @@ jobs:
           cache: pip
       - name: Install locked Python test dependencies
         run: python -m pip install --require-hashes -r requirements-test.lock.txt
+      - name: Validate changed social drafts and asset hashes
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          mapfile -t drafts < <(git diff --name-only --diff-filter=AM "$BASE_SHA" "$GITHUB_SHA" -- '.automation/social/drafts/*.json')
+          for draft in "${drafts[@]}"; do
+            test -n "$draft" || continue
+            DRAFT_PATH="$draft" python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          from scripts.automation.social_guard import content_hash, validate_social_draft
+
+          draft_path = Path(os.environ["DRAFT_PATH"])
+          draft = json.loads(draft_path.read_text(encoding="utf-8"))
+          validate_social_draft(draft)
+          if draft["content_hash"] != content_hash(draft):
+              raise SystemExit("social draft content_hash does not match its material payload")
+          asset_path = Path(draft["asset"]["path"])
+          if not asset_path.is_file():
+              raise SystemExit("asset does not exist")
+          actual = hashlib.sha256(asset_path.read_bytes()).hexdigest()
+          if actual != draft["asset"]["sha256"]:
+              raise SystemExit("social asset sha256 does not match the draft")
+          print(f"validated {draft_path}")
+          PY
+          done
       - name: Run Python contracts
         run: python -m pytest -q
       - name: Enforce formal analytical style on changed notes

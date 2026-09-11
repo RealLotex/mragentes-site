@@ -1,6 +1,6 @@
 # Social manager
 
-Compone y publica las piezas de Instagram y Facebook con **el mismo sistema
+Compone y valida las piezas de Instagram y Facebook con **el mismo sistema
 visual que el sitio**: papel hueso, tinta cálida, minio como único acento, las
 tres tipografías argentinas autoalojadas y la mano grabada como firma.
 
@@ -36,12 +36,14 @@ python3 -m scripts.social render --template dato --stat "40%" --lead "…" --sur
 
 python3 -m scripts.social nota --latest        # piezas de la última nota, sin publicar
 python3 -m scripts.social publish-nota --latest --dry-run
-python3 -m scripts.social publish-nota --latest
-python3 -m scripts.social publish-library --key diagnostico --story
+python3 -m scripts.social publish-nota --latest --dry-run
+python3 -m scripts.social publish-library --key diagnostico --story --dry-run
 ```
 
-Sin credenciales nada falla: compone, muestra el texto que iría a cada red y
-avisa qué falta. Con `SOCIAL_DRY_RUN=1` tampoco toca la red.
+Los comandos `publish-nota` y `publish-library` quedan limitados a ensayo local.
+La entrega real sólo la ejecutan `social-note.yml` y `social-daily.yml`, después
+de CI y del gate de despliegue. No hay credenciales, push local ni publicación
+remota en este CLI.
 
 ---
 
@@ -50,26 +52,23 @@ avisa qué falta. Con `SOCIAL_DRY_RUN=1` tampoco toca la red.
 Cada nota que llega a `main` se anuncia sola. El circuito:
 
 ```
-content/notas/2026-08-08-….md          ← publish_daily.py / publish_blog.py
-        │  push a main
+content/notas/2026-08-08-….md          ← cola editorial + PR verificado
+        │  merge protegido a main
         ▼
-.github/workflows/social.yml           ← se dispara con el push
-        │  compone 4 láminas 4:5 + 1 historia 9:16
+.github/workflows/deploy.yml           ← gate Pages y dispatch tipado
         ▼
-static/social/<slug>/                  ← commit + push (las piezas quedan servidas)
+.github/workflows/social-note.yml      ← consume asset versionado
         │
         ├── Facebook   → foto por multipart, con el enlace a la nota
         └── Instagram  → carrusel (por URL) + historia
         │
         ▼
-scripts/social/state.json              ← queda registrado: no se repite
+.automation/reports/                  ← ledger/resultado idempotente
 ```
 
-**Por qué se commitean las imágenes.** Facebook acepta el archivo directo;
-Instagram no: crea el posteo a partir de una URL pública que Meta descarga
-desde sus servidores. Al commitearlas quedan servidas por
-`raw.githubusercontent.com` apenas se pushea — sin esperar el deploy de Pages —
-y por el sitio cuando el deploy termina. Se prueban las dos, en ese orden.
+Los assets sociales se versionan junto al draft o a la nota. Instagram recibe
+la URL pública sólo después del despliegue y del health gate; Meta y Web Push
+son efectos posteriores, nunca pasos del generador local.
 
 Para que el repositorio no engorde, sólo se conservan las piezas de las
 **últimas 10 notas**: pasada esa ventana Meta ya descargó todo y no las mira
@@ -175,9 +174,9 @@ library.json   los quince posteos listos (texto plano, editable)
 library.py     lector de la biblioteca
 notas.py       lectura del front matter y del cuerpo de las notas de Hugo
 copy.py        ganchos, cierres, etiquetas y las piezas derivadas de una nota
-flow.py        el circuito completo: componer, commitear, publicar, registrar
+flow.py        composición local para ensayo e inspección
 publisher.py   cliente de la Graph API (Facebook, Instagram, historias)
-hook.py        enganche para publish_daily.py y publish_blog.py
+hook.py        enganche local de composición, sin efectos remotos
 cli.py         línea de comandos
 state.py       qué se publicó y qué plantilla salió última
 config.py      lectura del .env y de las variables de entorno

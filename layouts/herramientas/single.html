@@ -11,7 +11,7 @@
   <section class="tool-section col-wide" aria-labelledby="herramientas-practicas">
     <header class="tool-section__head">
       <p class="key">Para empezar</p>
-      <h2 id="herramientas-practicas">Dos recursos, dos usos distintos</h2>
+      <h2 id="herramientas-practicas">Tres recursos, tres usos distintos</h2>
     </header>
     <div class="tool-grid">
       <article class="tool-card">
@@ -26,6 +26,49 @@
         <p>Probá supuestos de volumen, tiempos y errores. El cálculo se hace en tu dispositivo y no promete resultados.</p>
         <a class="btn btn--minio" href="{{ "/calculadora-impacto/" | relURL }}">Abrir calculadora <span aria-hidden="true">→</span></a>
       </article>
+      <article class="tool-card">
+        <p class="key">Herramienta 03</p>
+        <h3>Diagnóstico de punto de partida</h3>
+        <p>Respondé cinco preguntas sobre una tarea y obtené una primera recomendación: ordenar, preparar o probar en pequeño.</p>
+        <a class="btn btn--minio" href="#diagnostico">Hacer diagnóstico <span aria-hidden="true">↓</span></a>
+      </article>
+    </div>
+  </section>
+
+  <section class="tool-section col-wide" id="diagnostico" aria-labelledby="diagnostico-title">
+    <header class="tool-section__head">
+      <p class="key">Diagnóstico local</p>
+      <h2 id="diagnostico-title">¿Qué proceso conviene mirar primero?</h2>
+      <p>Elegí una tarea concreta. Este diagnóstico ordena la conversación; las respuestas quedan sólo en este dispositivo.</p>
+    </header>
+    <div class="readiness-assessment">
+      <form class="readiness-assessment__form" data-readiness-assessment>
+        <label>¿Con qué frecuencia ocurre?
+          <select name="frequency"><option value="daily">Todos los días</option><option value="weekly">Todas las semanas</option><option value="occasional">De vez en cuando</option></select>
+        </label>
+        <label>¿Los pasos están claros?
+          <select name="clarity"><option value="clear">Sí, se repiten igual</option><option value="partial">En parte</option><option value="unclear">No todavía</option></select>
+        </label>
+        <label>¿Qué pasa si hay un error?
+          <select name="impact"><option value="low">Se corrige sin mayor impacto</option><option value="medium">Demora o retrabajo</option><option value="high">Afecta dinero, personas o compromisos</option></select>
+        </label>
+        <label>¿Cuántas excepciones tiene?
+          <select name="exceptions"><option value="few">Pocas y conocidas</option><option value="some">Algunas</option><option value="many">Muchas o imprevisibles</option></select>
+        </label>
+        <label>¿Hay alguien que valide el resultado?
+          <select name="owner"><option value="yes">Sí</option><option value="no">No</option></select>
+        </label>
+        <button class="btn btn--ghost" type="reset">Restablecer</button>
+      </form>
+      <aside class="readiness-result" data-readiness-result aria-live="polite" aria-atomic="true" aria-label="Resultado del diagnóstico">
+        <p class="key">Resultado</p>
+        <h3 data-readiness-level>—</h3>
+        <p class="readiness-score" data-readiness-score>—</p>
+        <p data-readiness-next>Completá las respuestas para ver una recomendación.</p>
+        <h4>Antes de avanzar</h4>
+        <ul data-readiness-controls></ul>
+        <a href="{{ "/calculadora-impacto/" | relURL }}">Estimar tiempo, costos y errores <span aria-hidden="true">→</span></a>
+      </aside>
     </div>
   </section>
 

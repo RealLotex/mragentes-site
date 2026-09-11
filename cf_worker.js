@@ -891,7 +891,6 @@ async function deploymentGate(url, env) {
 }
 
 async function handleSend(request, env, cors) {
-  if (!tokenOk(bearerToken(request), env.API_TOKEN)) return unauthorized(cors);
   const event = validateNotificationEvent(await parseRequestBody(request));
   if (request.headers.get("Idempotency-Key") !== event.eventId) {
     throw new HttpError(409, "Idempotency-Key conflicts with eventId", "conflict");

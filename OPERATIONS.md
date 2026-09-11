@@ -72,7 +72,8 @@ portada, servicios, notas, una nota individual y contacto en viewport móvil y e
 
 Verificá sin leer valores:
 
-- branch protection de `main` exige CI y permite auto-merge;
+- branch protection de `main` exige CI; el intake confiable hace el merge explícito con
+  `--match-head-commit` y no depende de auto-merge;
 - Pages usa GitHub Actions como source;
 - los environments `meta-testing`, `cloudflare-staging` y `cloudflare-production` existen;
 - `meta-testing` expone `META_ACCESS_TOKEN`, `FB_PAGE_ID`, `IG_USER_ID`;
@@ -199,7 +200,8 @@ La automatización de las 15:00:
 7. publica `automation/social/{run_id}` sin llamar a Meta.
 
 Al integrarse, deploy detecta el draft agregado y despacha `social-daily.yml` con esa ruta exacta.
-La URL de la imagen debe ser pública antes de que Meta intente descargarla.
+La URL de la imagen debe ser pública antes de que Meta intente descargarla. CI valida cada draft
+modificado, su `content_hash`, la existencia del asset y su SHA-256 antes de aceptar el PR.
 
 ### Recuperación de las 15:15
 
@@ -217,8 +219,9 @@ La recuperación es idempotente: usa la misma fecha, hash y `dedupe_key` del int
 
 ### Intake
 
-Un push a `automation/news/**`, `automation/blog/**` o `automation/social/**` activa
-`automation-intake.yml`. El workflow reutiliza el PR si existe y solicita auto-merge con squash.
+Un push a `automation/news/**`, `automation/blog/**`, `automation/social/**` o
+`automation/recovery/**` activa `automation-intake.yml`. El workflow reutiliza el PR si existe y
+hace el merge confiable con squash después de CI; no depende de auto-merge.
 No empuja directamente a `main` ni evita CI.
 
 ### Pages
@@ -257,7 +260,7 @@ estado engañoso.
 Usá este orden, sin publicar manualmente para “probar”:
 
 1. automatización de Codex: estado, run ID, rama y reporte;
-2. pull request: CI y auto-merge;
+2. pull request: CI y merge confiable del intake;
 3. Pages: workflow y URL pública;
 4. health gate: slug e imagen confirmados;
 5. Meta: workflow, ID/permalink por plataforma y ausencia de duplicados;
@@ -372,7 +375,7 @@ El cutover termina cuando:
 - suites Python, JavaScript y Hugo están GREEN;
 - los cuatro schedules conservan sus IDs, están registrados una sola vez, `ACTIVE` y en entorno
   `local`;
-- branch protection, auto-merge y Pages funcionan;
+- branch protection, merge confiable y Pages funcionan;
 - Meta testing confirma Facebook e Instagram sin duplicados;
 - Cloudflare confirma alta, baja, bienvenida y una notificación de nota idempotente;
 - una simulación de reruns prueba cero duplicados y recuperación parcial;

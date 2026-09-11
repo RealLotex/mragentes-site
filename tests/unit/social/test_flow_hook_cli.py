@@ -41,76 +41,18 @@ def test_ascii_slug_is_portable_deterministic_limited_and_never_empty() -> None:
 
 @pytest.mark.trace("GIT-SOCIAL-001")
 @pytest.mark.baseline_green
-def test_commit_and_push_returns_false_when_no_path_is_inside_repository(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    repo = tmp_path / "repo"
-    repo.mkdir()
-    outside = tmp_path / "outside.jpg"
-    outside.write_bytes(b"image")
-    monkeypatch.setattr(flow, "BASE_DIR", repo)
-
-    assert flow.commit_and_push([outside], "message") is False
+def test_legacy_social_flow_does_not_expose_local_git_mutation() -> None:
+    assert not hasattr(flow, "commit_and_push")
 
 
-@pytest.mark.trace("GIT-SOCIAL-002")
-@pytest.mark.baseline_green
-def test_commit_and_push_stages_allowlisted_paths_commits_and_pushes_without_force(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    repo = tmp_path / "repo"
-    asset = repo / "static" / "social" / "daily.jpg"
-    asset.parent.mkdir(parents=True)
-    asset.write_bytes(b"image")
-    calls: list[tuple[str, ...]] = []
+@pytest.mark.trace("GIT-SOCIAL-004")
+@pytest.mark.red_expected
+def test_legacy_social_flow_has_no_local_git_push_authority() -> None:
+    source = Path("scripts/social/flow.py").read_text(encoding="utf-8")
 
-    def fake_git(*args: str, check: bool = True):
-        del check
-        calls.append(args)
-        if args[:3] == ("diff", "--cached", "--quiet"):
-            return _completed(args, returncode=1)
-        return _completed(args)
-
-    monkeypatch.setattr(flow, "BASE_DIR", repo)
-    monkeypatch.setattr(flow, "_git", fake_git)
-
-    assert flow.commit_and_push([asset], "social: daily", branch="automation/social/run") is True
-    assert calls[0] == ("add", "--", "static/social/daily.jpg")
-    assert ("commit", "-m", "social: daily") in calls
-    assert ("push", "-u", "origin", "HEAD:automation/social/run") in calls
-    assert all("--force" not in call and "-f" not in call for call in calls)
-
-
-@pytest.mark.trace("GIT-SOCIAL-003")
-@pytest.mark.baseline_green
-def test_commit_and_push_reports_commit_failure_and_exhausts_bounded_push_retries(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    repo = tmp_path / "repo"
-    asset = repo / "static" / "social" / "daily.jpg"
-    asset.parent.mkdir(parents=True)
-    asset.write_bytes(b"image")
-    logs: list[str] = []
-    calls: list[tuple[str, ...]] = []
-
-    def fake_git(*args: str, check: bool = True):
-        del check
-        calls.append(args)
-        if args[:3] == ("diff", "--cached", "--quiet"):
-            return _completed(args, returncode=1)
-        if args and args[0] == "push":
-            raise subprocess.CalledProcessError(1, args, stderr="remote unavailable")
-        return _completed(args)
-
-    monkeypatch.setattr(flow, "BASE_DIR", repo)
-    monkeypatch.setattr(flow, "_git", fake_git)
-    monkeypatch.setattr(flow.time, "sleep", lambda seconds: None)
-
-    assert flow.commit_and_push(
-        [asset], "social: daily", branch="automation/social/run", log=logs.append
-    ) is False
-    assert len([call for call in calls if call and call[0] == "push"]) == 4
-    assert any("4/4" in line for line in logs)
+    assert "git push" not in source
+    assert "subprocess" not in source
+    assert not hasattr(flow, "commit_and_push")
 
 
 @pytest.mark.trace("SOCIAL-FLOW-002")
@@ -205,16 +147,6 @@ def test_publish_nota_dry_run_has_zero_git_meta_or_state_effects(
     monkeypatch.setattr(flow.state_mod, "load", lambda: {"version": 2, "published": {}})
     monkeypatch.setattr(flow.state_mod, "is_published", lambda slug, state: False)
     monkeypatch.setattr(flow, "render_nota_pieces", lambda *args, **kwargs: pieces)
-    monkeypatch.setattr(
-        flow,
-        "commit_and_push",
-        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("git must not run")),
-    )
-    monkeypatch.setattr(
-        flow,
-        "Meta",
-        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("Meta must not run")),
-    )
     monkeypatch.setattr(
         flow.state_mod,
         "record",
@@ -413,6 +345,46 @@ def test_publish_nota_cli_dry_run_never_constructs_meta_client(
     assert cli.cmd_publish_nota(args) == 0
     output = capsys.readouterr().out
     assert "fb-copy" in output and "ig-copy" in output
+
+
+@pytest.mark.trace("CLI-SOCIAL-010")
+@pytest.mark.red_expected
+def test_cli_publish_commands_fail_closed_outside_dry_run(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    settings = configured_settings(dry_run=False)
+    monkeypatch.setattr(cli, "load_settings", lambda: settings)
+    monkeypatch.setattr(
+        cli.notas_mod,
+        "latest",
+        lambda: (_ for _ in ()).throw(AssertionError("legacy note publisher must not load a note")),
+    )
+
+    nota_args = SimpleNamespace(
+        dry_run=False,
+        latest=True,
+        slug=None,
+        no_carousel=False,
+        no_story=False,
+        no_commit=False,
+        branch="",
+        wait=0,
+        force=False,
+    )
+    library_args = SimpleNamespace(
+        dry_run=False,
+        key="diagnostico",
+        surface="portrait",
+        story=False,
+        no_commit=False,
+        branch="",
+        wait=0,
+        force=False,
+    )
+
+    assert cli.cmd_publish_nota(nota_args) == 2
+    assert cli.cmd_publish_library(library_args) == 2
+    assert capsys.readouterr().out.count("cola editorial") == 2
 
 
 @pytest.mark.trace("CLI-SOCIAL-007")

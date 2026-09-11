@@ -38,9 +38,9 @@ from .delivery import (  # noqa: E402
     build_blog_note_draft,
     deliver_draft,
 )
-from .flow import ascii_slug, commit_and_push, public_name, publish_nota, render_nota_pieces  # noqa: E402
+from .flow import ascii_slug, publish_nota, render_nota_pieces  # noqa: E402
 from .library import LIBRARY, captions as library_captions, library_piece  # noqa: E402
-from .publisher import Meta, PublishError, resolve_public_url  # noqa: E402
+from .publisher import Meta, PublishError  # noqa: E402
 from .templates import Piece  # noqa: E402
 
 SURFACE_CHOICES = ("feed", "portrait", "story", "all")
@@ -380,6 +380,9 @@ def cmd_publish_nota(args) -> int:
     settings = load_settings()
     if args.dry_run:
         settings.dry_run = True
+    if not settings.dry_run:
+        print("⛔ Publicación directa deshabilitada: use la cola editorial y los workflows de GitHub.")
+        return 2
     if not settings.enabled and not settings.dry_run:
         print("○ SOCIAL_ENABLED=0 — no se publica nada.")
         return 0
@@ -427,6 +430,9 @@ def cmd_publish_library(args) -> int:
     settings = load_settings()
     if args.dry_run:
         settings.dry_run = True
+    if not settings.dry_run:
+        print("⛔ Publicación directa deshabilitada: use la cola editorial y los workflows de GitHub.")
+        return 2
 
     # ── Guardia anti-duplicado ──────────────────────────────────────────
     # `publish-nota` revisa state.json antes de publicar y por eso nunca
@@ -457,53 +463,11 @@ def cmd_publish_library(args) -> int:
     fb_caption = texts.get("facebook", "")
     ig_caption = texts.get("instagram", "")
 
-    if settings.dry_run or not settings.can_post:
-        print("\n── Facebook ─────────────────────────────────────────────────")
-        print(fb_caption)
-        print("\n── Instagram ────────────────────────────────────────────────")
-        print(ig_caption)
-        return 0
-
-    if not args.no_commit:
-        commit_and_push([p for p in [feed, story_path] if p], f"🖼️  Pieza de redes: {args.key}", args.branch)
-
-    meta = Meta(settings)
-    fb_result = meta.facebook_photo(feed, fb_caption)
-    results = [fb_result]
-    if fb_result.ok:
-        # Registrar YA (lección 2026-08-21: si el proceso muere a mitad, un
-        # reintento no debe volver a publicar FB).
-        state_mod.record(
-            args.key,
-            {"date": datetime.datetime.now().date().isoformat(), "facebook": fb_result.id},
-            state=state,
-        )
-    url = resolve_public_url(public_name(feed), settings, wait=args.wait)
-    if url:
-        results.append(meta.instagram_image(url, ig_caption))
-    if story_path:
-        surl = resolve_public_url(public_name(story_path), settings, wait=args.wait)
-        if surl:
-            results.append(meta.instagram_story(surl))
-    _print_result_block("── Resultado ───────────────────────────────────────────────", results)
-
-    # Registrar en state.json (igual que publish-nota) para evitar duplicados
-    # en el cron. La clave es args.key; sin esto, si el cron vuelve a correr,
-    # no hay forma de saber que la pieza ya se publicó.
-    record: dict = {"date": datetime.datetime.now().date().isoformat()}
-    fb = next((r for r in results if r.network == "facebook" and r.ok), None)
-    ig = next((r for r in results if r.network == "instagram" and r.kind == "feed" and r.ok), None)
-    st = next((r for r in results if r.network == "instagram" and r.kind == "historia" and r.ok), None)
-    if fb:
-        record["facebook"] = fb.id
-    if ig:
-        record["instagram"] = ig.id
-    if st:
-        record["story"] = st.id
-    if record != {"date": record["date"]}:
-        state_mod.record(args.key, record, state=state_mod.load())
-
-    return 0 if any(r.ok for r in results) else 1
+    print("\n── Facebook ─────────────────────────────────────────────────")
+    print(fb_caption)
+    print("\n── Instagram ────────────────────────────────────────────────")
+    print(ig_caption)
+    return 0
 
 
 # ── Parser ──────────────────────────────────────────────────────────────────

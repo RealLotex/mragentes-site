@@ -286,3 +286,21 @@ def test_publish_blog_no_longer_owns_direct_git_push_function() -> None:
     assert not hasattr(module, "git_commit_push"), trace_message(
         "EDITORIAL-SEPARATION-002", "legacy direct git_commit_push still exists"
     )
+
+
+@pytest.mark.trace("EDITORIAL-SEPARATION-005")
+@pytest.mark.red_expected
+def test_legacy_daily_publisher_has_no_direct_remote_side_effects() -> None:
+    source = Path("scripts/publish_daily.py").read_text(encoding="utf-8")
+
+    for forbidden in (
+        "git_commit_push",
+        "git push",
+        "_send_push_notification",
+        "_announce_on_social",
+        "PUSH_API_TOKEN",
+    ):
+        assert forbidden not in source, trace_message(
+            "EDITORIAL-SEPARATION-005",
+            f"publish_daily.py conserva un efecto remoto legado: {forbidden}",
+        )
