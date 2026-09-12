@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "automation_id": "mr-agentes-noticias",
+  "name": "MR Agentes — Editorial diario",
+  "project": "MR Agentes",
+  "execution_environment": "local",
+  "conversation": "new",
+  "workspace": "worktree",
+  "timezone": "America/Cordoba",
+  "weekdays": [0, 1, 2, 3, 4, 5, 6],
+  "local_time": "18:00",
+  "cron": "0 18 * * *",
+  "rrule": "RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR,SA,SU;BYHOUR=18;BYMINUTE=0;BYSECOND=0",
+  "model": "gpt-5.6-terra",
+  "reasoning_effort": "medium",
+  "skill": "mragentes-editorial-publisher",
+  "prompt": "Usá $mragentes-editorial-publisher para ejecutar una sola transacción editorial correspondiente a la fecha actual de America/Cordoba. Trabajá en una conversación nueva y un worktree limpio creado desde origin/main. Investigá noticias verificables, actualizá la cola, prepará exactamente una nota con su portada y su único anuncio social de plantilla, y validá guards, pruebas, secretos y Hugo. Si hay menos de dos noticias elegibles, devolvé skipped_valid sin inventar ni crear un cambio vacío. Entregá todos los archivos en un único commit atómico sobre automation/editorial/{run_id} y creá un PR no borrador mediante el conector de GitHub siguiendo .automation/github/connector-egress.json. No uses git push local, no hagas merge y no llames a Meta ni Cloudflare. Ante checkout sucio o estado remoto ambiguo, devolvé needs_review.",
+  "branch_template": "automation/editorial/{run_id}",
+  "status": "active",
+  "registered": true,
+  "catch_up": false,
+  "output": {
+    "notes_per_run": 1,
+    "facebook_posts_per_note": 1,
+    "instagram_posts_per_note": 1
+  },
+  "permissions": {
+    "repository_writes": [
+      ".automation/news/queue/**",
+      ".automation/blog/**",
+      ".automation/reports/**",
+      "content/notas/**",
+      "static/images/stock/**",
+      "static/images/social/**"
+    ],
+    "remote_egress": {
+      "provider": "github_connector",
+      "contract": ".automation/github/connector-egress.json"
+    },
+    "external_publish": false
+  }
+}

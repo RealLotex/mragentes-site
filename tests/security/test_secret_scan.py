@@ -274,3 +274,16 @@ def test_main_has_stable_clean_finding_and_infrastructure_exit_codes(
     assert "synthetic infrastructure failure" not in (
         infrastructure_output.out + infrastructure_output.err
     ), trace_message("SEC-SCAN-010", "infrastructure detail leaked to output")
+
+
+@pytest.mark.trace("SEC-SCAN-011")
+@pytest.mark.red_expected
+def test_exact_historical_test_placeholder_is_not_reported_as_a_secret() -> None:
+    fixture = 'API_TOKEN: "legacy-secret-not-used"'
+    assert scanner.scan_text(fixture, "historical-test.mjs") == [], trace_message(
+        "SEC-SCAN-011", "known synthetic historical placeholder blocks repository audits"
+    )
+    unsafe = 'API_TOKEN: "legacy-' + 'secret-real-looking"'
+    assert scanner.scan_text(unsafe, "bad.txt"), trace_message(
+        "SEC-SCAN-011", "placeholder exception is broader than the exact historical fixture"
+    )

@@ -1,0 +1,4 @@
+interface:
+  display_name: "MR Agentes — Editorial diario"
+  short_description: "Investiga y prepara una nota diaria validada"
+  default_prompt: "Usá $mragentes-editorial-publisher para preparar la transacción editorial de hoy."

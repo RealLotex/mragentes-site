@@ -4,6 +4,10 @@
   "repository": "RealLotex/mragentes-site",
   "base_branch": "main",
   "target_branch_prefix": "automation/",
+  "workspace": {
+    "mode": "dedicated_worktree",
+    "base_ref": "origin/main"
+  },
   "preflight": {
     "require_authenticated_connector": true,
     "minimum_repository_permission": "write",

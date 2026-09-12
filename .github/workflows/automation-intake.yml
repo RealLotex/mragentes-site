@@ -3,10 +3,7 @@ name: Automation branch intake
 on:
   push:
     branches:
-      - automation/news/**
-      - automation/blog/**
-      - automation/social/**
-      - automation/recovery/**
+      - automation/editorial/**
   workflow_run:
     workflows:
       - Contract and site CI
@@ -74,7 +71,7 @@ jobs:
         run: |
           set -euo pipefail
           case "$RUN_HEAD_BRANCH" in
-            automation/news/*|automation/blog/*|automation/social/*|automation/recovery/*) ;;
+            automation/editorial/*) ;;
             *) echo "workflow head is outside the automation branch allowlist" >&2; exit 1 ;;
           esac
           if [ "$RUN_HEAD_REPOSITORY" != "$GITHUB_REPOSITORY" ]; then

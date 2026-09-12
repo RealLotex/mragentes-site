@@ -16,16 +16,22 @@ draft: false
 aliases: []
 ---
 
-Introducción que conecte los hechos con una necesidad concreta de la audiencia.
+Introducción que conecta los hechos con una necesidad concreta.
 
 ## Qué ocurrió
 
-Síntesis original, con vínculos a las fuentes en el punto donde respaldan cada afirmación.
+Síntesis original con vínculos junto a cada afirmación.
 
 ## Por qué importa
 
 Implicancias prácticas, límites y contexto.
 
-## Qué podés hacer ahora
+## Qué puede hacer una PyME
 
-Conclusión accionable sin promesas infundadas.
+Un primer paso comprobable y una conclusión accionable.
+
+## Preguntas frecuentes
+
+### Pregunta concreta
+
+Respuesta concreta.

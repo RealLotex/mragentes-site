@@ -35,7 +35,6 @@
     }
   },
   "required_secrets": [
-    "API_TOKEN",
     "VAPID_PUBLIC_KEY",
     "VAPID_PRIVATE_KEY"
   ],
@@ -56,7 +55,7 @@
       "send": {
         "method": "POST",
         "path": "/api/send/",
-        "authentication": "bearer"
+        "authentication": "github_oidc"
       }
     }
   }

@@ -55,7 +55,10 @@ def test_git_index_and_baseline_head_are_sane() -> None:
     assert ancestry == b"", trace_message(
         "GIT-CANON-003", "audited RED baseline is no longer an ancestor of HEAD"
     )
-    assert (ROOT / ".git" / "index").is_file(), trace_message(
+    index = Path(git_bytes("rev-parse", "--git-path", "index").decode().strip())
+    if not index.is_absolute():
+        index = ROOT / index
+    assert index.is_file(), trace_message(
         "GIT-CANON-003", "Git index is absent"
     )
 

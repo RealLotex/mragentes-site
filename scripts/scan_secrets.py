@@ -114,6 +114,7 @@ PLACEHOLDER = re.compile(
 )
 LITERAL_PLACEHOLDER = re.compile(r"\b(?:TOKEN|SECRET|PASSWORD|USERNAME)\b")
 SYNTHETIC_MARKER = re.compile(r"(?i)\b(?:sentinel|synthetic)(?:[-_][A-Za-z0-9]+)*\b")
+HISTORICAL_TEST_PLACEHOLDER = re.compile(r"(?i)\blegacy-secret-not-used\b")
 EXAMPLE_CREDENTIAL_URL = re.compile(
     r"^https?://(?:user|username):(?:pass|password)@(?:[A-Za-z0-9-]+\.)*example\.test/",
     re.IGNORECASE,
@@ -166,6 +167,7 @@ def _is_allowed(line: str, candidate: str | None = None) -> bool:
         PLACEHOLDER.search(value)
         or LITERAL_PLACEHOLDER.search(value)
         or SYNTHETIC_MARKER.search(value)
+        or HISTORICAL_TEST_PLACEHOLDER.search(value)
         or EXAMPLE_CREDENTIAL_URL.search(value)
         or RUNTIME_REFERENCE.search(value)
     )
