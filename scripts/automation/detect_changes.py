@@ -8,16 +8,12 @@ import json
 from pathlib import Path
 from typing import Sequence
 
-from scripts.notifications.notify_deployed_note import (
-    changed_note_slugs,
-    changed_social_drafts,
-)
+from scripts.notifications.notify_deployed_note import changed_note_slugs
 
 
 def detect(repo: Path | str, before_sha: str, after_sha: str) -> dict[str, list[str]]:
     return {
         "note_slugs": sorted(changed_note_slugs(repo, before_sha, after_sha)),
-        "daily_drafts": sorted(changed_social_drafts(repo, before_sha, after_sha)),
     }
 
 

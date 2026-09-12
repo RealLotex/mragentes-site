@@ -174,7 +174,7 @@ describe("Worker authentication and routing contract", () => {
       repository_id: "1270433781",
       ref: "refs/heads/main",
       environment: "cloudflare-production",
-      workflow_ref: "RealLotex/mragentes-site/.github/workflows/notify-note.yml@refs/heads/main",
+      workflow_ref: "RealLotex/mragentes-site/.github/workflows/deploy.yml@refs/heads/main",
       iat: now,
       nbf: now - 1,
       exp: now + 120,
@@ -182,6 +182,10 @@ describe("Worker authentication and routing contract", () => {
     try {
       expect(await fn(await githubOidcToken(claims, pair.privateKey), environment())).toBe(true);
       expect(await fn(await githubOidcToken({ ...claims, repository_id: "0" }, pair.privateKey), environment())).toBe(false);
+      expect(await fn(await githubOidcToken({ ...claims, ref: "refs/heads/feature" }, pair.privateKey), environment())).toBe(false);
+      expect(await fn(await githubOidcToken({ ...claims, environment: "preview" }, pair.privateKey), environment())).toBe(false);
+      expect(await fn(await githubOidcToken({ ...claims, workflow_ref: "RealLotex/mragentes-site/.github/workflows/ci.yml@refs/heads/main" }, pair.privateKey), environment())).toBe(false);
+      expect(await fn(await githubOidcToken({ ...claims, sub: "repo:RealLotex/mragentes-site:ref:refs/heads/main" }, pair.privateKey), environment())).toBe(false);
     } finally {
       globalThis.fetch = originalFetch;
     }
@@ -203,8 +207,12 @@ describe("Worker authentication and routing contract", () => {
     const claims = {
       iss: "https://token.actions.githubusercontent.com",
       aud: "mragentes-push-notify",
+      sub: "repo:RealLotex/mragentes-site:environment:cloudflare-production",
       repository: "RealLotex/mragentes-site",
       repository_id: "1270433781",
+      ref: "refs/heads/main",
+      environment: "cloudflare-production",
+      workflow_ref: "RealLotex/mragentes-site/.github/workflows/deploy.yml@refs/heads/main",
       iat: now,
       nbf: now - 1,
       exp: now + 120,
@@ -229,7 +237,7 @@ describe("Worker authentication and routing contract", () => {
             "Idempotency-Key": eventId,
           },
         }),
-        environment({ API_TOKEN: "legacy-secret-not-used", FETCH: deployment.fetch }),
+        environment({ API_TOKEN: "", FETCH: deployment.fetch }),
         new ExecutionContextRecorder(),
       );
       expect(response.status).toBe(200);
@@ -237,6 +245,29 @@ describe("Worker authentication and routing contract", () => {
     } finally {
       globalThis.fetch = originalFetch;
     }
+  });
+
+  test("[PUSH-AUTH-015] el endpoint send rechaza el secreto API heredado aunque siga presente", async () => {
+    const target = await loadWorkerTarget("PUSH-AUTH-015");
+    const response = await workerHandler(target, "PUSH-AUTH-015").fetch(
+      jsonRequest("https://push.mragentes.test/api/send/", {
+        eventId: "blog-note:2026-08-26:ia-segura",
+        payloadHash: `sha256:${"a".repeat(64)}`,
+        payload: {
+          title: "IA segura",
+          body: "Nueva nota disponible",
+          url: `${ORIGIN}/notas/ia-segura/`,
+        },
+      }, {
+        headers: {
+          Authorization: "Bearer test-api-token-32-characters-long",
+          "Idempotency-Key": "blog-note:2026-08-26:ia-segura",
+        },
+      }),
+      environment(),
+      new ExecutionContextRecorder(),
+    );
+    expect(response.status).toBe(401);
   });
 
   test("[PUSH-AUTH-011] endpoints debug y clear-all son 404 en producción", async () => {

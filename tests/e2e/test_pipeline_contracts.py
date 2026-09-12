@@ -10,9 +10,9 @@ from tests.support.contracts import require_python_symbol, trace_message
 @pytest.mark.e2e
 def test_local_e2e_simulator_exposes_news_to_blog_pipeline() -> None:
     simulator = require_python_symbol(
-        "scripts/automation/e2e_simulator.py", "simulate_blog_pipeline", "E2E-BLOG-001"
+        "scripts/automation/e2e_simulator.py", "simulate_editorial_pipeline", "E2E-BLOG-001"
     )
-    result = simulator(mode="local-fakes", reruns=2)
+    result = simulator(reruns=2, deploy_healthy=True)
     assert result["notes"] == 1 and result["pushes"] == 1, trace_message(
         "E2E-BLOG-001", f"blog pipeline is not exactly-once: {result}"
     )
@@ -21,12 +21,12 @@ def test_local_e2e_simulator_exposes_news_to_blog_pipeline() -> None:
 @pytest.mark.trace("E2E-SOCIAL-001")
 @pytest.mark.red_expected
 @pytest.mark.e2e
-def test_local_e2e_simulator_separates_daily_and_blog_social() -> None:
+def test_local_e2e_simulator_has_only_blog_derived_social() -> None:
     simulator = require_python_symbol(
-        "scripts/automation/e2e_simulator.py", "simulate_social_pipeline", "E2E-SOCIAL-001"
+        "scripts/automation/e2e_simulator.py", "simulate_editorial_pipeline", "E2E-SOCIAL-001"
     )
-    result = simulator(day="wednesday", reruns=2)
-    assert result == {"daily_owned": 2, "blog_note": 2, "duplicates": 0}, trace_message(
+    result = simulator(reruns=2, deploy_healthy=True)
+    assert result["facebook"] == result["instagram"] == 1 and result["duplicates"] == 0, trace_message(
         "E2E-SOCIAL-001", f"social pipeline result differs: {result}"
     )
 
@@ -36,10 +36,10 @@ def test_local_e2e_simulator_separates_daily_and_blog_social() -> None:
 @pytest.mark.e2e
 def test_failed_deploy_produces_zero_external_calls() -> None:
     simulator = require_python_symbol(
-        "scripts/automation/e2e_simulator.py", "simulate_failed_deploy", "E2E-FAILURE-001"
+        "scripts/automation/e2e_simulator.py", "simulate_editorial_pipeline", "E2E-FAILURE-001"
     )
-    result = simulator()
-    assert result["meta_calls"] == result["push_calls"] == 0, trace_message(
+    result = simulator(reruns=2, deploy_healthy=False)
+    assert result["facebook"] == result["instagram"] == result["pushes"] == 0, trace_message(
         "E2E-FAILURE-001", f"failed deploy leaked effects: {result}"
     )
 

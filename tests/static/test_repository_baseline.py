@@ -73,5 +73,7 @@ def test_workspace_has_minimum_free_space() -> None:
 @pytest.mark.trace("GIT-CANON-004")
 @pytest.mark.baseline_green
 def test_index_exists_and_is_nonempty() -> None:
-    index = ROOT / ".git" / "index"
+    index = Path(git_text("rev-parse", "--git-path", "index"))
+    if not index.is_absolute():
+        index = ROOT / index
     assert index.is_file() and index.stat().st_size > 0

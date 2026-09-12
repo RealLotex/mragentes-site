@@ -115,7 +115,6 @@ def test_push_worker_manifest_declares_complete_runtime_bindings() -> None:
 def test_push_worker_manifest_names_secrets_without_values_or_account_identifiers() -> None:
     manifest = load_manifest("CF-MANIFEST-003")
     assert manifest.get("required_secrets") == [
-        "API_TOKEN",
         "VAPID_PUBLIC_KEY",
         "VAPID_PRIVATE_KEY",
     ], trace_message("CF-MANIFEST-003", "required Worker secret names are incomplete")
@@ -178,7 +177,7 @@ def test_push_worker_manifest_interface_matches_worker_and_site_clients() -> Non
             "send": {
                 "method": "POST",
                 "path": "/api/send/",
-                "authentication": "bearer",
+                "authentication": "github_oidc",
             },
         },
     }, trace_message("CF-MANIFEST-004", "public Worker interface differs from production")

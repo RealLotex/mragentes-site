@@ -52,16 +52,10 @@ def test_ci_workflow_is_read_only_by_default_and_scopes_merge_permissions() -> N
 
 @pytest.mark.trace("WF-CI-002")
 @pytest.mark.red_expected
-def test_ci_validates_changed_social_drafts_and_their_asset_hashes() -> None:
+def test_ci_has_no_daily_social_draft_branch() -> None:
     _, source, _ = workflow(".github/workflows/ci.yml", "WF-CI-002")
-    for term in (
-        "validate_social_draft",
-        "content_hash",
-        "sha256",
-        ".automation/social/drafts/*.json",
-        "asset does not exist",
-    ):
-        assert term in source, trace_message("WF-CI-002", f"CI lacks social draft gate: {term}")
+    for term in ("validate_social_draft", ".automation/social/drafts/*.json", "daily_owned"):
+        assert term not in source, trace_message("WF-CI-002", f"obsolete daily social gate remains: {term}")
 
 
 @pytest.mark.trace("WF-INTAKE-001")
@@ -69,10 +63,7 @@ def test_ci_validates_changed_social_drafts_and_their_asset_hashes() -> None:
 def test_automation_intake_requires_scoped_branches_and_pr_gate() -> None:
     _, source, parsed = workflow(".github/workflows/automation-intake.yml", "WF-INTAKE-001")
     for term in (
-        "automation/news/**",
-        "automation/blog/**",
-        "automation/social/**",
-        "automation/recovery/**",
+        "automation/editorial/**",
         "await_connector_pull_request",
         "pull-requests: read",
     ):
@@ -234,20 +225,20 @@ def test_deploy_health_gate_precedes_external_effects() -> None:
     assert "wait_for_publication" in source, trace_message(
         "WF-DEPLOY-003", "deploy has no URL/image/marker health gate"
     )
-    assert "social-note" in source and "notify_deployed_note" in source, trace_message(
+    assert "scripts.social deliver-note" in source and "notify_deployed_note" in source, trace_message(
         "WF-DEPLOY-003", "deploy does not invoke post-deploy effects"
     )
 
 
 @pytest.mark.trace("WF-DEPLOY-004")
 @pytest.mark.red_expected
-def test_deploy_detects_only_new_notes_and_daily_drafts_from_git_history() -> None:
+def test_deploy_detects_only_new_notes_from_git_history() -> None:
     _, source, parsed = workflow(".github/workflows/deploy.yml", "WF-DEPLOY-004")
     detect_job = parsed.get("jobs", {}).get("detect_changes", {})
     assert detect_job, trace_message("WF-DEPLOY-004", "deploy lacks a detect_changes job")
     outputs = detect_job.get("outputs", {})
-    assert {"note_slugs", "daily_drafts"}.issubset(outputs), trace_message(
-        "WF-DEPLOY-004", "detect_changes does not expose both typed output arrays"
+    assert set(outputs) == {"note_slugs"}, trace_message(
+        "WF-DEPLOY-004", "detect_changes exposes state beyond new note slugs"
     )
     assert "python -m scripts.automation.detect_changes" in source, trace_message(
         "WF-DEPLOY-004", "deploy bypasses the tested Git change detector"
@@ -274,13 +265,11 @@ def test_deploy_detects_only_new_notes_and_daily_drafts_from_git_history() -> No
 
 @pytest.mark.trace("WF-DEPLOY-005")
 @pytest.mark.red_expected
-def test_deploy_dispatches_content_effects_but_never_redeploys_worker_for_a_note() -> None:
+def test_deploy_runs_content_effects_inline_but_never_redeploys_worker_for_a_note() -> None:
     _, source, _ = workflow(".github/workflows/deploy.yml", "WF-DEPLOY-005")
-    for target in ("social-note.yml", "social-daily.yml", "notify-note.yml"):
-        assert target in source, trace_message("WF-DEPLOY-005", f"deploy never dispatches {target}")
-    assert "note_slug" in source and "daily_drafts" in source, trace_message(
-        "WF-DEPLOY-005", "deploy dispatches without typed note/draft identifiers"
-    )
+    assert "scripts.social deliver-note" in source
+    assert "scripts.notifications.notify_deployed_note" in source
+    assert "daily_drafts" not in source and "gh workflow run" not in source
     assert not re.search(r"gh\s+workflow\s+run\s+push-worker\.yml", source), trace_message(
         "WF-DEPLOY-005", "a content publication incorrectly redeploys the Push Worker"
     )
@@ -288,11 +277,10 @@ def test_deploy_dispatches_content_effects_but_never_redeploys_worker_for_a_note
 
 @pytest.mark.trace("WF-DEPLOY-007")
 @pytest.mark.red_expected
-def test_deploy_dispatches_workflows_with_an_explicit_repository_without_checkout() -> None:
+def test_deploy_has_no_secondary_workflow_dispatch_chain() -> None:
     _, source, _ = workflow(".github/workflows/deploy.yml", "WF-DEPLOY-007")
-    assert '"--repo"' in source and "GITHUB_REPOSITORY" in source, trace_message(
-        "WF-DEPLOY-007", "dispatch job relies on a local git checkout that it does not have"
-    )
+    assert "gh workflow run" not in source
+    assert "workflow_call" not in source
 
 
 @pytest.mark.trace("WF-DEPLOY-006")
@@ -321,19 +309,14 @@ def test_deploy_never_cancels_an_event_before_its_external_effect_dispatch() -> 
             "scripts.automation.wait_for_publication",
         ),
         (
-            ".github/workflows/notify-note.yml",
-            "send_notification",
+            ".github/workflows/deploy.yml",
+            "notify_push",
             "scripts.notifications.notify_deployed_note",
         ),
         (
-            ".github/workflows/social-note.yml",
-            "publish_testing_only",
+            ".github/workflows/deploy.yml",
+            "publish_meta",
             "scripts.social deliver-note",
-        ),
-        (
-            ".github/workflows/social-daily.yml",
-            "publish_daily_owned",
-            "scripts.social deliver-draft",
         ),
         (
             ".github/workflows/meta-preflight.yml",
@@ -372,13 +355,11 @@ def test_clean_python_jobs_install_hash_locked_runtime_dependencies(
 @pytest.mark.trace("WF-SOCIAL-NOTE-001")
 @pytest.mark.red_expected
 def test_social_note_is_reusable_and_testing_only() -> None:
-    _, source, parsed = workflow(".github/workflows/social-note.yml", "WF-SOCIAL-NOTE-001")
-    assert "workflow_call" in source and "meta-testing" in source, trace_message(
-        "WF-SOCIAL-NOTE-001", "social-note lacks reusable testing contract"
-    )
-    env = parsed.get("jobs", {}).get("publish_testing_only", {}).get("env", {})
+    _, source, parsed = workflow(".github/workflows/deploy.yml", "WF-SOCIAL-NOTE-001")
+    env = parsed.get("jobs", {}).get("publish_meta", {}).get("env", {})
+    assert parsed["jobs"]["publish_meta"]["environment"] == "meta-testing"
     assert env.get("META_GRAPH_VERSION") == "v26.0", trace_message(
-        "WF-SOCIAL-NOTE-001", "social-note does not pin the tested Graph API contract"
+        "WF-SOCIAL-NOTE-001", "deploy does not pin the tested Graph API contract"
     )
     assert "vars.META_GRAPH_VERSION" not in source, trace_message(
         "WF-SOCIAL-NOTE-001", "a stale repository variable can override Graph API v26.0"
@@ -388,7 +369,7 @@ def test_social_note_is_reusable_and_testing_only() -> None:
 @pytest.mark.trace("WF-SOCIAL-NOTE-002")
 @pytest.mark.red_expected
 def test_social_note_delivers_the_exact_deployed_slug_through_guarded_cli() -> None:
-    _, source, _ = workflow(".github/workflows/social-note.yml", "WF-SOCIAL-NOTE-002")
+    _, source, _ = workflow(".github/workflows/deploy.yml", "WF-SOCIAL-NOTE-002")
     assert "python -m scripts.social deliver-note" in source, trace_message(
         "WF-SOCIAL-NOTE-002", "social-note does not call the guarded delivery command"
     )
@@ -405,16 +386,10 @@ def test_social_note_delivers_the_exact_deployed_slug_through_guarded_cli() -> N
 @pytest.mark.trace("WF-SOCIAL-DAILY-001")
 @pytest.mark.red_expected
 def test_social_daily_is_separate_and_idempotent() -> None:
-    _, source, parsed = workflow(".github/workflows/social-daily.yml", "WF-SOCIAL-DAILY-001")
-    for term in ("daily_owned", "dedupe", "concurrency", "meta-testing"):
-        assert term in source, trace_message("WF-SOCIAL-DAILY-001", f"daily workflow lacks: {term}")
-    env = parsed.get("jobs", {}).get("publish_daily_owned", {}).get("env", {})
-    assert env.get("META_GRAPH_VERSION") == "v26.0", trace_message(
-        "WF-SOCIAL-DAILY-001", "daily social flow does not pin Graph API v26.0"
-    )
-    assert "vars.META_GRAPH_VERSION" not in source, trace_message(
-        "WF-SOCIAL-DAILY-001", "a stale repository variable can override Graph API v26.0"
-    )
+    paths = {path.name for path in (ROOT / ".github/workflows").glob("*.yml")}
+    assert "social-daily.yml" not in paths
+    _, source, _ = workflow(".github/workflows/deploy.yml", "WF-SOCIAL-DAILY-001")
+    assert "daily_owned" not in source and "deliver-draft" not in source
 
 
 @pytest.mark.trace("WF-META-PREFLIGHT-001")
@@ -463,32 +438,16 @@ def test_meta_preflight_is_manual_read_only_and_fail_closed() -> None:
 @pytest.mark.trace("WF-SOCIAL-DAILY-002")
 @pytest.mark.red_expected
 def test_social_daily_delivers_one_date_scoped_committed_draft() -> None:
-    _, source, _ = workflow(".github/workflows/social-daily.yml", "WF-SOCIAL-DAILY-002")
-    assert "draft_path" in source, trace_message(
-        "WF-SOCIAL-DAILY-002", "social-daily has no committed draft input"
-    )
-    assert ".automation/social/drafts/" in source, trace_message(
-        "WF-SOCIAL-DAILY-002", "social-daily does not constrain the draft namespace"
-    )
-    assert "python -m scripts.social deliver-draft" in source, trace_message(
-        "WF-SOCIAL-DAILY-002", "social-daily does not call the guarded delivery command"
-    )
-    assert '--draft "$DRAFT_PATH"' in source, trace_message(
-        "WF-SOCIAL-DAILY-002", "social-daily does not pass the validated draft path"
-    )
-    assert "scripts.social recover" not in source and "--force" not in source, trace_message(
-        "WF-SOCIAL-DAILY-002", "social-daily can recover-only or override deduplication"
-    )
+    _, source, _ = workflow(".github/workflows/deploy.yml", "WF-SOCIAL-DAILY-002")
+    assert ".automation/social/drafts/" not in source
+    assert "deliver-draft" not in source and "--force" not in source
 
 
 @pytest.mark.trace("WF-PUSH-001")
 @pytest.mark.red_expected
 def test_notify_note_sends_one_idempotent_event_with_secrets_only_in_env() -> None:
-    _, source, parsed = workflow(".github/workflows/notify-note.yml", "WF-PUSH-001")
-    assert "workflow_call" in source and "workflow_dispatch" in source, trace_message(
-        "WF-PUSH-001", "notify-note is not reusable and manually recoverable"
-    )
-    job = parsed.get("jobs", {}).get("send_notification", {})
+    _, source, parsed = workflow(".github/workflows/deploy.yml", "WF-PUSH-001")
+    job = parsed.get("jobs", {}).get("notify_push", {})
     env = job.get("env", {})
     assert "PUSH_API_TOKEN" not in env, trace_message(
         "WF-PUSH-001", "Push must use a short-lived OIDC identity, not a stored Actions secret"
@@ -496,7 +455,7 @@ def test_notify_note_sends_one_idempotent_event_with_secrets_only_in_env() -> No
     assert env.get("PUSH_WORKER_URL") == "https://mragentes-push.rosichmarcos.workers.dev/api/send/", trace_message(
         "WF-PUSH-001", "public Worker URL is not pinned to the canonical endpoint"
     )
-    assert parsed.get("permissions", {}).get("id-token") == "write", trace_message(
+    assert job.get("permissions", {}).get("id-token") == "write", trace_message(
         "WF-PUSH-001", "notify-note cannot request its short-lived GitHub OIDC identity"
     )
     run_sources = "\n".join(
@@ -511,7 +470,7 @@ def test_notify_note_sends_one_idempotent_event_with_secrets_only_in_env() -> No
     assert "ACTIONS_ID_TOKEN_REQUEST_URL" in run_sources and "mragentes-push-notify" in run_sources, trace_message(
         "WF-PUSH-001", "notify-note does not request the Worker-scoped OIDC token"
     )
-    assert "${{ secrets." not in source and "--token " not in run_sources, trace_message(
+    assert "${{ secrets." not in str(job) and "--token " not in run_sources, trace_message(
         "WF-PUSH-001", "a Push secret is interpolated directly into a command"
     )
 
@@ -539,24 +498,14 @@ def test_worker_pipeline_tests_staging_before_production() -> None:
 @pytest.mark.trace("WF-SOCIAL-LEGACY-001")
 @pytest.mark.red_expected
 def test_legacy_social_workflow_does_not_interpolate_inputs_in_shell() -> None:
-    _, source, _ = workflow(".github/workflows/social.yml", "WF-SOCIAL-LEGACY-001")
-    run_blocks = re.findall(r"(?ms)^\s+run:\s*\|\n(.*?)(?=^\s{6}\S|\Z)", source)
-    unsafe = [block for block in run_blocks if "${{" in block]
-    assert not unsafe, trace_message(
-        "WF-SOCIAL-LEGACY-001", "GitHub expressions are interpolated directly in shell"
-    )
+    assert not (ROOT / ".github/workflows/social.yml").exists()
 
 
 @pytest.mark.trace("WF-SOCIAL-LEGACY-002")
 @pytest.mark.red_expected
 def test_legacy_social_workflow_cannot_hide_git_failures() -> None:
-    _, source, _ = workflow(".github/workflows/social.yml", "WF-SOCIAL-LEGACY-002")
-    assert "git pull --rebase origin main || true" not in source, trace_message(
-        "WF-SOCIAL-LEGACY-002", "workflow suppresses rebase failures"
-    )
-    assert "git push origin HEAD:main" not in source, trace_message(
-        "WF-SOCIAL-LEGACY-002", "workflow writes state directly to main"
-    )
+    obsolete = ("social.yml", "social-note.yml", "social-daily.yml", "notify-note.yml")
+    assert not any((ROOT / ".github/workflows" / name).exists() for name in obsolete)
 
 
 @pytest.mark.trace("SEC-SCOPE-001")

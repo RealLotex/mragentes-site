@@ -1,4 +1,5 @@
-import { describe, expect, test as vitestTest, vi } from "vitest";
+import { webcrypto } from "node:crypto";
+import { beforeAll, describe, expect, test as vitestTest, vi } from "vitest";
 
 import {
   ExecutionContextRecorder,
@@ -23,8 +24,46 @@ const test = tracedTest(vitestTest);
 
 const SITE_ORIGIN = "https://mragentes.com.ar";
 const WORKER_ORIGIN = "https://push.mragentes.test";
-const TOKEN = "send-contract-token-32-characters";
 const FIXED_NOW = Date.parse("2026-08-26T12:00:00.000Z");
+let oidcToken;
+let oidcJwksTransport;
+
+function b64json(value) {
+  return Buffer.from(JSON.stringify(value), "utf8").toString("base64url");
+}
+
+beforeAll(async () => {
+  const pair = await webcrypto.subtle.generateKey(
+    { name: "RSASSA-PKCS1-v1_5", modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: "SHA-256" },
+    true,
+    ["sign", "verify"],
+  );
+  const publicJwk = await webcrypto.subtle.exportKey("jwk", pair.publicKey);
+  const now = Math.floor(FIXED_NOW / 1_000);
+  const header = b64json({ alg: "RS256", kid: "worker-send-test-key", typ: "JWT" });
+  const claims = b64json({
+    iss: "https://token.actions.githubusercontent.com",
+    aud: "mragentes-push-notify",
+    sub: "repo:RealLotex/mragentes-site:environment:cloudflare-production",
+    repository: "RealLotex/mragentes-site",
+    repository_id: "1270433781",
+    ref: "refs/heads/main",
+    environment: "cloudflare-production",
+    workflow_ref: "RealLotex/mragentes-site/.github/workflows/deploy.yml@refs/heads/main",
+    iat: now,
+    nbf: now - 1,
+    exp: now + 120,
+  });
+  const signature = await webcrypto.subtle.sign(
+    "RSASSA-PKCS1-v1_5",
+    pair.privateKey,
+    new TextEncoder().encode(`${header}.${claims}`),
+  );
+  oidcToken = `${header}.${claims}.${Buffer.from(signature).toString("base64url")}`;
+  oidcJwksTransport = async () => new Response(JSON.stringify({
+    keys: [{ ...publicJwk, kid: "worker-send-test-key", alg: "RS256" }],
+  }), { status: 200, headers: { "Content-Type": "application/json" } });
+});
 
 async function exported(name, traceId) {
   const target = await loadWorkerTarget(traceId);
@@ -58,10 +97,10 @@ function notification(overrides = {}) {
 function pushEnvironment(kv = new FakeKV(), overrides = {}) {
   return {
     PUSH_SUBS: kv,
-    API_TOKEN: TOKEN,
     ALLOWED_ORIGINS: SITE_ORIGIN,
     ENVIRONMENT: "production",
     CLOCK: () => FIXED_NOW,
+    FETCH_OIDC: oidcJwksTransport,
     ...overrides,
   };
 }
@@ -70,7 +109,7 @@ function sendRequest(body = notification(), headers = {}) {
   return jsonRequest(`${WORKER_ORIGIN}/api/send/`, body, {
     headers: {
       Origin: SITE_ORIGIN,
-      Authorization: `Bearer ${TOKEN}`,
+      Authorization: `Bearer ${oidcToken}`,
       "Idempotency-Key": body.eventId,
       ...headers,
     },
@@ -254,7 +293,7 @@ describe("Durable Object notification coordinator", () => {
 describe("Send fan-out and idempotency", () => {
   test("[PUSH-SEND-001] send exige Bearer válido aunque el body contenga token legacy", async () => {
     const target = await loadWorkerTarget("PUSH-SEND-001");
-    const body = { ...notification(), token: TOKEN };
+    const body = { ...notification(), token: "legacy-token-in-body" };
     const response = await workerHandler(target, "PUSH-SEND-001").fetch(
       jsonRequest(`${WORKER_ORIGIN}/api/send/`, body, { headers: { Origin: SITE_ORIGIN, "Idempotency-Key": body.eventId } }),
       pushEnvironment(),
@@ -921,7 +960,7 @@ describe("KV, pagination and concurrency helpers", () => {
     const target = await loadWorkerTarget("PUSH-KV-010");
     const worker = workerHandler(target, "PUSH-KV-010");
     for (const [method, path] of [["POST", "/api/debug/clear-all"], ["GET", "/api/subscriptions"], ["GET", "/api/keys"]]) {
-      const response = await worker.fetch(new Request(`${WORKER_ORIGIN}${path}`, { method, headers: { Authorization: `Bearer ${TOKEN}` }, body: method === "GET" ? undefined : "{}" }), pushEnvironment(), new ExecutionContextRecorder());
+      const response = await worker.fetch(new Request(`${WORKER_ORIGIN}${path}`, { method, headers: { Authorization: `Bearer ${oidcToken}` }, body: method === "GET" ? undefined : "{}" }), pushEnvironment(), new ExecutionContextRecorder());
       expect(response.status).toBe(404);
     }
   });

@@ -26,14 +26,14 @@ validación en GitHub y efectos externos dentro de entornos protegidos.
 | GitHub, entorno `meta-testing` | `META_ACCESS_TOKEN` | autenticar Graph API | sólo variable de entorno del job |
 | GitHub, entorno `meta-testing` | `FB_PAGE_ID` | destino Facebook | sólo variable de entorno del job |
 | GitHub, entorno `meta-testing` | `IG_USER_ID` | destino Instagram | sólo variable de entorno del job |
-| GitHub, entorno `cloudflare-production` | `PUSH_API_TOKEN` | autenticar `/api/send/` | sólo variable de entorno del job |
-| GitHub, entorno `cloudflare-production` | `PUSH_WORKER_URL` | URL base del Worker | variable de entorno protegida |
-| Cloudflare | `API_TOKEN` | verificar llamadas del workflow | secret del Worker |
+| GitHub Actions OIDC | token efímero | autenticar `/api/send/` | sólo memoria del job `notify_push` |
+| repositorio | `PUSH_WORKER_URL` | URL pública del Worker | configuración no sensible |
+| Cloudflare | identidad OIDC permitida | verificar llamadas del workflow | configuración del Worker |
 | Cloudflare | `VAPID_PRIVATE_KEY` | firmar Web Push | secret del Worker |
 | Cloudflare | `VAPID_PUBLIC_KEY` | alta del navegador | binding/configuración pública |
 | Cloudflare | `PUSH_SUBS` | suscripciones y estado | binding KV; nunca artefacto CI |
 
-`PUSH_API_TOKEN` y `API_TOKEN` representan el mismo secreto en lados opuestos del límite. La
+El token OIDC se emite para una corrida y audiencia concretas; no se almacena en GitHub. La
 clave privada VAPID nunca entra en GitHub ni en el cliente. El token de Meta nunca entra en una
 tarea de ChatGPT: aparece únicamente en los workflows de entrega.
 
@@ -51,8 +51,8 @@ en `.automation/schedules/*.json`.
 ### GitHub
 
 - CI usa `contents: read` siempre que alcanza.
-- El intake usa `contents: write` y `pull-requests: write` sólo para crear/reutilizar el PR y
-  solicitar merge automático protegido.
+- El intake de push es read-only; el job confiable posterior a CI usa escritura sólo para el
+  merge protegido del SHA exacto.
 - Pages usa `pages: write` e `id-token: write` únicamente en el job de despliegue.
 - Los jobs externos declaran `contents: read`, un environment concreto y sólo sus secrets.
 - Las actions de terceros permanecen fijadas por SHA.

@@ -1,7 +1,7 @@
 // MR Agentes — Cloudflare Worker for Web Push notifications.
 //
 // Runtime bindings:
-//   PUSH_SUBS, API_TOKEN, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY,
+//   PUSH_SUBS, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY,
 //   ALLOWED_ORIGINS. Optional adapters used by tests/local development:
 //   FETCH, PUSH_TRANSPORT and CLOCK.
 
@@ -26,10 +26,12 @@ const GITHUB_OIDC_JWKS_URL = `${GITHUB_OIDC_ISSUER}/.well-known/jwks`;
 const GITHUB_OIDC_AUDIENCE = "mragentes-push-notify";
 const GITHUB_OIDC_REPOSITORY = "RealLotex/mragentes-site";
 const GITHUB_OIDC_REPOSITORY_ID = "1270433781";
-// GitHub's optional workflow, ref and environment claims are deliberately not
-// authorization inputs: GitHub can serialize them differently across dispatch
-// and reusable-workflow contexts. The signed issuer, audience and immutable
-// repository identity below are the stable authorization boundary.
+const GITHUB_OIDC_SUBJECT = "repo:RealLotex/mragentes-site:environment:cloudflare-production";
+const GITHUB_OIDC_REF = "refs/heads/main";
+const GITHUB_OIDC_ENVIRONMENT = "cloudflare-production";
+const GITHUB_OIDC_WORKFLOW_REF = "RealLotex/mragentes-site/.github/workflows/deploy.yml@refs/heads/main";
+// The signed subject, workflow, ref and environment claims intentionally bind
+// delivery to the tested production job on main.
 const GITHUB_OIDC_MAX_TOKEN_BYTES = 16_384;
 const GITHUB_OIDC_MAX_TOKEN_AGE_SECONDS = 600;
 const GITHUB_OIDC_CLOCK_SKEW_SECONDS = 30;
@@ -156,13 +158,15 @@ function oidcInteger(value) {
   return typeof value === "number" && Number.isSafeInteger(value) ? value : null;
 }
 
-async function githubOidcKeys() {
+async function githubOidcKeys(env) {
   const now = Date.now();
   if (githubOidcJwksCache.expiresAt > now && githubOidcJwksCache.keys.length) {
     return githubOidcJwksCache.keys;
   }
   try {
-    const response = await fetch(GITHUB_OIDC_JWKS_URL, { headers: { Accept: "application/json" } });
+    const transport = env?.FETCH_OIDC || globalThis.fetch;
+    if (typeof transport !== "function") return [];
+    const response = await transport(GITHUB_OIDC_JWKS_URL, { headers: { Accept: "application/json" } });
     if (!response.ok) return [];
     const body = await response.json();
     if (!isPlainObject(body) || !Array.isArray(body.keys)) return [];
@@ -200,13 +204,17 @@ async function githubActionsTokenOk(token, env) {
     // repository_id is immutable, so a repository rename cannot broaden access.
     || claims.repository !== GITHUB_OIDC_REPOSITORY
     || String(claims.repository_id) !== GITHUB_OIDC_REPOSITORY_ID
+    || claims.sub !== GITHUB_OIDC_SUBJECT
+    || claims.ref !== GITHUB_OIDC_REF
+    || claims.environment !== GITHUB_OIDC_ENVIRONMENT
+    || claims.workflow_ref !== GITHUB_OIDC_WORKFLOW_REF
     || exp === null || iat === null || nbf === null
     || exp <= now - GITHUB_OIDC_CLOCK_SKEW_SECONDS
     || nbf > now + GITHUB_OIDC_CLOCK_SKEW_SECONDS
     || iat > now + GITHUB_OIDC_CLOCK_SKEW_SECONDS
     || now - iat > GITHUB_OIDC_MAX_TOKEN_AGE_SECONDS
   ) return false;
-  const key = (await githubOidcKeys()).find((candidate) => candidate.kid === header.kid);
+  const key = (await githubOidcKeys(env)).find((candidate) => candidate.kid === header.kid);
   if (!key) return false;
   try {
     const cryptoRuntime = await runtimeCrypto();
@@ -230,7 +238,7 @@ async function githubActionsTokenOk(token, env) {
 
 async function sendAuthorized(request, env) {
   const token = bearerToken(request);
-  return tokenOk(token, env?.API_TOKEN) || githubActionsTokenOk(token, env);
+  return githubActionsTokenOk(token, env);
 }
 
 function truncateUtf8(value, { maxCodePoints, maxBytes }) {
