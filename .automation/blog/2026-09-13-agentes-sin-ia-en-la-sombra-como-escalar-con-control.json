@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-09-13:agentes-sin-ia-en-la-sombra-como-escalar-con-control",
+  "status": "prepared",
+  "local_date": "2026-09-13",
+  "created_at": "2026-09-13T16:03:39Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/agentes-sin-ia-en-la-sombra-como-escalar-con-control.md",
+      "sha256": "a266385b70ce6121adc0cf949a12b0a30ad5e3a77c064197dc0767f657d78a51"
+    },
+    "asset": {
+      "path": "static/images/stock/pexels-5324856.jpg",
+      "sha256": "78643dfbf2614b1a54ad57d823c897240d9b4f83803eda8f5a5de22a80d9583d",
+      "source_url": "https://www.pexels.com/photo/busy-colleagues-working-on-laptops-in-office-5324856/",
+      "creator": "Anna Shvets",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/agentes-sin-ia-en-la-sombra-como-escalar-con-control.jpg",
+      "sha256": "81f60a03487cf86b7108f422631a0898cde8a6e106baa3c5d7f563e0b6559337"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "14f6fa96825d341bafb4efcdfcc72fab97a00d392b8e45a3559820589cc64203",
+      "transition": {
+        "from": "pending",
+        "to": "consumed",
+        "count": 3,
+        "ids": [
+          "news-v1-cf05853a4d10b13a",
+          "news-v1-f50677ff0d835690",
+          "news-v1-f014814422ffd1e9"
+        ]
+      }
+    }
+  },
+  "sources": [
+    "https://news.microsoft.com/source/asia/features/how-microsoft-ai-is-helping-cognizant-scale-delivery-excellence-across-10000-projects/",
+    "https://www.ncsc.gov.uk/blogs/the-hidden-risks-of-shadow-ai",
+    "https://www.gov.uk/government/publications/ai-risk-management-toolkit"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-09-13",
+  "status": "prepared",
+  "local_date": "2026-09-13",
+  "created_at": "2026-09-13T16:03:39Z",
+  "branch": "automation/editorial/editorial-2026-09-13",
+  "note_slug": "agentes-sin-ia-en-la-sombra-como-escalar-con-control",
+  "selected_news_ids": [
+    "news-v1-cf05853a4d10b13a",
+    "news-v1-f50677ff0d835690",
+    "news-v1-f014814422ffd1e9"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-09-13-agentes-sin-ia-en-la-sombra-como-escalar-con-control.json",
+    "note": "content/notas/agentes-sin-ia-en-la-sombra-como-escalar-con-control.md",
+    "cover": "static/images/stock/pexels-5324856.jpg",
+    "announcement": "static/images/social/notes/agentes-sin-ia-en-la-sombra-como-escalar-con-control.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "front_matter": "green",
+    "news_queue": "green",
+    "editorial_style": {
+      "words": 1876,
+      "sections": 7,
+      "sources": 6,
+      "analytic_markers": 9,
+      "faq_questions": 4
+    },
+    "focused_tests": "112 passed",
+    "python_suite": "545 passed",
+    "javascript_suite": "191 passed",
+    "production_dependency_audit": "green (0 vulnerabilities)",
+    "secret_scan": "green",
+    "hugo": "green",
+    "visual": "desktop and social announcement reviewed"
+  },
+  "external_effects": "none; protected merge and deploy workflow are pending"
+}
