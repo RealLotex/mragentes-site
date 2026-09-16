@@ -2,7 +2,8 @@
 
 ## Servicio esperado
 
-- Una nota diaria a las 18:00 de `America/Cordoba` cuando existan al menos dos hechos fiables.
+- Una nota diaria: intento principal a las 18:00 y segundo intento a las 21:00 de
+  `America/Cordoba` cuando existan al menos dos hechos fiables.
 - Una publicación en Facebook y una publicación en Instagram derivadas de esa nota.
 - Un push por nota desplegada y una bienvenida al crear una suscripción.
 - Cero publicaciones sociales diarias independientes.
@@ -11,22 +12,28 @@
 
 | Tarea | ID | Frecuencia | Skill | Sesión |
 |---|---|---|---|---|
-| MR Agentes — Editorial diario | `mr-agentes-noticias` | `0 18 * * *` | `mragentes-editorial-publisher` | conversación nueva + worktree |
+| MR Agentes — Editorial diario | `mr-agentes-noticias` | `0 18,21 * * *` | `mragentes-editorial-publisher` | conversación nueva + worktree self-managed |
 
 Es una sola automatización nativa de Codex, activa todos los días y sin `catch_up`: si la
-computadora estaba apagada no publica contenido atrasado automáticamente. Los antiguos registros
-de blog, social y recuperación deben quedar pausados o eliminados después del cutover.
+computadora estaba apagada no publica contenido atrasado automáticamente. Las dos ventanas usan
+la misma identidad; el segundo intento cubre un límite de uso transitorio y es un no-op cuando
+los artefactos completos de la fecha ya existen. Los antiguos registros de blog, social y
+recuperación deben quedar pausados o eliminados después del cutover.
 
-El worktree es un checkout temporal y aislado que Codex crea desde `origin/main`. Evita mezclar
-la tarea programada con cambios humanos del checkout principal; no es otro servidor ni otro
-clon que haya que mantener.
+El worktree es un checkout temporal y aislado que Codex crea desde `origin/main`. La tarea
+nativa comienza en el checkout compartido, ejecuta `git fetch --no-tags origin main`, obtiene una
+ruta única con `mktemp -d` y ejecuta `git worktree add --detach <ruta>/worktree origin/main` antes
+de comprobar limpieza. El checkout compartido sucio no es un bloqueo: se preserva y no se
+modifica. Así se evitan mezclas con cambios humanos sin sumar otro servidor ni otro clon que haya
+que mantener.
 
 ## Ejecución diaria
 
-1. Codex abre una conversación nueva en el proyecto y un worktree limpio.
+1. Codex abre una conversación nueva y crea su worktree aislado self-managed desde `origin/main`.
 2. La skill investiga fuentes primarias, abre las páginas originales y actualiza la cola.
 3. Deduplica y elige 2 o 3 ítems pendientes. Con menos de dos devuelve `skipped_valid`.
-4. Reserva la identidad `editorial:YYYY-MM-DD` y comprueba que no exista la nota del día.
+4. Reserva la identidad `editorial:YYYY-MM-DD`. Si los artefactos completos de la fecha ya
+   existen, devuelve `skipped_valid`; un estado parcial pasa a `needs_review`.
 5. Redacta una nota original, enlaza la evidencia y crea una portada relevante.
 6. Renderiza un único anuncio vertical con la plantilla `nota`.
 7. Consume los ítems en la misma ejecución y crea manifiesto e informe.
@@ -127,8 +134,8 @@ No existe schedule de recuperación. GitHub conserva la ejecución, el SHA y los
 
 1. Actualizar el registro `mr-agentes-noticias`; no crear un duplicado.
 2. Nombre: `MR Agentes — Editorial diario`.
-3. Proyecto: `MR Agentes`; ejecución local, worktree dedicado, conversación nueva.
-4. Frecuencia diaria 18:00 `America/Cordoba`; modelo y esfuerzo según `editorial.json`.
+3. Proyecto: `MR Agentes`; ejecución local, worktree self-managed, conversación nueva.
+4. Ventanas diarias 18:00 y 21:00 `America/Cordoba`; modelo y esfuerzo según `editorial.json`.
 5. Prompt y skill idénticos al descriptor versionado.
 6. Pausar los registros `mr-agentes-blog`, `mr-agentes-social-diario` y
    `mr-agentes-recuperaci-n-social` antes de activar el único registro.

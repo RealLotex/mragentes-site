@@ -135,7 +135,7 @@ def test_operations_documents_the_complete_schedule_and_delivery_contract() -> N
     source = (ROOT / "OPERATIONS.md").read_text(encoding="utf-8")
     required = (
         "America/Cordoba",
-        "0 18 * * *",
+        "0 18,21 * * *",
         "una sola automatización",
         "conversación nueva",
         "worktree",

@@ -30,11 +30,17 @@ def test_only_one_native_editorial_schedule_is_enabled() -> None:
     assert descriptor["status"] == "active" and descriptor["registered"] is True
     assert descriptor["timezone"] == "America/Cordoba"
     assert descriptor["weekdays"] == [0, 1, 2, 3, 4, 5, 6]
-    assert descriptor["local_time"] == "18:00"
+    assert descriptor["local_times"] == ["18:00", "21:00"]
+    assert descriptor["cron"] == "0 18,21 * * *"
+    assert descriptor["retry"]["same_identity"] is True
+    assert descriptor["retry"]["successful_first_attempt_becomes_noop"] is True
     assert descriptor["conversation"] == "new"
-    assert descriptor["workspace"] == "worktree"
+    assert descriptor["workspace"] == "self_managed_worktree"
+    assert descriptor["model"] == "gpt-5.6-sol"
+    assert descriptor["reasoning_effort"] == "ultra"
     assert descriptor["skill"] == "mragentes-editorial-publisher"
-    assert descriptor["branch_template"] == "automation/editorial/{run_id}"
+    assert descriptor["branch_template"] == "automation/editorial/{date}"
+    assert descriptor["notification_policy"] == "default"
     assert descriptor["output"] == {
         "notes_per_run": 1,
         "facebook_posts_per_note": 1,
@@ -123,3 +129,12 @@ def test_connector_clean_start_is_satisfied_by_a_dedicated_worktree() -> None:
     assert contract["safety"]["require_clean_start"] is True
     assert contract["workspace"]["mode"] == "dedicated_worktree"
     assert contract["workspace"]["base_ref"] == "origin/main"
+    assert contract["preflight"]["read_probe"] == {
+        "tool": "github_get_repo",
+        "arguments": {
+            "repository_full_name": "RealLotex/mragentes-site",
+        },
+        "required_result": {"permissions.push": True},
+    }
+    assert contract["preflight"]["write_permission_is_proven_by"] == "permissions.push"
+    assert contract["preflight"]["synthetic_write_probe"] is False

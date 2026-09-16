@@ -32,6 +32,15 @@ def test_github_connector_is_the_only_authenticated_remote_egress() -> None:
     assert contract["preflight"] == {
         "require_authenticated_connector": True,
         "minimum_repository_permission": "write",
+        "read_probe": {
+            "tool": "github_get_repo",
+            "arguments": {
+                "repository_full_name": "RealLotex/mragentes-site",
+            },
+            "required_result": {"permissions.push": True},
+        },
+        "write_permission_is_proven_by": "permissions.push",
+        "synthetic_write_probe": False,
         "on_unavailable": "needs_review",
     }, trace_message("GITHUB-EGRESS-001", "connector preflight does not fail closed")
     assert contract["local_git"] == {
