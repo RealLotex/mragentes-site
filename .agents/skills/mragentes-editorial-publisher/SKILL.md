@@ -8,11 +8,30 @@ description: Investiga noticias, prepara una única nota diaria de MR Agentes y 
 Esta skill es la única autoridad local del recorrido noticias → blog → recurso social. Leé
 `references/editorial-contract.md` antes de escribir y usá `assets/note-template.md` como base.
 
+## Aislamiento obligatorio
+
+La automatización nativa comienza en el checkout compartido del proyecto, no en un worktree
+creado por la aplicación. Antes de comprobar limpieza o leer contenido operativo:
+
+1. Ejecutá `git fetch --no-tags origin main` desde el repositorio compartido.
+2. Creá un padre temporal con `mktemp -d` y ejecutá
+   `git worktree add --detach <ruta-temporal>/worktree origin/main`.
+3. Cambiá el directorio de trabajo al worktree aislado, releé esta skill desde allí y comprobá
+   `git status --porcelain` dentro de ese worktree.
+
+Un checkout compartido sucio no es un bloqueo: preservalo y no lo inspecciones, limpies ni
+modifiques. Sólo un `git status --porcelain` no vacío dentro del worktree aislado recién creado
+produce `needs_review`. Eliminá el worktree temporal sólo después de un `skipped_valid` sin
+cambios o de que el conector confirme el PR; conservá la evidencia local ante un resultado
+remoto incierto.
+
 ## Contrato de ejecución
 
 1. Determiná la fecha en `America/Cordoba` y la identidad `editorial:YYYY-MM-DD`.
-2. Exigí un worktree limpio creado desde `origin/main`. Si no está limpio, si la nota del día ya
-   existe o si el estado remoto es ambiguo, detenete con `needs_review`; nunca pises cambios.
+2. Comprobá los artefactos de esa identidad en el worktree creado desde `origin/main`. Si los
+   artefactos completos de la fecha ya existen y son consistentes, devolvé `skipped_valid` sin
+   escribir. Si hay estado parcial, duplicado o ambiguo, devolvé `needs_review`; nunca pises ni
+   dupliques cambios.
 3. En `dry-run`, investigá y validá sin crear rama, commit, PR ni efectos externos.
 4. Abrí fuentes primarias y agregá a `.automation/news/queue/news-queue.json` sólo hechos
    verificables, actuales, pertinentes y no duplicados.
@@ -29,8 +48,14 @@ Esta skill es la única autoridad local del recorrido noticias → blog → recu
 9. Ejecutá `blog_guard`, `editorial_style`, los tests focalizados, el escaneo de secretos y Hugo.
    Cualquier fallo cancela la entrega completa.
 10. Entregá cola, nota, portada, anuncio, manifiesto e informe en un único commit remoto atómico
-    sobre `automation/editorial/<run_id>`, siguiendo
+    sobre `automation/editorial/YYYY-MM-DD`, siguiendo
     `.automation/github/connector-egress.json`. Creá un PR no borrador a `main` con el conector.
+
+Para el preflight de GitHub usá exactamente
+`github_get_repo(repository_full_name="RealLotex/mragentes-site")` y exigí
+`permissions.push=true`, como declara `.automation/github/connector-egress.json`; no inventes
+otra llamada de permisos ni una escritura de prueba. Un error de autenticación, esquema o
+permiso produce `needs_review`.
 
 El merge protegido y `.github/workflows/deploy.yml` publican la web y, sólo después del health
 gate, hacen una publicación en Facebook, una en Instagram y un push por nota. Esta skill no llama a Meta

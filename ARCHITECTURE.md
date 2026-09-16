@@ -38,8 +38,12 @@ pública, no existe autoridad para llamar a Meta ni para enviar push.
 ## Transacción editorial única
 
 `.automation/schedules/editorial.json` es el único descriptor activo. Conserva el ID
-`mr-agentes-noticias`, ejecuta todos los días a las 18:00 de `America/Cordoba`, abre una
-conversación nueva y usa un worktree dedicado desde `origin/main`.
+`mr-agentes-noticias`, ejecuta todos los días a las 18:00 y hace un segundo intento a las 21:00
+de `America/Cordoba`, abre una conversación nueva y crea por sí misma un worktree dedicado desde
+`origin/main`. Es un worktree
+*self-managed*: la automatización nativa comienza en el checkout compartido, pero sólo lo usa
+para `git fetch --no-tags origin main`, `mktemp -d` y
+`git worktree add --detach <ruta>/worktree origin/main`; después trabaja dentro del aislamiento.
 
 La única skill es `mragentes-editorial-publisher`. En una misma ejecución:
 
@@ -50,8 +54,16 @@ La única skill es `mragentes-editorial-publisher`. En una misma ejecución:
 5. valida guards, tests, secretos y Hugo;
 6. entrega un único commit remoto atómico y abre un PR.
 
-Si no hay dos noticias fiables, el resultado es `skipped_valid`. Ante checkout sucio o estado
-remoto ambiguo, el resultado es `needs_review`. La tarea no conoce secretos y no publica afuera.
+Si no hay dos noticias fiables, el resultado es `skipped_valid`. Un checkout compartido sucio
+no es un bloqueo y nunca se limpia ni modifica. Si los artefactos completos de la fecha ya
+existen, el resultado también es `skipped_valid`; ante estado parcial, worktree aislado sucio o
+estado remoto ambiguo, el resultado es `needs_review`. La tarea no conoce secretos y no publica
+afuera.
+
+Ambas ventanas usan la misma identidad `editorial:YYYY-MM-DD` y la rama válida
+`automation/editorial/YYYY-MM-DD`. El segundo intento cubre un límite de uso transitorio; si la
+primera corrida ya integró los artefactos completos de la fecha, la segunda es un no-op
+`skipped_valid`.
 
 ## Git y aislamiento
 

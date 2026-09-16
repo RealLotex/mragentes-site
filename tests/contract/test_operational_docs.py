@@ -81,6 +81,33 @@ def test_docs_describe_the_single_editorial_authority_and_inline_effects() -> No
         )
 
 
+@pytest.mark.trace("DOCS-ISOLATION-002")
+@pytest.mark.red_expected
+def test_docs_explain_that_the_native_task_self_manages_its_worktree() -> None:
+    architecture = require_target("ARCHITECTURE.md", "DOCS-ISOLATION-002").read_text(
+        encoding="utf-8"
+    )
+    operations = require_target("OPERATIONS.md", "DOCS-ISOLATION-002").read_text(
+        encoding="utf-8"
+    )
+    combined = " ".join((architecture + "\n" + operations).casefold().split())
+    for term in (
+        "self-managed",
+        "checkout compartido",
+        "no es un bloqueo",
+        "mktemp -d",
+        "git worktree add --detach",
+        "artefactos completos de la fecha ya existen",
+        "estado parcial",
+        "segundo intento",
+        "21:00",
+        "límite de uso",
+    ):
+        assert term in combined, trace_message(
+            "DOCS-ISOLATION-002", f"documentation lacks {term!r}"
+        )
+
+
 @pytest.mark.trace("DOCS-META-001")
 @pytest.mark.red_expected
 def test_operations_explains_meta_testing_as_a_safety_boundary() -> None:

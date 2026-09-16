@@ -11,6 +11,17 @@
   "preflight": {
     "require_authenticated_connector": true,
     "minimum_repository_permission": "write",
+    "read_probe": {
+      "tool": "github_get_repo",
+      "arguments": {
+        "repository_full_name": "RealLotex/mragentes-site"
+      },
+      "required_result": {
+        "permissions.push": true
+      }
+    },
+    "write_permission_is_proven_by": "permissions.push",
+    "synthetic_write_probe": false,
     "on_unavailable": "needs_review"
   },
   "local_git": {
