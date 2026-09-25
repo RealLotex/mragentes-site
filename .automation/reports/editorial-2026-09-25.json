@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-09-25",
+  "status": "prepared",
+  "local_date": "2026-09-25",
+  "created_at": "2026-09-25T21:15:53Z",
+  "branch": "automation/editorial/2026-09-25",
+  "note_slug": "agentes-con-horario-umbral-y-registro-una-guia-para-pymes",
+  "selected_news_ids": [
+    "news-v1-85e4a6f4b619c8c0",
+    "news-v1-b2bc1eec3dc5f142",
+    "news-v1-b3e660a2397a2dc4"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-09-25-agentes-con-horario-umbral-y-registro-una-guia-para-pymes.json",
+    "note": "content/notas/agentes-con-horario-umbral-y-registro-una-guia-para-pymes.md",
+    "cover": "static/images/stock/pexels-7688076.jpg",
+    "announcement": "static/images/social/notes/agentes-con-horario-umbral-y-registro-una-guia-para-pymes.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "delivery_gate": "green",
+    "front_matter": "green",
+    "news_queue": "green (revision 15; 3 selected items consumed; 0 reservations open)",
+    "editorial_style": {
+      "words": 2850,
+      "sections": 10,
+      "sources": 17,
+      "analytic_markers": 6,
+      "faq_questions": 3
+    },
+    "focused_tests": "green (116 passed)",
+    "python_suite": "549 passed; 3 environment preconditions failed because the required worktree is detached and /tmp has less than the test's 15 GiB threshold",
+    "javascript_suite": "189 passed in the full run; 2 concurrent-load timeouts passed in an isolated 29-test file rerun",
+    "production_dependency_audit": "green (0 vulnerabilities)",
+    "secret_scan": "green (--all; no findings)",
+    "hugo": "green (v0.128.0 extended)",
+    "visual": "cover and social announcement reviewed at 1200x1600 and 1080x1350; branding, contrast and text fit are green"
+  },
+  "external_effects": "none; protected merge and deploy workflow are pending"
+}

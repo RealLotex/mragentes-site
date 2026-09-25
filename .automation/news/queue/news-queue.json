@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 12,
-  "updated_at": "2026-09-13T16:03:39Z",
+  "revision": 15,
+  "updated_at": "2026-09-25T21:15:53Z",
   "items": [
     {
       "schema_version": 1,
@@ -596,6 +596,97 @@
       "priority": 4,
       "consumed_by": "agentes-sin-ia-en-la-sombra-como-escalar-con-control",
       "consumed_at": "2026-09-13T16:03:39Z"
+    },
+    {
+      "schema_version": 1,
+      "title": "Google Cloud muestra cómo PyMEs latinoamericanas llevan IA a operaciones concretas",
+      "canonical_url": "https://cloud.google.com/blog/topics/customers/how-midsize-latam-companies-build-with-ai",
+      "source": "Google Cloud",
+      "entity": "Google Cloud y PyMEs latinoamericanas",
+      "published_at": "2026-09-24T00:00:00Z",
+      "discovered_at": "2026-09-25T21:15:53Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://cloud.google.com/blog/topics/customers/how-midsize-latam-companies-build-with-ai",
+          "claim": "Google Cloud informa que el uso de sus herramientas de IA entre PyMEs latinoamericanas creció ocho veces interanual y enumera casos regionales con automatización y métricas operativas."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "automatizacion",
+        "productividad",
+        "pymes",
+        "latinoamerica"
+      ],
+      "summary": "Casos de Argentina y América Latina muestran agentes aplicados a documentos, operaciones, marketing y soporte con resultados atribuidos a cada cliente.",
+      "language": "es",
+      "geography": "América Latina",
+      "priority": 5,
+      "id": "news-v1-b2bc1eec3dc5f142",
+      "consumed_by": "agentes-con-horario-umbral-y-registro-una-guia-para-pymes",
+      "consumed_at": "2026-09-25T21:15:53Z"
+    },
+    {
+      "schema_version": 1,
+      "title": "Aderant automatiza la clasificación de tickets con umbrales humanos",
+      "canonical_url": "https://aws.amazon.com/blogs/machine-learning/aderant-builds-intelligent-ticket-triage-with-amazon-nova/",
+      "source": "AWS Machine Learning Blog",
+      "entity": "AWS y Aderant",
+      "published_at": "2026-09-24T00:00:00Z",
+      "discovered_at": "2026-09-25T21:15:53Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://aws.amazon.com/blogs/machine-learning/aderant-builds-intelligent-ticket-triage-with-amazon-nova/",
+          "claim": "AWS y Aderant documentan un flujo horario que reúne contexto, clasifica y enruta tickets; en 109 casos iniciales reportó cerca de 96% de precisión, revisión humana para baja confianza y un costo inferior a 30 dólares mensuales."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "automatizacion",
+        "soporte",
+        "productividad",
+        "control"
+      ],
+      "summary": "Un caso de producción muestra cómo combinar un disparador programado, contexto autorizado, umbrales y observabilidad para automatizar soporte.",
+      "language": "es",
+      "priority": 5,
+      "id": "news-v1-85e4a6f4b619c8c0",
+      "consumed_by": "agentes-con-horario-umbral-y-registro-una-guia-para-pymes",
+      "consumed_at": "2026-09-25T21:15:53Z"
+    },
+    {
+      "schema_version": 1,
+      "title": "Microsoft lleva rutinas programadas y por eventos a Foundry Agent Service",
+      "canonical_url": "https://azure.microsoft.com/en-us/blog/ship-agents-faster-with-expanded-model-choice-voice-agents-and-continuous-optimization/",
+      "source": "Microsoft Azure Blog",
+      "entity": "Microsoft Foundry",
+      "published_at": "2026-09-24T18:00:00Z",
+      "discovered_at": "2026-09-25T21:15:53Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://azure.microsoft.com/en-us/blog/ship-agents-faster-with-expanded-model-choice-voice-agents-and-continuous-optimization/",
+          "claim": "Microsoft anuncia disponibilidad general de Routines para ejecutar agentes por horario, demora o evento, junto con Tool Search y A2A, y describe controles de observabilidad, identidad y red."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "automatizacion",
+        "orquestacion",
+        "gobernanza",
+        "productividad"
+      ],
+      "summary": "Routines separa el disparador de la lógica del agente y reduce la necesidad de construir schedulers, colas e identidad desde cero.",
+      "language": "es",
+      "priority": 5,
+      "id": "news-v1-b3e660a2397a2dc4",
+      "consumed_by": "agentes-con-horario-umbral-y-registro-una-guia-para-pymes",
+      "consumed_at": "2026-09-25T21:15:53Z"
     }
   ]
 }

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-09-25:agentes-con-horario-umbral-y-registro-una-guia-para-pymes",
+  "status": "prepared",
+  "local_date": "2026-09-25",
+  "created_at": "2026-09-25T21:15:53Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/agentes-con-horario-umbral-y-registro-una-guia-para-pymes.md",
+      "sha256": "896a1bc60e744c234e0dc06543279dddb41899f5c3c1d39c5937dc0b9ef477aa"
+    },
+    "asset": {
+      "path": "static/images/stock/pexels-7688076.jpg",
+      "sha256": "743104d18617ffb024dda80333d86133724bb0c67b32601b42c45835b7f0d2aa",
+      "source_url": "https://www.pexels.com/photo/people-desk-laptop-office-7688076/",
+      "creator": "Kindel Media",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/agentes-con-horario-umbral-y-registro-una-guia-para-pymes.jpg",
+      "sha256": "da95d8b3959270e51f46ff262d7d7ef424e297d78931e7056ecbef32f45f882a"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "8fbd44457064c1fead6392dd23394f203806699845eea9aba303fab2e73330f7",
+      "transition": {
+        "from": "pending",
+        "to": "consumed",
+        "count": 3,
+        "ids": [
+          "news-v1-85e4a6f4b619c8c0",
+          "news-v1-b2bc1eec3dc5f142",
+          "news-v1-b3e660a2397a2dc4"
+        ]
+      }
+    }
+  },
+  "sources": [
+    "https://cloud.google.com/blog/topics/customers/how-midsize-latam-companies-build-with-ai",
+    "https://aws.amazon.com/blogs/machine-learning/aderant-builds-intelligent-ticket-triage-with-amazon-nova/",
+    "https://azure.microsoft.com/en-us/blog/ship-agents-faster-with-expanded-model-choice-voice-agents-and-continuous-optimization/"
+  ]
+}
