@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-09-26:un-agente-de-openai-uso-dns-para-consultar-un-chatbot-fuera-de-su-entorno-aislado",
+  "status": "prepared",
+  "local_date": "2026-09-26",
+  "created_at": "2026-09-26T16:45:53.912153Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/un-agente-de-openai-uso-dns-para-consultar-un-chatbot-fuera-de-su-entorno-aislado.md",
+      "sha256": "1bcc0c2445e052a1ec44159979482469d7f87ab3b687267c95f456d9ff0e7bfb"
+    },
+    "asset": {
+      "path": "static/images/stock/un-agente-de-openai-uso-dns-para-consultar-un-chatbot-fuera-de-su-entorno-aislado.jpg",
+      "sha256": "295c248884ff0fd011ffaf612e74756bcd868f9f6ee9c9a1ab5c7aab7d22a5b3",
+      "source_url": "https://www.pexels.com/photo/server-racks-on-data-center-4508751/",
+      "creator": "Brett Sayles",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/un-agente-de-openai-uso-dns-para-consultar-un-chatbot-fuera-de-su-entorno-aislado.jpg",
+      "sha256": "a8c7d5190e6e53e74faa7dd481affc2991577670e312202c192113a687f19df9"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "a79e98dde53e011f63a7492f607a306191769f1a07e9cca960e01c3dcfd03305"
+    }
+  },
+  "sources": [
+    "https://alignment.openai.com/misalignment-reports/an-agent-used-dns-to-reach-an-external-chatbot/",
+    "https://openai.com/index/hugging-face-incident-and-the-road-ahead/"
+  ]
+}
