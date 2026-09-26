@@ -11,18 +11,15 @@ from scripts.automation.editorial_style import (
 
 def _note(*, body: str = "") -> str:
     analysis = body or (
-        "## Evidencia verificable\n\n"
-        "El análisis documenta datos, fechas y entidades mediante fuentes públicas. " * 120
-        + "\n\n## Implicancias operativas\n\n"
-        + "La evidencia permite comparar riesgos, arquitectura y gobernanza en la operación. " * 120
-        + "\n\n## Conclusión\n\n"
-        + "La conclusión sintetiza el impacto de los datos y las decisiones de diseño. " * 120
-        + "\n\n## Preguntas frecuentes\n\n"
-        + "### ¿Qué significa este cambio?\n\nUna explicación breve y verificable.\n\n"
-        + "### ¿Por dónde se puede empezar?\n\nUn primer paso concreto y seguro.\n\n"
-        + "### ¿Qué conviene revisar antes?\n\nLos límites y la evidencia disponible.\n\n"
-        + "\n\n## Fuentes\n\n"
-        + "- https://example.test/a\n- https://example.test/b\n- https://example.test/c\n"
+        "OpenAI informó el 25 de septiembre de 2026 un incidente concreto "
+        "en un entorno de pruebas. "
+        "[Informe](https://example.test/a). "
+        * 24
+        + "\n\n## El acceso por DNS\n\n"
+        + "El agente consultó un servicio externo y el monitor generó una alerta en 15 minutos. "
+        * 18
+        + "\n\n## La respuesta\n\n"
+        + "El equipo detuvo la ejecución dos horas y media después del acceso. " * 12
     )
     return "---\ntitle: Prueba\n---\n\n" + analysis
 
@@ -31,11 +28,10 @@ def _note(*, body: str = "") -> str:
 @pytest.mark.red_expected
 def test_academic_note_requires_sourced_analytical_structure() -> None:
     report = validate_academic_note(_note())
-    assert report["words"] >= 1_000
-    assert report["sections"] >= 4
-    assert report["sources"] >= 3
-    assert report["analytic_markers"] >= 2
-    assert report["faq_questions"] >= 3
+    assert report["words"] >= 350
+    assert report["sections"] == 2
+    assert report["sources"] >= 1
+    assert report["faq_questions"] == 0
 
 
 @pytest.mark.trace("EDITORIAL-STYLE-002")
@@ -58,10 +54,10 @@ def test_formal_text_rejects_weekly_formulas_and_colloquial_register(text: str) 
 @pytest.mark.trace("EDITORIAL-STYLE-003")
 @pytest.mark.red_expected
 def test_academic_note_fails_closed_when_the_structure_is_too_short() -> None:
-    with pytest.raises(ValueError, match="1000 words"):
+    with pytest.raises(ValueError, match="350 words"):
         validate_academic_note(
             _note(
-                body="## Evidencia\n\nTexto técnico.\n\n## Conclusión\n\nTexto.\n\n"
+                body="## Evidencia\n\nTexto técnico.\n\n## Respuesta\n\nTexto.\n\n"
                 "- https://example.test/a\n- https://example.test/b\n- https://example.test/c"
             )
         )
@@ -72,3 +68,34 @@ def test_academic_note_fails_closed_when_the_structure_is_too_short() -> None:
 def test_inspection_ignores_front_matter_when_counting_article_words() -> None:
     report = inspect_note("---\ntitle: " + ("x " * 1_000) + "\n---\n\n## Análisis\n\nDato.")
     assert report["words"] < 10
+
+
+@pytest.mark.trace("EDITORIAL-NEWS-001")
+@pytest.mark.red_expected
+def test_concise_specific_news_passes_without_faq_or_four_sections() -> None:
+    body = (
+        "OpenAI informó el 25 de septiembre de 2026 que un agente usó DNS para consultar "
+        "un servicio externo. [Informe](https://alignment.openai.com/report/). "
+        "La alerta llegó en 15 minutos y la ejecución se detuvo dos horas y media después. "
+    ) * 12
+    report = validate_academic_note("## El incidente\n\n" + body + "\n\n## La respuesta\n\n" + body)
+    assert report["words"] >= 350
+    assert report["sections"] == 2
+    assert report["faq_questions"] == 0
+
+
+@pytest.mark.trace("EDITORIAL-NEWS-002")
+@pytest.mark.red_expected
+@pytest.mark.parametrize(
+    "phrase",
+    (
+        "En este artículo exploraremos",
+        "marca un momento crucial",
+        "refleja el panorama cambiante",
+        "los expertos sostienen",
+        "en conclusión",
+    ),
+)
+def test_news_style_rejects_boilerplate(phrase: str) -> None:
+    with pytest.raises(ValueError):
+        validate_formal_text(phrase)

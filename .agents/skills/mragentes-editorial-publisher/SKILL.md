@@ -1,69 +1,44 @@
 ---
 name: mragentes-editorial-publisher
-description: Investiga noticias, prepara una única nota diaria de MR Agentes y su anuncio visual, valida todo y entrega un solo cambio Git atómico. Usar para la automatización editorial diaria o su recuperación manual; no publica directamente en Meta ni Cloudflare.
+description: Investiga una noticia reciente de IA, redacta una nota breve y aporta una imagen. Un único comando prepara el PR; GitHub publica después del merge.
 ---
 
-# Publicador editorial diario de MR Agentes
+# Editor de noticias de MR Agentes
 
-Esta skill es la única autoridad local del recorrido noticias → blog → recurso social. Leé
-`references/editorial-contract.md` antes de escribir y usá `assets/note-template.md` como base.
+Tu trabajo termina al aportar una noticia investigada y una imagen al publicador fijo. Leé
+`references/editorial-contract.md`. No necesitás conocer la estructura Git, la cola, los
+manifiestos ni los workflows: `scripts/automation/editorial_release.py` los administra.
 
-## Aislamiento obligatorio
+## Cada día, a las 05:00 de Córdoba
 
-La automatización nativa comienza en el checkout compartido del proyecto, no en un worktree
-creado por la aplicación. Antes de comprobar limpieza o leer contenido operativo:
+1. Investigá durante unos minutos noticias de IA de las últimas 48 horas. Priorizá nuevos
+   modelos, descubrimientos, seguridad de agentes, robots, política y legislación; incluí la
+   adopción empresarial argentina cuando haya un hecho concreto. iProUP y medios de industria
+   4.0 pueden orientar la búsqueda. Abrí la fuente original y verificá fecha, nombres y cifras.
+2. Elegí **un hecho** con evidencia accesible. No fuerces un vínculo con PyMEs ni combines
+   noticias sin relación para completar una cuota. Si no encontrás uno, informá `skipped_valid`.
+3. Escribí una nota informativa en español formal y claro. Empezá por el hecho, con sujeto,
+   acción y fecha. Usá nombres, cifras y ejemplos cuando la fuente los respalde. Entre 350 y
+   900 palabras suelen bastar; uno o dos subtítulos son suficientes. Citá la fuente junto al
+   dato. Distinguí hechos, afirmaciones de una empresa y tu análisis. Evitá las fórmulas y el
+   tono publicitario enumerados en `references/editorial-contract.md`.
+4. Elegí una fotografía pertinente en JPG o PNG, de al menos 800 × 500 píxeles. Si proviene de
+   Pexels o Unsplash, registrá autor, página y licencia. No presentés una imagen ilustrativa
+   como foto del hecho.
+5. Guardá el JSON y la imagen fuera del repositorio, por ejemplo en `/var/tmp`. El JSON contiene
+   sólo `title`, `summary`, `body`, `image_alt`, `source_url`, `source_name`, `source_date` y,
+   opcionalmente, `related_sources`, `tags`, `image_credit`. Usá el ejemplo de
+   `assets/note-template.md` como formato, nunca como fuente de hechos.
+6. Ejecutá un solo comando, una sola vez:
 
-1. Ejecutá `git fetch --no-tags origin main` desde el repositorio compartido.
-2. Creá un padre temporal con `mktemp -d` y ejecutá
-   `git worktree add --detach <ruta-temporal>/worktree origin/main`.
-3. Cambiá el directorio de trabajo al worktree aislado, releé esta skill desde allí y comprobá
-   `git status --porcelain` dentro de ese worktree.
+   `python3 scripts/automation/editorial_release.py --input /var/tmp/nota.json --image /var/tmp/portada.jpg`
 
-Un checkout compartido sucio no es un bloqueo: preservalo y no lo inspecciones, limpies ni
-modifiques. Sólo un `git status --porcelain` no vacío dentro del worktree aislado recién creado
-produce `needs_review`. Eliminá el worktree temporal sólo después de un `skipped_valid` sin
-cambios o de que el conector confirme el PR; conservá la evidencia local ante un resultado
-remoto incierto.
+El comando hace `git fetch`, crea un worktree en `/var/tmp`, valida el contenido, registra cola,
+nota, portada, un anuncio social, manifiesto e informe, escanea secretos, crea un commit limitado a
+esos seis archivos, envía la rama y abre el PR. Usa `gh` autenticado en el equipo. CI, merge
+protegido y `deploy.yml` publican la web; después del health gate, GitHub Actions publica una
+vez en Facebook e Instagram y envía el push. No hagas pasos Git manuales ni llames a Meta.
 
-## Contrato de ejecución
-
-1. Determiná la fecha en `America/Cordoba` y la identidad `editorial:YYYY-MM-DD`.
-2. Comprobá los artefactos de esa identidad en el worktree creado desde `origin/main`. Si los
-   artefactos completos de la fecha ya existen y son consistentes, devolvé `skipped_valid` sin
-   escribir. Si hay estado parcial, duplicado o ambiguo, devolvé `needs_review`; nunca pises ni
-   dupliques cambios.
-3. En `dry-run`, investigá y validá sin crear rama, commit, PR ni efectos externos.
-4. Abrí fuentes primarias y agregá a `.automation/news/queue/news-queue.json` sólo hechos
-   verificables, actuales, pertinentes y no duplicados.
-5. Elegí 2 o 3 ítems pendientes compatibles. Si no existen al menos dos, devolvé
-   `skipped_valid`: no escribas contenido de relleno y no crees un cambio vacío.
-6. Prepará una nota original y exactamente una imagen de portada. Preferí Pexels o Unsplash; si
-   no hay una fotografía relevante, una imagen generada sin texto ni logotipos puede ser el
-   fondo. La nota debe ser comprensible para una PyME y enlazar la evidencia junto a cada dato.
-7. Renderizá exactamente un anuncio vertical con la plantilla `nota`:
-   `python -m scripts.social render-note-announcement --slug <slug>`. El fondo nunca es la pieza
-   social final.
-8. Reservá y consumí los ítems seleccionados dentro de la misma transacción. Creá el manifiesto
-   `.automation/blog/<fecha>-<slug>.json` y un reporte `.automation/reports/editorial-<fecha>.json`.
-9. Ejecutá `blog_guard`, `editorial_style`, los tests focalizados, el escaneo de secretos y Hugo.
-   Cualquier fallo cancela la entrega completa.
-10. Entregá cola, nota, portada, anuncio, manifiesto e informe en un único commit remoto atómico
-    sobre `automation/editorial/YYYY-MM-DD`, siguiendo
-    `.automation/github/connector-egress.json`. Creá un PR no borrador a `main` con el conector.
-
-Para el preflight de GitHub usá exactamente
-`github_get_repo(repository_full_name="RealLotex/mragentes-site")` y exigí
-`permissions.push=true`, como declara `.automation/github/connector-egress.json`; no inventes
-otra llamada de permisos ni una escritura de prueba. Un error de autenticación, esquema o
-permiso produce `needs_review`.
-
-El merge protegido y `.github/workflows/deploy.yml` publican la web y, sólo después del health
-gate, hacen una publicación en Facebook, una en Instagram y un push por nota. Esta skill no llama a Meta
-ni Cloudflare, no hace merge y no usa credenciales locales. No usa git push local
-ni lo autoriza. No uses git push local.
-
-## Recuperación
-
-Reejecutá la misma identidad. Reutilizá una rama o PR sólo si apuntan al mismo SHA base y a los
-mismos artefactos. Ante timeout del conector, commit remoto no comprobable o efecto externo
-`uncertain`, devolvé `needs_review`; no repitas a ciegas.
+Si el comando devuelve `skipped_valid`, ya existe una nota completa del día. Si devuelve
+`needs_review`, comunicá el error exacto. Ante una rama o efecto remoto incierto, no repitas
+la publicación. La tarea usa una conversación nueva por día y GPT-6 Luna xhigh.

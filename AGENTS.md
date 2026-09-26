@@ -23,6 +23,8 @@ prueba que ya pasaba antes del cambio no demuestra RED.
 - No uses comandos destructivos, force push ni atajos que incorporen todo el árbol.
 - No publiques, despliegues ni cambies tareas programadas salvo que el pedido lo autorice.
 - Los cambios automáticos entran por ramas `automation/**`, pull request, CI y merge protegido.
+- Para la nota diaria, sólo `scripts/automation/editorial_release.py` puede preparar el commit y
+  enviar la rama editorial; usa `gh` autenticado en el llavero y limita el cambio a seis rutas.
 - GitHub Pages es la única publicación web; GitHub Actions ejecuta los efectos posteriores.
 - Meta permanece en el entorno `meta-testing` hasta una decisión explícita del propietario.
 - La entrega de Cloudflare se administra con el conector; no agregues credenciales ni CLI de
@@ -34,7 +36,8 @@ prueba que ya pasaba antes del cambio no demuestra RED.
 - Los secretos viven en entornos protegidos de GitHub o en el proveedor correspondiente.
 - Toda llamada externa debe ser autenticada, acotada, observable e idempotente.
 - Ante resultado remoto incierto, detené la repetición y marcá revisión manual.
-- Ningún flujo puede depender de cuentas, procesos, rutas personales o servicios retirados.
+- La tarea local depende del proyecto registrado y de la sesión `gh` del propietario; nunca
+  copies el token ni incorpores rutas personales al contenido o a la configuración versionada.
 
 ## Definición de terminado
 
