@@ -135,17 +135,16 @@ def test_operations_documents_the_complete_schedule_and_delivery_contract() -> N
     source = (ROOT / "OPERATIONS.md").read_text(encoding="utf-8")
     required = (
         "America/Cordoba",
-        "0 18,21 * * *",
-        "una sola automatización",
+        "05:00",
+        "editorial_release.py",
         "conversación nueva",
         "worktree",
         "Facebook",
         "Instagram",
         "Meta",
         "testing",
-        "bienvenida",
-        "idempotente",
-        "misma rama/PR",
+        "idempotencia",
+        "PR",
         "skipped_valid",
     )
     assert all(token in source for token in required), trace_message(
@@ -159,12 +158,12 @@ def test_architecture_assigns_one_authority_to_each_native_system() -> None:
     source = (ROOT / "ARCHITECTURE.md").read_text(encoding="utf-8")
     required = (
         "Codex",
-        "automatizaciones nativas",
+        "automatización",
         "GitHub Actions",
         "GitHub Pages",
         "Cloudflare Worker",
-        "Meta Graph API",
-        "content/notas/",
+        "Meta",
+        "nota",
         ".automation/",
         "cf_worker.js",
         "static/sw.js",

@@ -1,29 +1,31 @@
-# Contrato editorial
+# Contrato editorial: noticia concreta, lenguaje claro
 
-## Selección y fuentes
+## Selección
 
-- Tema: IA, agentes, automatización, productividad o tecnología aplicable a PyMEs.
-- Preferir anuncios, documentación, repositorios, papers y páginas oficiales. Un medio puede
-  aportar contexto, pero no sustituye la fuente primaria cuando existe.
-- Cada ítem necesita URL HTTPS canónica, fecha del hecho, entidad y una afirmación comprobable.
-- Deduplicar por URL, entidad, fecha del evento y similitud del título contra pendientes y
-  consumidos. Si dos fuentes discrepan en algo material, descartar o marcar revisión.
-- Conservar noticias pendientes útiles de días anteriores. No copiar pasajes extensos.
+- Buscar hechos de IA publicados hoy o en los dos días anteriores; priorizar la actualidad
+  mainstream y alternar proveedores y temas. La adopción en empresas argentinas es noticia
+  cuando hay empresa, tecnología, fecha y evidencia identificables.
+- Abrir la fuente primaria. Un portal como iProUP puede detectar un tema y aportar contexto,
+  pero sus afirmaciones deben atribuirse. No inventar fechas, cifras, citas ni URLs.
+- Una nota trata **un** hecho principal. Si la evidencia no alcanza, no publicar relleno.
 
-## Nota
+## Redacción
 
-- Español claro y profesional, sin grandilocuencia, voseo ni afirmaciones que excedan fuentes.
-- Mínimo 1.000 palabras, cuatro secciones sustantivas, tres fuentes y conclusión accionable.
-- Integrar los hechos en un argumento; no encadenar resúmenes.
-- Definir el primer uso de términos técnicos y explicar el impacto para una PyME.
-- Incluir `## Preguntas frecuentes` con tres preguntas `###` y respuestas concretas.
-- Front matter cerrado: versión 1, `draft: false`, slug e identidad únicos, descripción breve,
-  fuente, portada local y texto alternativo útil.
+- Primer párrafo: quién hizo qué, cuándo y dónde. No reformular el título como introducción.
+- Español formal, preciso y fácil de leer. Definir un término técnico sólo cuando sea necesario.
+- Citar las cifras y afirmaciones cerca de su fuente. Identificar opiniones por nombre y cargo.
+- Separar lo comprobado de lo que dice una empresa y de lo que todavía no se conoce.
+- Extensión orientativa: 350–900 palabras, pocos subtítulos y párrafos de longitud variada.
+- No añadir por rutina preguntas frecuentes, conclusión, “por qué importa” ni consejos para
+  PyMEs. El análisis debe aportar un dato, una comparación verificable o una limitación concreta.
 
-## Gates y unidad atómica
+Prohibidas las aperturas “En este artículo exploraremos…”, los supuestos consensos sin fuente,
+la grandilocuencia (“momento crucial”, “panorama cambiante”, “huella duradera”), las tendencias
+amplias forzadas, los tríos vacíos, el tono de folleto y las frases de cierre que repiten la
+nota. No usar sinónimos artificiales para evitar repetir un término técnico. No inventar citas.
 
-- 2 o 3 noticias pasan de `pending` a `consumed` por la misma identidad editorial.
-- La portada y el anuncio social existen, son legibles y sus hashes coinciden con el manifiesto.
-- Enlaces críticos válidos, `editorial_style` GREEN, tests GREEN, Hugo GREEN y cero secretos.
-- El árbol remoto contiene exactamente la cola actualizada, una nota, una portada, un anuncio,
-  un manifiesto y un reporte. Cualquier fallo impide crear o actualizar la rama remota.
+## Entrega
+
+El modelo sólo entrega un JSON y un JPG/PNG. El script fijo
+`scripts/automation/editorial_release.py` controla fecha, idempotencia, portada, front matter,
+cola, hashes, anuncio social, escaneo, commit y PR. GitHub CI y `deploy.yml` controlan lo demás.

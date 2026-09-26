@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "provider": "gh_cli",
+  "owner": "scripts/automation/editorial_release.py",
+  "repository": "RealLotex/mragentes-site",
+  "base_branch": "main",
+  "branch_template": "automation/editorial/{date}",
+  "workspace": {
+    "mode": "temporary_worktree",
+    "root": "/var/tmp",
+    "base_ref": "origin/main"
+  },
+  "authentication": {
+    "method": "gh_os_keyring",
+    "preflight": ["gh auth status", "gh api repos/RealLotex/mragentes-site --jq .permissions.push"],
+    "repository_secrets": false
+  },
+  "delivery": {
+    "paths": 6,
+    "commits": 1,
+    "force_push": false,
+    "pull_request": "non_draft_to_main",
+    "merge": "protected_github_actions"
+  },
+  "on_existing_branch_without_pr": "needs_review",
+  "on_ambiguous_remote_state": "needs_review"
+}

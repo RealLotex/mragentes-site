@@ -1,18 +1,12 @@
-"""Deterministic editorial gates for the MR Agentes publication automations.
-
-The rules intentionally preserve the research-led, technical character of the
-July and early-August archive.  They reject only objectively detectable
-regressions; source validation remains the responsibility of ``blog_guard``.
-"""
+"""Small, objective gates for a sourced MR Agentes news story."""
 
 from __future__ import annotations
 
 import argparse
 import json
 import re
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Sequence
-
 
 _WEEKLY_FORMULAS = (
     r"\bla semana\b",
@@ -40,6 +34,17 @@ _COLLOQUIAL_FORMS = (
 _FORBIDDEN = tuple(("fórmula semanal", pattern) for pattern in _WEEKLY_FORMULAS) + tuple(
     ("expresión coloquial", pattern) for pattern in _COLLOQUIAL_FORMS
 )
+_NEWS_BOILERPLATE = (
+    r"en este art[ií]culo (?:exploraremos|analizaremos|veremos)",
+    r"marca un momento (?:crucial|pivotal)",
+    r"refleja el panorama cambiante",
+    r"\b(?:los )?expertos sostienen\b",
+    r"\bobservadores se[nñ]alan\b",
+    r"\bdiversos estudios indican\b",
+    r"\b(?:en )?conclusi[oó]n\b",
+    r"\btendencias m[aá]s amplias\b",
+    r"\bno s[oó]lo .{1,90} sino (?:tambi[eé]n )?\b",
+)
 _ANALYTIC_MARKERS = (
     "análisis",
     "evidencia",
@@ -62,6 +67,9 @@ def validate_formal_text(value: str, *, field: str = "texto") -> str:
     for category, pattern in _FORBIDDEN:
         if re.search(pattern, folded, re.IGNORECASE):
             raise ValueError(f"{field} contains a forbidden {category}")
+    for pattern in _NEWS_BOILERPLATE:
+        if re.search(pattern, folded, re.IGNORECASE):
+            raise ValueError(f"{field} contains editorial boilerplate")
     return value
 
 
@@ -94,20 +102,18 @@ def inspect_note(markdown: str) -> dict[str, int]:
 
 
 def validate_academic_note(markdown: str) -> dict[str, int]:
-    """Require the minimum structure of a sourced, analytical MR Agentes note."""
+    """Require a readable, sourced news report without a mandatory essay template."""
 
     validate_formal_text(markdown, field="nota")
     report = inspect_note(markdown)
-    if report["words"] < 1_000:
-        raise ValueError("nota must contain at least 1000 words of analysis")
-    if report["sections"] < 4:
-        raise ValueError("nota must contain at least four analytical sections")
-    if report["sources"] < 3:
-        raise ValueError("nota must cite at least three public sources")
-    if report["analytic_markers"] < 3:
-        raise ValueError("nota lacks sufficient analytical framing")
-    if report["faq_questions"] < 3:
-        raise ValueError("nota must answer at least three beginner FAQ questions")
+    if report["words"] < 350:
+        raise ValueError("nota must contain at least 350 words of reported facts")
+    if report["sources"] < 1:
+        raise ValueError("nota must cite at least one public source")
+    if report["sections"] > 4:
+        raise ValueError("nota has too many sections for a focused news report")
+    if re.search(r"(?mi)^##\s+(?:Preguntas frecuentes|Conclusi[oó]n)\s*$", _body(markdown)):
+        raise ValueError("nota contains a generic closing section")
     return report
 
 

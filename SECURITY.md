@@ -1,8 +1,9 @@
 # Seguridad
 
 Este repositorio es público y sirve `mragentes.com.ar`. Todo contenido versionado debe
-considerarse público y permanente. La arquitectura separa generación sin credenciales,
-validación en GitHub y efectos externos dentro de entornos protegidos.
+considerarse público y permanente. El modelo redacta sin secretos de Meta o Cloudflare; un
+comando local usa la sesión `gh` del llavero para crear el PR. GitHub valida y ejecuta los
+efectos externos dentro de entornos protegidos.
 
 ## Reglas no negociables
 
@@ -23,6 +24,7 @@ validación en GitHub y efectos externos dentro de entornos protegidos.
 
 | Autoridad | Nombre | Uso | Exposición permitida |
 |---|---|---|---|
+| llavero del equipo | sesión `gh` | enviar rama editorial y abrir PR | sólo el proceso local; nunca el repositorio |
 | GitHub, entorno `meta-testing` | `META_ACCESS_TOKEN` | autenticar Graph API | sólo variable de entorno del job |
 | GitHub, entorno `meta-testing` | `FB_PAGE_ID` | destino Facebook | sólo variable de entorno del job |
 | GitHub, entorno `meta-testing` | `IG_USER_ID` | destino Instagram | sólo variable de entorno del job |
@@ -44,9 +46,10 @@ vacíos o no sensibles. No uses un valor real como “ejemplo”.
 
 ### Codex y tareas de ChatGPT
 
-Generan contenido, recursos y reportes en un worktree. No reciben credenciales de Meta o
-Cloudflare y no publican directamente. Sus ramas sólo pueden escribir los prefijos declarados
-en `.automation/schedules/*.json`.
+El modelo entrega un JSON y una imagen fuera del repositorio. El publicador local crea un
+worktree desde `origin/main`, prepara seis rutas explícitas y usa la sesión `gh` del llavero
+para abrir un PR. No recibe credenciales de Meta o Cloudflare ni publica directamente en esos
+servicios. El token GitHub nunca se registra en el JSON, en Git o en logs.
 
 ### GitHub
 

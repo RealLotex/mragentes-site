@@ -1,134 +1,72 @@
-# Arquitectura
+# Arquitectura editorial
 
 ## Objetivo
 
-MR Agentes publica una nota útil por día para generar tráfico orgánico hacia la web y sus
-perfiles de Facebook e Instagram. La arquitectura aplica KISS: una sola automatización prepara
-el contenido y un solo pipeline administrado lo valida, publica y anuncia.
+MR Agentes publica una noticia de IA por día para atraer lectores a la web y a sus perfiles de
+Facebook e Instagram. La publicación parte de un hecho reciente y verificable. El tono es formal,
+con nombres, fechas y cifras; evita el ensayo genérico y el texto publicitario.
 
-La computadora Linux Mint puede permanecer encendida para que Codex inicie la tarea, pero no es
-un servidor de producción. No se agregan cron, systemd, contenedores persistentes ni clones
-operativos manuales.
-
-## Autoridades
-
-- Codex y sus automatizaciones nativas investigan y preparan un cambio editorial local.
-- GitHub recibe el cambio, ejecuta CI, protege el merge y coordina los efectos.
-- GitHub Pages es la única autoridad de publicación web.
-- Meta Graph API publica en Facebook e Instagram.
-- Cloudflare Worker mantiene suscripciones y entrega Web Push.
+## Un modelo, un comando, un pipeline
 
 ```mermaid
 flowchart LR
-    A[Una automatización Codex] -->|conversación nueva + worktree| E[Una transacción editorial]
-    E -->|automation/editorial/**| P[PR + CI + merge protegido]
-    P --> D[deploy.yml]
-    D --> W[GitHub Pages]
-    W --> H[health gate]
-    H --> M[publish_meta]
-    H --> N[notify_push]
-    M --> F[1 Facebook]
-    M --> I[1 Instagram]
-    N --> C[Cloudflare Worker]
+    A[Codex a las 05:00: investiga y redacta] -->|JSON + JPG/PNG| B[editorial_release.py]
+    B -->|un commit y PR| C[CI + merge protegido]
+    C --> D[deploy.yml]
+    D --> E[GitHub Pages]
+    E --> F[health gate]
+    F --> G[Facebook + Instagram]
+    F --> H[Web Push]
 ```
 
-El health gate es la frontera: antes de comprobar la URL, el marcador de la nota y su imagen
-pública, no existe autoridad para llamar a Meta ni para enviar push.
+La automatización `mr-agentes-noticias` corre una vez por día a las 05:00 de `America/Cordoba`,
+en conversación nueva, con `gpt-6-luna` y esfuerzo `xhigh`. La skill
+`mragentes-editorial-publisher` sólo define investigación, estilo y el formato de entrada. El
+modelo entrega un JSON y una fotografía; no decide los pasos Git.
 
-## Transacción editorial única
+`scripts/automation/editorial_release.py` es la única autoridad local de entrega. Desde el
+proyecto registrado hace `git fetch`, crea un worktree temporal en `/var/tmp` desde
+`origin/main`, valida la entrada, agrega un único hecho a la cola, crea la nota y la portada,
+renderiza el anuncio vertical y escribe el manifiesto y el informe. Escanea secretos, prepara
+sólo esas seis rutas, crea un commit, envía `automation/editorial/YYYY-MM-DD` y abre un PR a
+`main`. Usa la sesión `gh` del sistema operativo; ningún token entra al repositorio o al JSON.
 
-`.automation/schedules/editorial.json` es el único descriptor activo. Conserva el ID
-`mr-agentes-noticias`, ejecuta todos los días a las 18:00 y hace un segundo intento a las 21:00
-de `America/Cordoba`, abre una conversación nueva y crea por sí misma un worktree dedicado desde
-`origin/main`. Es un worktree
-*self-managed*: la automatización nativa comienza en el checkout compartido, pero sólo lo usa
-para `git fetch --no-tags origin main`, `mktemp -d` y
-`git worktree add --detach <ruta>/worktree origin/main`; después trabaja dentro del aislamiento.
+El script rechaza una noticia de más de dos días, una fuente ausente, una foto inválida, una
+fuente ya consumida o una nota duplicada. Una rama existente sin PR o un efecto remoto incierto
+produce `needs_review`. Una nota completa de la fecha produce `skipped_valid`.
 
-La única skill es `mragentes-editorial-publisher`. En una misma ejecución:
+## Datos y responsables
 
-1. verifica fuentes y deduplica la cola;
-2. selecciona 2 o 3 noticias elegibles;
-3. crea una nota, una portada y un anuncio social de marca;
-4. consume los ítems elegidos y genera manifiesto e informe;
-5. valida guards, tests, secretos y Hugo;
-6. entrega un único commit remoto atómico y abre un PR.
+| Dato | Autoridad |
+|---|---|
+| Hecho, redacción y elección de imagen | Codex, según la skill editorial |
+| Cola, nota, portada, anuncio, manifiesto e informe | `editorial_release.py` |
+| CI, merge protegido y Pages | GitHub Actions |
+| Publicación en Facebook e Instagram | `deploy.yml`, job `publish_meta` |
+| Notificación Web Push | `deploy.yml`, job `notify_push`, y Cloudflare Worker |
 
-Si no hay dos noticias fiables, el resultado es `skipped_valid`. Un checkout compartido sucio
-no es un bloqueo y nunca se limpia ni modifica. Si los artefactos completos de la fecha ya
-existen, el resultado también es `skipped_valid`; ante estado parcial, worktree aislado sucio o
-estado remoto ambiguo, el resultado es `needs_review`. La tarea no conoce secretos y no publica
-afuera.
+`.automation/schedules/editorial.json` documenta la tarea nativa. `.automation/github/editorial-egress.json`
+documenta el límite de entrega del script. No hay otro cron, servicio permanente ni workflow de
+ingesta editorial. Los registros nativos antiguos de blog, social y recuperación están pausados.
 
-Ambas ventanas usan la misma identidad `editorial:YYYY-MM-DD` y la rama válida
-`automation/editorial/YYYY-MM-DD`. El segundo intento cubre un límite de uso transitorio; si la
-primera corrida ya integró los artefactos completos de la fecha, la segunda es un no-op
-`skipped_valid`.
+## Después del PR
 
-## Git y aislamiento
+`.github/workflows/ci.yml` prueba contratos Python, JavaScript y estilo de las notas cambiadas.
+`.github/workflows/automation-intake.yml` sólo admite `automation/editorial/**` y compara el SHA
+aprobado por CI con el PR antes de integrarlo. Tras el merge, despacha `deploy.yml` para ese rango
+exacto. GitHub Pages publica la web. El health gate espera la URL y la imagen públicas antes de
+autorizar Meta o push.
 
-`.automation/github/connector-egress.json` exige el worktree limpio y autoriza sólo ramas
-`automation/editorial/**`. El conector crea el cambio con `create_blob` → `create_tree` →
-`create_commit` → `update_ref`, un máximo de un commit por corrida y actualización fast-forward.
-La automatización no usa git push local, `gh` ni credenciales almacenadas.
-
-`.github/workflows/automation-intake.yml` espera el PR creado por el conector. El evento
-`workflow_run` sólo habilita el merge si CI terminó bien y coinciden repositorio, base, rama y
-SHA. `--match-head-commit` evita integrar algo diferente de lo validado.
-
-## Datos canónicos
-
-| Dato | Fuente de verdad | Escritor |
-|---|---|---|
-| cola de noticias | `.automation/news/queue/news-queue.json` | skill editorial |
-| manifiesto | `.automation/blog/` | skill editorial |
-| nota | `content/notas/` | skill editorial vía PR |
-| portada | `static/images/stock/` | skill editorial vía PR |
-| anuncio de nota | `static/images/social/notes/` | skill editorial vía PR |
-| reporte | `.automation/reports/editorial-YYYY-MM-DD.json` | skill editorial |
-| sitio generado | artefacto de Pages | GitHub Actions |
-| publicación social | Meta | job `publish_meta` |
-| suscripciones y dedupe push | Cloudflare | `cf_worker.js` |
-
-Los drafts `daily_owned` y sus informes históricos se conservan como evidencia, pero ningún
-schedule ni workflow los consume. No se crea contenido social independiente del blog.
-
-## Pipeline administrado
-
-`.github/workflows/deploy.yml` contiene todo el recorrido posterior al merge:
-
-1. suites Python y JavaScript;
-2. detección tipada de nuevas notas por rango Git;
-3. build Hugo y despliegue en GitHub Pages;
-4. `wait_for_publication` sobre cada nota nueva;
-5. `publish_meta`, dentro de `meta-testing`, para una publicación en Facebook y una publicación
-   en Instagram;
-6. `notify_push`, dentro de `cloudflare-production`, para un evento Web Push idempotente.
-
-No hay dispatch a workflows secundarios. Los dos efectos usan la misma identidad de nota y se
-pueden reintentar por separado. Meta reconcilia publicaciones recientes antes de escribir y
-mantiene checkpoints por plataforma. El push usa un token OIDC efímero y un `eventId` estable.
+Meta permanece en el environment `meta-testing`. Su entrega reconcilia publicaciones previas y
+conserva checkpoints por plataforma. Cloudflare usa un `eventId` estable para deduplicar push.
+Si Facebook está confirmado e Instagram falla, sólo se recupera Instagram; un resultado incierto
+se investiga antes de repetir. El frontend y la autoridad de Pages no cambian.
 
 ## Web Push
 
 - `assets/js/push.js`: suscripción y baja iniciadas por la persona.
 - `static/sw.js`: recepción y apertura segura de la notificación.
-- `cf_worker.js`: validación, persistencia, bienvenida y fan-out idempotente.
+- `cf_worker.js`: validación, persistencia y envío idempotente.
 
-`PUSH_SUBS` admite claves canónicas `sub:v1:<sha256>` y las claves HTTPS legacy hasta completar
-su migración perezosa. Ningún estado de suscriptores vive en el repositorio.
-
-## Fallos seguros
-
-| Fallo | Resultado |
-|---|---|
-| investigación insuficiente | no crea nota ni PR |
-| validación o CI fallida | no integra a `main` |
-| deploy o health gate fallido | cero efectos externos |
-| Facebook confirmado e Instagram retryable | conserva Facebook y reintenta sólo Instagram |
-| resultado Meta incierto | reconcilia; si no es concluyente, `needs_review` |
-| push repetido | Cloudflare responde idempotentemente |
-| mismo ID con otro hash | conflicto y revisión manual |
-
-La recuperación normal es reejecutar el mismo job fallido del mismo SHA. No existe una
-automatización de recuperación paralela.
+`PUSH_SUBS` admite claves `sub:v1:<sha256>` y claves HTTPS legacy hasta completar su migración
+perezosa. Los suscriptores no viven en Git.

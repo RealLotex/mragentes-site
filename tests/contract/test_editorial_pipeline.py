@@ -8,7 +8,6 @@ import yaml
 
 from tests.support.contracts import require_target, trace_message
 
-
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -30,14 +29,13 @@ def test_only_one_native_editorial_schedule_is_enabled() -> None:
     assert descriptor["status"] == "active" and descriptor["registered"] is True
     assert descriptor["timezone"] == "America/Cordoba"
     assert descriptor["weekdays"] == [0, 1, 2, 3, 4, 5, 6]
-    assert descriptor["local_times"] == ["18:00", "21:00"]
-    assert descriptor["cron"] == "0 18,21 * * *"
-    assert descriptor["retry"]["same_identity"] is True
-    assert descriptor["retry"]["successful_first_attempt_becomes_noop"] is True
+    assert descriptor["local_times"] == ["05:00"]
+    assert descriptor["cron"] == "0 5 * * *"
+    assert "retry" not in descriptor
     assert descriptor["conversation"] == "new"
     assert descriptor["workspace"] == "self_managed_worktree"
-    assert descriptor["model"] == "gpt-5.6-sol"
-    assert descriptor["reasoning_effort"] == "ultra"
+    assert descriptor["model"] == "gpt-6-luna"
+    assert descriptor["reasoning_effort"] == "xhigh"
     assert descriptor["skill"] == "mragentes-editorial-publisher"
     assert descriptor["branch_template"] == "automation/editorial/{date}"
     assert descriptor["notification_policy"] == "default"
@@ -60,13 +58,13 @@ def test_one_skill_owns_the_complete_local_editorial_transaction() -> None:
     ).read_text(encoding="utf-8")
     for term in (
         "name: mragentes-editorial-publisher",
-        "dry-run",
+        "05:00",
         "una nota",
         "Facebook",
         "Instagram",
-        "atómico",
+        "JSON",
         "needs_review",
-        "no uses git push local",
+        "editorial_release.py",
     ):
         assert term.casefold() in source.casefold(), trace_message(
             "EDITORIAL-KISS-002", f"editorial skill lacks {term!r}"
@@ -89,7 +87,7 @@ def test_deploy_owns_both_post_publication_effects_without_dispatch_chains() -> 
 
     path = require_target(".github/workflows/deploy.yml", "EDITORIAL-KISS-003")
     source = path.read_text(encoding="utf-8")
-    parsed = yaml.load(source, Loader=yaml.BaseLoader)
+    parsed = yaml.safe_load(source)
     jobs = parsed["jobs"]
     assert {"wait_for_publication", "publish_meta", "notify_push"} <= set(jobs)
     assert jobs["publish_meta"]["needs"] == ["wait_for_publication", "detect_changes"]
@@ -120,21 +118,13 @@ def test_only_editorial_branches_enter_the_automation_gate() -> None:
 
 @pytest.mark.trace("EDITORIAL-KISS-005")
 @pytest.mark.red_expected
-def test_connector_clean_start_is_satisfied_by_a_dedicated_worktree() -> None:
+def test_release_script_uses_temporary_worktree_and_gh_authentication() -> None:
     contract = json.loads(
-        require_target(
-            ".automation/github/connector-egress.json", "EDITORIAL-KISS-005"
-        ).read_text(encoding="utf-8")
+        require_target(".automation/github/editorial-egress.json", "EDITORIAL-KISS-005").read_text(
+            encoding="utf-8"
+        )
     )
-    assert contract["safety"]["require_clean_start"] is True
-    assert contract["workspace"]["mode"] == "dedicated_worktree"
+    assert contract["workspace"]["mode"] == "temporary_worktree"
     assert contract["workspace"]["base_ref"] == "origin/main"
-    assert contract["preflight"]["read_probe"] == {
-        "tool": "github_get_repo",
-        "arguments": {
-            "repository_full_name": "RealLotex/mragentes-site",
-        },
-        "required_result": {"permissions.push": True},
-    }
-    assert contract["preflight"]["write_permission_is_proven_by"] == "permissions.push"
-    assert contract["preflight"]["synthetic_write_probe"] is False
+    assert contract["authentication"]["method"] == "gh_os_keyring"
+    assert contract["delivery"]["paths"] == 6

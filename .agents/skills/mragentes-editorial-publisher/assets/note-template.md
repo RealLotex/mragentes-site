@@ -1,37 +1,26 @@
----
-schema_version: 1
-title: "Título original y específico"
-date: "YYYY-MM-DDT12:00:00-03:00"
-description: "Resumen en texto plano de hasta 160 caracteres."
-image: "/images/stock/archivo-portable.webp"
-image_alt: "Descripción concreta del recurso visual."
-tags:
-  - automatizacion
-pillar: "automatizacion-practica"
-learning_level: "inicial"
-sources:
-  - "https://example.com/fuente-primaria"
-automation_id: "blog:YYYY-MM-DD:slug-portable"
-draft: false
-aliases: []
----
+# Formato de entrada al publicador
 
-Introducción que conecta los hechos con una necesidad concreta.
+Guardá un JSON fuera del repositorio. Los valores siguientes indican el formato, no son hechos
+ni enlaces aptos para publicación:
 
-## Qué ocurrió
+```json
+{
+  "title": "Título con sujeto y hecho concreto",
+  "summary": "Una oración de hasta 160 caracteres con el dato principal.",
+  "body": "Primer párrafo con quién, qué y cuándo. [Fuente original](https://FUENTE_REAL).\\n\\n## Un subtítulo útil\\n\\nDatos y límites con citas junto a cada afirmación.",
+  "image_alt": "Descripción literal de la fotografía",
+  "source_url": "https://FUENTE_REAL",
+  "source_name": "Nombre de la fuente",
+  "source_date": "YYYY-MM-DD",
+  "related_sources": [],
+  "tags": ["ia", "actualidad"],
+  "image_credit": {
+    "source_url": "https://PAGINA_REAL_DE_LA_FOTO",
+    "creator": "Autor real",
+    "license_url": "https://LICENCIA_REAL"
+  }
+}
+```
 
-Síntesis original con vínculos junto a cada afirmación.
-
-## Por qué importa
-
-Implicancias prácticas, límites y contexto.
-
-## Qué puede hacer una PyME
-
-Un primer paso comprobable y una conclusión accionable.
-
-## Preguntas frecuentes
-
-### Pregunta concreta
-
-Respuesta concreta.
+La imagen se entrega como un archivo JPG o PNG separado. El comando construye los metadatos
+Hugo y todos los artefactos derivados.

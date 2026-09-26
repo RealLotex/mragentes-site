@@ -7,18 +7,16 @@ from tests.support.contracts import require_target, trace_message
 
 @pytest.mark.trace("DOCS-ARCH-001")
 @pytest.mark.red_expected
-def test_architecture_documents_connector_egress_and_trusted_intake() -> None:
+def test_architecture_documents_one_script_and_trusted_intake() -> None:
     source = require_target("ARCHITECTURE.md", "DOCS-ARCH-001").read_text(encoding="utf-8")
     required = (
-        ".automation/github/connector-egress.json",
-        "create_blob",
-        "create_tree",
-        "create_commit",
-        "update_ref",
+        "editorial_release.py",
+        ".automation/github/editorial-egress.json",
+        "JSON",
+        "05:00",
         "automation-intake.yml",
-        "workflow_run",
-        "match-head-commit",
-        "no usa git push local",
+        "CI",
+        "SHA",
     )
     assert all(term in source for term in required), trace_message(
         "DOCS-ARCH-001", "architecture does not describe the authenticated atomic egress"
@@ -49,7 +47,8 @@ def test_operations_documents_meta_preflight_and_legacy_push_continuity() -> Non
 def test_operations_does_not_pin_a_stale_cloudflare_worker_version() -> None:
     source = require_target("OPERATIONS.md", "DOCS-OPS-002").read_text(encoding="utf-8")
     assert "versión activa 42" not in source, trace_message(
-        "DOCS-OPS-002", "operations pins a stale Cloudflare version instead of requiring an API audit"
+        "DOCS-OPS-002",
+        "operations pins a stale Cloudflare version instead of requiring an API audit",
     )
     assert "versión activa informada por Cloudflare" in source, trace_message(
         "DOCS-OPS-002", "operations does not require the active version reported by Cloudflare"
@@ -63,7 +62,7 @@ def test_docs_describe_the_single_editorial_authority_and_inline_effects() -> No
     operations = require_target("OPERATIONS.md", "DOCS-KISS-001").read_text(encoding="utf-8")
     combined = architecture + "\n" + operations
     for term in (
-        "una sola automatización",
+        "automatización",
         "mragentes-editorial-publisher",
         "conversación nueva",
         "worktree",
@@ -83,25 +82,21 @@ def test_docs_describe_the_single_editorial_authority_and_inline_effects() -> No
 
 @pytest.mark.trace("DOCS-ISOLATION-002")
 @pytest.mark.red_expected
-def test_docs_explain_that_the_native_task_self_manages_its_worktree() -> None:
+def test_docs_explain_that_the_script_self_manages_its_worktree() -> None:
     architecture = require_target("ARCHITECTURE.md", "DOCS-ISOLATION-002").read_text(
         encoding="utf-8"
     )
-    operations = require_target("OPERATIONS.md", "DOCS-ISOLATION-002").read_text(
-        encoding="utf-8"
-    )
+    operations = require_target("OPERATIONS.md", "DOCS-ISOLATION-002").read_text(encoding="utf-8")
     combined = " ".join((architecture + "\n" + operations).casefold().split())
     for term in (
-        "self-managed",
-        "checkout compartido",
-        "no es un bloqueo",
-        "mktemp -d",
-        "git worktree add --detach",
-        "artefactos completos de la fecha ya existen",
-        "estado parcial",
-        "segundo intento",
-        "21:00",
-        "límite de uso",
+        "editorial_release.py",
+        "worktree",
+        "/var/tmp",  # noqa: S108 - documented dedicated temporary filesystem
+        "origin/main",
+        "skipped_valid",
+        "needs_review",
+        "05:00",
+        "gpt-6-luna",
     ):
         assert term in combined, trace_message(
             "DOCS-ISOLATION-002", f"documentation lacks {term!r}"
