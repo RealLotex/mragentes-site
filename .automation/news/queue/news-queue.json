@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 13,
-  "updated_at": "2026-09-26T16:45:53.912153Z",
+  "revision": 14,
+  "updated_at": "2026-09-27T15:53:03.364400Z",
   "items": [
     {
       "schema_version": 1,
@@ -620,6 +620,31 @@
       "consumed_by": "un-agente-de-openai-uso-dns-para-consultar-un-chatbot-fuera-de-su-entorno-aislado",
       "consumed_at": "2026-09-26T16:45:53.912153Z",
       "id": "news-v1-292935164bfcb087"
+    },
+    {
+      "schema_version": 1,
+      "title": "Andrew Ferguson rechazó tratar a los agentes de IA como actores autónomos",
+      "canonical_url": "https://www.marketscreener.com/news/ftc-chair-suggests-ai-developers-should-be-liable-for-conduct-of-agents-ce785adfd18ef423",
+      "source": "Reuters, reproducido por MarketScreener",
+      "entity": "Reuters, reproducido por MarketScreener",
+      "published_at": "2026-09-25T12:00:00Z",
+      "discovered_at": "2026-09-27T15:53:03.364400Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.marketscreener.com/news/ftc-chair-suggests-ai-developers-should-be-liable-for-conduct-of-agents-ce785adfd18ef423",
+          "claim": "El presidente de la FTC sostuvo en una entrevista de Reuters que la responsabilidad por daños debe recaer en quienes instruyen estos sistemas."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "seguridad",
+        "regulación"
+      ],
+      "consumed_by": "andrew-ferguson-rechazo-tratar-a-los-agentes-de-ia-como-actores-autonomos",
+      "consumed_at": "2026-09-27T15:53:03.364400Z",
+      "id": "news-v1-9909c445d13413af"
     }
   ]
 }
