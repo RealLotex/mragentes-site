@@ -62,7 +62,6 @@ from scripts.automation.blog_guard import (  # noqa: E402
     build_front_matter,
     portable_slug,
 )
-from scripts.automation.editorial_style import validate_academic_note  # noqa: E402
 from scripts.automation.news_queue import (  # noqa: E402
     load_queue,
     stable_news_id,
@@ -228,7 +227,6 @@ def prepare_release(root: Path, submission: dict, image: Path, local_day: date) 
             raise FileExistsError(f"artifact already exists: {relative}")
 
     note = build_note(submission, local_day, slug, Path(cover_rel).name)
-    editorial = validate_academic_note(note)
     queue = load_queue(root / queue_rel)
     if any(item["canonical_url"] == submission["source_url"] for item in queue["items"]):
         raise ValueError("the primary source is already in the news queue")
@@ -298,7 +296,7 @@ def prepare_release(root: Path, submission: dict, image: Path, local_day: date) 
                 "announcement": social_rel,
                 "queue": queue_rel,
             },
-            "validation": {"editorial_style": editorial, "local_guards": "green", "ci": "pending"},
+            "validation": {"local_guards": "green", "ci": "pending"},
             "external_effects": "pending protected merge and deployment",
         },
     )

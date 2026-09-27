@@ -21,7 +21,9 @@ manifiestos ni los workflows: `scripts/automation/editorial_release.py` los admi
    acción y fecha. Usá nombres, cifras y ejemplos cuando la fuente los respalde. Entre 350 y
    900 palabras suelen bastar; uno o dos subtítulos son suficientes. Citá la fuente junto al
    dato. Distinguí hechos, afirmaciones de una empresa y tu análisis. Evitá las fórmulas y el
-   tono publicitario enumerados en `references/editorial-contract.md`.
+   tono publicitario enumerados en `references/editorial-contract.md`. Antes de guardar el JSON,
+   revisá el texto: sin voseo, coloquialismos, introducciones vacías ni conclusiones que repitan
+   el título. El comando no adivina el estilo mediante listas de palabras prohibidas.
 4. Elegí una fotografía pertinente en JPG o PNG, de al menos 800 × 500 píxeles. Si proviene de
    Pexels o Unsplash, registrá autor, página y licencia. No presentés una imagen ilustrativa
    como foto del hecho.

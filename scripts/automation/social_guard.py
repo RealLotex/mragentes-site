@@ -12,7 +12,6 @@ from pathlib import Path
 from typing import Any, Iterable
 from urllib.parse import urlsplit
 
-from scripts.automation.editorial_style import validate_formal_text
 
 
 _KINDS = {"daily_owned", "blog_note"}
@@ -215,10 +214,6 @@ def validate_social_draft(draft: dict[str, Any]) -> dict[str, Any]:
     instagram = _caption_text(captions["instagram"], "instagram caption", 2_200)
     if facebook.strip() == instagram.strip():
         raise ValueError("platform captions must be tailored separately")
-    validate_formal_text(result["topic"], field="social topic")
-    validate_formal_text(facebook, field="facebook caption")
-    validate_formal_text(instagram, field="instagram caption")
-
     if kind == "blog_note":
         result["note_slug"] = _note_slug(result["note_slug"])
         result["note_url"] = _public_note_url(result["note_url"])
