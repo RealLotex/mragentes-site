@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-09-27",
+  "status": "prepared",
+  "local_date": "2026-09-27",
+  "created_at": "2026-09-27T15:53:03.364400Z",
+  "branch": "automation/editorial/2026-09-27",
+  "note_slug": "andrew-ferguson-rechazo-tratar-a-los-agentes-de-ia-como-actores-autonomos",
+  "selected_news_ids": [
+    "news-v1-9909c445d13413af"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-09-27-andrew-ferguson-rechazo-tratar-a-los-agentes-de-ia-como-actores-autonomos.json",
+    "note": "content/notas/andrew-ferguson-rechazo-tratar-a-los-agentes-de-ia-como-actores-autonomos.md",
+    "cover": "static/images/stock/andrew-ferguson-rechazo-tratar-a-los-agentes-de-ia-como-actores-autonomos.jpg",
+    "announcement": "static/images/social/notes/andrew-ferguson-rechazo-tratar-a-los-agentes-de-ia-como-actores-autonomos.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}

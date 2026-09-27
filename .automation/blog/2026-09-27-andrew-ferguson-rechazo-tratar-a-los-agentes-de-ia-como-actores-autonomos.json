@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-09-27:andrew-ferguson-rechazo-tratar-a-los-agentes-de-ia-como-actores-autonomos",
+  "status": "prepared",
+  "local_date": "2026-09-27",
+  "created_at": "2026-09-27T15:53:03.364400Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/andrew-ferguson-rechazo-tratar-a-los-agentes-de-ia-como-actores-autonomos.md",
+      "sha256": "997b5d6dab2d44d908748855e81fb1bb7313670b7ad23d089991e2f2b8fd8ef0"
+    },
+    "asset": {
+      "path": "static/images/stock/andrew-ferguson-rechazo-tratar-a-los-agentes-de-ia-como-actores-autonomos.jpg",
+      "sha256": "ee9f090300886fbc37458aad062bb799c8e3c0e041e0e6abc9deb14cca554a8c",
+      "source_url": "https://www.pexels.com/photo/man-using-laptop-wit-chat-gpt-16094040/",
+      "creator": "Matheus Bertelli",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/andrew-ferguson-rechazo-tratar-a-los-agentes-de-ia-como-actores-autonomos.jpg",
+      "sha256": "75a9044f7bb09675eadb277d6e89f428b603828190b5bcf076660d5b35d91462"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "857a83011130febe518f8f308676dda9d3e927c31e96a0755fc00d024576aef0"
+    }
+  },
+  "sources": [
+    "https://www.marketscreener.com/news/ftc-chair-suggests-ai-developers-should-be-liable-for-conduct-of-agents-ce785adfd18ef423",
+    "https://events.reutersevents.com/reuters/newsmaker/andrewferguson"
+  ]
+}
