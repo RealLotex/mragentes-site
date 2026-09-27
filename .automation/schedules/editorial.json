@@ -14,7 +14,7 @@
   "model": "gpt-6-luna",
   "reasoning_effort": "xhigh",
   "skill": "mragentes-editorial-publisher",
-  "prompt": "Usá $mragentes-editorial-publisher para investigar un hecho de IA reciente y publicarlo con scripts/automation/editorial_release.py. Elegí una noticia mainstream verificable publicada en las últimas 48 horas: modelos, descubrimientos, seguridad de agentes, debate público o adopción empresarial argentina. Redactá una sola nota informativa con nombres, fechas y datos concretos, y aportá una imagen JPG o PNG pertinente. Guardá el paquete JSON y la imagen fuera del repositorio y ejecutá el comando documentado por la skill. El script se encarga de Git, PR y validaciones; no improvises pasos de entrega. Si no hay hecho verificable o el script falla, informá el bloqueo de forma visible sin inventar contenido ni repetir publicaciones.",
+  "prompt": "Usá $mragentes-editorial-publisher. Investigá una noticia mainstream de IA publicada en las últimas 48 horas y verificá fuente, fecha, nombres y cifras. Redactá una nota concreta, formal y fácil de leer. Revisá el texto para quitar voseo, coloquialismos, introducciones vacías, frases de folleto y conclusiones genéricas. Aportá una imagen JPG o PNG pertinente. Guardá JSON e imagen fuera del repositorio y ejecutá una sola vez scripts/automation/editorial_release.py como indica la skill. El script gestiona Git y PR; no hagas pasos Git manuales. Si falla o no hay noticia fiable, explicá el bloqueo sin inventar contenido ni repetir efectos.",
   "branch_template": "automation/editorial/{date}",
   "notification_policy": "default",
   "status": "active",

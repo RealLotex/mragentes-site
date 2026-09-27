@@ -12,7 +12,8 @@
 ## Redacción
 
 - Primer párrafo: quién hizo qué, cuándo y dónde. No reformular el título como introducción.
-- Español formal, preciso y fácil de leer. Definir un término técnico sólo cuando sea necesario.
+- Español formal, preciso y fácil de leer, sin voseo ni coloquialismos. Definir un término técnico
+  sólo cuando sea necesario.
 - Citar las cifras y afirmaciones cerca de su fuente. Identificar opiniones por nombre y cargo.
 - Separar lo comprobado de lo que dice una empresa y de lo que todavía no se conoce.
 - Extensión orientativa: 350–900 palabras, pocos subtítulos y párrafos de longitud variada.
