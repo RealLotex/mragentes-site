@@ -287,7 +287,7 @@ def build_front_matter(
     document: dict[str, Any] = {
         "schema_version": 1,
         "title": title,
-        "date": f"{_validated_local_date(local_date)}T12:00:00-03:00",
+        "date": f"{_validated_local_date(local_date)}T00:00:00-03:00",
         "description": description,
         "image": image,
         "image_alt": image_alt,
@@ -351,9 +351,9 @@ def validate_front_matter(front_matter: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(result["title"], str) or not result["title"].strip():
         raise ValueError("title is required")
     if not isinstance(result["date"], str) or not re.fullmatch(
-        r"\d{4}-\d{2}-\d{2}T12:00:00-03:00", result["date"]
+        r"\d{4}-\d{2}-\d{2}T(?:00|12):00:00-03:00", result["date"]
     ):
-        raise ValueError("date must be Córdoba noon with an explicit offset")
+        raise ValueError("date must use Córdoba midnight or legacy noon with an explicit offset")
     _validated_local_date(result["date"][:10])
 
     description = result["description"]

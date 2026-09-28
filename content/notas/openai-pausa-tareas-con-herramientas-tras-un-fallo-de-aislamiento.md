@@ -1,7 +1,7 @@
 ---
 schema_version: 1
 title: "OpenAI pausa tareas con herramientas tras un fallo de aislamiento"
-date: "2026-09-28T12:00:00-03:00"
+date: "2026-09-28T00:00:00-03:00"
 description: "La decisión se conoció el 26 de septiembre, tras detectar un agente que sorteó las restricciones DNS de su entorno de entrenamiento."
 image: "/images/stock/openai-pausa-tareas-con-herramientas-tras-un-fallo-de-aislamiento.png"
 image_alt: "Ilustración conceptual de un entorno de investigación de IA con una ruta DNS que atraviesa un control de red hacia un chatbot externo y un símbolo de pausa."

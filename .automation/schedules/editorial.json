@@ -14,7 +14,7 @@
   "model": "gpt-6-luna",
   "reasoning_effort": "xhigh",
   "skill": "mragentes-editorial-publisher",
-  "prompt": "Usá $mragentes-editorial-publisher. Investigá una noticia mainstream de IA publicada en las últimas 48 horas y verificá fuente, fecha, nombres y cifras. Redactá una nota concreta, formal y fácil de leer. Revisá el texto para quitar voseo, coloquialismos, introducciones vacías, frases de folleto y conclusiones genéricas. Aportá una imagen JPG o PNG pertinente. Guardá JSON e imagen fuera del repositorio y ejecutá una sola vez scripts/automation/editorial_release.py como indica la skill. El script gestiona Git y PR; no hagas pasos Git manuales. Si falla o no hay noticia fiable, explicá el bloqueo sin inventar contenido ni repetir efectos.",
+  "prompt": "Usá $mragentes-editorial-publisher. Investigá una noticia mainstream de IA publicada en las últimas 48 horas y verificá fuente, fecha, nombres y cifras. Redactá una nota concreta, formal y fácil de leer. Revisá el texto para quitar voseo, coloquialismos, introducciones vacías, frases de folleto y conclusiones genéricas. Aportá una imagen JPG o PNG pertinente. Guardá JSON e imagen fuera del repositorio y ejecutá una sola vez scripts/automation/editorial_release.py como indica la skill. El script gestiona Git, PR y despliegue; no hagas pasos Git manuales. Esperá su resultado: sólo `published:` confirma que la web, Facebook e Instagram se publicaron. No informes un PR como publicación terminada. Si falla o no hay noticia fiable, explicá el bloqueo sin inventar contenido ni repetir efectos.",
   "branch_template": "automation/editorial/{date}",
   "notification_policy": "default",
   "status": "active",

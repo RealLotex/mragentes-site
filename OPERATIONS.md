@@ -24,6 +24,8 @@ Comprobar el acceso con `gh auth status` y el permiso de escritura con
    `.agents/skills/mragentes-editorial-publisher/assets/note-template.md`.
 3. Ejecuta `python3 scripts/automation/editorial_release.py --input /var/tmp/nota.json --image /var/tmp/portada.jpg`.
    El comando controla idempotencia, validación, worktree, seis artefactos, commit, push y PR.
+   Espera hasta que termine el despliegue y los envíos externos. Sólo `published:` confirma
+   publicación; una URL de PR por sí sola no es el resultado final.
 4. GitHub ejecuta CI, merge protegido y `deploy.yml`. Pages publica la nota. Después del health
    gate, los jobs `publish_meta` y `notify_push` hacen los efectos externos.
 
@@ -63,3 +65,8 @@ Para Cloudflare, confirmar la versión activa informada por Cloudflare y los bin
 Los registros `mr-agentes-blog`, `mr-agentes-social-diario` y
 `mr-agentes-recuperaci-n-social` permanecen pausados. No agregar otro cron para compensar una
 falla de esta tarea: corregir el comando o el PR identificado por fecha.
+
+Las notas nuevas llevan la fecha local a las 00:00 para que Hugo no las oculte como futuras
+durante la publicación de las 05:00. Las notas anteriores fechadas al mediodía siguen siendo
+válidas. Si un despliegue se interrumpe después del merge, identificar el rango exacto y
+repetir `deploy.yml` sólo después de verificar que los efectos externos aún no se enviaron.

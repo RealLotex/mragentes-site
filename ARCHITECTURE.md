@@ -33,7 +33,10 @@ sólo esas seis rutas, crea un commit, envía `automation/editorial/YYYY-MM-DD` 
 
 El script rechaza una noticia de más de dos días, una fuente ausente, una foto inválida, una
 fuente ya consumida o una nota duplicada. Una rama existente sin PR o un efecto remoto incierto
-produce `needs_review`. Una nota completa de la fecha produce `skipped_valid`.
+produce `needs_review`. Una nota completa de la fecha produce `skipped_valid`. El comando no
+informa `published:` hasta que el PR se haya integrado y el despliegue y sus jobs externos hayan
+terminado. La fecha local de las notas nuevas se fija a las 00:00 para que Hugo las incluya en
+la publicación de las 05:00.
 
 ## Datos y responsables
 
@@ -51,7 +54,7 @@ ingesta editorial. Los registros nativos antiguos de blog, social y recuperació
 
 ## Después del PR
 
-`.github/workflows/ci.yml` prueba contratos Python, JavaScript y estilo de las notas cambiadas.
+`.github/workflows/ci.yml` prueba contratos Python y JavaScript.
 `.github/workflows/automation-intake.yml` sólo admite `automation/editorial/**` y compara el SHA
 aprobado por CI con el PR antes de integrarlo. Tras el merge, despacha `deploy.yml` para ese rango
 exacto. GitHub Pages publica la web. El health gate espera la URL y la imagen públicas antes de
