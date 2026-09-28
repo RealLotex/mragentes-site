@@ -108,7 +108,8 @@ def test_release_waits_for_merge_and_successful_deploy() -> None:
             {"state": "MERGED", "mergeCommit": {"oid": "a" * 40}},
             [{"databaseId": 42, "status": "completed", "conclusion": "success"}],
             {"jobs": [{"name": name, "conclusion": "success"} for name in (
-                "deploy", "wait_for_publication", "publish_meta", "notify_push"
+                "deploy", "wait_for_publication", "publish_meta (agente-dns)",
+                "notify_push (agente-dns)",
             )]},
         ]
     )
