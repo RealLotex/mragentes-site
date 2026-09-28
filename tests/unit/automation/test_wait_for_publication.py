@@ -6,6 +6,7 @@ import pytest
 
 from scripts.automation.wait_for_publication import (
     FetchResult,
+    MAX_RESPONSE_BYTES,
     PublicationNotReady,
     verify_deployed_url,
 )
@@ -160,3 +161,9 @@ def test_publication_gate_validates_retry_bounds_before_network() -> None:
                 **kwargs,
             )
     assert not fetch.calls
+
+
+@pytest.mark.trace("DEPLOY-HEALTH-006")
+@pytest.mark.red_expected
+def test_publication_gate_accepts_every_image_size_allowed_by_editorial_input() -> None:
+    assert MAX_RESPONSE_BYTES >= 15 * 1024 * 1024
