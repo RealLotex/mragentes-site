@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-09-28",
+  "status": "prepared",
+  "local_date": "2026-09-28",
+  "created_at": "2026-09-28T08:08:28.337838Z",
+  "branch": "automation/editorial/2026-09-28",
+  "note_slug": "openai-pausa-tareas-con-herramientas-tras-un-fallo-de-aislamiento",
+  "selected_news_ids": [
+    "news-v1-0cc72e62888e66a7"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-09-28-openai-pausa-tareas-con-herramientas-tras-un-fallo-de-aislamiento.json",
+    "note": "content/notas/openai-pausa-tareas-con-herramientas-tras-un-fallo-de-aislamiento.md",
+    "cover": "static/images/stock/openai-pausa-tareas-con-herramientas-tras-un-fallo-de-aislamiento.png",
+    "announcement": "static/images/social/notes/openai-pausa-tareas-con-herramientas-tras-un-fallo-de-aislamiento.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}

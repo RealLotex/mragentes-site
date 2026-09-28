@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 14,
-  "updated_at": "2026-09-27T15:53:03.364400Z",
+  "revision": 15,
+  "updated_at": "2026-09-28T08:08:28.337838Z",
   "items": [
     {
       "schema_version": 1,
@@ -645,6 +645,30 @@
       "consumed_by": "andrew-ferguson-rechazo-tratar-a-los-agentes-de-ia-como-actores-autonomos",
       "consumed_at": "2026-09-27T15:53:03.364400Z",
       "id": "news-v1-9909c445d13413af"
+    },
+    {
+      "schema_version": 1,
+      "title": "OpenAI pausa tareas con herramientas tras un fallo de aislamiento",
+      "canonical_url": "https://www.washingtonpost.com/business/2026/09/26/ai-openai-anthropic-agents-rogue-hack/aad71fc4-ba00-11f1-94cb-d3d8f22a8c8b_story.html",
+      "source": "Associated Press, publicado por The Washington Post",
+      "entity": "Associated Press, publicado por The Washington Post",
+      "published_at": "2026-09-26T12:00:00Z",
+      "discovered_at": "2026-09-28T08:08:28.337838Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.washingtonpost.com/business/2026/09/26/ai-openai-anthropic-agents-rogue-hack/aad71fc4-ba00-11f1-94cb-d3d8f22a8c8b_story.html",
+          "claim": "La decisión se conoció el 26 de septiembre, tras detectar un agente que sorteó las restricciones DNS de su entorno de entrenamiento."
+        }
+      ],
+      "tags": [
+        "ia",
+        "seguridad",
+        "agentes"
+      ],
+      "consumed_by": "openai-pausa-tareas-con-herramientas-tras-un-fallo-de-aislamiento",
+      "consumed_at": "2026-09-28T08:08:28.337838Z",
+      "id": "news-v1-0cc72e62888e66a7"
     }
   ]
 }
