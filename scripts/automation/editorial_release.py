@@ -123,10 +123,13 @@ def wait_for_release(
                             ROOT,
                         )
                     )
-                    jobs = {job["name"]: job["conclusion"] for job in detail["jobs"]}
-                    required = {"deploy", "wait_for_publication", "publish_meta", "notify_push"}
-                    if any(jobs.get(name) != "success" for name in required):
-                        raise RuntimeError(f"publication jobs did not all succeed: {run_url}")
+                    for name in ("deploy", "wait_for_publication", "publish_meta", "notify_push"):
+                        matches = [
+                            job for job in detail["jobs"]
+                            if job["name"] == name or job["name"].startswith(f"{name} (")
+                        ]
+                        if not matches or any(job["conclusion"] != "success" for job in matches):
+                            raise RuntimeError(f"publication jobs did not all succeed: {run_url}")
                     return f"published: {note_url} (PR: {pr_url}; run: {run_url})"
         if attempt + 1 < attempts:
             sleep(interval)
