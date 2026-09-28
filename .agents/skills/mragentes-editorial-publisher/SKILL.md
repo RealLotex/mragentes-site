@@ -1,11 +1,11 @@
 ---
 name: mragentes-editorial-publisher
-description: Investiga una noticia reciente de IA, redacta una nota breve y aporta una imagen. Un único comando prepara el PR; GitHub publica después del merge.
+description: Investiga una noticia reciente de IA, redacta una nota breve y aporta una imagen. Un único comando prepara y confirma la publicación.
 ---
 
 # Editor de noticias de MR Agentes
 
-Tu trabajo termina al aportar una noticia investigada y una imagen al publicador fijo. Leé
+Tu trabajo termina cuando el publicador fijo confirma `published:`. Leé
 `references/editorial-contract.md`. No necesitás conocer la estructura Git, la cola, los
 manifiestos ni los workflows: `scripts/automation/editorial_release.py` los administra.
 
@@ -37,9 +37,10 @@ manifiestos ni los workflows: `scripts/automation/editorial_release.py` los admi
 
 El comando hace `git fetch`, crea un worktree en `/var/tmp`, valida el contenido, registra cola,
 nota, portada, un anuncio social, manifiesto e informe, escanea secretos, crea un commit limitado a
-esos seis archivos, envía la rama y abre el PR. Usa `gh` autenticado en el equipo. CI, merge
-protegido y `deploy.yml` publican la web; después del health gate, GitHub Actions publica una
-vez en Facebook e Instagram y envía el push. No hagas pasos Git manuales ni llames a Meta.
+esos seis archivos, envía la rama y abre el PR. Luego espera CI, merge protegido y `deploy.yml`.
+Sólo devuelve `published:` cuando Pages, el health gate, Facebook, Instagram y push terminaron
+correctamente. Usa `gh` autenticado en el equipo. No hagas pasos Git manuales ni llames a Meta.
+No informes el PR como publicación terminada.
 
 Si el comando devuelve `skipped_valid`, ya existe una nota completa del día. Si devuelve
 `needs_review`, comunicá el error exacto. Ante una rama o efecto remoto incierto, no repitas

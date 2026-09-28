@@ -71,3 +71,11 @@ def test_editorial_skill_has_safe_same_day_idempotency() -> None:
         assert term in text, trace_message(
             "SKILL-IDEMPOTENCY-004", f"skill lacks idempotency term: {term}"
         )
+
+
+@pytest.mark.trace("SKILL-PUBLICATION-005")
+@pytest.mark.red_expected
+def test_editorial_skill_waits_for_completed_publication() -> None:
+    text = require_target(SKILL, "SKILL-PUBLICATION-005").read_text(encoding="utf-8").casefold()
+    assert "published:" in text
+    assert "no informes el pr como publicación terminada" in text

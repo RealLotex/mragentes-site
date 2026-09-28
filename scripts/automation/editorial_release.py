@@ -16,6 +16,8 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
+from collections.abc import Callable
 from datetime import UTC, date, datetime
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -72,6 +74,65 @@ REPOSITORY = "RealLotex/mragentes-site"
 TIMEZONE = ZoneInfo("America/Argentina/Cordoba")
 REQUIRED = {"title", "summary", "body", "image_alt", "source_url", "source_name", "source_date"}
 OPTIONAL = {"related_sources", "tags", "image_credit"}
+
+
+def wait_for_release(
+    pr_url: str,
+    note_url: str,
+    *,
+    attempts: int = 90,
+    interval: float = 10,
+    run: Callable[[list[str], Path], str] | None = None,
+    sleep: Callable[[float], None] = time.sleep,
+) -> str:
+    """Report publication only after the protected merge and full deploy succeed."""
+    runner = run or _run
+    if attempts < 1 or interval < 0:
+        raise ValueError("publication wait bounds are invalid")
+    for attempt in range(attempts):
+        pr = json.loads(
+            runner(
+                ["gh", "pr", "view", pr_url, "--repo", REPOSITORY, "--json", "state,mergeCommit"],
+                ROOT,
+            )
+        )
+        if pr["state"] == "CLOSED":
+            raise RuntimeError(f"editorial PR closed without publication: {pr_url}")
+        if pr["state"] == "MERGED":
+            sha = pr["mergeCommit"]["oid"]
+            runs = json.loads(
+                runner(
+                    [
+                        "gh", "run", "list", "--repo", REPOSITORY, "--workflow", "deploy.yml",
+                        "--commit", sha, "--event", "workflow_dispatch", "--json",
+                        "databaseId,status,conclusion", "--limit", "10",
+                    ],
+                    ROOT,
+                )
+            )
+            if runs:
+                current = runs[0]
+                if current["status"] == "completed":
+                    run_url = f"https://github.com/{REPOSITORY}/actions/runs/{current['databaseId']}"
+                    if current["conclusion"] != "success":
+                        raise RuntimeError(f"deploy failed: {run_url}")
+                    detail = json.loads(
+                        runner(
+                            ["gh", "run", "view", str(current["databaseId"]), "--repo", REPOSITORY,
+                             "--json", "jobs"],
+                            ROOT,
+                        )
+                    )
+                    jobs = {job["name"]: job["conclusion"] for job in detail["jobs"]}
+                    required = {"deploy", "wait_for_publication", "publish_meta", "notify_push"}
+                    if any(jobs.get(name) != "success" for name in required):
+                        raise RuntimeError(f"publication jobs did not all succeed: {run_url}")
+                    return f"published: {note_url} (PR: {pr_url}; run: {run_url})"
+        if attempt + 1 < attempts:
+            sleep(interval)
+    raise RuntimeError(
+        f"publication not confirmed within {attempts * interval:g} seconds: {pr_url}"
+    )
 
 
 def _run(command: list[str], cwd: Path, *, quiet: bool = False) -> str:
@@ -308,6 +369,8 @@ def release(input_path: Path, image_path: Path, *, dry_run: bool = False) -> str
     submission = validate_submission(json.loads(input_path.read_text(encoding="utf-8")), local_day)
     image = image_path.resolve(strict=True)
     _check_image(image)
+    slug = str(portable_slug(submission["title"], max_component_bytes=120))
+    note_url = f"https://mragentes.com.ar/notas/{slug}/"
     branch = f"automation/editorial/{local_day.isoformat()}"
     _run(["git", "fetch", "--no-tags", "origin", "main"], ROOT)
     remote = _run(["git", "ls-remote", "--heads", "origin", branch], ROOT)
@@ -331,7 +394,7 @@ def release(input_path: Path, image_path: Path, *, dry_run: bool = False) -> str
             )
         )
         if len(prs) == 1:
-            return prs[0]["url"]
+            return wait_for_release(prs[0]["url"], note_url)
         raise RuntimeError("the date's branch exists without one open PR; review it manually")
     temp_parent = Path(tempfile.mkdtemp(prefix="mragentes-editorial-", dir="/var/tmp"))
     worktree = temp_parent / "worktree"
@@ -425,7 +488,7 @@ def release(input_path: Path, image_path: Path, *, dry_run: bool = False) -> str
                 raise
             url = prs[0]["url"]
         safe_to_clean = True
-        return url
+        return wait_for_release(url, note_url)
     finally:
         if created and safe_to_clean:
             _run(["git", "worktree", "remove", str(worktree)], ROOT, quiet=True)

@@ -108,9 +108,12 @@ def test_front_matter_contains_closed_required_schema() -> None:
 @pytest.mark.red_expected
 def test_front_matter_date_uses_cordoba_offset_not_naive_or_utc_midnight() -> None:
     result = _front_matter("BLOG-FM-002", local_date="2026-08-26")
-    assert result["date"] == "2026-08-26T12:00:00-03:00", trace_message(
+    assert result["date"] == "2026-08-26T00:00:00-03:00", trace_message(
         "BLOG-FM-002", f"unexpected Córdoba publication date: {result['date']}"
     )
+    assert _validate(dict(result, date="2026-08-26T12:00:00-03:00"), "BLOG-FM-002")[
+        "date"
+    ] == "2026-08-26T12:00:00-03:00"
 
 
 @pytest.mark.trace("BLOG-FM-003")

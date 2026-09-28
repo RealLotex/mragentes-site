@@ -42,6 +42,7 @@ def test_model_only_researches_and_calls_one_fixed_release_command() -> None:
         assert term in prompt, trace_message("TASK-INPUT-002", f"prompt lacks {term}")
     for old_step in ("create_blob", "create_tree", "git worktree add", "github_get_repo"):
         assert old_step not in prompt
+    assert "published:" in prompt
 
 
 @pytest.mark.trace("TASK-EGRESS-003")
