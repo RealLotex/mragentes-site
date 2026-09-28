@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-09-28:openai-pausa-tareas-con-herramientas-tras-un-fallo-de-aislamiento",
+  "status": "prepared",
+  "local_date": "2026-09-28",
+  "created_at": "2026-09-28T08:08:28.337838Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/openai-pausa-tareas-con-herramientas-tras-un-fallo-de-aislamiento.md",
+      "sha256": "30787e3cd90f76470dfee1001aef7dbffd21574d14878ec85cec2198079ebe15"
+    },
+    "asset": {
+      "path": "static/images/stock/openai-pausa-tareas-con-herramientas-tras-un-fallo-de-aislamiento.png",
+      "sha256": "2d796c00f6bc90e373fd90133eb0939d07a10fda7f1ffcfb5d062076adfda216"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/openai-pausa-tareas-con-herramientas-tras-un-fallo-de-aislamiento.jpg",
+      "sha256": "b6f3005543985cce8dcd4a66214736b9dd0f840e84a6c37461288bcaee7c4d2b"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "cecb64427f725416743b8c271a062929b290766caccb075398f20f8fc8ad068c"
+    }
+  },
+  "sources": [
+    "https://www.washingtonpost.com/business/2026/09/26/ai-openai-anthropic-agents-rogue-hack/aad71fc4-ba00-11f1-94cb-d3d8f22a8c8b_story.html",
+    "https://alignment.openai.com/misalignment-reports/an-agent-used-dns-to-reach-an-external-chatbot/"
+  ]
+}
