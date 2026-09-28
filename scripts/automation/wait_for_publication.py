@@ -18,7 +18,7 @@ from scripts.generate_notas_index import canonical_note_url, parse_front_matter
 
 
 SITE_ORIGIN = "https://mragentes.com.ar"
-MAX_RESPONSE_BYTES = 2_000_000
+MAX_RESPONSE_BYTES = 15 * 1024 * 1024
 
 
 class PublicationNotReady(RuntimeError):
