@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-09-29",
+  "status": "prepared",
+  "local_date": "2026-09-29",
+  "created_at": "2026-09-29T08:10:25.544957Z",
+  "branch": "automation/editorial/2026-09-29",
+  "note_slug": "nvidia-presenta-controles-de-seguridad-para-agentes-de-ia",
+  "selected_news_ids": [
+    "news-v1-2b1aa6c98f698496"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-09-29-nvidia-presenta-controles-de-seguridad-para-agentes-de-ia.json",
+    "note": "content/notas/nvidia-presenta-controles-de-seguridad-para-agentes-de-ia.md",
+    "cover": "static/images/stock/nvidia-presenta-controles-de-seguridad-para-agentes-de-ia.png",
+    "announcement": "static/images/social/notes/nvidia-presenta-controles-de-seguridad-para-agentes-de-ia.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
