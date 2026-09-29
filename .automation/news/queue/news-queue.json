@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 15,
-  "updated_at": "2026-09-28T08:08:28.337838Z",
+  "revision": 16,
+  "updated_at": "2026-09-29T08:10:25.544957Z",
   "items": [
     {
       "schema_version": 1,
@@ -669,6 +669,30 @@
       "consumed_by": "openai-pausa-tareas-con-herramientas-tras-un-fallo-de-aislamiento",
       "consumed_at": "2026-09-28T08:08:28.337838Z",
       "id": "news-v1-0cc72e62888e66a7"
+    },
+    {
+      "schema_version": 1,
+      "title": "NVIDIA presenta controles de seguridad para agentes de IA",
+      "canonical_url": "https://nvidianews.nvidia.com/news/open-agent-safety-platform",
+      "source": "NVIDIA Newsroom",
+      "entity": "NVIDIA Newsroom",
+      "published_at": "2026-09-28T12:00:00Z",
+      "discovered_at": "2026-09-29T08:10:25.544957Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://nvidianews.nvidia.com/news/open-agent-safety-platform",
+          "claim": "Open Agent Safety combina un entorno aislado con supervisión por hardware; la eficacia anunciada aún requiere evaluación independiente."
+        }
+      ],
+      "tags": [
+        "ia",
+        "seguridad",
+        "agentes"
+      ],
+      "consumed_by": "nvidia-presenta-controles-de-seguridad-para-agentes-de-ia",
+      "consumed_at": "2026-09-29T08:10:25.544957Z",
+      "id": "news-v1-2b1aa6c98f698496"
     }
   ]
 }

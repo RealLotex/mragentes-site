@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-09-29:nvidia-presenta-controles-de-seguridad-para-agentes-de-ia",
+  "status": "prepared",
+  "local_date": "2026-09-29",
+  "created_at": "2026-09-29T08:10:25.544957Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/nvidia-presenta-controles-de-seguridad-para-agentes-de-ia.md",
+      "sha256": "4d04da963f5700dfa1504d4c0a8bb243b3e57e27a0e2eb8939309e2bec5bb929"
+    },
+    "asset": {
+      "path": "static/images/stock/nvidia-presenta-controles-de-seguridad-para-agentes-de-ia.png",
+      "sha256": "216a4008f6615e1064e2c0a3449a5ea6d2d8ccdff8c7a6042bcf965c150e5828"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/nvidia-presenta-controles-de-seguridad-para-agentes-de-ia.jpg",
+      "sha256": "8398e3532c4c27132049e8bdde7ed00c9be74685abef80a314b0fa0da2b23ac8"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "8fd7189d54dc960c5971aec9148916526f27c5bd03adfe8b19e23c59c693fddb"
+    }
+  },
+  "sources": [
+    "https://nvidianews.nvidia.com/news/open-agent-safety-platform",
+    "https://developer.nvidia.com/blog/nvidia-open-agent-safety-platform-a-reference-for-continuous-in-silicon-agent-monitoring/",
+    "https://apnews.com/article/3c4d7c1cfde82851c0577d1fa29b8621",
+    "https://m.economictimes.com/tech/artificial-intelligence/nvidia-releases-ai-safety-software-it-says-could-have-stopped-hugging-face-hack/amp_articleshow/134537399.cms"
+  ]
+}
