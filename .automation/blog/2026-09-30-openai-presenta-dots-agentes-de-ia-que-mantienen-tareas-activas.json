@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-09-30:openai-presenta-dots-agentes-de-ia-que-mantienen-tareas-activas",
+  "status": "prepared",
+  "local_date": "2026-09-30",
+  "created_at": "2026-09-30T08:06:48.551602Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/openai-presenta-dots-agentes-de-ia-que-mantienen-tareas-activas.md",
+      "sha256": "32c733b8059e4b9d04b17e4030baee3381ec5f502224e0d8cc7759fe5bcba995"
+    },
+    "asset": {
+      "path": "static/images/stock/openai-presenta-dots-agentes-de-ia-que-mantienen-tareas-activas.png",
+      "sha256": "d1595f11d267c97974a9aa6f2c2a8a0d7b7e9c46704272d1501a67858d8e29bc"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/openai-presenta-dots-agentes-de-ia-que-mantienen-tareas-activas.jpg",
+      "sha256": "908132d19ebca42f83717c1214c8bfc965c7f05f679b58caaf805f6b3ee8b092"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "629f92acfe6267c8d4aefe19b27b701c1fdd54faff0ff48fd8c723e9d0952a19"
+    }
+  },
+  "sources": [
+    "https://openai.com/index/introducing-dots/"
+  ]
+}
