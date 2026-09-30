@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 16,
-  "updated_at": "2026-09-29T08:10:25.544957Z",
+  "revision": 17,
+  "updated_at": "2026-09-30T08:06:48.551602Z",
   "items": [
     {
       "schema_version": 1,
@@ -693,6 +693,30 @@
       "consumed_by": "nvidia-presenta-controles-de-seguridad-para-agentes-de-ia",
       "consumed_at": "2026-09-29T08:10:25.544957Z",
       "id": "news-v1-2b1aa6c98f698496"
+    },
+    {
+      "schema_version": 1,
+      "title": "OpenAI presenta dots, agentes de IA que mantienen tareas activas",
+      "canonical_url": "https://openai.com/index/introducing-dots/",
+      "source": "OpenAI",
+      "entity": "OpenAI",
+      "published_at": "2026-09-29T12:00:00Z",
+      "discovered_at": "2026-09-30T08:06:48.551602Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://openai.com/index/introducing-dots/",
+          "claim": "Los agentes trabajan en segundo plano con aplicaciones conectadas y reglas de usuario; el despliegue inicial cubre planes y mercados específicos."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "OpenAI"
+      ],
+      "consumed_by": "openai-presenta-dots-agentes-de-ia-que-mantienen-tareas-activas",
+      "consumed_at": "2026-09-30T08:06:48.551602Z",
+      "id": "news-v1-c21e325b78e751bb"
     }
   ]
 }
