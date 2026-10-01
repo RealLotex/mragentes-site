@@ -296,32 +296,37 @@ def test_deploy_never_cancels_an_event_before_its_external_effect_dispatch() -> 
 @pytest.mark.trace("WF-PY-DEPS-001")
 @pytest.mark.red_expected
 @pytest.mark.parametrize(
-    ("relative_path", "job_name", "runtime_marker"),
+    ("relative_path", "job_name", "runtime_marker", "lock_file"),
     (
         (
             ".github/workflows/deploy.yml",
             "detect_changes",
             "scripts.automation.detect_changes",
+            "requirements-publication.lock.txt",
         ),
         (
             ".github/workflows/deploy.yml",
             "wait_for_publication",
             "scripts.automation.wait_for_publication",
+            "requirements-publication.lock.txt",
         ),
         (
             ".github/workflows/deploy.yml",
             "notify_push",
             "scripts.notifications.notify_deployed_note",
+            "requirements-publication.lock.txt",
         ),
         (
             ".github/workflows/deploy.yml",
             "publish_meta",
             "scripts.social deliver-note",
+            "requirements-test.lock.txt",
         ),
         (
             ".github/workflows/meta-preflight.yml",
             "validate_meta_testing",
             "scripts.social.meta_preflight",
+            "requirements-test.lock.txt",
         ),
     ),
 )
@@ -329,6 +334,7 @@ def test_clean_python_jobs_install_hash_locked_runtime_dependencies(
     relative_path: str,
     job_name: str,
     runtime_marker: str,
+    lock_file: str,
 ) -> None:
     _, _, parsed = workflow(relative_path, "WF-PY-DEPS-001")
     job = parsed.get("jobs", {}).get(job_name, {})
@@ -336,7 +342,7 @@ def test_clean_python_jobs_install_hash_locked_runtime_dependencies(
         "WF-PY-DEPS-001", f"{relative_path}:{job_name} does not exist"
     )
     commands = job_run_commands(job)
-    install = "python -m pip install --require-hashes -r requirements-test.lock.txt"
+    install = f"python -m pip install --require-hashes -r {lock_file}"
     assert install in commands, trace_message(
         "WF-PY-DEPS-001",
         f"{relative_path}:{job_name} imports PyYAML without installing the locked runtime",
@@ -350,6 +356,17 @@ def test_clean_python_jobs_install_hash_locked_runtime_dependencies(
             f"{relative_path}:{job_name} installs dependencies after running its Python entrypoint",
         )
     )
+
+
+@pytest.mark.trace("WF-PY-DEPS-002")
+@pytest.mark.red_expected
+def test_publication_jobs_install_only_the_locked_front_matter_parser() -> None:
+    lock = require_target("requirements-publication.lock.txt", "WF-PY-DEPS-002").read_text(
+        encoding="utf-8"
+    )
+    assert lock.startswith("pyyaml==6.0.2 \\\n")
+    assert re.search(r"--hash=sha256:[0-9a-f]{64}", lock)
+    assert "pytest" not in lock and "ruff" not in lock
 
 
 @pytest.mark.trace("WF-SOCIAL-NOTE-001")
