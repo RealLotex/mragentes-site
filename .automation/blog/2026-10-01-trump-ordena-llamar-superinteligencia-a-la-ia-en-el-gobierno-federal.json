@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-01:trump-ordena-llamar-superinteligencia-a-la-ia-en-el-gobierno-federal",
+  "status": "prepared",
+  "local_date": "2026-10-01",
+  "created_at": "2026-10-01T08:09:10.809058Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/trump-ordena-llamar-superinteligencia-a-la-ia-en-el-gobierno-federal.md",
+      "sha256": "ea026b95779299e8443dc1e0d8b9183f603cf707d661c7e5b1ee4ad27b56127c"
+    },
+    "asset": {
+      "path": "static/images/stock/trump-ordena-llamar-superinteligencia-a-la-ia-en-el-gobierno-federal.jpg",
+      "sha256": "faa2e14c55ccd53003642842517d195b1e58780d9298e650b1ccea64fbc77da3",
+      "source_url": "https://www.pexels.com/photo/white-house-in-washington-8181739/",
+      "creator": "Thuan Vo",
+      "license_url": "https://www.pexels.com/license/"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/trump-ordena-llamar-superinteligencia-a-la-ia-en-el-gobierno-federal.jpg",
+      "sha256": "adc41c728684fffee26a4b2e1f7b6a97e01469083ba67948af7b8225a9ae5087"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "e7770b32eb7e5be85f7008047df90c7b65ea126d668dfd9b061ccae0ea829468"
+    }
+  },
+  "sources": [
+    "https://www.whitehouse.gov/presidential-actions/2026/09/inaugurating-the-era-of-super-intelligence/"
+  ]
+}
