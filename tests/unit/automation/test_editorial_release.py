@@ -8,8 +8,11 @@ from pathlib import Path
 
 import pytest
 import yaml
+from PIL import Image
 
+from scripts.automation import editorial_release
 from scripts.automation.editorial_release import build_note, validate_submission, wait_for_release
+from scripts.automation.news_queue import load_queue, stable_news_id
 
 
 def _submission() -> dict:
@@ -42,13 +45,101 @@ def test_submission_is_one_fresh_sourced_story() -> None:
 
 @pytest.mark.trace("EDITORIAL-RELEASE-002")
 @pytest.mark.red_expected
-def test_submission_rejects_stale_or_uncited_story() -> None:
-    stale = _submission() | {"source_date": "2026-09-20"}
-    with pytest.raises(ValueError, match="recent"):
-        validate_submission(stale, date(2026, 9, 26))
-    uncited = _submission() | {"body": "OpenAI informó un caso sin enlace."}
-    with pytest.raises(ValueError, match="source"):
-        validate_submission(uncited, date(2026, 9, 26))
+@pytest.mark.parametrize("changes", [
+    {"source_date": "2026-09-20"},
+    {"source_date": "2026-09-27"},
+    {"body": "OpenAI informó un caso sin enlace."},
+])
+def test_editorial_age_and_inline_citation_do_not_block_publication(changes: dict) -> None:
+    submission = _submission() | changes
+    item = validate_submission(submission, date(2026, 9, 26))
+    assert item["body"] == submission["body"].strip()
+    assert item["source_date"] == submission["source_date"]
+
+
+@pytest.mark.trace("EDITORIAL-AVAILABILITY-001")
+@pytest.mark.red_expected
+def test_long_prose_is_preserved_and_description_is_adapted_for_hugo() -> None:
+    submission = _submission() | {
+        "title": "Una noticia sobre inteligencia artificial " * 6,
+        "summary": "Un resumen extenso. " * 30,
+        "body": "Un párrafo breve con datos.\n\n" * 500,
+        "image_alt": "Descripción de la ilustración. " * 10,
+    }
+    item = validate_submission(submission, date(2026, 9, 26))
+    note = build_note(item, date(2026, 9, 26), "noticia", "noticia.png")
+    front = yaml.safe_load(note.split("---", 2)[1])
+    assert front["title"] == submission["title"].strip()
+    assert front["description"] == submission["summary"].strip()[:160]
+    assert submission["body"].strip() in note
+
+
+@pytest.mark.trace("EDITORIAL-AVAILABILITY-002")
+@pytest.mark.red_expected
+def test_small_valid_cover_is_accepted(tmp_path: Path) -> None:
+    image = tmp_path / "cover.png"
+    Image.new("RGB", (320, 200)).save(image)
+    assert editorial_release._check_image(image) == ".png"
+
+
+@pytest.mark.trace("EDITORIAL-AVAILABILITY-003")
+@pytest.mark.red_expected
+def test_preparation_reuses_source_without_corrupting_queue(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    submission = validate_submission(_submission(), date(2026, 9, 26))
+    queue_path = tmp_path / ".automation/news/queue/news-queue.json"
+    story = {
+        "schema_version": 1, "title": submission["title"],
+        "canonical_url": submission["source_url"], "source": submission["source_name"],
+        "entity": submission["source_name"], "published_at": "2026-09-25T12:00:00Z",
+        "discovered_at": "2026-09-25T12:00:00Z", "status": "consumed",
+        "evidence": [{"url": submission["source_url"], "claim": submission["summary"]}],
+        "tags": submission["tags"], "consumed_by": "previous-note",
+        "consumed_at": "2026-09-25T12:00:00Z",
+    }
+    story["id"] = stable_news_id(story)
+    queue_path.parent.mkdir(parents=True)
+    queue_path.write_text(json.dumps({
+        "schema_version": 1, "revision": 1, "updated_at": "2026-09-25T12:00:00Z",
+        "items": [story],
+    }), encoding="utf-8")
+    image = tmp_path / "cover.png"
+    Image.new("RGB", (800, 500)).save(image)
+
+    def render(command: list[str], root: Path) -> str:
+        assert command[1:4] == ["-m", "scripts.social", "render-note-announcement"]
+        social = root / f"static/images/social/notes/{command[-1]}.jpg"
+        social.parent.mkdir(parents=True)
+        Image.new("RGB", (1080, 1350)).save(social)
+        return ""
+
+    monkeypatch.setattr(editorial_release, "_run", render)
+    paths = editorial_release.prepare_release(tmp_path, submission, image, date(2026, 9, 26))
+    assert len(paths) == 6
+    assert all((tmp_path / path).is_file() for path in paths)
+    queue = load_queue(queue_path)
+    assert len(queue["items"]) == 1
+    assert queue["items"][0]["consumed_by"] == "previous-note"
+    report = json.loads((tmp_path / paths[-1]).read_text(encoding="utf-8"))
+    assert report["selected_news_ids"] == [story["id"]]
+
+
+@pytest.mark.trace("EDITORIAL-AVAILABILITY-004")
+@pytest.mark.red_expected
+@pytest.mark.parametrize("changes", [
+    {"related_sources": [f"https://example.org/source/{i}" for i in range(4)]},
+    {"related_sources": [_submission()["source_url"], _submission()["source_url"]]},
+    {"tags": ["ia", "actualidad", "justicia", "agentes", "modelos", "robots"]},
+    {"tags": []},
+])
+def test_optional_metadata_counts_do_not_block_a_note(changes: dict) -> None:
+    item = validate_submission(_submission() | changes, date(2026, 9, 26))
+    note = build_note(item, date(2026, 9, 26), "noticia", "noticia.png")
+    front = yaml.safe_load(note.split("---", 2)[1])
+    assert front["sources"]
+    assert len(front["sources"]) == len(set(front["sources"]))
+    assert front["tags"]
 
 
 @pytest.mark.trace("EDITORIAL-RELEASE-003")

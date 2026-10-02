@@ -1,5 +1,9 @@
 # Contrato editorial: noticia concreta, lenguaje claro
 
+La calidad editorial no bloquea la publicación diaria. Estas pautas son recomendaciones;
+el propietario ajusta su estándar en el prompt de la automatización. Si faltan novedades,
+ampliar la ventana de búsqueda y publicar el mejor hecho verificable disponible.
+
 ## Selección
 
 - Buscar hechos de IA publicados hoy o en los dos días anteriores; priorizar la actualidad
@@ -7,7 +11,7 @@
   cuando hay empresa, tecnología, fecha y evidencia identificables.
 - Abrir la fuente primaria. Un portal como iProUP puede detectar un tema y aportar contexto,
   pero sus afirmaciones deben atribuirse. No inventar fechas, cifras, citas ni URLs.
-- Una nota trata **un** hecho principal. Si la evidencia no alcanza, no publicar relleno.
+- Una nota trata **un** hecho principal. Usar el mejor hecho verificable disponible ese día.
 
 ## Redacción
 
@@ -28,5 +32,8 @@ nota. No usar sinónimos artificiales para evitar repetir un término técnico. 
 ## Entrega
 
 El modelo sólo entrega un JSON y un JPG/PNG. El script fijo
-`scripts/automation/editorial_release.py` controla fecha, idempotencia, portada, front matter,
+`scripts/automation/editorial_release.py` controla formato, idempotencia, portada, front matter,
 cola, hashes, anuncio social, escaneo, commit y PR. GitHub CI y `deploy.yml` controlan lo demás.
+No exige antigüedad máxima, cita exacta de la URL primaria dentro del cuerpo, extensión editorial,
+resolución mínima ni una fuente nueva. `skipped_valid` sólo corresponde a una nota ya registrada
+en main para ese día. Los límites de seguridad y la confirmación de efectos externos se conservan.

@@ -6,6 +6,9 @@ MR Agentes publica una noticia de IA por día para atraer lectores a la web y a 
 Facebook e Instagram. La publicación parte de un hecho reciente y verificable. El tono es formal,
 con nombres, fechas y cifras; evita el ensayo genérico y el texto publicitario.
 
+La calidad editorial no bloquea la publicación diaria. Actualidad, citas dentro del cuerpo,
+estilo y extensión son recomendaciones del prompt que administra el propietario.
+
 ## Un modelo, un comando, un pipeline
 
 ```mermaid
@@ -31,8 +34,13 @@ renderiza el anuncio vertical y escribe el manifiesto y el informe. Escanea secr
 sólo esas seis rutas, crea un commit, envía `automation/editorial/YYYY-MM-DD` y abre un PR a
 `main`. Usa la sesión `gh` del sistema operativo; ningún token entra al repositorio o al JSON.
 
-El script rechaza una noticia de más de dos días, una fuente ausente, una foto inválida, una
-fuente ya consumida o una nota duplicada. Una rama existente sin PR o un efecto remoto incierto
+El script acepta fuentes de cualquier fecha y ya consumidas, cuerpos sin la URL primaria y
+fotografías de cualquier resolución. Conserva el texto y adapta un resumen largo a los 160
+caracteres del front matter; también limita los títulos derivados para la cola y el PR sin
+recortar el título publicado. La fuente primaria queda registrada en los metadatos.
+Los enlaces repetidos se deduplican y las etiquetas se adaptan al formato de Hugo. Rechaza
+JSON inválido, URLs inseguras, archivos dañados o demasiado grandes y artefactos duplicados.
+Una rama existente sin PR o un efecto remoto incierto
 produce `needs_review`. Una nota completa de la fecha produce `skipped_valid`. El comando no
 informa `published:` hasta que el PR se haya integrado y el despliegue y sus jobs externos hayan
 terminado. La fecha local de las notas nuevas se fija a las 00:00 para que Hugo las incluya en

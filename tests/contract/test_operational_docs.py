@@ -5,6 +5,22 @@ import pytest
 from tests.support.contracts import require_target, trace_message
 
 
+@pytest.mark.trace("DOCS-DAILY-PUBLICATION-001")
+@pytest.mark.red_expected
+@pytest.mark.parametrize("path", [
+    "ARCHITECTURE.md", "OPERATIONS.md",
+    ".agents/skills/mragentes-editorial-publisher/SKILL.md",
+    ".agents/skills/mragentes-editorial-publisher/references/editorial-contract.md",
+])
+def test_quality_is_advisory_and_never_a_reason_to_skip_the_day(path: str) -> None:
+    text = require_target(path, "DOCS-DAILY-PUBLICATION-001").read_text(encoding="utf-8")
+    normalized = " ".join(text.casefold().split())
+    assert "la calidad editorial no bloquea la publicación diaria" in normalized
+    assert "si la evidencia no alcanza, informa `skipped_valid`" not in normalized
+    assert "si no encontrás uno, informá `skipped_valid`" not in normalized
+    assert "si la evidencia no alcanza, no publicar relleno" not in normalized
+
+
 @pytest.mark.trace("DOCS-ARCH-001")
 @pytest.mark.red_expected
 def test_architecture_documents_one_script_and_trusted_intake() -> None:
