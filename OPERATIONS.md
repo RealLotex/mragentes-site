@@ -3,9 +3,11 @@
 ## Servicio esperado
 
 La tarea `mr-agentes-noticias` corre todos los días a las 05:00 de `America/Cordoba`.
-Inicia una conversación nueva con GPT-6 Luna xhigh. Intenta una noticia concreta publicada hoy o en los dos días
-anteriores. Si la evidencia no alcanza, informa `skipped_valid`; si hay un bloqueo o un estado
-remoto incierto, informa `needs_review`. Una nota integrada genera una publicación en Facebook,
+Inicia una conversación nueva con GPT-6 Luna xhigh. Publica una nota cada día; la actualidad de
+los dos días anteriores es una preferencia editorial. La calidad editorial no bloquea la
+publicación diaria. El propietario administra su estándar mediante el prompt de la tarea.
+`skipped_valid` sólo corresponde a una nota del día ya registrada en main. Si hay un error
+técnico o un estado remoto incierto, informa `needs_review`. Una nota integrada genera una publicación en Facebook,
 una publicación en Instagram y un push luego de que la web esté disponible.
 
 La computadora debe permanecer encendida y la aplicación de escritorio, abierta. La tarea usa el
@@ -40,6 +42,12 @@ repiten el título, “en este artículo exploraremos”, reflexiones grandilocu
 fuente, tono de folleto, tres elementos de relleno, preguntas frecuentes automáticas y un cierre
 que sólo resume. No forzar una aplicación para PyMEs en cada noticia. La referencia completa está
 en `references/editorial-contract.md` de la skill.
+
+Estas pautas orientan la redacción y no autorizan omitir el día. El publicador admite una
+fuente anterior o reutilizada, un cuerpo sin la URL primaria y una portada pequeña válida.
+El resumen se adapta automáticamente al límite de 160 caracteres de los metadatos; el cuerpo
+y el título publicado conservan su extensión. Los controles de JSON, URLs públicas, archivos
+válidos, secretos, idempotencia y confirmación de entrega siguen siendo técnicos.
 
 ## Verificación y recuperación
 

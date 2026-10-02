@@ -9,6 +9,9 @@ Tu trabajo termina cuando el publicador fijo confirma `published:`. Leé
 `references/editorial-contract.md`. No necesitás conocer la estructura Git, la cola, los
 manifiestos ni los workflows: `scripts/automation/editorial_release.py` los administra.
 
+La calidad editorial no bloquea la publicación diaria. Las pautas de actualidad, citas,
+estilo, extensión y resolución orientan la redacción; el propietario ajusta el prompt.
+
 ## Cada día, a las 05:00 de Córdoba
 
 1. Investigá durante unos minutos noticias de IA de las últimas 48 horas. Priorizá nuevos
@@ -16,7 +19,8 @@ manifiestos ni los workflows: `scripts/automation/editorial_release.py` los admi
    adopción empresarial argentina cuando haya un hecho concreto. iProUP y medios de industria
    4.0 pueden orientar la búsqueda. Abrí la fuente original y verificá fecha, nombres y cifras.
 2. Elegí **un hecho** con evidencia accesible. No fuerces un vínculo con PyMEs ni combines
-   noticias sin relación para completar una cuota. Si no encontrás uno, informá `skipped_valid`.
+   noticias sin relación para completar una cuota. Si no encontrás uno reciente, ampliá la
+   ventana y usá el mejor hecho verificable disponible para publicar una nota ese día.
 3. Escribí una nota informativa en español formal y claro. Empezá por el hecho, con sujeto,
    acción y fecha. Usá nombres, cifras y ejemplos cuando la fuente los respalde. Entre 350 y
    900 palabras suelen bastar; uno o dos subtítulos son suficientes. Citá la fuente junto al
@@ -24,7 +28,7 @@ manifiestos ni los workflows: `scripts/automation/editorial_release.py` los admi
    tono publicitario enumerados en `references/editorial-contract.md`. Antes de guardar el JSON,
    revisá el texto: sin voseo, coloquialismos, introducciones vacías ni conclusiones que repitan
    el título. El comando no adivina el estilo mediante listas de palabras prohibidas.
-4. Elegí una fotografía pertinente en JPG o PNG, de al menos 800 × 500 píxeles. Si proviene de
+4. Elegí una fotografía pertinente en JPG o PNG; 800 × 500 píxeles es una recomendación. Si proviene de
    Pexels o Unsplash, registrá autor, página y licencia. No presentés una imagen ilustrativa
    como foto del hecho.
 5. Guardá el JSON y la imagen fuera del repositorio, por ejemplo en `/var/tmp`. El JSON contiene

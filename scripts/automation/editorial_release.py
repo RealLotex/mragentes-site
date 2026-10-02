@@ -65,6 +65,7 @@ from scripts.automation.blog_guard import (  # noqa: E402
     portable_slug,
 )
 from scripts.automation.news_queue import (  # noqa: E402
+    canonicalize_url,
     load_queue,
     stable_news_id,
     validate_news_item,
@@ -165,7 +166,7 @@ def _public_https(value: object, field: str) -> str:
 
 
 def validate_submission(submission: dict, local_day: date) -> dict:
-    """Reject stale, uncited or underspecified input before touching Git."""
+    """Validate safe input and adapt metadata; editorial quality never gates delivery."""
     if (
         not isinstance(submission, dict)
         or set(submission) - REQUIRED - OPTIONAL
@@ -174,33 +175,32 @@ def validate_submission(submission: dict, local_day: date) -> dict:
         raise ValueError("submission fields do not match the editorial input contract")
     result = dict(submission)
     for field, maximum in (
-        ("title", 110),
-        ("summary", 160),
-        ("body", 12000),
-        ("image_alt", 180),
-        ("source_name", 120),
+        ("title", 1_000_000),
+        ("summary", 1_000_000),
+        ("body", 1_000_000),
+        ("image_alt", 1_000_000),
+        ("source_name", 200),
     ):
         result[field] = _plain(result[field], field, maximum)
-    result["source_url"] = _public_https(result["source_url"], "source_url")
-    if result["source_url"] not in result["body"]:
-        raise ValueError("the body must cite its primary source URL")
+    result["summary"] = result["summary"][:160]
+    result["source_url"] = canonicalize_url(_public_https(result["source_url"], "source_url"))
     try:
         published = date.fromisoformat(_plain(result["source_date"], "source_date", 10))
     except ValueError as exc:
         raise ValueError("source_date must use YYYY-MM-DD") from exc
-    if not 0 <= (local_day - published).days <= 2:
-        raise ValueError("the news event must be recent (today or the prior two days)")
     result["source_date"] = published.isoformat()
     related = result.get("related_sources", [])
-    if not isinstance(related, list) or len(related) > 3:
-        raise ValueError("related_sources must contain at most three URLs")
-    result["related_sources"] = [_public_https(value, "related_sources") for value in related]
-    if len(set([result["source_url"], *result["related_sources"]])) != 1 + len(related):
-        raise ValueError("source URLs must be distinct")
+    if not isinstance(related, list) or len(related) > 50:
+        raise ValueError("related_sources must be a bounded URL list")
+    sources = dict.fromkeys([
+        result["source_url"],
+        *(canonicalize_url(_public_https(value, "related_sources")) for value in related),
+    ])
+    result["related_sources"] = list(sources)[1:]
     tags = result.get("tags", ["ia", "actualidad"])
-    if not isinstance(tags, list) or not 1 <= len(tags) <= 5:
-        raise ValueError("tags must contain one to five terms")
-    result["tags"] = [_plain(tag, "tag", 40) for tag in tags]
+    if not isinstance(tags, list) or len(tags) > 1000:
+        raise ValueError("tags must be a bounded text list")
+    result["tags"] = [_plain(tag, "tag", 50) for tag in tags[:20]] or ["ia", "actualidad"]
     credit = result.get("image_credit")
     if credit is not None:
         if not isinstance(credit, dict) or set(credit) != {"source_url", "creator", "license_url"}:
@@ -269,8 +269,8 @@ def _check_image(path: Path) -> str:
     if path.stat().st_size > 15 * 1024 * 1024:
         raise ValueError("image exceeds 15 MiB")
     with Image.open(path) as image:
-        if image.format not in {"JPEG", "PNG"} or image.width < 800 or image.height < 500:
-            raise ValueError("image must be a real JPG/PNG at least 800x500")
+        if image.format not in {"JPEG", "PNG"}:
+            raise ValueError("image must be a real JPG/PNG")
         image.verify()
     return ".jpg" if path.suffix.casefold() in {".jpg", ".jpeg"} else ".png"
 
@@ -292,12 +292,10 @@ def prepare_release(root: Path, submission: dict, image: Path, local_day: date) 
 
     note = build_note(submission, local_day, slug, Path(cover_rel).name)
     queue = load_queue(root / queue_rel)
-    if any(item["canonical_url"] == submission["source_url"] for item in queue["items"]):
-        raise ValueError("the primary source is already in the news queue")
     now = datetime.now(UTC).isoformat().replace("+00:00", "Z")
     story = {
         "schema_version": 1,
-        "title": submission["title"],
+        "title": submission["title"][:500],
         "canonical_url": submission["source_url"],
         "source": submission["source_name"],
         "entity": submission["source_name"],
@@ -310,7 +308,9 @@ def prepare_release(root: Path, submission: dict, image: Path, local_day: date) 
         "consumed_at": now,
     }
     story["id"] = stable_news_id(story)
-    queue["items"].append(validate_news_item(story))
+    story = validate_news_item(story)
+    if not any(item["id"] == story["id"] for item in queue["items"]):
+        queue["items"].append(story)
     queue["revision"] += 1
     queue["updated_at"] = now
 
@@ -459,7 +459,7 @@ def release(input_path: Path, image_path: Path, *, dry_run: bool = False) -> str
                     "--head",
                     branch,
                     "--title",
-                    submission["title"],
+                    submission["title"][:110],
                     "--body",
                     (
                         f"Nota informativa del {local_day.isoformat()}. "
