@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-10-02",
+  "status": "prepared",
+  "local_date": "2026-10-02",
+  "created_at": "2026-10-02T22:16:25.896497Z",
+  "branch": "automation/editorial/2026-10-02",
+  "note_slug": "arizona-anula-una-pena-tras-un-video-de-la-victima-generado-con-ia",
+  "selected_news_ids": [
+    "news-v1-896be4e613bd69c0"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-10-02-arizona-anula-una-pena-tras-un-video-de-la-victima-generado-con-ia.json",
+    "note": "content/notas/arizona-anula-una-pena-tras-un-video-de-la-victima-generado-con-ia.md",
+    "cover": "static/images/stock/arizona-anula-una-pena-tras-un-video-de-la-victima-generado-con-ia.png",
+    "announcement": "static/images/social/notes/arizona-anula-una-pena-tras-un-video-de-la-victima-generado-con-ia.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}

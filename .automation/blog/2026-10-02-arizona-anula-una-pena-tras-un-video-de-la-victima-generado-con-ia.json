@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-02:arizona-anula-una-pena-tras-un-video-de-la-victima-generado-con-ia",
+  "status": "prepared",
+  "local_date": "2026-10-02",
+  "created_at": "2026-10-02T22:16:25.896497Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/arizona-anula-una-pena-tras-un-video-de-la-victima-generado-con-ia.md",
+      "sha256": "c5bcb7b0bc6893acd9942437fbb6b592496957faf91f8ca02074ef011f63bacd"
+    },
+    "asset": {
+      "path": "static/images/stock/arizona-anula-una-pena-tras-un-video-de-la-victima-generado-con-ia.png",
+      "sha256": "b4509d642f526c411e60be39419b5e9a0d7f14c49372574c1e2f41beb37b5d3d"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/arizona-anula-una-pena-tras-un-video-de-la-victima-generado-con-ia.jpg",
+      "sha256": "0d433dfca87c9c440f3e2b0cdf0c19afc88efa318c536e3ab1e1362283c633c9"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "d8bc54e913957fa10dffc99a87855a7673dfd1cd3417a1fcb53fa10654bdd593"
+    }
+  },
+  "sources": [
+    "https://apps.azcourts.gov/aacc/appella/1CA/CR/CR250191.PDF",
+    "https://apnews.com/article/arizona-ai-video-victim-cd1ca553c7fa80c6698d7f97b51b1edd",
+    "https://law.justia.com/cases/arizona/court-of-appeals-division-one-published/2026/1-ca-cr-25-0191.html"
+  ]
+}
