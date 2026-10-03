@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-03:el-smithsonian-usa-ia-para-conectar-archivos-de-la-revolucion-estadounidense",
+  "status": "prepared",
+  "local_date": "2026-10-03",
+  "created_at": "2026-10-03T08:08:15.976618Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/el-smithsonian-usa-ia-para-conectar-archivos-de-la-revolucion-estadounidense.md",
+      "sha256": "d0934e4521f19fe0f07ae4da2992f52567ed2f74c7869afed1bfc4b2279f4945"
+    },
+    "asset": {
+      "path": "static/images/stock/el-smithsonian-usa-ia-para-conectar-archivos-de-la-revolucion-estadounidense.png",
+      "sha256": "3ace34a38ddf7f8263cc0fa55eef6479fc3ec28af8cabc4d661a8da19e43faed"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/el-smithsonian-usa-ia-para-conectar-archivos-de-la-revolucion-estadounidense.jpg",
+      "sha256": "23d0d366dac911b85edab6916064e3cdd2e2f38a06f92a9d640f641d40078dc7"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "542aeb905dd250b25bf760d2d6e26ecbff2baef6b8192d5a4117e1713272e91e"
+    }
+  },
+  "sources": [
+    "https://apnews.com/article/artificial-intelligence-smithsonian-american-revolution-crossroads-history-5653502a18f0e476bcb2b540ddf01637"
+  ]
+}
