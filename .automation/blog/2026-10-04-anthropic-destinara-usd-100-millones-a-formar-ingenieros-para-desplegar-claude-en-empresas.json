@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-04:anthropic-destinara-usd-100-millones-a-formar-ingenieros-para-desplegar-claude-en-empresas",
+  "status": "prepared",
+  "local_date": "2026-10-04",
+  "created_at": "2026-10-04T08:08:13.369561Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/anthropic-destinara-usd-100-millones-a-formar-ingenieros-para-desplegar-claude-en-empresas.md",
+      "sha256": "e6b9a388fbce54aaa7861fc360279d4368704cb0b118c0c8887825edd30e08dc"
+    },
+    "asset": {
+      "path": "static/images/stock/anthropic-destinara-usd-100-millones-a-formar-ingenieros-para-desplegar-claude-en-empresas.png",
+      "sha256": "ad02805c83cbe25834201ac9934ff773aab4a968538c323defb36b2ce37f4920"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/anthropic-destinara-usd-100-millones-a-formar-ingenieros-para-desplegar-claude-en-empresas.jpg",
+      "sha256": "5672dd8ef58ce3a3c8f95d5387220471749f997adb83a122fe0ec3ba6fe1170b"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "e61bbffe73532b90af1efb5024cf17b1717d7f9ddbb1be4bbe3cc03a0b4d614a"
+    }
+  },
+  "sources": [
+    "https://www.anthropic.com/news/claude-frontier-academy",
+    "https://www.cnbc.com/2026/10/02/anthropic-to-invest-100-million-to-train-ai-engineer-talent.html"
+  ]
+}
