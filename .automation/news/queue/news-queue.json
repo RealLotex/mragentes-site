@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 21,
-  "updated_at": "2026-10-04T08:08:13.369561Z",
+  "revision": 22,
+  "updated_at": "2026-10-05T08:09:06.538118Z",
   "items": [
     {
       "schema_version": 1,
@@ -814,6 +814,32 @@
       "consumed_by": "anthropic-destinara-usd-100-millones-a-formar-ingenieros-para-desplegar-claude-en-empresas",
       "consumed_at": "2026-10-04T08:08:13.369561Z",
       "id": "news-v1-db0c530fe717a345"
+    },
+    {
+      "schema_version": 1,
+      "title": "Trump crea la Fuerza de Superinteligencia para coordinar la IA en EE.UU.",
+      "canonical_url": "https://truthsocial.com/@realDonaldTrump/posts/117382616783706638",
+      "source": "Donald Trump en Truth Social",
+      "entity": "Donald Trump en Truth Social",
+      "published_at": "2026-10-04T12:00:00Z",
+      "discovered_at": "2026-10-05T08:09:06.538118Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://truthsocial.com/@realDonaldTrump/posts/117382616783706638",
+          "claim": "La mesa reúne funcionarios de inteligencia, comercio, defensa y gestión pública tras un acuerdo voluntario de controles con las tecnológicas."
+        }
+      ],
+      "tags": [
+        "inteligencia-artificial",
+        "politica-tecnologica",
+        "estados-unidos",
+        "seguridad",
+        "gobernanza"
+      ],
+      "consumed_by": "trump-crea-la-fuerza-de-superinteligencia-para-coordinar-la-ia-en-ee-uu",
+      "consumed_at": "2026-10-05T08:09:06.538118Z",
+      "id": "news-v1-a6883111c1af0c0a"
     }
   ]
 }
