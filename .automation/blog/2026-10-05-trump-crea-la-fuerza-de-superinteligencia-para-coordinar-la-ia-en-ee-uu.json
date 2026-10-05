@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-05:trump-crea-la-fuerza-de-superinteligencia-para-coordinar-la-ia-en-ee-uu",
+  "status": "prepared",
+  "local_date": "2026-10-05",
+  "created_at": "2026-10-05T08:09:06.538118Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/trump-crea-la-fuerza-de-superinteligencia-para-coordinar-la-ia-en-ee-uu.md",
+      "sha256": "a37f034668e54d3ca3be822b14255744dd24c7a9f85bb383bac0f617cb8c326f"
+    },
+    "asset": {
+      "path": "static/images/stock/trump-crea-la-fuerza-de-superinteligencia-para-coordinar-la-ia-en-ee-uu.png",
+      "sha256": "c1c157a9fc37464f2af5c2e3c21dec3cf7e55117482c1c928cbe0b6a033a78d4"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/trump-crea-la-fuerza-de-superinteligencia-para-coordinar-la-ia-en-ee-uu.jpg",
+      "sha256": "3bb3167caad65f1f738cf0c2d52fd5be3148be80ef042ea857fc2bb02b15bd2d"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "e1b181137fbd8f9b77830270f657ed637bea908a4c486948bb57801c59057897"
+    }
+  },
+  "sources": [
+    "https://truthsocial.com/@realDonaldTrump/posts/117382616783706638",
+    "https://apnews.com/article/trump-jay-clayton-artificial-intelligence-task-force-b8689ea07de9102a52bd1cd2049b5901",
+    "https://www.washingtonpost.com/politics/2026/10/04/trump-launches-super-intelligence-force-after-calls-ai-slowdown/",
+    "https://www.cbsnews.com/news/trump-ai-constitution-tech-execs-openai-anthropic-voluntary-controls/",
+    "https://www.whitehouse.gov/presidential-actions/2026/09/inaugurating-the-era-of-super-intelligence/"
+  ]
+}

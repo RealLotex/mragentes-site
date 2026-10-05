@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-10-05",
+  "status": "prepared",
+  "local_date": "2026-10-05",
+  "created_at": "2026-10-05T08:09:06.538118Z",
+  "branch": "automation/editorial/2026-10-05",
+  "note_slug": "trump-crea-la-fuerza-de-superinteligencia-para-coordinar-la-ia-en-ee-uu",
+  "selected_news_ids": [
+    "news-v1-a6883111c1af0c0a"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-10-05-trump-crea-la-fuerza-de-superinteligencia-para-coordinar-la-ia-en-ee-uu.json",
+    "note": "content/notas/trump-crea-la-fuerza-de-superinteligencia-para-coordinar-la-ia-en-ee-uu.md",
+    "cover": "static/images/stock/trump-crea-la-fuerza-de-superinteligencia-para-coordinar-la-ia-en-ee-uu.png",
+    "announcement": "static/images/social/notes/trump-crea-la-fuerza-de-superinteligencia-para-coordinar-la-ia-en-ee-uu.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
