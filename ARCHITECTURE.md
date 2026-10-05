@@ -3,8 +3,10 @@
 ## Objetivo
 
 MR Agentes publica una noticia de IA por día para atraer lectores a la web y a sus perfiles de
-Facebook e Instagram. La publicación parte de un hecho reciente y verificable. El tono es formal,
-con nombres, fechas y cifras; evita el ensayo genérico y el texto publicitario.
+Facebook e Instagram. La publicación parte de un hecho verificable y cuenta su historia: los
+protagonistas, los antecedentes, cómo se llegó a la noticia y qué cambia. El tono es natural,
+profesional y accesible. El contenido aporta contexto y explicación para ganar lectores,
+favorecer el descubrimiento en buscadores y dar a conocer la mirada práctica de MR Agentes.
 
 La calidad editorial no bloquea la publicación diaria. Actualidad, citas dentro del cuerpo,
 estilo y extensión son recomendaciones del prompt que administra el propietario.
@@ -25,7 +27,7 @@ flowchart LR
 La automatización `mr-agentes-noticias` corre una vez por día a las 05:00 de `America/Cordoba`,
 en conversación nueva, con `gpt-6-luna` y esfuerzo `xhigh`. La skill
 `mragentes-editorial-publisher` sólo define investigación, estilo y el formato de entrada. El
-modelo entrega un JSON y una fotografía; no decide los pasos Git.
+modelo entrega un JSON y una imagen; no decide los pasos Git.
 
 `scripts/automation/editorial_release.py` es la única autoridad local de entrega. Desde el
 proyecto registrado hace `git fetch`, crea un worktree temporal en `/var/tmp` desde

@@ -18,11 +18,12 @@ Comprobar el acceso con `gh auth status` y el permiso de escritura con
 
 ## Qué hace cada corrida
 
-1. El modelo busca durante unos minutos una noticia mainstream de IA: modelo, descubrimiento,
+1. El modelo investiga una noticia mainstream de IA y sus antecedentes: modelo, descubrimiento,
    seguridad de agentes, debate público, robótica o adopción empresarial argentina. Abre la
    fuente original; medios como iProUP ayudan a encontrar hechos, no sustituyen la verificación.
-2. Redacta una sola nota, con el hecho en el primer párrafo, citas junto a los datos y una imagen
-   pertinente. Guarda JSON e imagen fuera del repositorio. El ejemplo de formato está en
+2. Redacta una sola nota que ubique pronto al lector y reconstruya la historia, sus antecedentes
+   y su importancia, con fuentes y una imagen pertinente. Guarda JSON e imagen fuera del
+   repositorio. El ejemplo de formato está en
    `.agents/skills/mragentes-editorial-publisher/assets/note-template.md`.
 3. Ejecuta `python3 scripts/automation/editorial_release.py --input /var/tmp/nota.json --image /var/tmp/portada.jpg`.
    El comando controla idempotencia, validación, worktree, seis artefactos, commit, push y PR.
@@ -36,12 +37,19 @@ social independiente. El script no llama directamente a Meta o Cloudflare.
 
 ## Estilo editorial
 
-Una nota debe dejar datos memorables: nombres, fecha, cifras, mecanismo y límites. Debe poder
-leerse sin conocimientos técnicos avanzados, conservando precisión. Evitar introducciones que
-repiten el título, “en este artículo exploraremos”, reflexiones grandilocuentes, consenso sin
-fuente, tono de folleto, tres elementos de relleno, preguntas frecuentes automáticas y un cierre
-que sólo resume. No forzar una aplicación para PyMEs en cada noticia. La referencia completa está
-en `references/editorial-contract.md` de la skill.
+La nota se escribe para una persona que no conoce el tema. Debe permitir reconstruir qué pasó,
+quiénes participaron, cómo se llegó a la noticia y qué cambia. El interés se sostiene con
+información nueva, ejemplos y explicaciones, con libertad de tono, extensión y estructura.
+Se adaptan recursos de los guiones de YouTube: cumplir la promesa del título desde la apertura,
+desarrollar una pregunta central, avanzar mediante causas y consecuencias y resolver al cierre.
+Los hechos conocidos se cuentan pronto; las escenas y los giros se apoyan en las fuentes.
+
+El reconocimiento de MR Agentes se construye con análisis práctico útil y enlaces internos
+pertinentes. Los títulos descriptivos, las entidades claras y las respuestas integradas en el
+relato ayudan a lectores y buscadores a comprender el contenido. Son objetivos editoriales,
+sin cuotas ni validadores de calidad. La referencia completa está en
+`references/editorial-contract.md` de la skill. El prompt de la tarea nativa y su copia en
+`.automation/schedules/editorial.json` contienen las mismas instrucciones.
 
 Estas pautas orientan la redacción y no autorizan omitir el día. El publicador admite una
 fuente anterior o reutilizada, un cuerpo sin la URL primaria y una portada pequeña válida.
