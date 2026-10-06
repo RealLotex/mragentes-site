@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-06:nueva-york-enfrento-a-openai-y-anthropic-con-sus-ex-empleados-por-la-seguridad-de-la-ia",
+  "status": "prepared",
+  "local_date": "2026-10-06",
+  "created_at": "2026-10-06T08:12:04.888607Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/nueva-york-enfrento-a-openai-y-anthropic-con-sus-ex-empleados-por-la-seguridad-de-la-ia.md",
+      "sha256": "369f1b4ab01afe7037e8aaed27bddb42a7fb0a807a195006e8266e4152232c16"
+    },
+    "asset": {
+      "path": "static/images/stock/nueva-york-enfrento-a-openai-y-anthropic-con-sus-ex-empleados-por-la-seguridad-de-la-ia.png",
+      "sha256": "83f2de1e329176e8717832bd8d821ef990281d61235a119ee387926609a34b3a"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/nueva-york-enfrento-a-openai-y-anthropic-con-sus-ex-empleados-por-la-seguridad-de-la-ia.jpg",
+      "sha256": "45d92ef4ea0ebd7384df475dfe14f5f86753745e7c5e8140233f2593597fd821"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "b26087f96fac1a41c5db7195d7bc49c45c0d69aa80681c4e8821b3f569aff954"
+    }
+  },
+  "sources": [
+    "https://apnews.com/article/ai-nyc-whistleblower-artificial-intelligence-4be252d137ff1de1006130cdbb42ec24",
+    "https://nyc.legistar.com/MeetingDetail.aspx?G=2FD004F1-D85B-4588-A648-0A736C77D6E3&GID=61&LEGID=22752",
+    "https://council.nyc.gov/press/2026/09/28/3266/",
+    "https://council.nyc.gov/press/2026/09/25/3252/",
+    "https://legistar.council.nyc.gov/LegislationDetail.aspx?GUID=A927E066-C669-4F66-8E5A-4B610FA321E5&ID=8239233&Options=&Search=",
+    "https://legistar.council.nyc.gov/LegislationDetail.aspx?GUID=01805F83-CD9B-40E8-8B3B-5F8180B9ECF0&ID=8239232&Options=&Search=",
+    "https://legistar.council.nyc.gov/LegislationDetail.aspx?GUID=75E3ADBA-51CD-4CF8-B8B7-6A1B9A1F22FE&ID=8239234&Options=&Search=",
+    "https://fortune.com/2026/10/05/new-york-city-council-hearing-openai-anthropic-ai-safety-google-meta/",
+    "https://www.cbsnews.com/newyork/news/new-york-city-council-ai-oversight-hearing/"
+  ]
+}

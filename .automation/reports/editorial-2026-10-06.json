@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-10-06",
+  "status": "prepared",
+  "local_date": "2026-10-06",
+  "created_at": "2026-10-06T08:12:04.888607Z",
+  "branch": "automation/editorial/2026-10-06",
+  "note_slug": "nueva-york-enfrento-a-openai-y-anthropic-con-sus-ex-empleados-por-la-seguridad-de-la-ia",
+  "selected_news_ids": [
+    "news-v1-fe36a845b00d2d18"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-10-06-nueva-york-enfrento-a-openai-y-anthropic-con-sus-ex-empleados-por-la-seguridad-de-la-ia.json",
+    "note": "content/notas/nueva-york-enfrento-a-openai-y-anthropic-con-sus-ex-empleados-por-la-seguridad-de-la-ia.md",
+    "cover": "static/images/stock/nueva-york-enfrento-a-openai-y-anthropic-con-sus-ex-empleados-por-la-seguridad-de-la-ia.png",
+    "announcement": "static/images/social/notes/nueva-york-enfrento-a-openai-y-anthropic-con-sus-ex-empleados-por-la-seguridad-de-la-ia.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
