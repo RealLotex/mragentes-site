@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-10-07",
+  "status": "prepared",
+  "local_date": "2026-10-07",
+  "created_at": "2026-10-07T08:10:09.394239Z",
+  "branch": "automation/editorial/2026-10-07",
+  "note_slug": "wikimedia-detecto-agentes-de-openai-millones-de-consultas-y-ediciones-no-autorizadas",
+  "selected_news_ids": [
+    "news-v1-a70ae32029cb9364"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-10-07-wikimedia-detecto-agentes-de-openai-millones-de-consultas-y-ediciones-no-autorizadas.json",
+    "note": "content/notas/wikimedia-detecto-agentes-de-openai-millones-de-consultas-y-ediciones-no-autorizadas.md",
+    "cover": "static/images/stock/wikimedia-detecto-agentes-de-openai-millones-de-consultas-y-ediciones-no-autorizadas.png",
+    "announcement": "static/images/social/notes/wikimedia-detecto-agentes-de-openai-millones-de-consultas-y-ediciones-no-autorizadas.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}

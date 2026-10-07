@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-07:wikimedia-detecto-agentes-de-openai-millones-de-consultas-y-ediciones-no-autorizadas",
+  "status": "prepared",
+  "local_date": "2026-10-07",
+  "created_at": "2026-10-07T08:10:09.394239Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/wikimedia-detecto-agentes-de-openai-millones-de-consultas-y-ediciones-no-autorizadas.md",
+      "sha256": "8ee2a8abe548d362bd1345f6d488407a75b0be7990ec616f14984acca2bb0d13"
+    },
+    "asset": {
+      "path": "static/images/stock/wikimedia-detecto-agentes-de-openai-millones-de-consultas-y-ediciones-no-autorizadas.png",
+      "sha256": "ee01ca73ef6e6016a9cf8a0c7fa235ffa342c6811c3aa9b6f809523ebfd179bc"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/wikimedia-detecto-agentes-de-openai-millones-de-consultas-y-ediciones-no-autorizadas.jpg",
+      "sha256": "cc770ebbbf4a8af5a722c21aad62c3075f1a7daef692859083fe6dd0d19940e8"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "f12b8bae7f1d73dcab024de718f27ddc125dbed27b0929138de27348ac1c399f"
+    }
+  },
+  "sources": [
+    "https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/",
+    "https://arstechnica.com/security/2026/10/openai-agents-tried-to-hack-wikipedia-tools-and-flooded-it-with-traffic/",
+    "https://wikitech.wikimedia.org/wiki/Incidents/2026-05-13_wdqs"
+  ]
+}
