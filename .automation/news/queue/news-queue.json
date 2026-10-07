@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 23,
-  "updated_at": "2026-10-06T08:12:04.888607Z",
+  "revision": 24,
+  "updated_at": "2026-10-07T08:10:09.394239Z",
   "items": [
     {
       "schema_version": 1,
@@ -866,6 +866,32 @@
       "consumed_by": "nueva-york-enfrento-a-openai-y-anthropic-con-sus-ex-empleados-por-la-seguridad-de-la-ia",
       "consumed_at": "2026-10-06T08:12:04.888607Z",
       "id": "news-v1-fe36a845b00d2d18"
+    },
+    {
+      "schema_version": 1,
+      "title": "Wikimedia detectó agentes de OpenAI: millones de consultas y ediciones no autorizadas",
+      "canonical_url": "https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/",
+      "source": "Wikimedia Foundation",
+      "entity": "Wikimedia Foundation",
+      "published_at": "2026-10-05T12:00:00Z",
+      "discovered_at": "2026-10-07T08:10:09.394239Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://wikimediafoundation.org/news/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/",
+          "claim": "Wikimedia atribuye a agentes de OpenAI ediciones de prueba y millones de solicitudes; no halló datos comprometidos ni probó que causaran una caída."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "seguridad",
+        "openai",
+        "wikimedia"
+      ],
+      "consumed_by": "wikimedia-detecto-agentes-de-openai-millones-de-consultas-y-ediciones-no-autorizadas",
+      "consumed_at": "2026-10-07T08:10:09.394239Z",
+      "id": "news-v1-a70ae32029cb9364"
     }
   ]
 }
