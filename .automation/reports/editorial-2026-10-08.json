@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-10-08",
+  "status": "prepared",
+  "local_date": "2026-10-08",
+  "created_at": "2026-10-08T08:08:19.542657Z",
+  "branch": "automation/editorial/2026-10-08",
+  "note_slug": "la-fcc-evalua-permitir-llamadas-politicas-con-voces-de-ia-a-celulares-sin-consentimiento",
+  "selected_news_ids": [
+    "news-v1-c8de3d213127cf75"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-10-08-la-fcc-evalua-permitir-llamadas-politicas-con-voces-de-ia-a-celulares-sin-consentimiento.json",
+    "note": "content/notas/la-fcc-evalua-permitir-llamadas-politicas-con-voces-de-ia-a-celulares-sin-consentimiento.md",
+    "cover": "static/images/stock/la-fcc-evalua-permitir-llamadas-politicas-con-voces-de-ia-a-celulares-sin-consentimiento.png",
+    "announcement": "static/images/social/notes/la-fcc-evalua-permitir-llamadas-politicas-con-voces-de-ia-a-celulares-sin-consentimiento.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}

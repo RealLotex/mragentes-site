@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 24,
-  "updated_at": "2026-10-07T08:10:09.394239Z",
+  "revision": 25,
+  "updated_at": "2026-10-08T08:08:19.542657Z",
   "items": [
     {
       "schema_version": 1,
@@ -892,6 +892,32 @@
       "consumed_by": "wikimedia-detecto-agentes-de-openai-millones-de-consultas-y-ediciones-no-autorizadas",
       "consumed_at": "2026-10-07T08:10:09.394239Z",
       "id": "news-v1-a70ae32029cb9364"
+    },
+    {
+      "schema_version": 1,
+      "title": "La FCC evalúa permitir llamadas políticas con voces de IA a celulares sin consentimiento",
+      "canonical_url": "https://apnews.com/article/fcc-political-robocalls-artificial-intelligence-ai-midterms-b97fb6e8d06704dc043556dba25de548",
+      "source": "Associated Press",
+      "entity": "Associated Press",
+      "published_at": "2026-10-07T12:00:00Z",
+      "discovered_at": "2026-10-08T08:08:19.542657Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://apnews.com/article/fcc-political-robocalls-artificial-intelligence-ai-midterms-b97fb6e8d06704dc043556dba25de548",
+          "claim": "Club for Growth pide una excepción al consentimiento previo para llamadas políticas a celulares. El debate revive la falsa voz de Biden de 2024."
+        }
+      ],
+      "tags": [
+        "ia",
+        "regulacion",
+        "voz-sintetica",
+        "elecciones",
+        "politica"
+      ],
+      "consumed_by": "la-fcc-evalua-permitir-llamadas-politicas-con-voces-de-ia-a-celulares-sin-consentimiento",
+      "consumed_at": "2026-10-08T08:08:19.542657Z",
+      "id": "news-v1-c8de3d213127cf75"
     }
   ]
 }
