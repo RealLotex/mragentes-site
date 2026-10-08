@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-08:la-fcc-evalua-permitir-llamadas-politicas-con-voces-de-ia-a-celulares-sin-consentimiento",
+  "status": "prepared",
+  "local_date": "2026-10-08",
+  "created_at": "2026-10-08T08:08:19.542657Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/la-fcc-evalua-permitir-llamadas-politicas-con-voces-de-ia-a-celulares-sin-consentimiento.md",
+      "sha256": "a77f8982d3cca2b127b62123c923d5dc0b20d17c223462c3c49911ee445ae584"
+    },
+    "asset": {
+      "path": "static/images/stock/la-fcc-evalua-permitir-llamadas-politicas-con-voces-de-ia-a-celulares-sin-consentimiento.png",
+      "sha256": "a2910099b91d4dbd91d0f0a30c569a652c26d3367d20c1a383de245583c44e6c"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/la-fcc-evalua-permitir-llamadas-politicas-con-voces-de-ia-a-celulares-sin-consentimiento.jpg",
+      "sha256": "ad09e20bd1a699eb49d2d4d4c5663814a81d43ac7c3b8759e64e628a44c9a8c7"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "74947d61f7c1e699cfeb8e934865f531908c584d6283ddcae212e2527fb08898"
+    }
+  },
+  "sources": [
+    "https://apnews.com/article/fcc-political-robocalls-artificial-intelligence-ai-midterms-b97fb6e8d06704dc043556dba25de548",
+    "https://docs.fcc.gov/public/attachments/DA-26-940A1.pdf",
+    "https://docs.fcc.gov/public/attachments/FCC-24-17A1_Rcd.pdf",
+    "https://apnews.com/article/ai-robocall-biden-new-hampshire-primary-2024-f94aa2d7f835ccc3cc254a90cd481a99",
+    "https://apnews.com/article/ai-robocalls-new-hampshire-biden-kramer-e87ef8848a2a6515202535a6e800da07"
+  ]
+}
