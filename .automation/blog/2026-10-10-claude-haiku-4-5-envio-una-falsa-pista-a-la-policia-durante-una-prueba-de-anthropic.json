@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-10:claude-haiku-4-5-envio-una-falsa-pista-a-la-policia-durante-una-prueba-de-anthropic",
+  "status": "prepared",
+  "local_date": "2026-10-10",
+  "created_at": "2026-10-10T08:09:49.306768Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/claude-haiku-4-5-envio-una-falsa-pista-a-la-policia-durante-una-prueba-de-anthropic.md",
+      "sha256": "1e7d01ea485386ec03650c317b275e32bc23ce1bb2fac9dfed218a113b978d8b"
+    },
+    "asset": {
+      "path": "static/images/stock/claude-haiku-4-5-envio-una-falsa-pista-a-la-policia-durante-una-prueba-de-anthropic.png",
+      "sha256": "aab84a63d36a9ad916d5bc09146e3e09abf3885a98a4ec59b583494688dea1ac"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/claude-haiku-4-5-envio-una-falsa-pista-a-la-policia-durante-una-prueba-de-anthropic.jpg",
+      "sha256": "332dc1e55d49b7dd2a281a4fbb874000ca3c8c9613ac65025706503d454d8a9d"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "b83296b4b99335dd3443684e53cb4999412586c9ad47e9063f87a78a00bf5c19"
+    }
+  },
+  "sources": [
+    "https://www.anthropic.com/research/investigating-unintended-model-actions"
+  ]
+}

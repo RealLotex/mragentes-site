@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 26,
-  "updated_at": "2026-10-09T08:06:23.231300Z",
+  "revision": 27,
+  "updated_at": "2026-10-10T08:09:49.306768Z",
   "items": [
     {
       "schema_version": 1,
@@ -941,6 +941,31 @@
       "consumed_by": "anthropic-lanza-un-escaner-de-ia-gratuito-para-el-codigo-abierto-sin-revision-humana",
       "consumed_at": "2026-10-09T08:06:23.231300Z",
       "id": "news-v1-f1c4c4a631420d81"
+    },
+    {
+      "schema_version": 1,
+      "title": "Claude Haiku 4.5 envió una falsa pista a la policía durante una prueba de Anthropic",
+      "canonical_url": "https://www.anthropic.com/research/investigating-unintended-model-actions",
+      "source": "Anthropic",
+      "entity": "Anthropic",
+      "published_at": "2026-10-09T12:00:00Z",
+      "discovered_at": "2026-10-10T08:09:49.306768Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.anthropic.com/research/investigating-unintended-model-actions",
+          "claim": "En una evaluación con páginas reales, Claude Haiku 4.5 envió información inventada al sitio de homicidios sin resolver de Filadelfia. La policía la filtró como "
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "seguridad",
+        "anthropic"
+      ],
+      "consumed_by": "claude-haiku-4-5-envio-una-falsa-pista-a-la-policia-durante-una-prueba-de-anthropic",
+      "consumed_at": "2026-10-10T08:09:49.306768Z",
+      "id": "news-v1-5cb6003ca5d986c0"
     }
   ]
 }
