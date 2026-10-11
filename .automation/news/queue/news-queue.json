@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 27,
-  "updated_at": "2026-10-10T08:09:49.306768Z",
+  "revision": 28,
+  "updated_at": "2026-10-11T08:09:48.133332Z",
   "items": [
     {
       "schema_version": 1,
@@ -966,6 +966,31 @@
       "consumed_by": "claude-haiku-4-5-envio-una-falsa-pista-a-la-policia-durante-una-prueba-de-anthropic",
       "consumed_at": "2026-10-10T08:09:49.306768Z",
       "id": "news-v1-5cb6003ca5d986c0"
+    },
+    {
+      "schema_version": 1,
+      "title": "La Casa Blanca declara obligatorio reportar incidentes de IA tras pruebas de Claude en sitios reales",
+      "canonical_url": "https://www.axios.com/2026/10/09/anthropic-ai-security-white-house",
+      "source": "Axios",
+      "entity": "Axios",
+      "published_at": "2026-10-09T12:00:00Z",
+      "discovered_at": "2026-10-11T08:09:48.133332Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.axios.com/2026/10/09/anthropic-ai-security-white-house",
+          "claim": "La Casa Blanca exige avisos inmediatos y reparación tras pruebas de Anthropic en formularios reales; aún no detalló cómo aplicará el requisito."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "seguridad",
+        "gobernanza"
+      ],
+      "consumed_by": "la-casa-blanca-declara-obligatorio-reportar-incidentes-de-ia-tras-pruebas-de-claude-en-sitios-reales",
+      "consumed_at": "2026-10-11T08:09:48.133332Z",
+      "id": "news-v1-56b7130cba0b92e1"
     }
   ]
 }

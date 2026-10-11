@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-11:la-casa-blanca-declara-obligatorio-reportar-incidentes-de-ia-tras-pruebas-de-claude-en-sitios-reales",
+  "status": "prepared",
+  "local_date": "2026-10-11",
+  "created_at": "2026-10-11T08:09:48.133332Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/la-casa-blanca-declara-obligatorio-reportar-incidentes-de-ia-tras-pruebas-de-claude-en-sitios-reales.md",
+      "sha256": "0380ef344c355bb2602d7e1256e39b84b6f17c6508cd464d8abc6b4fdacee75e"
+    },
+    "asset": {
+      "path": "static/images/stock/la-casa-blanca-declara-obligatorio-reportar-incidentes-de-ia-tras-pruebas-de-claude-en-sitios-reales.png",
+      "sha256": "aa0f74fa09de70ff286f1b98750e9cd3b95128207aead404c49e7cea7d283df2"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/la-casa-blanca-declara-obligatorio-reportar-incidentes-de-ia-tras-pruebas-de-claude-en-sitios-reales.jpg",
+      "sha256": "f97076507b05692067d1ecd30fda202328def4a22df787957412af1582fb2e41"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "68ebf7840eddbaa5d51e444eabe2e20780cec8d810da156829d3d94aa54049b3"
+    }
+  },
+  "sources": [
+    "https://www.axios.com/2026/10/09/anthropic-ai-security-white-house"
+  ]
+}
