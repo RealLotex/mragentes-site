@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-13:meta-lanza-muse-wonder-modelos-para-agentes-que-recuerdan-y-retoman-tareas",
+  "status": "prepared",
+  "local_date": "2026-10-13",
+  "created_at": "2026-10-13T08:14:47.582172Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/meta-lanza-muse-wonder-modelos-para-agentes-que-recuerdan-y-retoman-tareas.md",
+      "sha256": "f8c2db760424dcd22b70cecd1535d4b269832e243e44079711efed6ac4c657d7"
+    },
+    "asset": {
+      "path": "static/images/stock/meta-lanza-muse-wonder-modelos-para-agentes-que-recuerdan-y-retoman-tareas.png",
+      "sha256": "5d67ddadd7ff255d3d01cbe05531e5d557fbf3f623dd1678a0aa63c98c471aa8"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/meta-lanza-muse-wonder-modelos-para-agentes-que-recuerdan-y-retoman-tareas.jpg",
+      "sha256": "55b346bed1c3645452c0bc71df36fb94e71e231d2a931e1783f34e18b23fec84"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "bb409e01c7b4dbffac3a0444afd70d77a674613b3c6360e165ca1f120f496c31"
+    }
+  },
+  "sources": [
+    "https://about.fb.com/news/2026/10/introducing-muse-wonder-models/",
+    "https://research.meta.ai/blog/muse-wonder",
+    "https://research.meta.ai/static/muse-wonder-model-card",
+    "https://dev.meta.ai/models/muse-wonder",
+    "https://about.fb.com/news/2026/09/introducing-muse-personal-ai-agent/",
+    "https://techcrunch.com/2026/10/12/meta-releases-its-first-frontier-model-muse-wonder/",
+    "https://www.axios.com/2026/10/12/meta-new-ai-models-anthropic-openai"
+  ]
+}
