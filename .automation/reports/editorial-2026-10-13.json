@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-10-13",
+  "status": "prepared",
+  "local_date": "2026-10-13",
+  "created_at": "2026-10-13T08:14:47.582172Z",
+  "branch": "automation/editorial/2026-10-13",
+  "note_slug": "meta-lanza-muse-wonder-modelos-para-agentes-que-recuerdan-y-retoman-tareas",
+  "selected_news_ids": [
+    "news-v1-b430292f15206076"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-10-13-meta-lanza-muse-wonder-modelos-para-agentes-que-recuerdan-y-retoman-tareas.json",
+    "note": "content/notas/meta-lanza-muse-wonder-modelos-para-agentes-que-recuerdan-y-retoman-tareas.md",
+    "cover": "static/images/stock/meta-lanza-muse-wonder-modelos-para-agentes-que-recuerdan-y-retoman-tareas.png",
+    "announcement": "static/images/social/notes/meta-lanza-muse-wonder-modelos-para-agentes-que-recuerdan-y-retoman-tareas.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
