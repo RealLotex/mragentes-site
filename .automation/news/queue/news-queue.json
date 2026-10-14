@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 29,
-  "updated_at": "2026-10-13T08:14:47.582172Z",
+  "revision": 30,
+  "updated_at": "2026-10-14T08:09:12.095831Z",
   "items": [
     {
       "schema_version": 1,
@@ -1016,6 +1016,32 @@
       "consumed_by": "meta-lanza-muse-wonder-modelos-para-agentes-que-recuerdan-y-retoman-tareas",
       "consumed_at": "2026-10-13T08:14:47.582172Z",
       "id": "news-v1-b430292f15206076"
+    },
+    {
+      "schema_version": 1,
+      "title": "Cómo un centro de datos rechazado en Boulder City llegó a tierras federales",
+      "canonical_url": "https://apnews.com/article/nevada-data-centers-public-lands-governors-race-777894300ca0612493a4991da5f30308",
+      "source": "Associated Press",
+      "entity": "Associated Press",
+      "published_at": "2026-10-13T12:00:00Z",
+      "discovered_at": "2026-10-14T08:09:12.095831Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://apnews.com/article/nevada-data-centers-public-lands-governors-race-777894300ca0612493a4991da5f30308",
+          "claim": "Townsite Solar 2 retiró una propuesta local y obtuvo permiso federal para un centro de datos; una apelación frenó el inicio de obra."
+        }
+      ],
+      "tags": [
+        "ia",
+        "centros-de-datos",
+        "energia",
+        "Estados Unidos",
+        "politica"
+      ],
+      "consumed_by": "como-un-centro-de-datos-rechazado-en-boulder-city-llego-a-tierras-federales",
+      "consumed_at": "2026-10-14T08:09:12.095831Z",
+      "id": "news-v1-05629284f1d39d41"
     }
   ]
 }
