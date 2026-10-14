@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-14:como-un-centro-de-datos-rechazado-en-boulder-city-llego-a-tierras-federales",
+  "status": "prepared",
+  "local_date": "2026-10-14",
+  "created_at": "2026-10-14T08:09:12.095831Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/como-un-centro-de-datos-rechazado-en-boulder-city-llego-a-tierras-federales.md",
+      "sha256": "2dec1bc0d9555b1f82d1d5048e53e629d56d8d106b7737578ef8338be813092c"
+    },
+    "asset": {
+      "path": "static/images/stock/como-un-centro-de-datos-rechazado-en-boulder-city-llego-a-tierras-federales.png",
+      "sha256": "f17f3b943dfc1a25488678ecf2f059615446c65e6acbe7423bd6e34ed1413c1d"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/como-un-centro-de-datos-rechazado-en-boulder-city-llego-a-tierras-federales.jpg",
+      "sha256": "bd4099efb00252520368487e6e3d760c774847b2b86559f2f169d0b05e6e0cfc"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "78b29311aa8579f9aede497470b88fd63149edb79e31f0995c04696faf36af8f"
+    }
+  },
+  "sources": [
+    "https://apnews.com/article/nevada-data-centers-public-lands-governors-race-777894300ca0612493a4991da5f30308",
+    "https://www.blm.gov/announcement/approved-decision-townsite-data-center",
+    "https://eplanning.blm.gov/Project-Home/?id=f4dd06fc-446f-f111-ab0d-001dd802f839",
+    "https://www.flybouldercity.com/1174/TS2-Data-Center-Proposal-Withdrawn-76202",
+    "https://flybouldercity.com/m/newsflash/Home/Detail/534",
+    "https://nevadacurrent.com/2026/09/01/judge-halts-data-center-construction-on-public-land/"
+  ]
+}
