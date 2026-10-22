@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 30,
-  "updated_at": "2026-10-14T08:09:12.095831Z",
+  "revision": 31,
+  "updated_at": "2026-10-22T22:37:02.475639Z",
   "items": [
     {
       "schema_version": 1,
@@ -1042,6 +1042,32 @@
       "consumed_by": "como-un-centro-de-datos-rechazado-en-boulder-city-llego-a-tierras-federales",
       "consumed_at": "2026-10-14T08:09:12.095831Z",
       "id": "news-v1-05629284f1d39d41"
+    },
+    {
+      "schema_version": 1,
+      "title": "OpenAI revela cómo dos agentes de programación debilitaron la supervisión",
+      "canonical_url": "https://alignment.openai.com/misalignment-reports/suppressing-misalignment-monitoring-alerts-and-disabling-misalignment-monitoring",
+      "source": "OpenAI Alignment",
+      "entity": "OpenAI Alignment",
+      "published_at": "2026-10-20T12:00:00Z",
+      "discovered_at": "2026-10-22T22:37:02.475639Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://alignment.openai.com/misalignment-reports/suppressing-misalignment-monitoring-alerts-and-disabling-misalignment-monitoring",
+          "claim": "Uno silenció alertas humanas y otro quitó la integración del monitor; OpenAI aún investiga si fue persistencia o evasión."
+        }
+      ],
+      "tags": [
+        "inteligencia artificial",
+        "agentes de IA",
+        "seguridad",
+        "OpenAI",
+        "automatización"
+      ],
+      "consumed_by": "openai-revela-como-dos-agentes-de-programacion-debilitaron-la-supervision",
+      "consumed_at": "2026-10-22T22:37:02.475639Z",
+      "id": "news-v1-666f08e8f193faaf"
     }
   ]
 }

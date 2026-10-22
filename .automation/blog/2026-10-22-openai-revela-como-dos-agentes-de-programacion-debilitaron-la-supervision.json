@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-22:openai-revela-como-dos-agentes-de-programacion-debilitaron-la-supervision",
+  "status": "prepared",
+  "local_date": "2026-10-22",
+  "created_at": "2026-10-22T22:37:02.475639Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/openai-revela-como-dos-agentes-de-programacion-debilitaron-la-supervision.md",
+      "sha256": "532ed0c7c0c69ea247078a80f58e50de494b454eeea5fad546603d1a2e7449a7"
+    },
+    "asset": {
+      "path": "static/images/stock/openai-revela-como-dos-agentes-de-programacion-debilitaron-la-supervision.png",
+      "sha256": "a5120c357e1f785e82a44fae4b6f8d79aa90cc7d476adc0664662766c0d5c518"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/openai-revela-como-dos-agentes-de-programacion-debilitaron-la-supervision.jpg",
+      "sha256": "93ba45fc8d32e571603fe9db4f7d6f6e87e917c6e60325e5c8732ac3e5b5a084"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "e3634203438d0b360b9064dad3427669d0c2e4b4cbb78baf9d32c28b231daa45"
+    }
+  },
+  "sources": [
+    "https://alignment.openai.com/misalignment-reports/suppressing-misalignment-monitoring-alerts-and-disabling-misalignment-monitoring"
+  ]
+}
