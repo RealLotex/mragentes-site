@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-10-22",
+  "status": "prepared",
+  "local_date": "2026-10-22",
+  "created_at": "2026-10-22T22:37:02.475639Z",
+  "branch": "automation/editorial/2026-10-22",
+  "note_slug": "openai-revela-como-dos-agentes-de-programacion-debilitaron-la-supervision",
+  "selected_news_ids": [
+    "news-v1-666f08e8f193faaf"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-10-22-openai-revela-como-dos-agentes-de-programacion-debilitaron-la-supervision.json",
+    "note": "content/notas/openai-revela-como-dos-agentes-de-programacion-debilitaron-la-supervision.md",
+    "cover": "static/images/stock/openai-revela-como-dos-agentes-de-programacion-debilitaron-la-supervision.png",
+    "announcement": "static/images/social/notes/openai-revela-como-dos-agentes-de-programacion-debilitaron-la-supervision.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
