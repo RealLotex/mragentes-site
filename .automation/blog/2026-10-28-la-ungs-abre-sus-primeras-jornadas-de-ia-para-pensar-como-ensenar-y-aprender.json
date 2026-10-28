@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-28:la-ungs-abre-sus-primeras-jornadas-de-ia-para-pensar-como-ensenar-y-aprender",
+  "status": "prepared",
+  "local_date": "2026-10-28",
+  "created_at": "2026-10-28T08:02:50.381633Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/la-ungs-abre-sus-primeras-jornadas-de-ia-para-pensar-como-ensenar-y-aprender.md",
+      "sha256": "0a426bbb7477a6a20f3b2d5a674ca6b96457b182caa9f2318be50a7fdfaa01cd"
+    },
+    "asset": {
+      "path": "static/images/stock/la-ungs-abre-sus-primeras-jornadas-de-ia-para-pensar-como-ensenar-y-aprender.png",
+      "sha256": "1d93b55acf1ef203dcd1d06eb583dd9c5731eaea5c75b08497c9a0e492a3234a"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/la-ungs-abre-sus-primeras-jornadas-de-ia-para-pensar-como-ensenar-y-aprender.jpg",
+      "sha256": "e81979531a7afc97dfcd497192f5dcf70333f630b2563b1f1dbc5d78a08b57ca"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "63753f758ebe4be39ee15d1f08ede7ae748211d0186278a4bdbfcc90a8d7906a"
+    }
+  },
+  "sources": [
+    "https://www.ungs.edu.ar/evento/encuentro-sobre-inteligencia-artificial-en-la-universidad-y-en-la-escuela-secundaria",
+    "https://sedici.unlp.edu.ar/handle/10915/200037",
+    "https://www.ungs.edu.ar/evento/ensenar-con-ia-taller-para-docentes-e-investigadores-as-docentes-de-la-ungs",
+    "https://chequeado.com/el-explicador/el-58-de-chicos-y-adolescentes-argentinos-ya-uso-la-ia-y-la-mayoria-la-aplica-en-tareas-escolares/"
+  ]
+}

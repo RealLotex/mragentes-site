@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 32,
-  "updated_at": "2026-10-28T02:58:38.261278Z",
+  "revision": 33,
+  "updated_at": "2026-10-28T08:02:50.381633Z",
   "items": [
     {
       "schema_version": 1,
@@ -1094,6 +1094,30 @@
       "consumed_by": "el-ataque-con-agentes-de-ia-que-alcanzo-al-menos-15-entidades-de-salud-en-argentina",
       "consumed_at": "2026-10-28T02:58:38.261278Z",
       "id": "news-v1-4c92f844a62c0d98"
+    },
+    {
+      "schema_version": 1,
+      "title": "La UNGS abre sus primeras jornadas de IA para pensar cómo enseñar y aprender",
+      "canonical_url": "https://www.ungs.edu.ar/evento/encuentro-sobre-inteligencia-artificial-en-la-universidad-y-en-la-escuela-secundaria",
+      "source": "Universidad Nacional de General Sarmiento, programa de jornadas",
+      "entity": "Universidad Nacional de General Sarmiento, programa de jornadas",
+      "published_at": "2026-10-28T12:00:00Z",
+      "discovered_at": "2026-10-28T08:02:50.381633Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.ungs.edu.ar/evento/encuentro-sobre-inteligencia-artificial-en-la-universidad-y-en-la-escuela-secundaria",
+          "claim": "La universidad de Los Polvorines reúne a especialistas para debatir IA en enseñanza, investigación y gestión académica."
+        }
+      ],
+      "tags": [
+        "inteligencia artificial",
+        "educación",
+        "argentina"
+      ],
+      "consumed_by": "la-ungs-abre-sus-primeras-jornadas-de-ia-para-pensar-como-ensenar-y-aprender",
+      "consumed_at": "2026-10-28T08:02:50.381633Z",
+      "id": "news-v1-4dcbf6afd699fec9"
     }
   ]
 }
