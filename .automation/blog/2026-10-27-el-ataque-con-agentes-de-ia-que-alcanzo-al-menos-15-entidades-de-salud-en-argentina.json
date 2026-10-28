@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-27:el-ataque-con-agentes-de-ia-que-alcanzo-al-menos-15-entidades-de-salud-en-argentina",
+  "status": "prepared",
+  "local_date": "2026-10-27",
+  "created_at": "2026-10-28T02:58:38.261278Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/el-ataque-con-agentes-de-ia-que-alcanzo-al-menos-15-entidades-de-salud-en-argentina.md",
+      "sha256": "4ee2c52a3acee0dd5431cd523fc820e75867df12b017df86e13fbbaccf914448"
+    },
+    "asset": {
+      "path": "static/images/stock/el-ataque-con-agentes-de-ia-que-alcanzo-al-menos-15-entidades-de-salud-en-argentina.png",
+      "sha256": "7978aabae2be3d698e78eac0647167919472691c8cedd07eca40ad233183b3ad"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/el-ataque-con-agentes-de-ia-que-alcanzo-al-menos-15-entidades-de-salud-en-argentina.jpg",
+      "sha256": "b1bc35426996e6ac64ff5c78111072ee00c9edf4bd3b13ab7884c50ba94cb86d"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "e6390d215094eb98b49af54b5ef294592d7bbbf5eb8e1e3a7a18b0c5e596832f"
+    }
+  },
+  "sources": [
+    "https://www.crowdstrike.com/en-us/blog/crowdstrike-uncovers-new-agentic-ai-campaigns/",
+    "https://www.clarin.com/tecnologia/crecen-ciberataque-agentes-ia-argentina-vulneraron-15-entidades-salud-robaron-historias-clinicas_0_E48IKoPlfw.html"
+  ]
+}
