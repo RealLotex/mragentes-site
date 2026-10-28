@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-10-27",
+  "status": "prepared",
+  "local_date": "2026-10-27",
+  "created_at": "2026-10-28T02:58:38.261278Z",
+  "branch": "automation/editorial/2026-10-27",
+  "note_slug": "el-ataque-con-agentes-de-ia-que-alcanzo-al-menos-15-entidades-de-salud-en-argentina",
+  "selected_news_ids": [
+    "news-v1-4c92f844a62c0d98"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-10-27-el-ataque-con-agentes-de-ia-que-alcanzo-al-menos-15-entidades-de-salud-en-argentina.json",
+    "note": "content/notas/el-ataque-con-agentes-de-ia-que-alcanzo-al-menos-15-entidades-de-salud-en-argentina.md",
+    "cover": "static/images/stock/el-ataque-con-agentes-de-ia-que-alcanzo-al-menos-15-entidades-de-salud-en-argentina.png",
+    "announcement": "static/images/social/notes/el-ataque-con-agentes-de-ia-que-alcanzo-al-menos-15-entidades-de-salud-en-argentina.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
