@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-10-28",
+  "status": "prepared",
+  "local_date": "2026-10-28",
+  "created_at": "2026-10-28T08:02:50.381633Z",
+  "branch": "automation/editorial/2026-10-28",
+  "note_slug": "la-ungs-abre-sus-primeras-jornadas-de-ia-para-pensar-como-ensenar-y-aprender",
+  "selected_news_ids": [
+    "news-v1-4dcbf6afd699fec9"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-10-28-la-ungs-abre-sus-primeras-jornadas-de-ia-para-pensar-como-ensenar-y-aprender.json",
+    "note": "content/notas/la-ungs-abre-sus-primeras-jornadas-de-ia-para-pensar-como-ensenar-y-aprender.md",
+    "cover": "static/images/stock/la-ungs-abre-sus-primeras-jornadas-de-ia-para-pensar-como-ensenar-y-aprender.png",
+    "announcement": "static/images/social/notes/la-ungs-abre-sus-primeras-jornadas-de-ia-para-pensar-como-ensenar-y-aprender.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
