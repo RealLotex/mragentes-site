@@ -12,6 +12,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -275,8 +276,21 @@ def _check_image(path: Path) -> str:
     return ".jpg" if path.suffix.casefold() in {".jpg", ".jpeg"} else ".png"
 
 
-def prepare_release(root: Path, submission: dict, image: Path, local_day: date) -> list[str]:
+def _release_key(local_day: date, edition: str | None = None) -> str:
+    if edition is not None and (
+        not isinstance(edition, str)
+        or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", edition)
+        or len(edition) > 48
+    ):
+        raise ValueError("edition must be a lowercase slug of at most 48 characters")
+    return local_day.isoformat() + (f"-{edition}" if edition is not None else "")
+
+
+def prepare_release(
+    root: Path, submission: dict, image: Path, local_day: date, *, edition: str | None = None,
+) -> list[str]:
     """Write exactly six reviewed artifacts in a clean checkout."""
+    release_key = _release_key(local_day, edition)
     slug = str(portable_slug(submission["title"], max_component_bytes=120))
     suffix = _check_image(image)
     cover_rel = f"static/images/stock/{slug}{suffix}"
@@ -284,7 +298,7 @@ def prepare_release(root: Path, submission: dict, image: Path, local_day: date) 
     social_rel = f"static/images/social/notes/{slug}.jpg"
     queue_rel = ".automation/news/queue/news-queue.json"
     manifest_rel = f".automation/blog/{local_day.isoformat()}-{slug}.json"
-    report_rel = f".automation/reports/editorial-{local_day.isoformat()}.json"
+    report_rel = f".automation/reports/editorial-{release_key}.json"
     paths = [queue_rel, note_rel, cover_rel, social_rel, manifest_rel, report_rel]
     for relative in paths[1:]:
         if (root / relative).exists():
@@ -346,11 +360,11 @@ def prepare_release(root: Path, submission: dict, image: Path, local_day: date) 
         root / report_rel,
         {
             "schema_version": 1,
-            "run_id": f"editorial:{local_day.isoformat()}",
+            "run_id": f"editorial:{local_day.isoformat()}" + (f":{edition}" if edition else ""),
             "status": "prepared",
             "local_date": local_day.isoformat(),
             "created_at": now,
-            "branch": f"automation/editorial/{local_day.isoformat()}",
+            "branch": f"automation/editorial/{release_key}",
             "note_slug": slug,
             "selected_news_ids": [story["id"]],
             "artifacts": {
@@ -367,14 +381,17 @@ def prepare_release(root: Path, submission: dict, image: Path, local_day: date) 
     return paths
 
 
-def release(input_path: Path, image_path: Path, *, dry_run: bool = False) -> str:
+def release(
+    input_path: Path, image_path: Path, *, dry_run: bool = False, edition: str | None = None,
+) -> str:
     local_day = datetime.now(TIMEZONE).date()
+    release_key = _release_key(local_day, edition)
     submission = validate_submission(json.loads(input_path.read_text(encoding="utf-8")), local_day)
     image = image_path.resolve(strict=True)
     _check_image(image)
     slug = str(portable_slug(submission["title"], max_component_bytes=120))
     note_url = f"https://mragentes.com.ar/notas/{slug}/"
-    branch = f"automation/editorial/{local_day.isoformat()}"
+    branch = f"automation/editorial/{release_key}"
     _run(["git", "fetch", "--no-tags", "origin", "main"], ROOT)
     remote = _run(["git", "ls-remote", "--heads", "origin", branch], ROOT)
     if remote:
@@ -408,16 +425,18 @@ def release(input_path: Path, image_path: Path, *, dry_run: bool = False) -> str
         created = True
         if _run(["git", "status", "--porcelain"], worktree):
             raise RuntimeError("new editorial worktree is not clean")
-        report = worktree / f".automation/reports/editorial-{local_day.isoformat()}.json"
+        report = worktree / f".automation/reports/editorial-{release_key}.json"
         if report.exists():
+            if edition and json.loads(report.read_text(encoding="utf-8")).get("note_slug") != slug:
+                raise RuntimeError("edition already belongs to a different note; review it manually")
             safe_to_clean = True
-            return "skipped_valid: today's report already exists on main"
-        if any(
+            return "skipped_valid: this edition's report already exists on main"
+        if edition is None and any(
             f'date: "{local_day.isoformat()}' in path.read_text(encoding="utf-8")
             for path in (worktree / "content/notas").glob("*.md")
         ):
             raise RuntimeError("a note for today exists without a complete editorial report")
-        paths = prepare_release(worktree, submission, image, local_day)
+        paths = prepare_release(worktree, submission, image, local_day, edition=edition)
         _run(["git", "add", "--", *paths], worktree)
         _run([sys.executable, "scripts/scan_secrets.py"], worktree, quiet=True)
         _run(["git", "diff", "--cached", "--check"], worktree)
@@ -441,7 +460,7 @@ def release(input_path: Path, image_path: Path, *, dry_run: bool = False) -> str
                 "user.email=editorial@mragentes.com.ar",
                 "commit",
                 "-m",
-                f"content(editorial): news for {local_day.isoformat()}",
+                f"content(editorial): news for {release_key}",
             ],
             worktree,
         )
@@ -503,9 +522,10 @@ def main() -> int:
     parser.add_argument("--input", type=Path, required=True, help="researched story JSON")
     parser.add_argument("--image", type=Path, required=True, help="JPG or PNG cover")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--edition", help="extra edition slug, only on explicit owner request")
     args = parser.parse_args()
     try:
-        print(release(args.input, args.image, dry_run=args.dry_run))
+        print(release(args.input, args.image, dry_run=args.dry_run, edition=args.edition))
     except (OSError, ValueError, RuntimeError, json.JSONDecodeError) as exc:
         print(f"needs_review: {exc}", file=sys.stderr)
         return 1

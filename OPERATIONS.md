@@ -37,6 +37,17 @@ social independiente. El script no llama directamente a Meta o Cloudflare.
 
 ## Estilo editorial
 
+La prioridad editorial es Argentina. Buscá hechos sobre empresas, pymes, universidades, investigación, trabajo, agro, industria y políticas públicas del país. Antes de elegir, compará al menos cinco candidatos por impacto concreto, novedad, utilidad para usuarios o empresas, alcance y evidencia disponible. Priorizá productos que ya se pueden usar, integraciones MCP y agentes que actúan sobre servicios reales, adopción empresarial y cambios que afectan dinero, trabajo o productividad. El MCP de IOL InvertirOnline es un ejemplo del tipo de historia relevante: una capacidad disponible y sus consecuencias, con límites y permisos verificables. Las jornadas, cursos, efemérides y anuncios institucionales quedan detrás de novedades de mayor impacto; sólo elegirlos si hay un resultado o consecuencia excepcional comprobable.
+
+Buscá en varias familias de fuentes: iProUP, El Cronista/Infotechnology, Ámbito, La Nación Tecnología y medios especializados argentinos como Infotecnología o ITSitio. Contrastá con fuentes originales: páginas de producto, documentación técnica, comunicados y responsables de empresas argentinas, fintechs, bancos, proveedores de software y organismos. Buscá también por nombres de productos y términos como MCP, agentes, integraciones y automatización, sin depender de un único medio ni de resultados genéricos sobre IA. Detectá contenido patrocinado y no lo cuentes como corroboración independiente. Registrá en el resumen de la corrida los cinco candidatos con URL, fecha del hecho, fecha de publicación, consecuencia y motivo de selección o descarte. Consultá las notas recientes para evitar repetir temas. La fecha del hecho importa más que la actualización de una página: no presentes un lanzamiento anterior como de hoy. Si faltan novedades recientes, ampliá la ventana de búsqueda local; una herramienta relevante de semanas anteriores puede superar una jornada de ayer. Elegí una noticia internacional sólo cuando tenga impacto concreto y verificable en Argentina y explicá esa relación desde la apertura. No inventes una conexión argentina. La calidad editorial no bloquea la publicación diaria: elegí la mejor historia verificable y publicá.
+
+Una edición adicional sólo se prepara por pedido explícito del propietario con
+`--edition <identificador>` (por ejemplo, `--edition iol-mcp`). Conserva la fecha real,
+la nota diaria y el límite de seis rutas; usa una rama y un informe propios con el sufijo
+del identificador. Repetir el mismo identificador no crea otra entrega; si pertenece a otra
+nota, devuelve `needs_review`. No uses --edition en la corrida diaria ni para eludir un
+resultado remoto incierto. No se agrega otra tarea programada.
+
 La nota se escribe para una persona que no conoce el tema. Debe permitir reconstruir qué pasó,
 quiénes participaron, cómo se llegó a la noticia y qué cambia. El interés se sostiene con
 información nueva, ejemplos y explicaciones, con libertad de tono, extensión y estructura.
