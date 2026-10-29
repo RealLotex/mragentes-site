@@ -462,7 +462,7 @@ main { flex: 1 0 auto; }
 
 .masthead-inner {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   align-items: center;
   gap: var(--gap);
   min-height: var(--header-h);
@@ -527,10 +527,6 @@ main { flex: 1 0 auto; }
   font-weight: 650;
   border-bottom-color: var(--minio);
 }
-
-.masthead-cta { grid-column: 3; }
-
-.masthead-cta .btn { padding: 0.55em 1rem; font-size: 0.875rem; box-shadow: 2px 2px 0 var(--ink); }
 
 /* Botón de menú: sólo existe en pantallas angostas. */
 .menu-btn {
@@ -1857,8 +1853,7 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 
   .masthead nav a:last-of-type { border-bottom: 0; }
 
-  .masthead-cta { display: none; }
-  .menu-btn { display: flex; }
+  .menu-btn { display: flex; grid-column: 2; }
   .masthead-inner { grid-template-columns: 1fr auto; position: relative; }
   .masthead nav { grid-column: 1 / -1; }
 
@@ -2211,9 +2206,6 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 .home-intro .btn--offer { --btn-bg: var(--offer-accent); border-color: var(--offer-accent); }
 .home-intro .btn--offer:focus-visible { outline-color: var(--offer-accent); }
 
-@media (min-width: 62rem) {
-  .masthead-inner--home { grid-template-columns: auto 1fr; }
-}
 .home-intro-copy .lede { font-size: 1.125rem; line-height: 1.4; max-width: 43ch; }
 .home-intro-copy .btn-row { margin-top: var(--s-2); }
 .colophon .footer-location { margin-block: var(--s-3) var(--s-2); line-height: 1.6; }
