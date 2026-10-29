@@ -17,7 +17,9 @@
 
 <meta name="theme-color" content="#f1ebde">
 <meta name="color-scheme" content="light">
-<meta name="author" content="MR Agentes">
+{{- $authorName := "MR Agentes" }}
+{{- if and .IsPage (eq .Section "notas") }}{{ $authorName = (partial "note-author.html" .).name }}{{ end }}
+<meta name="author" content="{{ $authorName }}">
 <meta name="geo.region" content="AR-S">
 <meta name="geo.placename" content="Gálvez, Santa Fe">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">

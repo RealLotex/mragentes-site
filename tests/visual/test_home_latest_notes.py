@@ -22,6 +22,9 @@ def _build(tmp_path: Path, notes: list[tuple[str, str, str]], body: str = "Texto
     shutil.copyfile(ROOT / "layouts/index.html", tmp_path / "layouts/index.html")
     shutil.copyfile(ROOT / "layouts/partials/colophon.html", tmp_path / "layouts/partials/colophon.html")
     shutil.copyfile(ROOT / "layouts/partials/masthead.html", tmp_path / "layouts/partials/masthead.html")
+    shutil.copyfile(ROOT / "layouts/partials/schema.html", tmp_path / "layouts/partials/schema.html")
+    if (ROOT / "assets/authors").exists():
+        shutil.copytree(ROOT / "assets/authors", tmp_path / "assets/authors")
     (tmp_path / "layouts/notas").mkdir()
     shutil.copyfile(ROOT / "layouts/notas/single.html", tmp_path / "layouts/notas/single.html")
     for partial in (ROOT / "layouts/partials").glob("note-*.html"):
@@ -32,7 +35,7 @@ def _build(tmp_path: Path, notes: list[tuple[str, str, str]], body: str = "Texto
     shutil.copyfile(ROOT / "layouts/_default/single.html", tmp_path / "layouts/_default/single.html")
     shutil.copyfile(ROOT / "content/nosotros.md", tmp_path / "content/nosotros.md")
     (tmp_path / "layouts/_default/baseof.html").write_text(
-        '{{ partial "masthead.html" . }}<main>{{ block "main" . }}{{ end }}</main>{{ partial "colophon.html" . }}', encoding="utf-8"
+        '{{ partial "schema.html" . }}{{ partial "masthead.html" . }}<main>{{ block "main" . }}{{ end }}</main>{{ partial "colophon.html" . }}', encoding="utf-8"
     )
     (tmp_path / "layouts/partials/closer.html").write_text(
         '<a href="/contacto/">Contame tu caso</a>', encoding="utf-8"

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -65,3 +66,32 @@ def test_related_notes_have_graphic_cards_and_exclude_current_draft_and_future(t
     assert links == ["/notas/second/", "/notas/old/"]
     assert 'class="note-related-grid"' in related
     assert "<img " in related
+
+
+@pytest.mark.trace("NOTE-LAYOUT-004")
+@pytest.mark.red_expected
+@pytest.mark.visual
+def test_notes_credit_marcos_with_portrait_and_person_schema(tmp_path: Path) -> None:
+    _build(tmp_path, [("latest", "2020-01-02", "")])
+    note = _note(tmp_path)
+    byline = note.split('class="note-author"', 1)[1].split("</a>", 1)[0]
+    assert "Marcos Rosich" in byline
+    portrait = re.search(r'src="([^"]+)"', byline).group(1)
+    assert "/authors/marcos-rosich" in portrait and portrait.endswith(".webp")
+    assert (tmp_path / "public" / portrait.lstrip("/")).is_file()
+    graph = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', note).group(1))["@graph"]
+    article = next(node for node in graph if node["@type"] == "BlogPosting")
+    assert article["author"]["@type"] == "Person"
+    assert article["author"]["name"] == "Marcos Rosich"
+    assert article["author"]["url"].endswith("/nosotros/")
+    assert article["publisher"]["@id"].endswith("#mragentes")
+
+
+@pytest.mark.trace("NOTE-LAYOUT-005")
+@pytest.mark.red_expected
+@pytest.mark.visual
+def test_note_promo_has_one_contact_button_without_duplicate_link(tmp_path: Path) -> None:
+    _build(tmp_path, [("latest", "2020-01-02", "")])
+    promo = _note(tmp_path).split('class="note-promo"', 1)[1].split("</div>", 1)[0]
+    assert re.findall(r'<a\b[^>]*href="([^"]+)"[^>]*>(.*?)</a>', promo) == [("/contacto/", "Contactanos")]
+    assert 'class="btn"' in promo

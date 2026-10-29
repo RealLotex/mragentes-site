@@ -1,5 +1,6 @@
 {{ define "main" }}
 {{- $shareText := printf "%s — %s" .Title .Permalink -}}
+{{- $author := partial "note-author.html" . -}}
 
 <article class="note sheet">
   <nav class="note-breadcrumbs col-plate" aria-label="Ruta de navegación">
@@ -14,8 +15,8 @@
     <div class="note-meta-row">
       <div class="note-byline">
         <a class="note-author" href="{{ "/nosotros/" | relURL }}">
-          <img src="/faviconhand512.png" width="34" height="34" alt="" aria-hidden="true">
-          <span>MR Agentes</span>
+          <img src="{{ $author.photo.RelPermalink }}" width="56" height="56" alt="" decoding="async">
+          <span>{{ $author.name }}</span>
         </a>
         <p class="note-dateline">
           <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
@@ -71,8 +72,7 @@
         <p class="key">MR Agentes · Servicios</p>
         <h2>La IA también puede trabajar en tu negocio.</h2>
         <p>Automatizaciones y agentes para resolver tareas de todos los días.</p>
-        <a class="btn" href="{{ "/servicios/" | relURL }}">Conocé los servicios</a>
-        <a class="arrow-link" href="{{ "/contacto/" | relURL }}">Contactanos</a>
+        <a class="btn" href="{{ "/contacto/" | relURL }}">Contactanos</a>
       </div>
       <div class="note-sidebar-about">
         <p class="key">Detrás de estas notas</p>
