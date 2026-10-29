@@ -171,9 +171,12 @@ def test_contact_button_is_unique_on_home_and_kept_in_other_page_headers(tmp_pat
 @pytest.mark.trace("HOME-NOTES-008")
 @pytest.mark.red_expected
 @pytest.mark.visual
-def test_promotional_banner_has_a_visible_red_tint() -> None:
+def test_promotional_banner_has_a_visible_green_tint_and_border() -> None:
     css = (ROOT / "assets/css/main.css").read_text(encoding="utf-8")
-    banner = re.search(r"\.cover--compact\s*\{([^}]+)", css).group(1)
-    color = re.search(r"background:\s*#([0-9a-f]{6})", banner).group(1)
+    banner = re.search(r"\.home-intro\s*\{([^}]+)", css).group(1)
+    background = re.search(r"background:\s*#([0-9a-f]{6})", banner)
+    assert background, "Promotional block must have its own green background"
+    color = background.group(1)
     red, green, blue = (int(color[i:i + 2], 16) for i in (0, 2, 4))
-    assert red - green >= 35 and red - blue >= 45, "Banner must read as tinted red rather than neutral paper"
+    assert green > red and green > blue, "Promotional block must retain its green tint"
+    assert "border:" in banner and "border-left:" in banner
