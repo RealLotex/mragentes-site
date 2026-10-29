@@ -76,6 +76,7 @@ def test_notes_credit_marcos_with_portrait_and_person_schema(tmp_path: Path) -> 
     note = _note(tmp_path)
     byline = note.split('class="note-author"', 1)[1].split("</a>", 1)[0]
     assert "Marcos Rosich" in byline
+    assert "<small>MR AGENTES</small>" in byline
     portrait = re.search(r'src="([^"]+)"', byline).group(1)
     assert "/authors/marcos-rosich" in portrait and portrait.endswith(".webp")
     assert (tmp_path / "public" / portrait.lstrip("/")).is_file()

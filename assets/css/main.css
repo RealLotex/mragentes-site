@@ -2313,6 +2313,8 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 .note-byline { display: grid; gap: var(--s-2); }
 .note-author { display: inline-flex; align-items: center; gap: .55rem; width: fit-content; font-family: var(--f-display); font-size: .9375rem; font-weight: 650; text-decoration: none; }
 .note-author img { width: 56px; height: 56px; flex-shrink: 0; object-fit: cover; border-radius: 50%; }
+.note-author-label { display: grid; gap: .2rem; }
+.note-author-label small { font-family: var(--f-mono); font-size: .625rem; font-weight: 500; letter-spacing: .1em; line-height: 1.4; }
 .note-dateline { display: flex; flex-wrap: wrap; gap: .55rem; color: var(--ink-55); font-family: var(--f-display); font-size: var(--t-sm); }
 .note-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: end; gap: var(--s-2) var(--s-3); max-width: 24rem; }
 .note-actions .btn { padding: .6em .9em; font-size: var(--t-sm); }
