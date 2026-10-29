@@ -13,9 +13,10 @@
     var footer = document.querySelector("[data-push-btn]");
     if (!panel || !footer) return;
     var activate = panel.querySelector("[data-push-prompt-activate]");
+    var activateLabel = panel.querySelector("[data-push-prompt-label]");
     var status = panel.querySelector("[data-push-prompt-status]");
     var footerStatus = document.querySelector("[data-push-status]");
-    if (!activate || !status) return;
+    if (!activate || !activateLabel || !status) return;
 
     var timer = null;
     var wasShown = false;
@@ -72,7 +73,7 @@
       }
       if (!panel.hidden) {
         activate.disabled = footer.disabled;
-        activate.textContent = footer.disabled ? "Activando avisos…" : "Activar notificaciones ↗";
+        activateLabel.textContent = footer.disabled ? "Activando avisos…" : "Activar notificaciones";
         panel.setAttribute("aria-busy", String(footer.disabled));
         status.textContent = activationRequested && footerStatus ? footerStatus.textContent : "";
         return;

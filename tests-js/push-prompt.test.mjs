@@ -67,6 +67,11 @@ describe("Invitación para activar avisos", () => {
     expect(h.panel.hidden).toBe(false);
     expect(h.panel.textContent).toContain("Tu competencia ya usa IA.");
     expect(h.panel.textContent).toContain("Activá las notificaciones para mantenerte actualizado");
+    expect(h.panel.querySelector(".push-prompt-row")?.contains(h.activate)).toBe(true);
+    expect(h.panel.querySelector(".push-prompt-row")?.querySelector("#push-prompt-copy")).not.toBeNull();
+    expect(h.activate.querySelector("svg")).not.toBeNull();
+    expect(h.panel.textContent).not.toMatch(/Notas de MR Agentes|Un aviso por cada nota nueva|Ahora no/i);
+    expect(h.panel.querySelectorAll("button")).toHaveLength(2);
     expect(h.window.Notification.requestPermission).not.toHaveBeenCalled();
     expect(h.window.document.activeElement).toBe(h.footer);
     expect(h.panel.getAttribute("aria-modal")).toBe("false");
@@ -115,6 +120,8 @@ describe("Invitación para activar avisos", () => {
     expect(h.calls.permission).toHaveLength(1);
     expect(h.calls.subscribe).toHaveLength(1);
     expect(view.activate.disabled).toBe(true);
+    expect(view.activate.querySelector("svg")).not.toBeNull();
+    expect(view.activate.textContent).toContain("Activando avisos");
     expect(view.panel.hidden).toBe(false);
     release(new Response("", { status: 201 }));
     await h.flush(20);
@@ -133,6 +140,8 @@ describe("Invitación para activar avisos", () => {
     await h.flush(24);
     expect(view.panel.hidden).toBe(false);
     expect(view.activate.disabled).toBe(false);
+    expect(view.activate.querySelector("svg")).not.toBeNull();
+    expect(view.activate.textContent).toContain("Activar notificaciones");
     expect(view.status.textContent).toMatch(/No se pudo/);
     expect(h.button.getAttribute("aria-pressed")).toBe("false");
     expect(h.calls.unsubscribe).toHaveLength(1);
