@@ -92,3 +92,12 @@ defaultContentLanguage = "es"
 
 [build]
   writeStats = false
+
+# Las portadas conservan su URL pública y también permiten miniaturas con Hugo.
+[module]
+  [[module.mounts]]
+    source = "assets"
+    target = "assets"
+  [[module.mounts]]
+    source = "static/images/stock"
+    target = "assets/note-images"

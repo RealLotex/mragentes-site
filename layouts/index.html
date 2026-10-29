@@ -1,58 +1,26 @@
 {{ define "main" }}
 
-{{- /* ==========================================================================
-     PORTADA — apertura de revista, no "hero"
-
-     El titular arranca en la columna de claves, o sea a la izquierda del cuerpo
-     de texto, y la lámina de Miguel Ángel corta a sangre de borde a borde con el
-     epígrafe colgado en el margen. La primera versión de esta página era un
-     titular centrado en la medida de lectura con media pantalla vacía al lado.
-     ====================================================================== */ -}}
-<section class="cover sheet">
-
-  <div class="cover-head">
-    <h1>Automatizamos lo que hoy <span class="mark">hacés a mano</span>.</h1>
-  </div>
-
-  <div class="cover-sub">
-    <p class="lede">
-      Facturas que se emiten y se envían solas. Consultas de WhatsApp respondidas a
-      las tres de la mañana. Datos que dejan de cargarse dos veces.
-    </p>
-
-    <p class="margin-note col-aside">
-      Marcos Rosich trabaja desde Gálvez. Quien recibe tu primera consulta es también
-      quien construye el sistema y lo atiende cuando algo falla.
-    </p>
-
-    <div class="btn-row">
-      <a class="btn btn--minio" href="{{ "/contacto/" | relURL }}">Contar mi caso</a>
-      <a class="btn btn--ghost" href="{{ "/servicios/" | relURL }}">Ver qué se automatiza</a>
+{{- /* La oferta abre la página; las notas muestran actividad y criterio. */ -}}
+<section class="cover cover--compact sheet">
+  <div class="home-intro col-plate">
+    <div class="home-intro-title">
+      <p class="key">Automatización · Gálvez, Santa Fe</p>
+      <h1>Automatizamos lo que hoy <span class="mark">hacés a mano</span>.</h1>
+    </div>
+    <div class="home-intro-copy">
+      <p class="lede">Facturas que se emiten y se envían solas. Consultas de WhatsApp
+        respondidas a las tres de la mañana. Datos que dejan de cargarse dos veces.</p>
+      <div class="btn-row">
+        <a class="btn btn--minio" href="{{ "/contacto/" | relURL }}">Contar mi caso</a>
+        <a class="arrow-link" href="{{ "/servicios/" | relURL }}">Ver qué se automatiza</a>
+      </div>
+      <p class="home-byline">Marcos Rosich trabaja desde Gálvez. Quien recibe tu consulta
+        es también quien construye el sistema y lo atiende cuando algo falla.</p>
     </div>
   </div>
-
-  <figure class="plate plate--bleed">
-    <img src="/creationofadam.png" width="986" height="300" fetchpriority="high"
-         alt="Detalle del fresco La creación de Adán: dos manos que casi se tocan, la de Dios extendida y la de Adán a punto de recibir el impulso.">
-    <figcaption>
-      <b>fig. 1</b>
-      <span>Miguel Ángel Buonarroti, <i>La creación de Adán</i> (detalle), c.&nbsp;1512.
-        Fresco, Capilla Sixtina. Dominio público.</span>
-      <span>Toda la escena pasa en el espacio entre dos dedos: una mano le transfiere a
-        la otra la capacidad de actuar. Eso es delegar una tarea, y de ahí sale la mano
-        grabada que usamos como marca.</span>
-    </figcaption>
-  </figure>
-
-  {{- /* Datos, no estadísticas: cada línea es comprobable en la primera charla. */ -}}
-  <dl class="datastrip col-plate">
-    <div><dt>Dónde</dt><dd>Gálvez, Santa Fe</dd></div>
-    <div><dt>Quién atiende</dt><dd>Marcos Rosich</dd></div>
-    <div><dt>Herramientas</dt><dd>n8n · Make · WhatsApp API</dd></div>
-    <div><dt>Presupuesto</dt><dd>Cerrado, por proyecto</dd></div>
-  </dl>
-
 </section>
+
+{{ partial "home-latest-notes.html" . }}
 
 
 {{- /* ==========================================================================
@@ -234,40 +202,6 @@
 </section>
 
 
-{{- /* ==========================================================================
-     IV · NOTAS — índice a sangre, fechas colgadas en el margen.
-     ====================================================================== */ -}}
-{{- $notas := first 4 (where site.RegularPages "Section" "notas") }}
-{{- with $notas }}
-<section class="band band--tight sheet" aria-labelledby="t-notas">
-  <div class="band-head band-head--numbered">
-    <p class="numeral">IV<small>Notas</small></p>
-    <hgroup>
-      <h2 id="t-notas">Lo último que escribimos</h2>
-      <p>Qué está pasando en automatización e IA y qué implica para una pyme argentina,
-         con las fuentes citadas al pie de cada nota.</p>
-    </hgroup>
-  </div>
-
-  <ul class="index col-plate">
-    {{- range . }}
-    <li>
-      <a href="{{ .RelPermalink }}">
-        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
-        <div>
-          <h3>{{ .Title }}</h3>
-          <p>{{ .Description | default .Summary | plainify | truncate 165 }}</p>
-        </div>
-      </a>
-    </li>
-    {{- end }}
-  </ul>
-
-  <p class="col-plate" style="margin-top:var(--s-4)">
-    <a class="arrow-link" href="{{ "/notas/" | relURL }}">Todas las notas</a>
-  </p>
-</section>
-{{- end }}
 
 
 {{ partial "closer.html" . }}

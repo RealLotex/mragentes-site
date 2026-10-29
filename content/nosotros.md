@@ -14,6 +14,19 @@ hablás en la primera consulta es la misma que escribe el flujo, la misma que lo
 en producción y la misma que atiende el teléfono cuando algo se rompe un martes a la
 tarde.
 
+<figure class="plate">
+  <img src="/creationofadam.png" width="986" height="300" loading="lazy" decoding="async"
+       alt="Detalle del fresco La creación de Adán: dos manos que casi se tocan, la de Dios extendida y la de Adán a punto de recibir el impulso.">
+  <figcaption>
+    <b>fig. 1</b>
+    <span>Miguel Ángel Buonarroti, <i>La creación de Adán</i> (detalle), c. 1512.
+      Fresco, Capilla Sixtina. Dominio público.<br>
+      Toda la escena pasa en el espacio entre dos dedos: una mano le transfiere a
+      la otra la capacidad de actuar. Eso es delegar una tarea, y de ahí sale la mano
+      grabada que usamos como marca.</span>
+  </figcaption>
+</figure>
+
 ## Qué implica que sea uno solo
 
 Conviene decirlo antes de que lo descubras vos.

@@ -26,6 +26,11 @@ jobs:
           cache: pip
       - name: Install locked Python test dependencies
         run: python -m pip install --require-hashes -r requirements-test.lock.txt
+      - name: Setup Hugo for rendered contracts
+        uses: peaceiris/actions-hugo@6e295a6a0c9087bf374299e9d67f9d2edab9f18f
+        with:
+          hugo-version: "0.128.0"
+          extended: true
       - name: Run Python contracts
         run: python -m pytest -q
       - name: Install locked JavaScript dependencies
