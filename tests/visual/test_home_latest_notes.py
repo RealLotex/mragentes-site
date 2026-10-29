@@ -20,13 +20,14 @@ def _build(tmp_path: Path, notes: list[tuple[str, str, str]]) -> str:
     (tmp_path / "content/notas").mkdir(parents=True)
     shutil.copyfile(ROOT / "hugo.toml", tmp_path / "hugo.toml")
     shutil.copyfile(ROOT / "layouts/index.html", tmp_path / "layouts/index.html")
+    shutil.copyfile(ROOT / "layouts/partials/colophon.html", tmp_path / "layouts/partials/colophon.html")
     for partial in (ROOT / "layouts/partials").glob("home-*.html"):
         shutil.copyfile(partial, tmp_path / "layouts/partials" / partial.name)
     (tmp_path / "layouts/_default").mkdir()
     shutil.copyfile(ROOT / "layouts/_default/single.html", tmp_path / "layouts/_default/single.html")
     shutil.copyfile(ROOT / "content/nosotros.md", tmp_path / "content/nosotros.md")
     (tmp_path / "layouts/_default/baseof.html").write_text(
-        '<main>{{ block "main" . }}{{ end }}</main>', encoding="utf-8"
+        '<main>{{ block "main" . }}{{ end }}</main>{{ partial "colophon.html" . }}', encoding="utf-8"
     )
     (tmp_path / "layouts/partials/closer.html").write_text(
         '<a href="/contacto/">Contame tu caso</a>', encoding="utf-8"
@@ -133,3 +134,18 @@ def test_brand_illustration_moves_to_about_with_its_caption(tmp_path: Path) -> N
     assert "La creación de Adán" in about and "Dominio público" in about
     assert "de ahí sale la mano" in about
     assert 'loading="lazy"' in about
+
+
+@pytest.mark.trace("HOME-NOTES-006")
+@pytest.mark.red_expected
+@pytest.mark.visual
+def test_home_keeps_the_short_offer_and_moves_location_to_visible_footer(tmp_path: Path) -> None:
+    home = _build(tmp_path, [])
+    offer = home.split('<section class="cover', 1)[1].split("</section>", 1)[0]
+    footer = home.split("<footer", 1)[1]
+    assert "Contactanos para conocer qué herramientas de inteligencia artificial podés aplicar a tu negocio" in offer
+    assert "Automatización · Gálvez" not in offer
+    assert "Marcos Rosich trabaja desde Gálvez" not in offer
+    assert "Facturas que se emiten" not in offer
+    assert "Contar mi caso" in offer
+    assert "Automatización · Gálvez · Santa Fe" in footer
