@@ -1,0 +1,22 @@
+{{- $page := .page -}}
+{{- $image := false -}}
+{{- with $page.Params.image -}}
+  {{- if hasPrefix . "/images/stock/" -}}
+    {{- $image = resources.Get (replace . "/images/stock/" "note-images/") -}}
+  {{- end -}}
+{{- end -}}
+{{- if $image -}}
+  {{- $small := $image.Resize (printf "%dx webp q80" .small) -}}
+  {{- $large := $image.Resize (printf "%dx webp q80" .large) -}}
+  <img src="{{ $large.RelPermalink }}"
+       srcset="{{ $small.RelPermalink }} {{ .small }}w, {{ $large.RelPermalink }} {{ .large }}w"
+       sizes="{{ .sizes }}"
+       width="{{ $large.Width }}" height="{{ $large.Height }}"
+       alt="{{ $page.Params.image_alt | default $page.Title }}"
+       loading="{{ .loading }}" decoding="async"{{ if .priority }} fetchpriority="high"{{ end }}>
+{{- else -}}
+  {{- with $page.Params.image -}}
+  <img src="{{ . | relURL }}" alt="{{ $page.Params.image_alt | default $page.Title }}"
+       loading="{{ $.loading }}" decoding="async">
+  {{- end -}}
+{{- end -}}

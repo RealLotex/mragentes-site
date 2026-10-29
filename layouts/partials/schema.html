@@ -48,6 +48,7 @@
 {{- end -}}
 
 {{- if eq .Section "notas" -}}
+  {{- $author := partial "note-author.html" . -}}
   {{- $article := dict
     "@type" "BlogPosting"
     "@id" (printf "%s#nota" .Permalink)
@@ -59,7 +60,7 @@
     "inLanguage" "es-AR"
     "wordCount" .WordCount
     "isAccessibleForFree" true
-    "author" (dict "@id" (printf "%s#mragentes" site.BaseURL))
+    "author" (dict "@type" "Person" "name" $author.name "url" $author.url "image" $author.photo.Permalink)
     "publisher" (dict "@id" (printf "%s#mragentes" site.BaseURL))
     "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
   -}}

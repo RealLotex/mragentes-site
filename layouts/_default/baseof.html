@@ -17,7 +17,9 @@
 
 <meta name="theme-color" content="#f1ebde">
 <meta name="color-scheme" content="light">
-<meta name="author" content="MR Agentes">
+{{- $authorName := "MR Agentes" }}
+{{- if and .IsPage (eq .Section "notas") }}{{ $authorName = (partial "note-author.html" .).name }}{{ end }}
+<meta name="author" content="{{ $authorName }}">
 <meta name="geo.region" content="AR-S">
 <meta name="geo.placename" content="Gálvez, Santa Fe">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
@@ -33,7 +35,7 @@
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 {{- end }}
 
-{{- $js := slice (resources.Get "js/site.js") (resources.Get "js/push.js") | resources.Concat "js/site.bundle.js" | minify | fingerprint "sha256" }}
+{{- $js := slice (resources.Get "js/site.js") (resources.Get "js/push.js") (resources.Get "js/push-prompt.js") | resources.Concat "js/site.bundle.js" | minify | fingerprint "sha256" }}
 <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
 {{- with resources.Get "js/impact-calculator.js" }}
   {{- $calculator := . | minify | fingerprint "sha256" }}
@@ -87,5 +89,6 @@
 </main>
 
 {{ partial "colophon.html" . }}
+{{ partial "push-prompt.html" . }}
 </body>
 </html>

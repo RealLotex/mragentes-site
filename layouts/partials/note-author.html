@@ -1,0 +1,2 @@
+{{- $photo := (resources.Get "authors/marcos-rosich.jpg").Resize "112x webp q85" -}}
+{{- return (dict "name" "Marcos Rosich" "url" ("/nosotros/" | absURL) "photo" $photo) -}}

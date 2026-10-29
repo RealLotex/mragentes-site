@@ -1912,5 +1912,77 @@
     "test_paths": [
       "tests-js/worker-subscriptions.test.mjs::[PUSH-WELCOME-010] feedback de alta dice si la bienvenida quedó programada, no si ya se entregó"
     ]
+  },
+  {
+    "id": "PUSH-PROMPT-001",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "aparece después de leer sin pedir permiso ni mover el foco",
+    "source_symbols": [
+      "assets/js/push-prompt.js",
+      "layouts/partials/push-prompt.html"
+    ],
+    "test_paths": [
+      "tests-js/push-prompt.test.mjs::[PUSH-PROMPT-001] aparece después de leer sin pedir permiso ni mover el foco"
+    ]
+  },
+  {
+    "id": "PUSH-PROMPT-002",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "no invita con avisos activos, bloqueados, pendientes o no disponibles",
+    "source_symbols": [
+      "assets/js/push-prompt.js",
+      "layouts/partials/push-prompt.html"
+    ],
+    "test_paths": [
+      "tests-js/push-prompt.test.mjs::[PUSH-PROMPT-002] no invita con avisos activos, bloqueados, pendientes o no disponibles"
+    ]
+  },
+  {
+    "id": "PUSH-PROMPT-003",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "cerrar respeta siete días y Escape restaura el foco",
+    "source_symbols": [
+      "assets/js/push-prompt.js",
+      "layouts/partials/push-prompt.html"
+    ],
+    "test_paths": [
+      "tests-js/push-prompt.test.mjs::[PUSH-PROMPT-003] cerrar respeta siete días y Escape restaura el foco"
+    ]
+  },
+  {
+    "id": "PUSH-PROMPT-004",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "activa mediante el cliente existente y espera confirmación remota",
+    "source_symbols": [
+      "assets/js/push-prompt.js",
+      "layouts/partials/push-prompt.html"
+    ],
+    "test_paths": [
+      "tests-js/push-prompt.test.mjs::[PUSH-PROMPT-004] activa mediante el cliente existente y espera confirmación remota"
+    ]
+  },
+  {
+    "id": "PUSH-PROMPT-005",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "conserva el error y permite reintentar sin anunciar un alta falsa",
+    "source_symbols": [
+      "assets/js/push-prompt.js",
+      "layouts/partials/push-prompt.html"
+    ],
+    "test_paths": [
+      "tests-js/push-prompt.test.mjs::[PUSH-PROMPT-005] conserva el error y permite reintentar sin anunciar un alta falsa"
+    ]
+  },
+  {
+    "id": "PUSH-PROMPT-006",
+    "initial_state": "RED_EXPECTED",
+    "requirement": "tolera almacenamiento bloqueado y no reaparece al cerrarlo",
+    "source_symbols": [
+      "assets/js/push-prompt.js",
+      "layouts/partials/push-prompt.html"
+    ],
+    "test_paths": [
+      "tests-js/push-prompt.test.mjs::[PUSH-PROMPT-006] tolera almacenamiento bloqueado y no reaparece al cerrarlo"
+    ]
   }
 ]
