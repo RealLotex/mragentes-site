@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 33,
-  "updated_at": "2026-10-28T08:02:50.381633Z",
+  "revision": 34,
+  "updated_at": "2026-10-29T08:02:52.570449Z",
   "items": [
     {
       "schema_version": 1,
@@ -1118,6 +1118,31 @@
       "consumed_by": "la-ungs-abre-sus-primeras-jornadas-de-ia-para-pensar-como-ensenar-y-aprender",
       "consumed_at": "2026-10-28T08:02:50.381633Z",
       "id": "news-v1-4dcbf6afd699fec9"
+    },
+    {
+      "schema_version": 1,
+      "title": "La IA santafesina que detecta malezas llegará de fábrica a pulverizadoras brasileñas",
+      "canonical_url": "https://www.lanacion.com.ar/economia/campo/ponemos-la-inteligencia-artificial-una-empresa-argentina-cerro-una-alianza-con-un-gigante-brasileno-nid05102026/",
+      "source": "LA NACION",
+      "entity": "LA NACION",
+      "published_at": "2026-10-05T12:00:00Z",
+      "discovered_at": "2026-10-29T08:02:52.570449Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.lanacion.com.ar/economia/campo/ponemos-la-inteligencia-artificial-una-empresa-argentina-cerro-una-alianza-con-un-gigante-brasileno-nid05102026/",
+          "claim": "DeepAgro acordó integrar su sistema SprAI en equipos selectivos de Jacto. Cómo funciona y qué muestran las pruebas en Brasil."
+        }
+      ],
+      "tags": [
+        "inteligencia artificial",
+        "agro",
+        "Argentina",
+        "automatización"
+      ],
+      "consumed_by": "la-ia-santafesina-que-detecta-malezas-llegara-de-fabrica-a-pulverizadoras-brasilenas",
+      "consumed_at": "2026-10-29T08:02:52.570449Z",
+      "id": "news-v1-649356ef3e323d3c"
     }
   ]
 }

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-10-29",
+  "status": "prepared",
+  "local_date": "2026-10-29",
+  "created_at": "2026-10-29T08:02:52.570449Z",
+  "branch": "automation/editorial/2026-10-29",
+  "note_slug": "la-ia-santafesina-que-detecta-malezas-llegara-de-fabrica-a-pulverizadoras-brasilenas",
+  "selected_news_ids": [
+    "news-v1-649356ef3e323d3c"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-10-29-la-ia-santafesina-que-detecta-malezas-llegara-de-fabrica-a-pulverizadoras-brasilenas.json",
+    "note": "content/notas/la-ia-santafesina-que-detecta-malezas-llegara-de-fabrica-a-pulverizadoras-brasilenas.md",
+    "cover": "static/images/stock/la-ia-santafesina-que-detecta-malezas-llegara-de-fabrica-a-pulverizadoras-brasilenas.png",
+    "announcement": "static/images/social/notes/la-ia-santafesina-que-detecta-malezas-llegara-de-fabrica-a-pulverizadoras-brasilenas.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}

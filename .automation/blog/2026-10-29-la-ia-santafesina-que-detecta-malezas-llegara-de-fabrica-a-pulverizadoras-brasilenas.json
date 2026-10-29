@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-29:la-ia-santafesina-que-detecta-malezas-llegara-de-fabrica-a-pulverizadoras-brasilenas",
+  "status": "prepared",
+  "local_date": "2026-10-29",
+  "created_at": "2026-10-29T08:02:52.570449Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/la-ia-santafesina-que-detecta-malezas-llegara-de-fabrica-a-pulverizadoras-brasilenas.md",
+      "sha256": "18c46f86700a98743cc7e891e85941ae50951f90d9306d8db07ba85389cfa29c"
+    },
+    "asset": {
+      "path": "static/images/stock/la-ia-santafesina-que-detecta-malezas-llegara-de-fabrica-a-pulverizadoras-brasilenas.png",
+      "sha256": "0facebcad24c7f49ebf86be9576a3808f79dff55661021263efc7bb64e86fa36"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/la-ia-santafesina-que-detecta-malezas-llegara-de-fabrica-a-pulverizadoras-brasilenas.jpg",
+      "sha256": "763a6570e51126be95701471583b3bc7a2694d902cb9420b2cfa83777a2eeeec"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "95d0ed289ea3dd81dc62a3f542d9066d7aa51a4c864f5cf53226f09d282766d3"
+    }
+  },
+  "sources": [
+    "https://www.lanacion.com.ar/economia/campo/ponemos-la-inteligencia-artificial-una-empresa-argentina-cerro-una-alianza-con-un-gigante-brasileno-nid05102026/",
+    "https://deepagro.com/blog/",
+    "https://deepagro.com/producto/",
+    "https://deepagro.com/blog/amaggi-apuesta-por-deepagro/",
+    "https://news.agrofy.com.ar/noticia/216731/rosario-equipar-gigante-global-maquinaria-trabajar-productor-soja-mas-grande-mundo-es-hubiera-agrono"
+  ]
+}
