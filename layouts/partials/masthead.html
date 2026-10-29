@@ -1,5 +1,5 @@
 <header class="masthead">
-  <div class="masthead-inner">
+  <div class="masthead-inner{{ if .IsHome }} masthead-inner--home{{ end }}">
 
     {{- /* La marca es la mano grabada. El logotipo azul anterior no aportaba
            nada que la mano no diga mejor, y peleaba con la paleta. */ -}}
@@ -17,9 +17,11 @@
       {{- end }}
     </nav>
 
+    {{- if not .IsHome }}
     <div class="masthead-cta">
-      <a class="btn btn--minio" href="{{ "/contacto/" | relURL }}">Escribinos</a>
+      <a class="btn btn--minio" href="{{ "/contacto/" | relURL }}">Contactanos</a>
     </div>
+    {{- end }}
 
     {{- /* Nace oculto: sin JavaScript el <nav> queda visible en el flujo y un
            botón que no hace nada sólo confunde. site.js lo revela. */ -}}

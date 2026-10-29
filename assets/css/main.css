@@ -2187,3 +2187,86 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
   .tool-card,
   .route-list > li { min-height: auto; }
 }
+
+/* Portada: oferta breve, notas con sus ilustraciones y acceso a servicios. */
+.cover--compact {
+  padding-block: var(--s-4) var(--s-2);
+}
+
+.home-intro {
+  --offer-accent: #345347;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--s-4);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: #d5ddd5;
+  border: var(--hair) solid #b6c4b8;
+  border-left: 4px solid var(--offer-accent);
+}
+
+.home-intro > * { min-width: 0; }
+.cover--compact h1 { max-width: 22ch; font-size: clamp(2rem, 2.7vw, 2.5rem); line-height: 1.05; }
+.home-intro .mark { background-image: linear-gradient(var(--offer-accent), var(--offer-accent)); white-space: nowrap; }
+.home-intro .btn--offer { --btn-bg: var(--offer-accent); border-color: var(--offer-accent); }
+.home-intro .btn--offer:focus-visible { outline-color: var(--offer-accent); }
+
+@media (min-width: 62rem) {
+  .masthead-inner--home { grid-template-columns: auto 1fr; }
+}
+.home-intro-copy .lede { font-size: 1.125rem; line-height: 1.4; max-width: 43ch; }
+.home-intro-copy .btn-row { margin-top: var(--s-2); }
+.colophon .footer-location { margin-block: var(--s-3) var(--s-2); line-height: 1.6; }
+
+.home-notes { padding-top: var(--s-3); }
+.home-notes-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: var(--s-3);
+  padding-top: var(--s-3);
+  margin-bottom: var(--s-4);
+  border-top: 2px solid var(--ink);
+}
+
+.home-notes-head .key { color: var(--minio-ink); margin-bottom: var(--s-2); }
+.home-notes-head h2 { font-size: clamp(1.35rem, 2.3vw, 1.85rem); line-height: 1.12; }
+.home-notes-head > a { flex-shrink: 0; }
+.latest-grid { display: grid; grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)); gap: var(--s-3); }
+.latest-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.latest-grid--1 { grid-template-columns: minmax(0, 1fr); max-width: 48rem; }
+.latest-note { min-width: 0; border-bottom: var(--hair) solid var(--rule); }
+.latest-note-link { display: flex; flex-direction: column; height: 100%; padding-bottom: var(--s-3); text-decoration: none; }
+.latest-note-link img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--bone-2); }
+.latest-note-meta { margin-block: var(--s-2); color: var(--minio-ink); font-family: var(--f-data); font-size: var(--t-xs); }
+.latest-note h3 { font-size: clamp(1.1rem, 1.4vw, 1.3rem); font-stretch: 105%; line-height: 1.14; text-wrap: pretty; }
+.latest-note--lead h3 { font-size: clamp(1.4rem, 2.2vw, 1.9rem); }
+.latest-note-link:hover h3 { color: var(--minio-ink); }
+.latest-note-summary { margin-top: var(--s-2); color: var(--ink-70); font-size: 1rem; line-height: 1.45; }
+.latest-note--lead .latest-note-summary { font-size: 1.125rem; }
+.latest-note-read { margin-top: auto; padding-top: var(--s-3); color: var(--minio-ink); font-family: var(--f-display); font-size: var(--t-sm); font-weight: 600; }
+.latest-note-placeholder { display: flex; flex-direction: column; justify-content: center; padding: var(--s-3); aspect-ratio: 16 / 9; background: var(--bone-2); color: var(--minio-ink); font-family: var(--f-display); font-weight: 700; }
+.latest-note-placeholder > span { margin-top: var(--s-2); font-family: var(--f-data); font-size: var(--t-xs); font-weight: 400; }
+
+@media (min-width: 42rem) and (max-width: 61.99rem) {
+  .latest-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .latest-grid--3 .latest-note--lead { grid-column: 1 / -1; }
+  .latest-note--lead img { max-height: 23rem; }
+}
+
+@media (max-width: 61.99rem) {
+  .home-intro { grid-template-columns: minmax(0, 1fr); gap: var(--s-3); }
+  .cover--compact h1 { max-width: 22ch; font-size: clamp(1.9rem, 5vw, 2.7rem); }
+  .home-intro-copy .lede { max-width: 55ch; }
+  .home-notes-head { flex-wrap: wrap; }
+}
+
+@media (max-width: 41.99rem) {
+  .cover--compact { padding-block: var(--s-3) var(--s-2); }
+  .cover--compact h1 { font-size: clamp(1.4rem, 6.6vw, 1.9rem); font-stretch: 100%; }
+  .home-intro-copy .lede { font-size: 1.125rem; }
+  .home-notes-head { margin-bottom: var(--s-3); }
+  .latest-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
+  .latest-note h3 { font-size: 1.4rem; }
+  .latest-note-summary { font-size: 1.0625rem; }
+}

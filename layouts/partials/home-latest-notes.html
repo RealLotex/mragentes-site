@@ -1,0 +1,44 @@
+{{- $notes := first 3 ((where site.RegularPages "Section" "notas").ByDate.Reverse) -}}
+{{- with $notes }}
+<section class="band band--tight sheet home-notes" aria-labelledby="t-notas">
+  <header class="home-notes-head col-plate">
+    <div>
+      <p class="key">Últimas notas</p>
+      <h2 id="t-notas">IA y automatización: lo que está pasando</h2>
+    </div>
+    <a class="arrow-link" href="{{ "/notas/" | relURL }}">Todas las notas</a>
+  </header>
+  <div class="latest-grid latest-grid--{{ len . }} col-plate">
+    {{- range $index, $note := . }}
+    <article class="latest-note{{ if eq $index 0 }} latest-note--lead{{ end }}">
+      <a class="latest-note-link" href="{{ .RelPermalink }}">
+        {{- $image := false -}}
+        {{- with .Params.image -}}
+          {{- if hasPrefix . "/images/stock/" -}}
+            {{- $image = resources.Get (replace . "/images/stock/" "note-images/") -}}
+          {{- end -}}
+        {{- end -}}
+        {{- if $image }}
+          {{- $small := $image.Resize "480x webp q80" -}}
+          {{- $large := $image.Resize "960x webp q80" -}}
+          <img src="{{ $large.RelPermalink }}"
+               srcset="{{ $small.RelPermalink }} 480w, {{ $large.RelPermalink }} 960w"
+               sizes="{{ if eq $index 0 }}(min-width: 62rem) 50vw, 100vw{{ else }}(min-width: 62rem) 25vw, (min-width: 42rem) 50vw, 100vw{{ end }}"
+               width="{{ $large.Width }}" height="{{ $large.Height }}"
+               alt="{{ .Params.image_alt | default .Title }}"
+               decoding="async"{{ if eq $index 0 }} fetchpriority="high"{{ else }} loading="lazy"{{ end }}>
+        {{- else }}
+          <span class="latest-note-placeholder" aria-hidden="true">MR Agentes<span>IA · Automatización</span></span>
+        {{- end }}
+        <p class="latest-note-meta">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
+        </p>
+        <h3>{{ .Title }}</h3>
+        <p class="latest-note-summary">{{ .Description | default .Summary | plainify | truncate 165 }}</p>
+        <span class="latest-note-read" aria-hidden="true">Leer nota ↗</span>
+      </a>
+    </article>
+    {{- end }}
+  </div>
+</section>
+{{- end }}

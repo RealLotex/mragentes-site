@@ -85,8 +85,11 @@ def test_footer_social_links_keep_a_comfortable_touch_target() -> None:
 @pytest.mark.visual
 def test_home_intro_uses_one_consistent_voice() -> None:
     home = _home()
-    assert "Marcos Rosich trabaja desde Gálvez" in home, trace_message(
-        "UX-COPY-001", "home intro switches awkwardly between first and third person"
+    assert "Contactanos para conocer qué herramientas de inteligencia artificial podés aplicar a tu negocio" in home, trace_message(
+        "UX-COPY-001", "home intro must use the requested short invitation"
+    )
+    assert "Marcos Rosich trabaja desde Gálvez" not in home, trace_message(
+        "UX-COPY-001", "home intro still includes the removed personal byline"
     )
     assert "Trabaja Marcos Rosich" not in home, trace_message(
         "UX-COPY-001", "home intro keeps the inverted third-person phrasing"
