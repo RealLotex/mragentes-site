@@ -166,3 +166,14 @@ def test_contact_button_is_unique_on_home_and_kept_in_other_page_headers(tmp_pat
     assert "masthead-cta" in about_header
     assert 'href="/contacto/">Contactanos</a>' in about_header
     assert "Escribinos" not in about_header
+
+
+@pytest.mark.trace("HOME-NOTES-008")
+@pytest.mark.red_expected
+@pytest.mark.visual
+def test_promotional_banner_has_a_visible_red_tint() -> None:
+    css = (ROOT / "assets/css/main.css").read_text(encoding="utf-8")
+    banner = re.search(r"\.cover--compact\s*\{([^}]+)", css).group(1)
+    color = re.search(r"background:\s*#([0-9a-f]{6})", banner).group(1)
+    red, green, blue = (int(color[i:i + 2], 16) for i in (0, 2, 4))
+    assert red - green >= 35 and red - blue >= 45, "Banner must read as tinted red rather than neutral paper"
