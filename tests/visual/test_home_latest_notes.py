@@ -21,13 +21,14 @@ def _build(tmp_path: Path, notes: list[tuple[str, str, str]]) -> str:
     shutil.copyfile(ROOT / "hugo.toml", tmp_path / "hugo.toml")
     shutil.copyfile(ROOT / "layouts/index.html", tmp_path / "layouts/index.html")
     shutil.copyfile(ROOT / "layouts/partials/colophon.html", tmp_path / "layouts/partials/colophon.html")
+    shutil.copyfile(ROOT / "layouts/partials/masthead.html", tmp_path / "layouts/partials/masthead.html")
     for partial in (ROOT / "layouts/partials").glob("home-*.html"):
         shutil.copyfile(partial, tmp_path / "layouts/partials" / partial.name)
     (tmp_path / "layouts/_default").mkdir()
     shutil.copyfile(ROOT / "layouts/_default/single.html", tmp_path / "layouts/_default/single.html")
     shutil.copyfile(ROOT / "content/nosotros.md", tmp_path / "content/nosotros.md")
     (tmp_path / "layouts/_default/baseof.html").write_text(
-        '<main>{{ block "main" . }}{{ end }}</main>{{ partial "colophon.html" . }}', encoding="utf-8"
+        '{{ partial "masthead.html" . }}<main>{{ block "main" . }}{{ end }}</main>{{ partial "colophon.html" . }}', encoding="utf-8"
     )
     (tmp_path / "layouts/partials/closer.html").write_text(
         '<a href="/contacto/">Contame tu caso</a>', encoding="utf-8"
@@ -74,7 +75,7 @@ def test_home_puts_latest_published_notes_between_offer_and_services(tmp_path: P
         ("draft", "2020-01-05", "draft: true"),
         ("future", "2099-01-01", ""),
     ])
-    assert home.index("Contar mi caso") < home.index('id="t-notas"') < home.index('id="t-catalogo"')
+    assert home.index("Contactanos</a>") < home.index('id="t-notas"') < home.index('id="t-catalogo"')
     note_links = re.findall(r'href="(/notas/[^\"]+/)"', home)
     assert note_links == ["/notas/latest/", "/notas/second/", "/notas/third/"]
     assert "creationofadam.png" not in home
@@ -147,5 +148,21 @@ def test_home_keeps_the_short_offer_and_moves_location_to_visible_footer(tmp_pat
     assert "Automatización · Gálvez" not in offer
     assert "Marcos Rosich trabaja desde Gálvez" not in offer
     assert "Facturas que se emiten" not in offer
-    assert "Contar mi caso" in offer
+    assert "Contactanos</a>" in offer
     assert "Automatización · Gálvez · Santa Fe" in footer
+
+
+@pytest.mark.trace("HOME-NOTES-007")
+@pytest.mark.red_expected
+@pytest.mark.visual
+def test_contact_button_is_unique_on_home_and_kept_in_other_page_headers(tmp_path: Path) -> None:
+    home = _build(tmp_path, [])
+    header = home.split('<header class="masthead">', 1)[1].split("</header>", 1)[0]
+    assert "masthead-cta" not in header
+    assert home.count("Contactanos</a>") == 1
+    assert "Contar mi caso" not in home and "Escribinos" not in home
+    about = (tmp_path / "public/nosotros/index.html").read_text(encoding="utf-8")
+    about_header = about.split('<header class="masthead">', 1)[1].split("</header>", 1)[0]
+    assert "masthead-cta" in about_header
+    assert 'href="/contacto/">Contactanos</a>' in about_header
+    assert "Escribinos" not in about_header
