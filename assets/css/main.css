@@ -2263,6 +2263,7 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 
 @media (max-width: 41.99rem) {
   .cover--compact { padding-block: var(--s-3) var(--s-2); }
+  .cover--compact h1 { font-size: clamp(1.4rem, 6.6vw, 1.9rem); font-stretch: 100%; }
   .home-intro-copy .lede { font-size: 1.125rem; }
   .home-notes-head { margin-bottom: var(--s-3); }
   .latest-grid { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); }
