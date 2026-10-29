@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-29:iol-conecta-tu-cuenta-de-inversion-con-la-ia-que-cambia-con-su-mcp",
+  "status": "prepared",
+  "local_date": "2026-10-29",
+  "created_at": "2026-10-29T14:40:33.501167Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/iol-conecta-tu-cuenta-de-inversion-con-la-ia-que-cambia-con-su-mcp.md",
+      "sha256": "30bedf4693511ef32e12948c2cf66c38aff1fd53b99afa18d227e8163496f3dc"
+    },
+    "asset": {
+      "path": "static/images/stock/iol-conecta-tu-cuenta-de-inversion-con-la-ia-que-cambia-con-su-mcp.png",
+      "sha256": "c7ff749bdf195a3ebb60950fc711db1714e5dcbc1d09c2832110b513c40f979a"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/iol-conecta-tu-cuenta-de-inversion-con-la-ia-que-cambia-con-su-mcp.jpg",
+      "sha256": "eb3645ead05c5d447e08d48fb9c74952b50f99fbae7eb79d71c4826cde0b1b20"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "4d78093a0116a2df4818a6e67ed008d3db6745cdefaa2c0499e6e09e28ceca8a"
+    }
+  },
+  "sources": [
+    "https://www.iproup.com/finanzas/71001-iol-lanza-un-agentes-de-ia-para-analizar-tus-inversiones",
+    "https://mcp.invertironline.com/",
+    "https://mcp.invertironline.com/documentacion-tecnica",
+    "https://www.invertironline.com/mcp",
+    "https://www.invertironline.com/tyc-mcp",
+    "https://www.lanacion.com.ar/economia/IA/ahora-podes-interactuar-con-tu-cuenta-de-inversiones-conectandola-a-la-ia-que-fintech-lo-hizo-nid21102026/"
+  ]
+}

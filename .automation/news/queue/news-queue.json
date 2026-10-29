@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 34,
-  "updated_at": "2026-10-29T08:02:52.570449Z",
+  "revision": 35,
+  "updated_at": "2026-10-29T14:40:33.501167Z",
   "items": [
     {
       "schema_version": 1,
@@ -1143,6 +1143,33 @@
       "consumed_by": "la-ia-santafesina-que-detecta-malezas-llegara-de-fabrica-a-pulverizadoras-brasilenas",
       "consumed_at": "2026-10-29T08:02:52.570449Z",
       "id": "news-v1-649356ef3e323d3c"
+    },
+    {
+      "schema_version": 1,
+      "title": "IOL conecta tu cuenta de inversión con la IA: qué cambia con su MCP",
+      "canonical_url": "https://www.iproup.com/finanzas/71001-iol-lanza-un-agentes-de-ia-para-analizar-tus-inversiones",
+      "source": "iProUP",
+      "entity": "iProUP",
+      "published_at": "2026-08-26T12:00:00Z",
+      "discovered_at": "2026-10-29T14:40:33.501167Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.iproup.com/finanzas/71001-iol-lanza-un-agentes-de-ia-para-analizar-tus-inversiones",
+          "claim": "El MCP de IOL conecta la cartera con asistentes de IA. Qué permite hacer, cómo cambian los permisos y qué contradicciones tienen sus textos oficiales."
+        }
+      ],
+      "tags": [
+        "ia",
+        "argentina",
+        "mcp",
+        "fintech",
+        "agentes",
+        "seguridad"
+      ],
+      "consumed_by": "iol-conecta-tu-cuenta-de-inversion-con-la-ia-que-cambia-con-su-mcp",
+      "consumed_at": "2026-10-29T14:40:33.501167Z",
+      "id": "news-v1-28eb315e1d6b075f"
     }
   ]
 }
