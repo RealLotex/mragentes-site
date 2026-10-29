@@ -12,7 +12,7 @@ import pytest
 from tests.support.contracts import ROOT
 
 
-def _build(tmp_path: Path, notes: list[tuple[str, str, str]]) -> str:
+def _build(tmp_path: Path, notes: list[tuple[str, str, str]], body: str = "Texto de la nota.") -> str:
     """Render the real home with isolated content, including weighted/draft notes."""
     hugo = shutil.which("hugo")
     assert hugo, "Hugo is required to verify the home build"
@@ -22,6 +22,10 @@ def _build(tmp_path: Path, notes: list[tuple[str, str, str]]) -> str:
     shutil.copyfile(ROOT / "layouts/index.html", tmp_path / "layouts/index.html")
     shutil.copyfile(ROOT / "layouts/partials/colophon.html", tmp_path / "layouts/partials/colophon.html")
     shutil.copyfile(ROOT / "layouts/partials/masthead.html", tmp_path / "layouts/partials/masthead.html")
+    (tmp_path / "layouts/notas").mkdir()
+    shutil.copyfile(ROOT / "layouts/notas/single.html", tmp_path / "layouts/notas/single.html")
+    for partial in (ROOT / "layouts/partials").glob("note-*.html"):
+        shutil.copyfile(partial, tmp_path / "layouts/partials" / partial.name)
     for partial in (ROOT / "layouts/partials").glob("home-*.html"):
         shutil.copyfile(partial, tmp_path / "layouts/partials" / partial.name)
     (tmp_path / "layouts/_default").mkdir()
@@ -48,7 +52,7 @@ def _build(tmp_path: Path, notes: list[tuple[str, str, str]]) -> str:
     for slug, date, extra in notes:
         (tmp_path / f"content/notas/{slug}.md").write_text(
             f'---\ntitle: "{slug}"\ndate: "{date}"\nslug: "{slug}"\n'
-            f'description: "Resumen de {slug}"\n{extra}\n---\nTexto de la nota.\n',
+            f'description: "Resumen de {slug}"\n{extra}\n---\n{body}\n',
             encoding="utf-8",
         )
     (tmp_path / "content/servicios.md").write_text(

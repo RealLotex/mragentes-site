@@ -1,98 +1,112 @@
 {{ define "main" }}
+{{- $shareText := printf "%s — %s" .Title .Permalink -}}
 
-<article class="sheet">
+<article class="note sheet">
+  <nav class="note-breadcrumbs col-plate" aria-label="Ruta de navegación">
+    <a href="{{ "/" | relURL }}">Inicio</a><span aria-hidden="true">/</span>
+    <a href="{{ "/notas/" | relURL }}">Notas</a>
+  </nav>
 
-  <header class="article-head">
-    <p class="key col-key">
-      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
-    </p>
-    <hgroup>
-      <h1>{{ .Title }}</h1>
-      {{- with .Description }}<p class="lede">{{ . }}</p>{{ end }}
-    </hgroup>
-    <p class="article-meta">
-      <span>{{ math.Max 1 (math.Round (div (float .WordCount) 200)) }} min de lectura</span>
-      {{- with .Params.tags }}
-      <span class="topics" style="display:flex;gap:.4rem;flex-wrap:wrap">
-        {{- range . }}
-        {{- $t := . }}
-        {{- with site.GetPage (printf "/tags/%s" ($t | urlize)) }}<a class="topic" href="{{ .RelPermalink }}">{{ $t }}</a>{{ else }}<span class="topic">{{ $t }}</span>{{ end }}
-        {{- end }}
-      </span>
-      {{- end }}
-    </p>
-    {{- with .Params.learning_level }}
-    <p class="article-meta"><span>Nivel {{ . }}</span></p>
-    {{- end }}
-    {{- with .Params.pillar }}
-    {{- $pillar := index site.Data.editorial.pillars . }}
-    {{- with $pillar }}
-    <p class="article-meta">
-      <a class="topic" href="{{ "/notas/#pilares" | relURL }}">{{ .label }}</a>
-      <span>{{ .description }}</span>
-    </p>
-    {{- end }}
-    {{- end }}
+  <header class="note-head col-plate">
+    <p class="note-kicker">IA y automatización</p>
+    <h1>{{ .Title }}</h1>
+    {{- with .Description }}<p class="note-deck">{{ . }}</p>{{ end }}
+    <div class="note-meta-row">
+      <div class="note-byline">
+        <a class="note-author" href="{{ "/nosotros/" | relURL }}">
+          <img src="/faviconhand512.png" width="34" height="34" alt="" aria-hidden="true">
+          <span>MR Agentes</span>
+        </a>
+        <p class="note-dateline">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
+          <span aria-hidden="true">·</span>
+          <span>{{ math.Max 1 (math.Ceil (div (float .WordCount) 200)) }} min de lectura</span>
+        </p>
+      </div>
+      <div class="note-actions" aria-label="Compartir esta nota">
+        <button class="btn btn--ghost" type="button" data-share-url="{{ .Permalink }}" data-share-title="{{ .Title }}">Compartir ↗</button>
+        <a class="note-whatsapp" href="https://wa.me/?text={{ $shareText | urlquery }}" target="_blank" rel="noopener" data-share-whatsapp>WhatsApp</a>
+        <p class="form-note" data-share-status aria-live="polite"></p>
+      </div>
+    </div>
   </header>
 
-  {{- /* La imagen de portada de cada nota sigue existiendo en el front matter
-         porque la usan las tarjetas de Facebook, WhatsApp y Twitter al compartir.
-         Pero no se pinta arriba del artículo: son fotos de archivo genéricas que
-         no ilustran nada y empujaban el texto media pantalla hacia abajo. */ -}}
+  <div class="note-layout col-plate">
+    <div class="note-main">
+      {{- with .Params.image }}
+      <figure class="note-figure">
+        {{ partial "note-image.html" (dict "page" $ "large" 1200 "small" 640 "sizes" "(min-width: 62rem) 55vw, 100vw" "loading" "eager" "priority" true) }}
+        <figcaption>{{ $.Params.image_caption | default $.Params.image_alt | default $.Title }}</figcaption>
+      </figure>
+      {{- end }}
 
-  {{- /* El índice deja ver el recorrido antes de empezar. No reemplaza la
-         lectura: permite ir directo a la duda concreta y crea enlaces estables
-         a cada sección para compartirlos o volver a encontrarlos. */ -}}
-  {{- if ge (len (findRE `(?m)^##\s+` .RawContent)) 3 }}
-  <nav class="article-toc" aria-label="Contenido de esta nota">
-    <p class="key">En esta nota</p>
-    {{ .TableOfContents }}
-  </nav>
-  {{- end }}
+      {{- if ge (len (findRE `(?m)^##\s+` .RawContent)) 3 }}
+      <details class="note-contents">
+        <summary>En esta nota</summary>
+        <div class="note-toc-links">{{ .TableOfContents }}</div>
+      </details>
+      {{- end }}
 
-  <div class="prose">
-    {{ .Content }}
+      <div class="prose note-prose">{{ .Content }}</div>
+
+      <footer class="note-end">
+        {{- with .Params.tags }}
+        <p class="key">Temas de esta nota</p>
+        <div class="topics">
+          {{- range . }}
+          {{- $tag := . }}
+          {{- with site.GetPage (printf "/tags/%s" (. | urlize)) }}
+          <a class="topic" href="{{ .RelPermalink }}">{{ $tag | humanize }}</a>
+          {{- else }}<span class="topic">{{ . | humanize }}</span>{{ end }}
+          {{- end }}
+        </div>
+        {{- end }}
+        {{- with .Params.learning_level }}<p class="note-level">Nivel {{ . }}</p>{{ end }}
+        <a class="arrow-link" href="https://wa.me/?text={{ $shareText | urlquery }}" target="_blank" rel="noopener">Enviársela a alguien por WhatsApp</a>
+      </footer>
+    </div>
+
+    <aside class="note-sidebar" aria-label="Servicios de MR Agentes">
+      <div class="note-promo">
+        <p class="key">MR Agentes · Servicios</p>
+        <h2>La IA también puede trabajar en tu negocio.</h2>
+        <p>Automatizaciones y agentes para resolver tareas de todos los días.</p>
+        <a class="btn" href="{{ "/servicios/" | relURL }}">Conocé los servicios</a>
+        <a class="arrow-link" href="{{ "/contacto/" | relURL }}">Contactanos</a>
+      </div>
+      <div class="note-sidebar-about">
+        <p class="key">Detrás de estas notas</p>
+        <p>Una mirada práctica sobre inteligencia artificial y automatización, desde Gálvez, Santa Fe.</p>
+        <a href="{{ "/nosotros/" | relURL }}">Conocé MR Agentes →</a>
+      </div>
+    </aside>
   </div>
 
-  {{- $shareText := printf "%s — %s" .Title .Permalink }}
-  <aside class="article-share rule-top" aria-labelledby="share-title">
-    <p class="key" id="share-title">Puede servirle a otra persona</p>
-    <p>Enviásela ↗ a alguien a quien pueda servirle.</p>
-    <div class="btn-row">
-      <button class="btn btn--minio" type="button" data-share-url="{{ .Permalink }}" data-share-title="{{ .Title }}">
-        Compartir esta nota
-      </button>
-      <a class="arrow-link" href="https://wa.me/?text={{ $shareText | urlquery }}" target="_blank" rel="noopener" data-share-whatsapp>Enviar por WhatsApp</a>
+  {{- $related := where (where site.RegularPages "Section" "notas") "Permalink" "!=" .Permalink -}}
+  {{- with .Params.tags }}{{ $related = where $related ".Params.tags" "intersect" . }}{{ end -}}
+  {{- with first 3 $related.ByDate.Reverse }}
+  <section class="note-related col-plate" aria-labelledby="note-related-title">
+    <div class="note-related-head">
+      <h2 id="note-related-title">Seguí leyendo</h2>
+      <a class="arrow-link" href="{{ "/notas/" | relURL }}">Todas las notas</a>
     </div>
-    <p class="form-note" data-share-status aria-live="polite"></p>
-  </aside>
-
-  {{- $rel := where (where site.RegularPages "Section" "notas") "Permalink" "!=" .Permalink }}
-  {{- with .Params.tags }}
-    {{- $tags := . }}
-    {{- $rel = where $rel ".Params.tags" "intersect" $tags }}
-  {{- end }}
-  {{- with first 3 $rel }}
-  <aside class="rule-top" style="margin-bottom:var(--s-6)">
-    <p class="key" style="margin-bottom:var(--s-2)">Seguir aprendiendo</p>
-    <ul class="index">
+    <div class="note-related-grid">
       {{- range . }}
-      <li>
-        <a href="{{ .RelPermalink }}">
-          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time>
-          <div>
-            <h3>{{ .Title }}</h3>
-            <p>{{ .Description | default .Summary | plainify | truncate 150 }}</p>
-          </div>
+      <article class="latest-note">
+        <a class="latest-note-link" href="{{ .RelPermalink }}">
+          {{- if .Params.image }}
+          {{ partial "note-image.html" (dict "page" . "large" 640 "small" 320 "sizes" "(min-width: 62rem) 33vw, (min-width: 42rem) 50vw, 100vw" "loading" "lazy" "priority" false) }}
+          {{- else }}<span class="latest-note-placeholder" aria-hidden="true">MR Agentes<span>IA · Automatización</span></span>{{ end }}
+          <p class="latest-note-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time></p>
+          <h3>{{ .Title }}</h3>
+          <p class="latest-note-summary">{{ .Description | default .Summary | plainify | truncate 140 }}</p>
         </a>
-      </li>
+      </article>
       {{- end }}
-    </ul>
-  </aside>
+    </div>
+  </section>
   {{- end }}
-
 </article>
 
 {{ partial "closer.html" . }}
-
 {{ end }}
