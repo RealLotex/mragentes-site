@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-10-30:coati-el-agente-argentino-que-prepara-presupuestos-por-whatsapp-y-los-carga-en-el-sistema-de-gestion",
+  "status": "prepared",
+  "local_date": "2026-10-30",
+  "created_at": "2026-10-30T08:02:43.619842Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/coati-el-agente-argentino-que-prepara-presupuestos-por-whatsapp-y-los-carga-en-el-sistema-de-gestion.md",
+      "sha256": "bf654a273b2892b41ffe15044ec301aeab14891a4fbf6367b5147b55f205d8f8"
+    },
+    "asset": {
+      "path": "static/images/stock/coati-el-agente-argentino-que-prepara-presupuestos-por-whatsapp-y-los-carga-en-el-sistema-de-gestion.png",
+      "sha256": "fb4e88a2cc02716999fa98c81cb55e8b798372cd4587ed48dcf38e453c9612b6"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/coati-el-agente-argentino-que-prepara-presupuestos-por-whatsapp-y-los-carga-en-el-sistema-de-gestion.jpg",
+      "sha256": "56e798bb29b01c3a8162f1cd3b0dab8eb26f34b318b122f574fda42a4b0a606c"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "e4965126dddc8d16c17c76112a404bc966dbcd4b28aac323d91c6438530b7569"
+    }
+  },
+  "sources": [
+    "https://www.cronista.com/infotechnology/entreprenerds/argentinos-crearon-una-ia-para-negocios-atiende-247-por-whatsapp-y-ya-gestiona-miles-de-operaciones/",
+    "https://tech-sed.com/",
+    "https://mercado.com.ar/protagonistas/techsed-presenta-su-ecosistema-de-ia-y-gestion"
+  ]
+}
