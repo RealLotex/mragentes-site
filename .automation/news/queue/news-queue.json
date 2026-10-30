@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 35,
-  "updated_at": "2026-10-29T14:40:33.501167Z",
+  "revision": 36,
+  "updated_at": "2026-10-30T08:02:43.619842Z",
   "items": [
     {
       "schema_version": 1,
@@ -1170,6 +1170,33 @@
       "consumed_by": "iol-conecta-tu-cuenta-de-inversion-con-la-ia-que-cambia-con-su-mcp",
       "consumed_at": "2026-10-29T14:40:33.501167Z",
       "id": "news-v1-28eb315e1d6b075f"
+    },
+    {
+      "schema_version": 1,
+      "title": "Coati, el agente argentino que prepara presupuestos por WhatsApp y los carga en el sistema de gestión",
+      "canonical_url": "https://www.cronista.com/infotechnology/entreprenerds/argentinos-crearon-una-ia-para-negocios-atiende-247-por-whatsapp-y-ya-gestiona-miles-de-operaciones/",
+      "source": "El Cronista - Infotechnology",
+      "entity": "El Cronista - Infotechnology",
+      "published_at": "2026-09-02T12:00:00Z",
+      "discovered_at": "2026-10-30T08:02:43.619842Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.cronista.com/infotechnology/entreprenerds/argentinos-crearon-una-ia-para-negocios-atiende-247-por-whatsapp-y-ya-gestiona-miles-de-operaciones/",
+          "claim": "Techsed conecta atención comercial y gestión: su agente responde consultas, prepara presupuestos y registra operaciones. Qué muestran sus primeros números."
+        }
+      ],
+      "tags": [
+        "inteligencia-artificial",
+        "agentes",
+        "pymes",
+        "argentina",
+        "whatsapp",
+        "automatizacion"
+      ],
+      "consumed_by": "coati-el-agente-argentino-que-prepara-presupuestos-por-whatsapp-y-los-carga-en-el-sistema-de-gestion",
+      "consumed_at": "2026-10-30T08:02:43.619842Z",
+      "id": "news-v1-790c6b16bec1bd6e"
     }
   ]
 }
