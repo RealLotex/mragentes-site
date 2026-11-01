@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 36,
-  "updated_at": "2026-10-30T08:02:43.619842Z",
+  "revision": 37,
+  "updated_at": "2026-11-01T08:03:06.321619Z",
   "items": [
     {
       "schema_version": 1,
@@ -1197,6 +1197,32 @@
       "consumed_by": "coati-el-agente-argentino-que-prepara-presupuestos-por-whatsapp-y-los-carga-en-el-sistema-de-gestion",
       "consumed_at": "2026-10-30T08:02:43.619842Z",
       "id": "news-v1-790c6b16bec1bd6e"
+    },
+    {
+      "schema_version": 1,
+      "title": "belo conecta agentes de IA con cuentas financieras: qué pueden hacer y quién aprueba las operaciones",
+      "canonical_url": "https://www.startupjournal.io/article/belo-agentic-banking-mcp-agentes-ia-cuentas-pesos-reales-dolares-cripto",
+      "source": "The Startup Journal",
+      "entity": "The Startup Journal",
+      "published_at": "2026-10-08T12:00:00Z",
+      "discovered_at": "2026-11-01T08:03:06.321619Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.startupjournal.io/article/belo-agentic-banking-mcp-agentes-ia-cuentas-pesos-reales-dolares-cripto",
+          "claim": "La fintech argentina presentó un MCP para consultar cuentas y preparar operaciones con IA. El acceso es gradual y cada movimiento requiere aprobación humana."
+        }
+      ],
+      "tags": [
+        "inteligencia-artificial",
+        "agentes",
+        "mcp",
+        "fintech",
+        "argentina"
+      ],
+      "consumed_by": "belo-conecta-agentes-de-ia-con-cuentas-financieras-que-pueden-hacer-y-quien-aprueba-las-operaciones",
+      "consumed_at": "2026-11-01T08:03:06.321619Z",
+      "id": "news-v1-665e0fde5e1932da"
     }
   ]
 }
