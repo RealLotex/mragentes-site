@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-11-01:belo-conecta-agentes-de-ia-con-cuentas-financieras-que-pueden-hacer-y-quien-aprueba-las-operaciones",
+  "status": "prepared",
+  "local_date": "2026-11-01",
+  "created_at": "2026-11-01T08:03:06.321619Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/belo-conecta-agentes-de-ia-con-cuentas-financieras-que-pueden-hacer-y-quien-aprueba-las-operaciones.md",
+      "sha256": "ebf326a9e517ec475836ade6850e6109cdc818f9d640515e696471eb17cc4fbc"
+    },
+    "asset": {
+      "path": "static/images/stock/belo-conecta-agentes-de-ia-con-cuentas-financieras-que-pueden-hacer-y-quien-aprueba-las-operaciones.png",
+      "sha256": "1ac4d0d6a337df7c1cecb57114f3be6dbf90ae67863507a9c966d8b6e23e0f93"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/belo-conecta-agentes-de-ia-con-cuentas-financieras-que-pueden-hacer-y-quien-aprueba-las-operaciones.jpg",
+      "sha256": "9b66b537e5c33e62391b9e5b4615c5fc8c35309d0c813f03dc655207c5a89939"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "77cee0aa994c3b215be330c8a36679c69b50978ea5908893a156f00fc9fa1b71"
+    }
+  },
+  "sources": [
+    "https://www.startupjournal.io/article/belo-agentic-banking-mcp-agentes-ia-cuentas-pesos-reales-dolares-cripto",
+    "https://agentic.belo.app/",
+    "https://bankmagazine.com.ar/banca-agentica/",
+    "https://es.linkedin.com/posts/mbeaudroit_la-ia-es-el-futuro-de-las-finanzas-y-cripto-activity-7511548440774946816-FcV0"
+  ]
+}
