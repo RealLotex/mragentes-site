@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 37,
-  "updated_at": "2026-11-01T08:03:06.321619Z",
+  "revision": 38,
+  "updated_at": "2026-11-02T08:03:34.744603Z",
   "items": [
     {
       "schema_version": 1,
@@ -1223,6 +1223,32 @@
       "consumed_by": "belo-conecta-agentes-de-ia-con-cuentas-financieras-que-pueden-hacer-y-quien-aprueba-las-operaciones",
       "consumed_at": "2026-11-01T08:03:06.321619Z",
       "id": "news-v1-665e0fde5e1932da"
+    },
+    {
+      "schema_version": 1,
+      "title": "Belo conecta agentes de IA con cuentas financieras: qué pueden hacer y quién aprueba",
+      "canonical_url": "https://www.iproup.com/finanzas/72121-inteligencia-artificial-bancos-como-acceder-sistema-argentino-automatiza-cuenta.amp",
+      "source": "iProUP",
+      "entity": "iProUP",
+      "published_at": "2026-10-07T12:00:00Z",
+      "discovered_at": "2026-11-02T08:03:34.744603Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.iproup.com/finanzas/72121-inteligencia-artificial-bancos-como-acceder-sistema-argentino-automatiza-cuenta.amp",
+          "claim": "Belo presentó una conexión para consultar cuentas y preparar operaciones con IA: el acceso es progresivo y cada movimiento requiere aprobación humana."
+        }
+      ],
+      "tags": [
+        "inteligencia artificial",
+        "agentes de IA",
+        "MCP",
+        "fintech",
+        "Argentina"
+      ],
+      "consumed_by": "belo-conecta-agentes-de-ia-con-cuentas-financieras-que-pueden-hacer-y-quien-aprueba",
+      "consumed_at": "2026-11-02T08:03:34.744603Z",
+      "id": "news-v1-405740d71964f483"
     }
   ]
 }
