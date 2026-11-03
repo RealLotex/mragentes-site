@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-11-03",
+  "status": "prepared",
+  "local_date": "2026-11-03",
+  "created_at": "2026-11-03T08:02:54.821272Z",
+  "branch": "automation/editorial/2026-11-03",
+  "note_slug": "tiendanube-conecta-la-ia-con-tiendas-reales-que-puede-hacer-y-quien-controla-los-permisos",
+  "selected_news_ids": [
+    "news-v1-ba44c9fcab1712b9"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-11-03-tiendanube-conecta-la-ia-con-tiendas-reales-que-puede-hacer-y-quien-controla-los-permisos.json",
+    "note": "content/notas/tiendanube-conecta-la-ia-con-tiendas-reales-que-puede-hacer-y-quien-controla-los-permisos.md",
+    "cover": "static/images/stock/tiendanube-conecta-la-ia-con-tiendas-reales-que-puede-hacer-y-quien-controla-los-permisos.png",
+    "announcement": "static/images/social/notes/tiendanube-conecta-la-ia-con-tiendas-reales-que-puede-hacer-y-quien-controla-los-permisos.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}

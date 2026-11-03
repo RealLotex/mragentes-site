@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-11-03:tiendanube-conecta-la-ia-con-tiendas-reales-que-puede-hacer-y-quien-controla-los-permisos",
+  "status": "prepared",
+  "local_date": "2026-11-03",
+  "created_at": "2026-11-03T08:02:54.821272Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/tiendanube-conecta-la-ia-con-tiendas-reales-que-puede-hacer-y-quien-controla-los-permisos.md",
+      "sha256": "8631a7ad4cfe1d4503398fe1e5f1fe356ad79dc57e78d19c0a9965cced3ee9d9"
+    },
+    "asset": {
+      "path": "static/images/stock/tiendanube-conecta-la-ia-con-tiendas-reales-que-puede-hacer-y-quien-controla-los-permisos.png",
+      "sha256": "517d8b30e10f4422e516f761a4639167bcd6823a27854d5ac2d71ab2d04383ac"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/tiendanube-conecta-la-ia-con-tiendas-reales-que-puede-hacer-y-quien-controla-los-permisos.jpg",
+      "sha256": "ffb130bd9d0e7ab84088c8724be848fe1a40dc38bae01774f9c90029de089eb7"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "51be84b86409010a4fcdbe64f7d143a17e5943b2959ad9cd8c905380883a8540"
+    }
+  },
+  "sources": [
+    "https://changelog.tiendanube.com/permisos-respetados-por-el-admin-mcp-en-tiendanube-8e54f2f4",
+    "https://tiendanube.dev/es-AR/ai-agents/admin-mcp",
+    "https://codigon.gs1.org.ar/index.php/2026/08/14/de-crear-contenido-a-gestionar-el-negocio-el-nuevo-paso-de-la-ia-en-tiendanube/",
+    "https://tiendanube.helpjuice.com/es_MX/conectores-de-ia/como-conectar-mi-tiendanube-a-chatgpt"
+  ]
+}
