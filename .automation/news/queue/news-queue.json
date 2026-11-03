@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 38,
-  "updated_at": "2026-11-02T08:03:34.744603Z",
+  "revision": 39,
+  "updated_at": "2026-11-03T08:02:54.821272Z",
   "items": [
     {
       "schema_version": 1,
@@ -1249,6 +1249,32 @@
       "consumed_by": "belo-conecta-agentes-de-ia-con-cuentas-financieras-que-pueden-hacer-y-quien-aprueba",
       "consumed_at": "2026-11-02T08:03:34.744603Z",
       "id": "news-v1-405740d71964f483"
+    },
+    {
+      "schema_version": 1,
+      "title": "Tiendanube conecta la IA con tiendas reales: qué puede hacer y quién controla los permisos",
+      "canonical_url": "https://changelog.tiendanube.com/permisos-respetados-por-el-admin-mcp-en-tiendanube-8e54f2f4",
+      "source": "Tiendanube, registro de novedades",
+      "entity": "Tiendanube, registro de novedades",
+      "published_at": "2026-10-21T12:00:00Z",
+      "discovered_at": "2026-11-03T08:02:54.821272Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://changelog.tiendanube.com/permisos-respetados-por-el-admin-mcp-en-tiendanube-8e54f2f4",
+          "claim": "El conector Admin MCP permite gestionar una tienda conversando con IA. Una actualización aplica los permisos de cada usuario a esas acciones."
+        }
+      ],
+      "tags": [
+        "inteligencia artificial",
+        "agentes",
+        "pymes",
+        "comercio electrónico",
+        "MCP"
+      ],
+      "consumed_by": "tiendanube-conecta-la-ia-con-tiendas-reales-que-puede-hacer-y-quien-controla-los-permisos",
+      "consumed_at": "2026-11-03T08:02:54.821272Z",
+      "id": "news-v1-ba44c9fcab1712b9"
     }
   ]
 }
