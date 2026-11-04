@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-11-04:xtract-y-modo-como-una-empresa-argentina-automatiza-la-lectura-de-facturas",
+  "status": "prepared",
+  "local_date": "2026-11-04",
+  "created_at": "2026-11-04T08:03:13.463400Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/xtract-y-modo-como-una-empresa-argentina-automatiza-la-lectura-de-facturas.md",
+      "sha256": "63f21ec6a8ed5b9fb020758a1d4ae002027ff99a8c4fe5c13ad3410aacacb3b2"
+    },
+    "asset": {
+      "path": "static/images/stock/xtract-y-modo-como-una-empresa-argentina-automatiza-la-lectura-de-facturas.png",
+      "sha256": "8bad66dc6105764388711e59ec5fdc655a7940111f13b209543677df6b1edd51"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/xtract-y-modo-como-una-empresa-argentina-automatiza-la-lectura-de-facturas.jpg",
+      "sha256": "e4fc4b320673d4c099080a2c1eff7306ec4f56d7ec4397a6ab7b56c73e99c438"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "7b3ba0344deebd1454a0a7963e563e36e75568f7eeb7452e3ddc253a45fe7906"
+    }
+  },
+  "sources": [
+    "https://www.itsitio.com/ar/inteligencia-artificial/en-contabilidad-casi-bien-es-mal-xtract-la-startup-argentina-que-le-enseno-a-leer-facturas-a-arcos-dorados-y-modo-sin-depender-de-openai-o-antropic/",
+    "https://xtract.app/es-ES/resources/case-studies/modo/",
+    "https://www.cronista.com/negocios/de-la-corpo-a-armar-una-startup-que-automatiza-facturas-para-ypf-arcos-dorados-y-nike-van-por-us-75-millones/"
+  ]
+}

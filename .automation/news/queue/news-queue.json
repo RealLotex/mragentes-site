@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 39,
-  "updated_at": "2026-11-03T08:02:54.821272Z",
+  "revision": 40,
+  "updated_at": "2026-11-04T08:03:13.463400Z",
   "items": [
     {
       "schema_version": 1,
@@ -1275,6 +1275,31 @@
       "consumed_by": "tiendanube-conecta-la-ia-con-tiendas-reales-que-puede-hacer-y-quien-controla-los-permisos",
       "consumed_at": "2026-11-03T08:02:54.821272Z",
       "id": "news-v1-ba44c9fcab1712b9"
+    },
+    {
+      "schema_version": 1,
+      "title": "Xtract y MODO: cómo una empresa argentina automatiza la lectura de facturas",
+      "canonical_url": "https://www.itsitio.com/ar/inteligencia-artificial/en-contabilidad-casi-bien-es-mal-xtract-la-startup-argentina-que-le-enseno-a-leer-facturas-a-arcos-dorados-y-modo-sin-depender-de-openai-o-antropic/",
+      "source": "ITSitio",
+      "entity": "ITSitio",
+      "published_at": "2026-11-02T12:00:00Z",
+      "discovered_at": "2026-11-04T08:03:13.463400Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.itsitio.com/ar/inteligencia-artificial/en-contabilidad-casi-bien-es-mal-xtract-la-startup-argentina-que-le-enseno-a-leer-facturas-a-arcos-dorados-y-modo-sin-depender-de-openai-o-antropic/",
+          "claim": "Xtract procesa facturas para MODO y otras empresas: qué automatiza, qué resultados informa y por qué importa controlar los errores."
+        }
+      ],
+      "tags": [
+        "inteligencia artificial",
+        "automatización",
+        "pymes",
+        "Argentina"
+      ],
+      "consumed_by": "xtract-y-modo-como-una-empresa-argentina-automatiza-la-lectura-de-facturas",
+      "consumed_at": "2026-11-04T08:03:13.463400Z",
+      "id": "news-v1-69e3d12493b75cfe"
     }
   ]
 }
