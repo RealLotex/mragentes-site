@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 40,
-  "updated_at": "2026-11-04T08:03:13.463400Z",
+  "revision": 41,
+  "updated_at": "2026-11-06T08:05:16.854411Z",
   "items": [
     {
       "schema_version": 1,
@@ -1300,6 +1300,31 @@
       "consumed_by": "xtract-y-modo-como-una-empresa-argentina-automatiza-la-lectura-de-facturas",
       "consumed_at": "2026-11-04T08:03:13.463400Z",
       "id": "news-v1-69e3d12493b75cfe"
+    },
+    {
+      "schema_version": 1,
+      "title": "Propio: la IA argentina que ayuda a tasar propiedades desde WhatsApp",
+      "canonical_url": "https://www.cronista.com/infotechnology/innovacion-it/nuevo-mercado-inmobiliario-crearon-una-ia-para-tasar-propiedades-y-ya-procesan-20000-casos-por-mes/",
+      "source": "El Cronista - Infotechnology",
+      "entity": "El Cronista - Infotechnology",
+      "published_at": "2026-11-03T12:00:00Z",
+      "discovered_at": "2026-11-06T08:05:16.854411Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.cronista.com/infotechnology/innovacion-it/nuevo-mercado-inmobiliario-crearon-una-ia-para-tasar-propiedades-y-ya-procesan-20000-casos-por-mes/",
+          "claim": "La startup argentina Propio usa datos de avisos para generar estimaciones inmobiliarias por WhatsApp. Qué puede hacer y dónde interviene el profesional."
+        }
+      ],
+      "tags": [
+        "inteligencia artificial",
+        "argentina",
+        "inmobiliarias",
+        "automatización"
+      ],
+      "consumed_by": "propio-la-ia-argentina-que-ayuda-a-tasar-propiedades-desde-whatsapp",
+      "consumed_at": "2026-11-06T08:05:16.854411Z",
+      "id": "news-v1-70f8d7300bf396d9"
     }
   ]
 }

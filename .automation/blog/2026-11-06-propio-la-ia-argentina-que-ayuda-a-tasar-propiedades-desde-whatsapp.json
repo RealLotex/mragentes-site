@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-11-06:propio-la-ia-argentina-que-ayuda-a-tasar-propiedades-desde-whatsapp",
+  "status": "prepared",
+  "local_date": "2026-11-06",
+  "created_at": "2026-11-06T08:05:16.854411Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/propio-la-ia-argentina-que-ayuda-a-tasar-propiedades-desde-whatsapp.md",
+      "sha256": "03d4e33fa4aea5b5e78895db23ee519a5de054ce53dc4c158ac635301af227f5"
+    },
+    "asset": {
+      "path": "static/images/stock/propio-la-ia-argentina-que-ayuda-a-tasar-propiedades-desde-whatsapp.png",
+      "sha256": "88c2c977857f51952f845c3fcaab5288d05766281559a6205584b28b1b643c22"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/propio-la-ia-argentina-que-ayuda-a-tasar-propiedades-desde-whatsapp.jpg",
+      "sha256": "81221bb23214301207fd08e8809193ecdee41d7afebc0d17ea11aaa47720175c"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "a6facf815a2c082f26125e10419924f86444edd3a2ec1123a0dea8c58f17d248"
+    }
+  },
+  "sources": [
+    "https://www.cronista.com/infotechnology/innovacion-it/nuevo-mercado-inmobiliario-crearon-una-ia-para-tasar-propiedades-y-ya-procesan-20000-casos-por-mes/",
+    "https://propio.com.ar/tasador",
+    "https://propio.com.ar/"
+  ]
+}

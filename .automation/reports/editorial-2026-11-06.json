@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-11-06",
+  "status": "prepared",
+  "local_date": "2026-11-06",
+  "created_at": "2026-11-06T08:05:16.854411Z",
+  "branch": "automation/editorial/2026-11-06",
+  "note_slug": "propio-la-ia-argentina-que-ayuda-a-tasar-propiedades-desde-whatsapp",
+  "selected_news_ids": [
+    "news-v1-70f8d7300bf396d9"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-11-06-propio-la-ia-argentina-que-ayuda-a-tasar-propiedades-desde-whatsapp.json",
+    "note": "content/notas/propio-la-ia-argentina-que-ayuda-a-tasar-propiedades-desde-whatsapp.md",
+    "cover": "static/images/stock/propio-la-ia-argentina-que-ayuda-a-tasar-propiedades-desde-whatsapp.png",
+    "announcement": "static/images/social/notes/propio-la-ia-argentina-que-ayuda-a-tasar-propiedades-desde-whatsapp.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
