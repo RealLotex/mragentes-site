@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 41,
-  "updated_at": "2026-11-06T08:05:16.854411Z",
+  "revision": 42,
+  "updated_at": "2026-11-07T08:04:42.142787Z",
   "items": [
     {
       "schema_version": 1,
@@ -1325,6 +1325,32 @@
       "consumed_by": "propio-la-ia-argentina-que-ayuda-a-tasar-propiedades-desde-whatsapp",
       "consumed_at": "2026-11-06T08:05:16.854411Z",
       "id": "news-v1-70f8d7300bf396d9"
+    },
+    {
+      "schema_version": 1,
+      "title": "Tiendanube lleva las ventas al chat de IA y limita las acciones según cada usuario",
+      "canonical_url": "https://changelog.tiendanube.com/permisos-respetados-por-el-admin-mcp-en-tiendanube-8e54f2f4",
+      "source": "Tiendanube",
+      "entity": "Tiendanube",
+      "published_at": "2026-10-21T12:00:00Z",
+      "discovered_at": "2026-11-07T08:04:42.142787Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://changelog.tiendanube.com/permisos-respetados-por-el-admin-mcp-en-tiendanube-8e54f2f4",
+          "claim": "El MCP de Tiendanube permite consultar ventas con IA y aplica los permisos de cada integrante de la tienda."
+        }
+      ],
+      "tags": [
+        "inteligencia artificial",
+        "tiendanube",
+        "mcp",
+        "comercio electronico",
+        "automatizacion"
+      ],
+      "consumed_by": "tiendanube-lleva-las-ventas-al-chat-de-ia-y-limita-las-acciones-segun-cada-usuario",
+      "consumed_at": "2026-11-07T08:04:42.142787Z",
+      "id": "news-v1-7674e65a9a7982e8"
     }
   ]
 }

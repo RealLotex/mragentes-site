@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-11-07",
+  "status": "prepared",
+  "local_date": "2026-11-07",
+  "created_at": "2026-11-07T08:04:42.142787Z",
+  "branch": "automation/editorial/2026-11-07",
+  "note_slug": "tiendanube-lleva-las-ventas-al-chat-de-ia-y-limita-las-acciones-segun-cada-usuario",
+  "selected_news_ids": [
+    "news-v1-7674e65a9a7982e8"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-11-07-tiendanube-lleva-las-ventas-al-chat-de-ia-y-limita-las-acciones-segun-cada-usuario.json",
+    "note": "content/notas/tiendanube-lleva-las-ventas-al-chat-de-ia-y-limita-las-acciones-segun-cada-usuario.md",
+    "cover": "static/images/stock/tiendanube-lleva-las-ventas-al-chat-de-ia-y-limita-las-acciones-segun-cada-usuario.jpg",
+    "announcement": "static/images/social/notes/tiendanube-lleva-las-ventas-al-chat-de-ia-y-limita-las-acciones-segun-cada-usuario.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
