@@ -30,12 +30,16 @@ def test_note_opens_with_headline_metadata_assigned_image_and_share_controls(tmp
     assert 'class="note-figure"' in note
     assert 'alt="Ilustración conceptual de prueba"' in note
     assert "srcset=" in note and "fetchpriority=" in note
-    preferred_source = 'href="https://www.google.com/preferences/source?q=mragentes.com.ar"'
+    preferred_source = 'href="https://www.google.com/preferences/source?q=mragentes.com.ar&amp;hl=es-419&amp;gl=AR"'
     assert note.count(preferred_source) == 1
     assert note.index('class="note-actions"') < note.index(preferred_source) < note.index("data-share-url=")
     assert note.index(preferred_source) < note.index('<figure class="note-figure">')
     assert 21 <= int(re.search(r'data-reaction-base="(\d+)"', note)[1]) <= 29
     assert 'data-note-audio' in note and re.search(r'data-audio-duration>\d{2}:\d{2}<', note)
+    assert 'aria-controls="note-player"' in note
+    assert 'data-note-player hidden' in note
+    assert 'type="range" data-audio-progress' in note
+    assert 'data-audio-toggle' in note and 'data-audio-skip="-15"' in note and 'data-audio-skip="15"' in note
     assert set(re.findall(r'data-share-provider="([^"]+)"', note)) == {
         "whatsapp", "x", "instagram", "facebook", "linkedin", "url",
     }

@@ -37,7 +37,7 @@
         <span class="note-author-label"><span>{{ $author.name }}</span><small>{{ $author.credit }}</small></span>
       </a>
       <div class="note-actions" aria-label="Acciones de esta nota">
-        <a class="note-action note-google" href="https://www.google.com/preferences/source?q={{ (urls.Parse site.BaseURL).Hostname | urlquery }}" target="_blank" rel="noopener" aria-label="Agregar MR Agentes como fuente preferida en Google"><span class="note-google-long">Agregar MR Agentes en</span><span class="note-google-short">Fuente preferida</span>{{ partial "note-icon.html" "google" }}</a>
+        <a class="note-action note-google" href="https://www.google.com/preferences/source?q={{ (urls.Parse site.BaseURL).Hostname | urlquery }}&amp;hl=es-419&amp;gl=AR" target="_blank" rel="noopener" aria-label="Agregar MR Agentes como fuente preferida en Google"><span class="note-google-long">Agregar MR Agentes en</span><span class="note-google-short">Fuente preferida</span>{{ partial "note-icon.html" "google" }}</a>
         <button class="note-action" type="button" data-share-url="{{ .Permalink }}" data-share-title="{{ .Title }}" hidden>{{ partial "note-icon.html" "share" }}Compartir</button>
         <button class="note-action" type="button" data-note-save aria-pressed="false" hidden>{{ partial "note-icon.html" "bookmark" }}<span data-note-save-label>Guardar</span></button>
       </div>
@@ -52,7 +52,7 @@
         <button class="note-tool note-reaction" type="button" data-note-reaction data-reaction-base="{{ $base }}" aria-pressed="false" aria-label="Dar Me gusta. Puntaje de la nota {{ $base }}." title="Dar Me gusta · Puntaje de la nota" disabled>
           {{ partial "note-icon.html" "heart" }}<span data-note-score>{{ $base }}</span>
         </button>
-        <button class="note-tool note-audio" type="button" data-note-audio aria-pressed="false" aria-label="Escuchar la nota, duración estimada {{ $duration }}" title="Escuchar la nota" hidden>{{ partial "note-icon.html" "headphones" }}<span data-audio-duration>{{ $duration }}</span></button>
+        <button class="note-tool note-audio" type="button" data-note-audio aria-controls="note-player" aria-expanded="false" aria-label="Escuchar la nota, duración estimada {{ $duration }}" title="Escuchar la nota" hidden>{{ partial "note-icon.html" "headphones" }}<span data-audio-duration>{{ $duration }}</span></button>
       </div>
       <div class="note-tools-sharing" role="group" aria-label="Compartir en redes">
         <a class="note-tool" data-share-provider="whatsapp" data-share-whatsapp href="https://wa.me/?text={{ $shareText | urlquery }}" target="_blank" rel="noopener" aria-label="Compartir por WhatsApp" title="WhatsApp">{{ partial "note-icon.html" "whatsapp" }}</a>
@@ -66,6 +66,22 @@
   </aside>
 
   <div class="note-main">
+    <section id="note-player" class="note-player" aria-label="Reproductor de la nota" data-note-player hidden>
+      <div class="note-player-controls">
+        <button type="button" data-audio-skip="-15" aria-label="Retroceder 15 segundos" title="Retroceder 15 segundos">{{ partial "note-icon.html" "rewind" }}<span aria-hidden="true">15</span></button>
+        <button type="button" data-audio-toggle aria-label="Reproducir lectura">
+          <span data-audio-play>{{ partial "note-icon.html" "play" }}</span>
+          <span data-audio-pause hidden>{{ partial "note-icon.html" "pause" }}</span>
+        </button>
+        <button type="button" data-audio-skip="15" aria-label="Avanzar 15 segundos" title="Avanzar 15 segundos">{{ partial "note-icon.html" "forward" }}<span aria-hidden="true">15</span></button>
+      </div>
+      <div class="note-player-timeline">
+        <span data-audio-current>00:00</span>
+        <input type="range" data-audio-progress aria-label="Posición de lectura" min="0" max="{{ $seconds }}" step="1" value="0" aria-valuetext="00:00 de {{ $duration }}">
+        <span title="Duración estimada">{{ $duration }}</span>
+      </div>
+      <p class="note-player-error" data-audio-error role="status"></p>
+    </section>
     {{- with .Params.image }}
     <figure class="note-figure">
       {{ partial "note-image.html" (dict "page" $ "large" 1200 "small" 640 "sizes" "(min-width: 78rem) 48rem, (min-width: 62rem) 58vw, 100vw" "loading" "eager" "priority" true) }}

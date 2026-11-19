@@ -96,6 +96,10 @@ identificador del navegador. La migración `0002_note_reactions.sql` actualiza e
 total en la misma operación que guarda o quita una reacción. La interfaz muestra
 el puntaje de base de la nota más ese total.
 
-La lectura en voz alta usa una voz en español instalada en el dispositivo. Para
-desplegar el contador, aplicá la migración a la base existente `mragentes_metrics`
-y después actualizá `mragentes-metrics` mediante el conector de Cloudflare.
+La lectura en voz alta usa una voz en español instalada en el dispositivo. El
+reproductor calcula la duración y la posición de la barra a partir del texto.
+Los saltos de 15 segundos reanudan en la palabra correspondiente al tiempo estimado.
+
+Para desplegar el contador, aplicá la migración a la base existente
+`mragentes_metrics` y después actualizá `mragentes-metrics` mediante el conector
+de Cloudflare.

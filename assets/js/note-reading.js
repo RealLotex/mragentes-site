@@ -97,76 +97,173 @@ export function speechParts(text) {
   return parts;
 }
 
-export function initReadAloud(note, tell, browser = window) {
+function formatTime(seconds) {
+  return [Math.floor(seconds / 60), seconds % 60].map((value) => String(value).padStart(2, "0")).join(":");
+}
+
+export function initReadAloud(note, browser = window) {
   const synth = browser.speechSynthesis;
   const Utterance = browser.SpeechSynthesisUtterance;
   if (!synth || !Utterance) return;
   const button = note.querySelector("[data-note-audio]");
+  const player = note.querySelector("[data-note-player]");
+  const toggle = player.querySelector("[data-audio-toggle]");
+  const play = toggle.querySelector("[data-audio-play]");
+  const pause = toggle.querySelector("[data-audio-pause]");
+  const progress = player.querySelector("[data-audio-progress]");
+  const elapsed = player.querySelector("[data-audio-current]");
+  const error = player.querySelector("[data-audio-error]");
+  const total = Number(progress.max);
   const duration = button.querySelector("[data-audio-duration]").textContent;
-  let playback = null;
+  let parts;
+  let secondsPerWord;
+  let voice;
+  let position = 0;
+  let seeking = false;
+  let current = null;
+  let timer;
   synth.getVoices();
 
-  function reset() {
-    playback = null;
-    button.setAttribute("aria-pressed", "false");
-    button.setAttribute("aria-label", `Escuchar la nota, duración estimada ${duration}`);
-    button.title = "Escuchar la nota";
+  function renderTime(value) {
+    const time = formatTime(value);
+    elapsed.textContent = time;
+    progress.value = value;
+    progress.setAttribute("aria-valuetext", `${time} de ${duration}`);
+  }
+
+  function renderPlayback() {
+    play.hidden = Boolean(current);
+    pause.hidden = !current;
+    toggle.setAttribute("aria-label", current ? "Pausar lectura" : "Reproducir lectura");
+  }
+
+  function stop() {
+    const wasPlaying = Boolean(current);
+    current = null;
+    browser.clearInterval(timer);
+    if (wasPlaying) synth.cancel();
+    renderPlayback();
+  }
+
+  function prepare() {
+    const localVoices = synth.getVoices().filter((voice) => voice.localService);
+    voice = localVoices.find((item) => /^es[-_]ar$/i.test(item.lang))
+      || localVoices.find((item) => /^es(?:[-_]|$)/i.test(item.lang));
+    if (!voice) {
+      error.textContent = "Para escuchar, activá una voz en español en la configuración de tu dispositivo.";
+      return false;
+    }
+    if (!parts) {
+      const content = note.querySelector("[data-note-text]");
+      const text = `${note.querySelector("h1").textContent}.\n${content.innerText || content.textContent}`;
+      let wordCount = 0;
+      parts = speechParts(text).map((part) => {
+        const words = Array.from(part.matchAll(/\S+/g), (word) => word.index);
+        const start = wordCount;
+        wordCount += words.length;
+        return { text: part, words, start, end: wordCount };
+      });
+      secondsPerWord = total / wordCount;
+    }
+    error.textContent = "";
+    return true;
+  }
+
+  function speakFrom(word) {
+    const part = parts.find((item) => word < item.end);
+    if (!part) {
+      current = null;
+      position = total;
+      if (!seeking) renderTime(total);
+      renderPlayback();
+      return;
+    }
+    const offset = part.words[word - part.start];
+    const utterance = new Utterance(part.text.slice(offset));
+    utterance.voice = voice;
+    utterance.lang = voice.lang.replace("_", "-");
+    current = utterance;
+    renderPlayback();
+
+    let anchorPosition = position;
+    let anchorTime;
+    // Los eventos de palabra ajustan el reloj cuando el motor de voz los emite.
+    utterance.onstart = () => {
+      if (current !== utterance) return;
+      anchorTime = browser.performance.now();
+      timer = browser.setInterval(() => {
+        const estimate = anchorPosition + (browser.performance.now() - anchorTime) / 1000;
+        position = Math.max(position, Math.min(total, part.end * secondsPerWord, estimate));
+        if (!seeking) renderTime(Math.floor(position));
+      }, 200);
+    };
+    utterance.onboundary = (event) => {
+      if (current !== utterance || event.name !== "word") return;
+      const nextWord = part.words.findIndex((index) => index > offset + event.charIndex);
+      anchorPosition = ((nextWord === -1 ? part.end : part.start + nextWord) - 1) * secondsPerWord;
+      anchorTime = browser.performance.now();
+    };
+    utterance.onend = () => {
+      if (current !== utterance) return;
+      browser.clearInterval(timer);
+      position = Math.min(total, part.end * secondsPerWord);
+      if (!seeking) renderTime(Math.floor(position));
+      speakFrom(part.end);
+    };
+    utterance.onerror = () => {
+      if (current !== utterance) return;
+      stop();
+      error.textContent = "La lectura se interrumpió. Podés reanudarla desde el reproductor.";
+    };
+    synth.speak(utterance);
+  }
+
+  function start() {
+    if (!prepare()) return;
+    if (position >= total) position = 0;
+    renderTime(Math.floor(position));
+    speakFrom(Math.floor(position / secondsPerWord + 1e-8));
+  }
+
+  function seek(value) {
+    const resume = Boolean(current);
+    if (resume) stop();
+    position = Math.max(0, Math.min(total, Math.floor(value)));
+    seeking = false;
+    renderTime(position);
+    if (resume && position < total) start();
   }
 
   button.hidden = false;
   button.addEventListener("click", () => {
-    if (playback) {
-      reset();
-      synth.cancel();
-      tell("Lectura detenida.");
-      return;
+    const opening = player.hidden;
+    player.hidden = !opening;
+    button.setAttribute("aria-expanded", String(opening));
+    button.setAttribute("aria-label", opening ? "Cerrar el reproductor" : `Escuchar la nota, duración estimada ${duration}`);
+    button.title = opening ? "Cerrar el reproductor" : "Escuchar la nota";
+    if (opening) {
+      start();
+      toggle.focus();
+    } else {
+      stop();
     }
-    const localVoices = synth.getVoices().filter((voice) => voice.localService);
-    const voice = localVoices.find((item) => /^es[-_]ar$/i.test(item.lang))
-      || localVoices.find((item) => /^es(?:[-_]|$)/i.test(item.lang));
-    if (!voice) {
-      tell("Para escuchar, activá una voz en español en la configuración de tu dispositivo.");
-      return;
-    }
-    const content = note.querySelector("[data-note-text]");
-    const parts = speechParts(`${note.querySelector("h1").textContent}.\n${content.innerText || content.textContent}`);
-    if (parts.length === 0) return;
-
-    const current = { index: 0, utterance: null };
-    playback = current;
-    button.setAttribute("aria-pressed", "true");
-    button.setAttribute("aria-label", "Detener la lectura");
-    button.title = "Detener la lectura";
-    tell("Leyendo la nota.");
-
-    function next() {
-      if (playback !== current) return;
-      if (current.index === parts.length) {
-        reset();
-        tell("Lectura finalizada.");
-        return;
-      }
-      const utterance = new Utterance(parts[current.index]);
-      current.index += 1;
-      current.utterance = utterance;
-      utterance.voice = voice;
-      utterance.lang = voice.lang;
-      utterance.onend = next;
-      utterance.onerror = () => {
-        if (playback !== current) return;
-        reset();
-        tell("La lectura se interrumpió. Podés volver a iniciarla.");
-      };
-      synth.speak(utterance);
-    }
-    next();
   });
-
-  browser.addEventListener("pagehide", () => {
-    if (!playback) return;
-    reset();
-    synth.cancel();
+  toggle.addEventListener("click", () => {
+    if (current) stop();
+    else start();
   });
+  player.querySelectorAll("[data-audio-skip]").forEach((skip) => {
+    skip.addEventListener("click", () => seek(position + Number(skip.dataset.audioSkip)));
+  });
+  progress.addEventListener("input", () => {
+    seeking = true;
+    renderTime(Number(progress.value));
+  });
+  progress.addEventListener("change", () => seek(Number(progress.value)));
+  progress.addEventListener("blur", () => {
+    if (seeking) seek(Number(progress.value));
+  });
+  browser.addEventListener("pagehide", stop);
 }
 
 const note = typeof document !== "undefined" && document.querySelector("[data-note-reading]");
@@ -177,5 +274,5 @@ if (note) {
   const tell = (message) => { status.textContent = message; };
   initReaction(note, slug, tell);
   initBookmark(note, slug, tell);
-  initReadAloud(note, tell);
+  initReadAloud(note);
 }

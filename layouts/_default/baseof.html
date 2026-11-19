@@ -15,7 +15,7 @@
 <meta name="description" content="{{ $desc }}">
 <link rel="canonical" href="{{ .Permalink }}">
 
-<meta name="theme-color" content="#f1ebde">
+<meta name="theme-color" content="#faf8f6">
 <meta name="color-scheme" content="light">
 {{- $authorName := "MR Agentes" }}
 {{- if and .IsPage (eq .Section "notas") }}{{ $authorName = (partial "note-author.html" .).name }}{{ end }}
@@ -24,11 +24,8 @@
 <meta name="geo.placename" content="Gálvez, Santa Fe">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 
-{{- /* Fuentes: autoalojadas y precargadas. Las dos que pintan el primer
-       viewport se precargan; la itálica y la monoespaciada llegan después
-       porque no bloquean nada que se vea de entrada. */}}
+{{- /* Archivo pinta los títulos, el texto principal y la navegación. */}}
 <link rel="preload" href="/fonts/archivo-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/alegreya-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 
 {{- with resources.Get "css/main.css" }}
   {{- $css := . | minify | fingerprint "sha256" }}
@@ -80,7 +77,7 @@
 {{ partial "schema.html" . }}
 </head>
 
-<body{{ if $isNote }} class="note-page"{{ end }}>
+<body>
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
 {{ partial "masthead.html" . }}

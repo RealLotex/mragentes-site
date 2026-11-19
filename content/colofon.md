@@ -16,12 +16,10 @@ Las tres familias del sitio están dibujadas en Argentina. No es un gesto decora
 entre varias opciones técnicamente equivalentes, ésta agrega algo que las otras no.
 
 - **[Archivo](https://fonts.google.com/specimen/Archivo)**, de Omnibus-Type (Buenos
-  Aires), en títulos e interfaz. Tiene eje de ancho variable, y los títulos van
-  ligeramente expandidos —112 %— para que se lean como una placa grabada y no como
-  una tipografía de sistema.
+  Aires), en títulos, texto principal e interfaz. Su eje de ancho variable
+  permite ajustar los títulos a cada formato.
 - **[Alegreya](https://fonts.google.com/specimen/Alegreya)**, de Huerta Tipográfica
-  (Buenos Aires), diseñada por Juan Pablo del Peral, en todo el texto largo. Es una
-  serif pensada para literatura: tiene ritmo y aguanta párrafos enteros sin cansar.
+  (Buenos Aires), diseñada por Juan Pablo del Peral, en citas.
 - **[Chivo Mono](https://fonts.google.com/specimen/Chivo+Mono)**, también de
   Omnibus-Type, en fechas, claves y datos. La monoespaciada alinea las cifras en
   columna, que es exactamente para lo que se la usa acá.
@@ -33,22 +31,14 @@ envía la IP de cada visitante a un tercero sin avisarle.
 
 ## Color y forma
 
-El fondo es hueso, no blanco puro, y la tinta es un negro cálido, no `#000`. El negro
-puro sobre blanco puro vibra en pantalla y cansa a los pocos párrafos.
-
-El único acento es el naranja del **minio**, la pintura antióxido con la que se pintan
-las estructuras de hierro y buena parte de la maquinaria agrícola de esta zona. Se usa
-para una cosa por página, no para decorar.
-
-No hay tarjetas. Lo que en una plantilla sería una grilla de recuadros con sombra, acá
-son filas separadas por filetes de un pixel, numeradas al margen como una lámina
-anatómica. Los botones son rectángulos con 2 px de radio y una sombra dura que se hunde
-al presionarlos, como una tecla.
+El fondo claro acompaña la lectura. Los botones redondeados y los bordes finos
+se repiten en la navegación y en los formularios. El verde petróleo identifica
+los bloques de contacto, y el ocre marca la sección activa.
 
 ## La mano
 
-La marca es una mano grabada, y el detalle de *La creación de Adán* que abre la portada
-es el mismo gesto. Toda esa escena de Miguel Ángel ocurre en el espacio entre dos dedos:
+La marca es una mano grabada que toma el gesto de *La creación de Adán*.
+La escena de Miguel Ángel ocurre en el espacio entre dos dedos:
 una mano le transfiere a la otra la capacidad de actuar. Eso es delegar una tarea, y es
 literalmente lo que hace un agente. El fresco es de 1512 y es de dominio público.
 
