@@ -1,4 +1,4 @@
-import { describe, expect, test as vitestTest } from "vitest";
+import { describe, expect, test as vitestTest, vi } from "vitest";
 
 import { createPushClientHarness, makeSubscription } from "./support/fake-dom.mjs";
 import { tracedTest } from "./support/trace-test.mjs";
@@ -171,9 +171,10 @@ describe("assets/js/push.js public helpers and initialization", () => {
       harness.dispatchReady();
       harness.dispatchReady();
       await harness.flush();
-      expect(harness.calls.register).toHaveLength(1);
+      expect(harness.calls.register).toHaveLength(0);
       harness.button.click();
       await harness.flush();
+      expect(harness.calls.register).toHaveLength(1);
       expect(harness.calls.subscribe).toHaveLength(1);
     } finally {
       harness.close();
@@ -315,7 +316,7 @@ describe("assets/js/push.js subscribe, revalidation and drop", () => {
         harness.dispatchReady();
         await harness.flush();
         harness.button.click();
-        await harness.flush(16);
+        await harness.flush();
         expect(harness.calls.unsubscribe).toHaveLength(1);
         expect(harness.button.getAttribute("aria-pressed")).toBe("false");
         expect(harness.status.textContent).toMatch(/No se pudo|error/i);
@@ -323,6 +324,25 @@ describe("assets/js/push.js subscribe, revalidation and drop", () => {
       } finally {
         harness.close();
       }
+    }
+
+    vi.useFakeTimers();
+    const harness = await loadingHarness({ fetchImpl: (_url, { signal }) => new Promise((_resolve, reject) => {
+      signal?.addEventListener("abort", () => reject(signal.reason), { once: true });
+    }) });
+    try {
+      harness.window.setTimeout = setTimeout;
+      harness.window.clearTimeout = clearTimeout;
+      harness.dispatchReady();
+      harness.button.click();
+      await harness.flush(24);
+      await vi.advanceTimersByTimeAsync(8_000);
+      expect(harness.calls.unsubscribe).toHaveLength(1);
+      expect(harness.button.disabled).toBe(false);
+      expect(harness.status.textContent).toMatch(/no respondió a tiempo/);
+    } finally {
+      harness.close();
+      vi.useRealTimers();
     }
   });
 

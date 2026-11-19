@@ -12,6 +12,7 @@
   var API = meta("push-api-url").replace(/\/+$/, "");
   var VAPID = meta("vapid-key");
   var RETRY_KEY = "mragentes:push-unsubscribe-retry";
+  var TIMEOUT = 8000;
   var initialized = false;
 
   function meta(name) {
@@ -98,8 +99,8 @@
     var status = document.querySelector("[data-push-status]");
     if (!btn) return;
 
-    var operationPending = false;
     var activeSubscription = null;
+    var confirmed = false;
 
     function say(text) {
       if (!status) return;
@@ -142,20 +143,23 @@
       return payload;
     }
 
-    function post(path, payload, onSuccess, onError) {
-      window.fetch(API + path, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      }).then(function (response) {
-        if (!response.ok) {
-          onError(new Error("el servidor rechazó la operación"));
-          return;
-        }
-        onSuccess(response);
-      }, function (error) {
-        onError(error);
-      });
+    async function post(path, payload) {
+      var controller = new AbortController();
+      var timer = window.setTimeout(function () { controller.abort(); }, TIMEOUT);
+      try {
+        var response = await window.fetch(API + path, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+        if (!response.ok) throw new Error("el servidor rechazó la operación");
+      } catch (error) {
+        if (controller.signal.aborted) throw new Error("el servidor no respondió a tiempo");
+        throw error;
+      } finally {
+        window.clearTimeout(timer);
+      }
     }
 
     function readRetries() {
@@ -196,89 +200,70 @@
       }));
     }
 
-    function revalidateRemote(sub, onSuccess, onError) {
-      post("/api/subscribe/", subscriptionPayload(sub, true), function () {
-        activeSubscription = sub;
-        onSuccess(true);
-      }, onError);
-    }
-
-    function add(reg, onSuccess, onError) {
-      function subscribe(permission) {
-        if (permission !== "granted") {
-          onError(new Error("permiso denegado en el navegador"));
-          return;
-        }
-        var key = vapidBytes();
-        if (!key) {
-          onError(new Error("configuración de avisos no disponible"));
-          return;
-        }
-        reg.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: key
-        }).then(function (sub) {
-          post("/api/subscribe/", subscriptionPayload(sub, false), function () {
-            activeSubscription = sub;
-            onSuccess(true);
-          }, function (error) {
-            /* Una alta remota fallida revierte siempre la suscripción local. */
-            Promise.resolve(sub.unsubscribe()).then(function () {
-              activeSubscription = null;
-              onError(error);
-            }, function () {
-              activeSubscription = null;
-              onError(error);
-            });
-          });
-        }, onError);
+    async function add(existingRegistration) {
+      var worker = navigator.serviceWorker;
+      var timer;
+      var deadline = new Promise(function (_resolve, reject) {
+        timer = window.setTimeout(function () {
+          reject(new Error("el servicio de avisos no inició a tiempo"));
+        }, TIMEOUT);
+      });
+      var reg;
+      try {
+        var registered = existingRegistration
+          ? Promise.resolve(existingRegistration)
+          : worker.register("/sw.js", { scope: "/" });
+        reg = await Promise.race([registered.then(function (registration) {
+          return registration.active ? registration : worker.ready;
+        }), deadline]);
+      } finally {
+        window.clearTimeout(timer);
       }
 
-      var permission = window.Notification.permission;
-      if (permission === "default") {
-        window.Notification.requestPermission().then(subscribe, onError);
-      } else {
-        subscribe(permission);
+      var sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: vapidBytes()
+      });
+      try {
+        await post("/api/subscribe/", subscriptionPayload(sub, false));
+      } catch (error) {
+        /* Si el navegador no logra revertir el alta, el próximo intento
+           verifica esa suscripción local antes de crear otra. */
+        try { await sub.unsubscribe(); }
+        catch (_rollbackError) { activeSubscription = sub; }
+        throw error;
       }
+      activeSubscription = sub;
+      return true;
     }
 
     /* La baja remota va primero para no perder el único endpoint que permite
        limpiarla. Si falla, se guarda para reintento y luego se completa la baja
        local: el usuario no debe seguir viendo una suscripción que quiso quitar. */
-    function drop(sub, onSuccess, onError) {
+    async function drop(sub) {
       var endpoint = sub.endpoint;
-
-      function finishLocal() {
-        sub.unsubscribe().then(function () {
-          activeSubscription = null;
-          onSuccess(false);
-        }, onError);
-      }
-
-      post("/api/unsubscribe/", { endpoint: endpoint }, function () {
+      try {
+        await post("/api/unsubscribe/", { endpoint: endpoint });
         forgetRetry(endpoint);
-        finishLocal();
-      }, function () {
+      } catch (_error) {
         rememberRetry(endpoint);
-        finishLocal();
-      });
+      }
+      await sub.unsubscribe();
+      activeSubscription = null;
+      return false;
     }
 
-    function revalidate(reg, onSuccess, onError) {
-      reg.pushManager.getSubscription().then(function (sub) {
-        activeSubscription = sub;
-        if (!sub) {
-          onSuccess(false);
-          return;
-        }
-        if (keyMatches(sub)) {
-          revalidateRemote(sub, onSuccess, onError);
-          return;
-        }
-        drop(sub, function () {
-          add(reg, onSuccess, onError);
-        }, onError);
-      }, onError);
+    async function revalidate() {
+      var reg = await navigator.serviceWorker.getRegistration("/");
+      var sub = reg && await reg.pushManager.getSubscription();
+      activeSubscription = sub || null;
+      if (!sub) return false;
+      if (keyMatches(sub)) {
+        await post("/api/subscribe/", subscriptionPayload(sub, true));
+        return true;
+      }
+      await drop(sub);
+      return add(reg);
     }
 
     if (!API || !vapidBytes()) {
@@ -287,7 +272,7 @@
       return;
     }
 
-    if (!supported()) {
+    if (iosNeedsInstall() || !supported()) {
       btn.hidden = true;
       say(iosNeedsInstall()
         ? "En iPhone y iPad hay que agregar el sitio a la pantalla de inicio (Compartir → Agregar a inicio) para recibir avisos."
@@ -301,55 +286,35 @@
       return;
     }
 
+    async function perform(action, operation) {
+      renderLoading(action, confirmed);
+      try {
+        confirmed = await operation();
+        render(confirmed);
+      } catch (error) {
+        render(confirmed);
+        if (activeSubscription && !confirmed) btn.textContent = "Reintentar avisos";
+        say("No se pudo completar la operación: " +
+          (error && error.message ? error.message : "error desconocido") + ".");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
     btn.hidden = false;
-    renderLoading("verify", false);
-    operationPending = true;
-
-    navigator.serviceWorker.register("/sw.js", { scope: "/" }).then(function (reg) {
-      revalidate(reg, function (on) {
-        render(on);
-        operationPending = false;
-        btn.disabled = false;
-
-        btn.addEventListener("click", function () {
-          if (operationPending) return;
-          operationPending = true;
-
-          var currentlyOn = activeSubscription !== null;
-          renderLoading(currentlyOn ? "drop" : "add", currentlyOn);
-
-          function complete(nextOn) {
-            render(nextOn);
-            operationPending = false;
-            btn.disabled = false;
-          }
-
-          function fail(error) {
-          render(false);
-          say("No se pudo completar la operación: " +
-            (error && error.message ? error.message : "error desconocido") + ".");
-            operationPending = false;
-            btn.disabled = false;
-          }
-
-          if (activeSubscription) {
-            drop(activeSubscription, complete, fail);
-          } else {
-            add(reg, complete, fail);
-          }
-        });
-      }, function () {
-        btn.hidden = true;
-        say("No se pudo iniciar el servicio de avisos.");
-        operationPending = false;
-        btn.disabled = false;
+    btn.addEventListener("click", function () {
+      if (btn.disabled) return;
+      if (confirmed) return perform("drop", function () { return drop(activeSubscription); });
+      if (activeSubscription) return perform("verify", revalidate);
+      return perform("add", async function () {
+        var permission = window.Notification.permission;
+        if (permission === "default") permission = await window.Notification.requestPermission();
+        if (permission !== "granted") throw new Error("permiso denegado en el navegador");
+        return add();
       });
-    }, function () {
-      btn.hidden = true;
-      say("No se pudo iniciar el servicio de avisos.");
-      operationPending = false;
-      btn.disabled = false;
     });
+    if (window.Notification.permission === "granted") perform("verify", revalidate);
+    else render(false);
   }
 
   if (document.readyState === "loading") {

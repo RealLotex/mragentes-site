@@ -131,6 +131,7 @@ describe("Push subscription validation and persistence", () => {
     expect(second.status).toBe(200);
     expect((await second.json()).created).toBe(false);
     expect(secondCtx.promises).toHaveLength(0);
+    expect(kv.calls.filter(({ operation }) => operation === "put")).toHaveLength(1);
 
     const legacyKv = new FakeKV();
     const legacySubscription = validSubscription("https://legacy-push.example.test/subscription/existing");
@@ -276,9 +277,10 @@ describe("Push subscription validation and persistence", () => {
     const clock = new FakeClock();
     const kv = new FakeKV({ clock });
     const worker = workerHandler(target, "PUSH-SUB-016");
-    await worker.fetch(request("/api/subscribe/", validSubscription()), env(kv), new ExecutionContextRecorder());
+    const bindings = env(kv, { CLOCK: () => clock.now() });
+    await worker.fetch(request("/api/subscribe/", validSubscription()), bindings, new ExecutionContextRecorder());
     clock.advance(10 * 86_400_000);
-    await worker.fetch(request("/api/subscribe/", validSubscription()), env(kv), new ExecutionContextRecorder());
+    await worker.fetch(request("/api/subscribe/", validSubscription()), bindings, new ExecutionContextRecorder());
     const ttls = kv.calls.filter((call) => call.operation === "put" && call.key.startsWith("sub:")).map((call) => call.options.expirationTtl);
     expect(ttls).toHaveLength(2);
     expect(ttls.every((ttl) => ttl >= 86_400 && ttl <= 31_536_000)).toBe(true);

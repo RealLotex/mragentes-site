@@ -1,5 +1,6 @@
 ---
 schema_version: 1
+news: true
 title: "Anthropic sale a bolsa y disputa el récord de SpaceX"
 date: "2026-11-19T00:00:00-03:00"
 description: "Anthropic fijó su oferta base en US$81.340 millones. SpaceX captó US$86.250 millones brutos al cierre tras colocar acciones adicionales."

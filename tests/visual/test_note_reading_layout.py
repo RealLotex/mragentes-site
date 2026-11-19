@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import json
 import re
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from xml.etree import ElementTree
 
 import pytest
 
@@ -72,7 +74,14 @@ def test_related_notes_have_graphic_cards_and_exclude_current_draft_and_future(t
 @pytest.mark.red_expected
 @pytest.mark.visual
 def test_notes_credit_marcos_with_portrait_and_person_schema(tmp_path: Path) -> None:
-    _build(tmp_path, [("latest", "2020-01-02", "")])
+    published = (datetime.now(timezone(timedelta(hours=-3))) - timedelta(hours=1)).replace(microsecond=0)
+    stamp = published.isoformat()
+    _build(tmp_path, [
+        ("latest", stamp, "news: true"),
+        ("essay", stamp, ""),
+        ("old", "2020-01-01", "news: true"),
+        ("draft", stamp, "news: true\ndraft: true"),
+    ])
     note = _note(tmp_path)
     byline = note.split('class="note-author"', 1)[1].split("</a>", 1)[0]
     assert "Marcos Rosich" in byline
@@ -81,11 +90,23 @@ def test_notes_credit_marcos_with_portrait_and_person_schema(tmp_path: Path) -> 
     assert "/authors/marcos-rosich" in portrait and portrait.endswith(".webp")
     assert (tmp_path / "public" / portrait.lstrip("/")).is_file()
     graph = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', note).group(1))["@graph"]
-    article = next(node for node in graph if node["@type"] == "BlogPosting")
+    article = next(node for node in graph if node["@type"] == "NewsArticle")
     assert article["author"]["@type"] == "Person"
     assert article["author"]["name"] == "Marcos Rosich"
     assert article["author"]["url"].endswith("/nosotros/")
     assert article["publisher"]["@id"].endswith("#mragentes")
+    assert article["datePublished"] == article["dateModified"] == stamp
+
+    public = tmp_path / "public"
+    assert '"@type":"BlogPosting"' in (public / "notas/essay/index.html").read_text(encoding="utf-8")
+    sitemap = ElementTree.parse(public / "sitemap-news.xml")
+    namespaces = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9", "n": "http://www.google.com/schemas/sitemap-news/0.9"}
+    entries = sitemap.findall("s:url", namespaces)
+    assert len(entries) == 1
+    assert entries[0].findtext("s:loc", namespaces=namespaces) == "https://mragentes.com.ar/notas/latest/"
+    assert entries[0].findtext("n:news/n:publication_date", namespaces=namespaces) == stamp
+    assert entries[0].findtext("n:news/n:title", namespaces=namespaces) == "latest"
+
 
 
 @pytest.mark.trace("NOTE-LAYOUT-005")

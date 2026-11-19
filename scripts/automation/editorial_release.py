@@ -234,6 +234,7 @@ def build_note(submission: dict, local_day: date, slug: str, image_name: str) ->
         sources=[submission["source_url"], *submission.get("related_sources", [])],
         automation_id=blog_run_id(local_day.isoformat(), slug),
     )
+    front["news"] = True
     lines = ["---"]
     for key, value in front.items():
         if isinstance(value, list):

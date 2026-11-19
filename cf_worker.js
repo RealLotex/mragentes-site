@@ -15,6 +15,7 @@ const BRAND_ICON = "/faviconhand512.png";
 const BRAND_BADGE = "/faviconhand512.png";
 const SCHEMA_VERSION = 1;
 const SUBSCRIPTION_TTL_SECONDS = 31_536_000;
+const SUBSCRIPTION_REFRESH_MS = 86_400_000;
 const MAX_REQUEST_BYTES = 16_384;
 const DEFAULT_PAGE_SIZE = 50;
 const DEFAULT_MAX_SUBSCRIPTIONS = 10_000;
@@ -665,8 +666,10 @@ async function handleSubscribe(request, env, cors, ctx) {
   }
   const key = await subscriptionKey(subscription.endpoint);
   const result = await withBindingLock(env.PUSH_SUBS, key, async () => {
-    const existingRaw = await env.PUSH_SUBS.get(key);
-    const legacyRaw = await env.PUSH_SUBS.get(subscription.endpoint);
+    const [existingRaw, legacyRaw] = await Promise.all([
+      env.PUSH_SUBS.get(key),
+      env.PUSH_SUBS.get(subscription.endpoint),
+    ]);
     const legacySubscription = validLegacySubscriptionRecord(legacyRaw, subscription.endpoint);
     let existing = null;
     try { existing = existingRaw ? JSON.parse(existingRaw) : null; } catch { existing = null; }
@@ -676,6 +679,12 @@ async function handleSubscribe(request, env, cors, ctx) {
     // legacy record is removed after the canonical write succeeds.
     const created = existingRaw === null && legacyRaw === null;
     const timestamp = nowFrom(env);
+    const age = timestamp - existing?.updatedAt;
+    if (legacyRaw === null && existing?.schemaVersion === SCHEMA_VERSION &&
+        Number.isFinite(existing.updatedAt) && age >= 0 && age < SUBSCRIPTION_REFRESH_MS &&
+        JSON.stringify(existing.subscription) === JSON.stringify(subscription)) {
+      return { created: false };
+    }
     await env.PUSH_SUBS.put(key, JSON.stringify({
       schemaVersion: SCHEMA_VERSION,
       subscription,

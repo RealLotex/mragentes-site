@@ -90,7 +90,7 @@
           wasShown = true;
           write("sessionStorage", SESSION_KEY, "1");
           panel.hidden = false;
-        }, 10000);
+        }, 1500);
       }
     }
 
