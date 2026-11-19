@@ -32,8 +32,9 @@ envía la IP de cada visitante a un tercero sin avisarle.
 ## Color y forma
 
 El fondo claro acompaña la lectura. Los botones redondeados y los bordes finos
-se repiten en la navegación y en los formularios. El verde petróleo identifica
-los bloques de contacto, y el ocre marca la sección activa.
+se repiten en la navegación y en los formularios. El naranja minio es el color
+de marca y destaca los botones y la sección activa. El verde petróleo identifica
+el recuadro de contacto al costado de las notas.
 
 ## La mano
 
