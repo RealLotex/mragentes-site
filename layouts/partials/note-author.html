@@ -1,2 +1,15 @@
-{{- $photo := (resources.Get "authors/marcos-rosich.jpg").Resize "112x webp q85" -}}
-{{- return (dict "name" "Marcos Rosich" "url" ("/nosotros/" | absURL) "photo" $photo) -}}
+{{- $name := "Marcos Rosich" -}}
+{{- $url := "/nosotros/" | absURL -}}
+{{- $type := "Person" -}}
+{{- $credit := "MR AGENTES" -}}
+{{- $photo := "" -}}
+{{- if .Params.automation_id -}}
+  {{- $name = site.Title -}}
+  {{- $url = "/nosotros/#criterio-editorial" | absURL -}}
+  {{- $type = "Organization" -}}
+  {{- $credit = "Marcos Rosich · responsable editorial" -}}
+  {{- $photo = site.Params.logo | relURL -}}
+{{- else -}}
+  {{- $photo = ((resources.Get "authors/marcos-rosich.jpg").Resize "112x webp q85").RelPermalink -}}
+{{- end -}}
+{{- return (dict "name" $name "url" $url "type" $type "credit" $credit "photo" $photo) -}}

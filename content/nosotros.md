@@ -70,14 +70,19 @@ tenga consecuencias.
 personal: van contra los términos del servicio y terminan con el número bloqueado, casi
 siempre en el peor momento.
 
-## Cómo escribo las notas
+## Cómo se hacen las notas {#criterio-editorial}
 
-Publico seguido sobre lo que pasa en automatización e inteligencia artificial. Dos
-reglas: cada dato afirmado lleva su fuente enlazada al pie, y si algo se demostró
-falso, se corrige la nota y se deja anotada la corrección en lugar de borrarla.
+MR Agentes publica noticias y análisis sobre inteligencia artificial y automatización
+desde Gálvez, Santa Fe. Soy el responsable editorial de la publicación.
 
-Escribo yo, con ayuda de herramientas para buscar y ordenar material. No publico nada
-que no haya leído y entendido, porque el que da la cara si una nota está mal soy yo.
+Algunas notas se preparan y publican mediante un flujo automatizado que usa IA para
+investigar, redactar y preparar imágenes. Esas notas están firmadas por MR Agentes
+y me identifican como responsable editorial. Los enlaces de cada nota permiten
+consultar las fuentes.
+
+Si encontrás un error, podés avisarme desde [Contacto](/contacto/). Las correcciones
+relevantes se indican en la propia nota. Si hay patrocinio o un vínculo comercial
+relevante para la cobertura, se identifica en el artículo.
 
 ## Cómo seguir
 

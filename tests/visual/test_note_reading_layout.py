@@ -30,6 +30,10 @@ def test_note_opens_with_headline_metadata_assigned_image_and_share_controls(tmp
     assert 'class="note-figure"' in note
     assert 'alt="Ilustración conceptual de prueba"' in note
     assert "srcset=" in note and "fetchpriority=" in note
+    preferred_source = 'href="https://www.google.com/preferences/source?q=mragentes.com.ar"'
+    assert note.count(preferred_source) == 1
+    assert note.index('</header>', note.index('class="note-head')) < note.index(preferred_source)
+    assert note.index(preferred_source) < note.index('<figure class="note-figure">')
     assert note.index("<figcaption>") < note.index("Texto de la nota.")
     for source in re.findall(r'(/note-images/[^\s\"]+\.webp)', note):
         assert (tmp_path / "public" / source.lstrip("/")).is_file()
@@ -77,28 +81,38 @@ def test_notes_credit_marcos_with_portrait_and_person_schema(tmp_path: Path) -> 
     published = (datetime.now(timezone(timedelta(hours=-3))) - timedelta(hours=1)).replace(microsecond=0)
     stamp = published.isoformat()
     _build(tmp_path, [
-        ("latest", stamp, "news: true"),
+        ("latest", stamp, "news: true\nautomation_id: blog:2026-11-19:latest"),
         ("essay", stamp, ""),
         ("old", "2020-01-01", "news: true"),
         ("draft", stamp, "news: true\ndraft: true"),
     ])
     note = _note(tmp_path)
     byline = note.split('class="note-author"', 1)[1].split("</a>", 1)[0]
-    assert "Marcos Rosich" in byline
-    assert "<small>MR AGENTES</small>" in byline
-    portrait = re.search(r'src="([^"]+)"', byline).group(1)
-    assert "/authors/marcos-rosich" in portrait and portrait.endswith(".webp")
-    assert (tmp_path / "public" / portrait.lstrip("/")).is_file()
+    assert "<span>MR Agentes</span>" in byline
+    assert "Marcos Rosich · responsable editorial" in byline
+    assert 'href="https://mragentes.com.ar/nosotros/#criterio-editorial"' in byline
     graph = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', note).group(1))["@graph"]
     article = next(node for node in graph if node["@type"] == "NewsArticle")
-    assert article["author"]["@type"] == "Person"
-    assert article["author"]["name"] == "Marcos Rosich"
-    assert article["author"]["url"].endswith("/nosotros/")
+    assert article["author"]["@type"] == "Organization"
+    assert article["author"]["name"] == "MR Agentes"
+    assert article["author"]["url"].endswith("/nosotros/#criterio-editorial")
     assert article["publisher"]["@id"].endswith("#mragentes")
+    publisher = next(node for node in graph if node.get("@id") == article["publisher"]["@id"])
+    assert publisher["publishingPrinciples"].endswith("/nosotros/#criterio-editorial")
     assert article["datePublished"] == article["dateModified"] == stamp
 
     public = tmp_path / "public"
-    assert '"@type":"BlogPosting"' in (public / "notas/essay/index.html").read_text(encoding="utf-8")
+    essay = (public / "notas/essay/index.html").read_text(encoding="utf-8")
+    essay_byline = essay.split('class="note-author"', 1)[1].split("</a>", 1)[0]
+    assert "Marcos Rosich" in essay_byline and "<small>MR AGENTES</small>" in essay_byline
+    portrait = re.search(r'src="([^"]+)"', essay_byline).group(1)
+    assert "/authors/marcos-rosich" in portrait and portrait.endswith(".webp")
+    assert (public / portrait.lstrip("/")).is_file()
+    essay_graph = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', essay).group(1))["@graph"]
+    essay_schema = next(node for node in essay_graph if node["@type"] == "BlogPosting")
+    assert essay_schema["author"]["@type"] == "Person" and essay_schema["author"]["name"] == "Marcos Rosich"
+    about = (public / "nosotros/index.html").read_text(encoding="utf-8")
+    assert 'id="criterio-editorial"' in about and 'href="/contacto/"' in about
     sitemap = ElementTree.parse(public / "sitemap-news.xml")
     namespaces = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9", "n": "http://www.google.com/schemas/sitemap-news/0.9"}
     entries = sitemap.findall("s:url", namespaces)

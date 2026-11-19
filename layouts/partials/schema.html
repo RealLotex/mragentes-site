@@ -16,6 +16,8 @@
   "description" site.Params.description
   "url" site.BaseURL
   "image" (absURL "/faviconhand512.png")
+  "logo" (absURL site.Params.logo)
+  "publishingPrinciples" (absURL "/nosotros/#criterio-editorial")
   "email" site.Params.email
   "telephone" "+5493404502729"
   "founder" (dict "@type" "Person" "name" "Marcos Rosich")
@@ -60,7 +62,7 @@
     "inLanguage" "es-AR"
     "wordCount" .WordCount
     "isAccessibleForFree" true
-    "author" (dict "@type" "Person" "name" $author.name "url" $author.url "image" $author.photo.Permalink)
+    "author" (dict "@type" $author.type "name" $author.name "url" $author.url "image" (absURL $author.photo))
     "publisher" (dict "@id" (printf "%s#mragentes" site.BaseURL))
     "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
   -}}
