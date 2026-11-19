@@ -163,7 +163,7 @@ def test_home_keeps_the_short_offer_and_moves_location_to_visible_footer(tmp_pat
 @pytest.mark.trace("HOME-NOTES-007")
 @pytest.mark.red_expected
 @pytest.mark.visual
-def test_contact_button_stays_in_home_promotion_and_is_absent_from_all_headers(tmp_path: Path) -> None:
+def test_public_pages_share_search_and_contact_controls_in_the_header(tmp_path: Path) -> None:
     home = _build(tmp_path, [])
     header = home.split('<header class="masthead">', 1)[1].split("</header>", 1)[0]
     assert "masthead-cta" not in header
@@ -176,6 +176,9 @@ def test_contact_button_stays_in_home_promotion_and_is_absent_from_all_headers(t
     assert 'href="/contacto/">Contacto</a>' in header
     assert 'href="/contacto/">Contacto</a>' in about_header
     assert "Escribinos" not in about_header
+    for masthead in (header, about_header):
+        assert 'href="/notas/#q"' in masthead and 'aria-label="Buscar notas"' in masthead
+        assert 'href="/contacto/">Hablemos' in masthead
 
 
 @pytest.mark.trace("HOME-NOTES-008")
