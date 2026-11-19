@@ -1514,18 +1514,14 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 
 /* Alegreya sobre fondo oscuro adelgaza: se compensa con peso, no con opacidad. */
 .band--ink p,
-.band--ink span,
-.closer p {
+.band--ink span {
   color: rgba(241, 235, 222, 0.9);
   font-weight: 500;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
 }
 
-/* `.band-head hgroup p` es más específico que `.closer p`, así que sin esta
-   línea la bajada del cierre salía en gris oscuro sobre minio. */
-.band--ink .band-head hgroup p,
-.closer .band-head hgroup p { color: rgba(241, 235, 222, 0.82); }
+.band--ink .band-head hgroup p { color: rgba(241, 235, 222, 0.82); }
 
 /* Los bordes duros del sistema son `var(--ink)` literal: invisibles sobre tinta. */
 .band--ink :is(.nope, .ledger, .index, .catalog, .track, .channels, .datastrip) { border-top-color: rgba(241, 235, 222, 0.5); }
@@ -1718,17 +1714,14 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 
 .closer h2 { color: var(--bone); max-width: 18ch; }
 
-/* Papel sobre tinta adelgaza la letra: el suavizado en escala de grises se come
-   medio trazo de una serif. Se compensa con peso, no subiendo la opacidad —
-   que sólo la aclararía todavía más. */
 .closer p {
-  color: rgba(241, 235, 222, 0.92);
   font-weight: 500;
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
   margin-top: var(--s-3);
   max-width: 42ch;
 }
+.closer .band-head hgroup p { color: var(--bone); }
 
 .closer .key { color: rgba(255, 250, 242, 0.8); }
 .closer .btn-row { margin-top: var(--s-4); }
