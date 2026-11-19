@@ -184,12 +184,22 @@ def test_public_pages_share_search_and_contact_controls_in_the_header(tmp_path: 
 @pytest.mark.trace("HOME-NOTES-008")
 @pytest.mark.red_expected
 @pytest.mark.visual
-def test_promotional_banner_has_a_visible_green_tint_and_border() -> None:
+def test_site_uses_brand_orange_and_reserves_green_for_note_promotion() -> None:
     css = (ROOT / "assets/css/main.css").read_text(encoding="utf-8")
+    assert "--minio: #a8391b;" in css
     banner = re.search(r"\.home-intro\s*\{([^}]+)", css).group(1)
-    background = re.search(r"background:\s*#([0-9a-f]{6})", banner)
-    assert background, "Promotional block must have its own green background"
-    color = background.group(1)
-    red, green, blue = (int(color[i:i + 2], 16) for i in (0, 2, 4))
-    assert green > red and green > blue, "Promotional block must retain its green tint"
+    assert "background: var(--accent-soft);" in banner
     assert "border:" in banner and "border-left:" in banner
+
+    def green_colors(rules: str) -> set[str]:
+        greens = set()
+        for color in re.findall(r"#([0-9a-f]{6})(?:[0-9a-f]{2})?\b", rules, re.I):
+            red, green, blue = (int(color[i:i + 2], 16) for i in (0, 2, 4))
+            if green - red >= 6 and blue - green <= 2:
+                greens.add(color)
+        return greens
+
+    promo_blocks = r"(?m)^\.note-promo[^{]*\{[^}]*\}"
+    assert green_colors("".join(re.findall(promo_blocks, css))), "The note CTA must keep its green"
+    outside_promo = green_colors(re.sub(promo_blocks, "", css))
+    assert not outside_promo, f"Green styles outside the note CTA: {sorted(outside_promo)}"
