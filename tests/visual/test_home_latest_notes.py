@@ -190,6 +190,7 @@ def test_site_uses_brand_orange_and_reserves_green_for_note_promotion() -> None:
     banner = re.search(r"\.home-intro\s*\{([^}]+)", css).group(1)
     assert "background: var(--accent-soft);" in banner
     assert "border:" in banner and "border-left:" in banner
+    assert re.search(r"\.closer \.band-head hgroup p\s*\{\s*color:\s*var\(--bone\);", css)
 
     def green_colors(rules: str) -> set[str]:
         greens = set()
