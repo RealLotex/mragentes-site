@@ -56,4 +56,37 @@ describe("Worker de métricas de MR Agentes", () => {
     await Promise.all(tasks);
     expect(calls[0].values.slice(0, 2)).toEqual(["social_referral", "facebook:/notas/guia-practica/"]);
   });
+
+  test("[METRICS-004] cuenta reacciones por nota y usa una transacción para aplicar y devolver una", async () => {
+    const path = "https://mragentes.com.ar/api/metrics/v1/reactions/an%C3%A1lisis-ia";
+    const visitor = "f84875b4-0b12-4cea-82ae-4aee8615a1fd";
+    const headers = { Origin: "https://mragentes.com.ar", "X-Note-Visitor": visitor };
+    const operations = [];
+    const env = { METRICS_DB: {
+      prepare: (sql) => ({ bind: (...values) => ({ sql, values, first: async () => ({ likes: 2 }) }) }),
+      batch: async (sql) => { operations.push(sql); return [{ success: true }, { results: [{ likes: 3 }] }]; },
+    } };
+    const get = await worker.fetch(new Request(path), env);
+    expect(await get.json()).toEqual({ likes: 2 });
+    const put = await worker.fetch(new Request(path, { method: "PUT", headers }), env);
+    expect(await put.json()).toEqual({ likes: 3, liked: true });
+    const drop = await worker.fetch(new Request(path, { method: "DELETE", headers }), env);
+    expect(await drop.json()).toEqual({ likes: 3, liked: false });
+    expect(operations[0][0]).toMatchObject({ sql: expect.stringContaining("INSERT OR IGNORE"), values: ["análisis-ia", visitor] });
+    expect(operations[1][0]).toMatchObject({ sql: expect.stringContaining("DELETE FROM"), values: ["análisis-ia", visitor] });
+    expect(operations.flat().filter(({ sql }) => /^SELECT /.test(sql))).toHaveLength(2);
+  });
+
+  test("[METRICS-005] rechaza origen, identificador y slug inválidos antes de tocar la base", async () => {
+    const parent = "https://mragentes.com.ar/api/metrics/v1/reactions/";
+    const valid = { Origin: "https://mragentes.com.ar", "X-Note-Visitor": "f84875b4-0b12-4cea-82ae-4aee8615a1fd" };
+    const env = { METRICS_DB: { prepare() { throw new Error("No debe consultar D1"); } } };
+    for (const [url, headers, status] of [
+      [parent + "guia", { ...valid, Origin: "https://example.com" }, 403],
+      [parent + "guia", { ...valid, "X-Note-Visitor": "un-identificador-invalido" }, 400],
+      [parent + "arch%2Fivo", valid, 404],
+    ]) {
+      expect((await worker.fetch(new Request(url, { method: "PUT", headers }), env)).status).toBe(status);
+    }
+  });
 });

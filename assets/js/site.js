@@ -161,26 +161,43 @@
     var btn = document.querySelector("[data-share-url]");
     var status = document.querySelector("[data-share-status]");
     if (!btn) return;
+    var url = btn.getAttribute("data-share-url") || window.location.href;
+    var title = btn.getAttribute("data-share-title") || document.title;
 
-    btn.addEventListener("click", function () {
-      var url = btn.getAttribute("data-share-url") || window.location.href;
-      var title = btn.getAttribute("data-share-title") || document.title;
-      if (navigator.share) {
-        navigator.share({ title: title, text: title, url: url }).then(function () {
-          recordShareMetric("share_native");
-        }).catch(function () {});
-        return;
-      }
+    function copyLink(message) {
       if (!navigator.clipboard || !navigator.clipboard.writeText) {
-        if (status) status.textContent = "Copie este enlace: " + url;
+        if (status) status.textContent = "Copiá este enlace: " + url;
         return;
       }
       navigator.clipboard.writeText(url).then(function () {
-        if (status) status.textContent = "Enlace copiado. Ya puede enviárselo a quien le pueda servir.";
+        if (status) status.textContent = message;
         recordShareMetric("share_copy");
       }).catch(function () {
-        if (status) status.textContent = "Copie este enlace: " + url;
+        if (status) status.textContent = "Copiá este enlace: " + url;
       });
+    }
+
+    btn.hidden = false;
+    btn.addEventListener("click", function () {
+      if (navigator.share) {
+        navigator.share({ title: title, text: title, url: url }).then(function () {
+          recordShareMetric("share_native");
+        }).catch(function (error) {
+          if (error.name !== "AbortError") copyLink("Enlace copiado.");
+        });
+        return;
+      }
+      copyLink("Enlace copiado.");
+    });
+
+    var copy = document.querySelector("[data-share-copy]");
+    if (copy) {
+      copy.hidden = false;
+      copy.addEventListener("click", function () { copyLink("Enlace copiado."); });
+    }
+    var instagram = document.querySelector("[data-share-instagram]");
+    if (instagram) instagram.addEventListener("click", function () {
+      copyLink("Enlace copiado para pegar en Instagram.");
     });
 
     var whatsapp = document.querySelector("[data-share-whatsapp]");
