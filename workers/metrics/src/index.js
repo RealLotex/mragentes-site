@@ -2,6 +2,8 @@ const ALLOWED_EVENTS = new Set(["share_native", "share_copy", "share_whatsapp"])
 const ALLOWED_SOURCES = new Set(["facebook", "instagram"]);
 const ORIGIN = "https://mragentes.com.ar";
 const MAX_BODY_BYTES = 512;
+const REACTIONS_PATH = "/api/metrics/v1/reactions/";
+const VISITOR_ID = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/;
 
 function cors(request) {
   const origin = request.headers.get("Origin");
@@ -40,9 +42,47 @@ async function recordMetric(db, event, dimension) {
     .run();
 }
 
+async function noteReaction(request, db, slug) {
+  if (!validSlug(slug)) return new Response("not found", { status: 404 });
+  const visitor = request.headers.get("X-Note-Visitor") || "";
+  const headers = { "Cache-Control": "no-store" };
+
+  const total = () => db.prepare("SELECT likes FROM note_reaction_totals WHERE slug = ?1").bind(slug);
+  if (request.method === "GET") {
+    if (VISITOR_ID.test(visitor)) {
+      const current = await db.prepare(
+        "SELECT COALESCE((SELECT likes FROM note_reaction_totals WHERE slug = ?1), 0) AS likes, " +
+        "EXISTS(SELECT 1 FROM note_reactions WHERE slug = ?1 AND visitor = ?2) AS liked"
+      ).bind(slug, visitor).first();
+      return Response.json({ likes: current.likes, liked: Boolean(current.liked) }, { headers });
+    }
+    return Response.json({ likes: (await total().first())?.likes ?? 0 }, { headers });
+  }
+
+  if (request.method !== "PUT" && request.method !== "DELETE") {
+    return new Response(null, { status: 405, headers: { ...headers, Allow: "GET, PUT, DELETE" } });
+  }
+  if (!cors(request)["Access-Control-Allow-Origin"]) return new Response(null, { status: 403, headers });
+  if (!VISITOR_ID.test(visitor)) return new Response(null, { status: 400, headers });
+
+  const liked = request.method === "PUT";
+  const change = db.prepare(liked
+    ? "INSERT OR IGNORE INTO note_reactions (slug, visitor) VALUES (?1, ?2)"
+    : "DELETE FROM note_reactions WHERE slug = ?1 AND visitor = ?2"
+  ).bind(slug, visitor);
+  const [, snapshot] = await db.batch([change, total()]);
+  return Response.json({ likes: snapshot.results[0]?.likes ?? 0, liked }, { headers });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname.startsWith(REACTIONS_PATH)) {
+      let slug;
+      try { slug = decodeURIComponent(url.pathname.slice(REACTIONS_PATH.length)); }
+      catch { return new Response(null, { status: 404 }); }
+      return noteReaction(request, env.METRICS_DB, slug);
+    }
     if (request.method === "OPTIONS" && url.pathname === "/api/metrics/v1/events") {
       return new Response(null, {
         status: 204,

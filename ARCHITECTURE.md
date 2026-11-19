@@ -87,3 +87,15 @@ se investiga antes de repetir. El frontend y la autoridad de Pages no cambian.
 
 `PUSH_SUBS` admite claves `sub:v1:<sha256>` y claves HTTPS legacy hasta completar su migración
 perezosa. Los suscriptores no viven en Git.
+
+## Reacciones y lectura de notas
+
+El script de lectura de cada nota consulta el Worker de métricas en
+`/api/metrics/v1/reactions/<slug>`. D1 conserva una reacción revocable por nota e
+identificador del navegador. La migración `0002_note_reactions.sql` actualiza el
+total en la misma operación que guarda o quita una reacción. La interfaz muestra
+el puntaje de base de la nota más ese total.
+
+La lectura en voz alta usa una voz en español instalada en el dispositivo. Para
+desplegar el contador, aplicá la migración a la base existente `mragentes_metrics`
+y después actualizá `mragentes-metrics` mediante el conector de Cloudflare.

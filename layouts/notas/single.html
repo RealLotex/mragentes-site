@@ -1,115 +1,154 @@
 {{ define "main" }}
 {{- $shareText := printf "%s — %s" .Title .Permalink -}}
 {{- $author := partial "note-author.html" . -}}
+{{- $base := add 21 (mod (int (printf "0x%s" (substr (sha256 .RelPermalink) 0 6))) 9) -}}
+{{- $seconds := int (math.Max 1 (math.Ceil (mul (div (float .WordCount) 150.0) 60))) -}}
+{{- $duration := printf "%02d:%02d" (div $seconds 60) (mod $seconds 60) -}}
+{{- $toc := replace .TableOfContents "id=\"TableOfContents\"" "aria-label=\"Secciones de la nota\"" | safeHTML -}}
+{{- $hasToc := gt (len (findRE "(?m)^#{2,3}[[:space:]]+" .RawContent)) 0 -}}
+{{- $allRelated := where (where site.RegularPages "Section" "notas") "Permalink" "!=" .Permalink -}}
+{{- $related := $allRelated -}}
+{{- with .Params.tags }}{{ $related = where $related ".Params.tags" "intersect" . }}{{ end -}}
+{{- if not $related }}{{ $related = $allRelated }}{{ end -}}
 
-<article class="note sheet">
-  <nav class="note-breadcrumbs col-plate" aria-label="Ruta de navegación">
-    <a href="{{ "/" | relURL }}">Inicio</a><span aria-hidden="true">/</span>
-    <a href="{{ "/notas/" | relURL }}">Notas</a>
+<article class="note note-reading" data-note-reading>
+  <nav class="note-breadcrumbs" aria-label="Ruta de navegación">
+    <a href="{{ "/" | relURL }}" aria-label="Inicio">{{ partial "note-icon.html" "home" }}</a><span aria-hidden="true">›</span>
+    <a href="{{ "/notas/" | relURL }}">Notas</a><span aria-hidden="true">›</span>
+    <span aria-current="page">IA y automatización</span>
   </nav>
 
-  <header class="note-head col-plate">
+  <header class="note-head">
     <p class="note-kicker">IA y automatización</p>
     <h1>{{ .Title }}</h1>
     {{- with .Description }}<p class="note-deck">{{ . }}</p>{{ end }}
+    <div class="note-dateline">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "note-icon.html" "calendar" }}{{ .Date | time.Format ":date_long" }}</time>
+      <span>{{ partial "note-icon.html" "clock" }}{{ math.Max 1 (math.Ceil (div (float .WordCount) 200)) }} min de lectura</span>
+      {{- with .Params.tags }}{{ range first 3 . }}
+      {{- with site.GetPage (printf "/tags/%s" (. | urlize)) }}
+      <a href="{{ .RelPermalink }}">{{ partial "note-icon.html" "tag" }}{{ if eq (lower .Title) "ia" }}IA{{ else if eq (lower .Title) "spacex" }}SpaceX{{ else }}{{ .Title | humanize }}{{ end }}</a>
+      {{- end }}{{ end }}
+      {{- end }}
+    </div>
     <div class="note-meta-row">
-      <div class="note-byline">
-        <a class="note-author" href="{{ $author.url }}">
-          <img src="{{ $author.photo }}" width="56" height="56" alt="" decoding="async">
-          <span class="note-author-label"><span>{{ $author.name }}</span><small>{{ $author.credit }}</small></span>
-        </a>
-        <p class="note-dateline">
-          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
-          <span aria-hidden="true">·</span>
-          <span>{{ math.Max 1 (math.Ceil (div (float .WordCount) 200)) }} min de lectura</span>
-        </p>
-      </div>
-      <div class="note-actions" aria-label="Compartir esta nota">
-        <button class="btn btn--ghost" type="button" data-share-url="{{ .Permalink }}" data-share-title="{{ .Title }}">Compartir ↗</button>
-        <a class="note-whatsapp" href="https://wa.me/?text={{ $shareText | urlquery }}" target="_blank" rel="noopener" data-share-whatsapp>WhatsApp</a>
-        <p class="form-note" data-share-status aria-live="polite"></p>
+      <a class="note-author" href="{{ $author.url }}">
+        <img src="{{ $author.portrait }}" width="52" height="52" alt="" decoding="async">
+        <span class="note-author-label"><span>{{ $author.name }}</span><small>{{ $author.credit }}</small></span>
+      </a>
+      <div class="note-actions" aria-label="Acciones de esta nota">
+        <a class="note-action note-google" href="https://www.google.com/preferences/source?q={{ (urls.Parse site.BaseURL).Hostname | urlquery }}" target="_blank" rel="noopener" aria-label="Agregar MR Agentes como fuente preferida en Google"><span class="note-google-long">Agregar MR Agentes en</span><span class="note-google-short">Fuente preferida</span>{{ partial "note-icon.html" "google" }}</a>
+        <button class="note-action" type="button" data-share-url="{{ .Permalink }}" data-share-title="{{ .Title }}" hidden>{{ partial "note-icon.html" "share" }}Compartir</button>
+        <button class="note-action" type="button" data-note-save aria-pressed="false" hidden>{{ partial "note-icon.html" "bookmark" }}<span data-note-save-label>Guardar</span></button>
       </div>
     </div>
+    <p class="note-feedback" data-share-status aria-live="polite"></p>
+    <p class="note-feedback" data-note-status aria-live="polite"></p>
   </header>
 
-  <div class="note-layout col-plate">
-    <div class="note-main">
-      <p class="note-preferred-source">
-        <a class="arrow-link" href="https://www.google.com/preferences/source?q={{ (urls.Parse site.BaseURL).Hostname | urlquery }}" target="_blank" rel="noopener">Elegí a MR Agentes como fuente preferida en Google</a>
-      </p>
-      {{- with .Params.image }}
-      <figure class="note-figure">
-        {{ partial "note-image.html" (dict "page" $ "large" 1200 "small" 640 "sizes" "(min-width: 62rem) 55vw, 100vw" "loading" "eager" "priority" true) }}
-        <figcaption>{{ $.Params.image_caption | default $.Params.image_alt | default $.Title }}</figcaption>
-      </figure>
-      {{- end }}
-
-      {{- if ge (len (findRE `(?m)^##\s+` .RawContent)) 3 }}
-      <details class="note-contents">
-        <summary>En esta nota</summary>
-        <div class="note-toc-links">{{ .TableOfContents }}</div>
-      </details>
-      {{- end }}
-
-      <div class="prose note-prose">{{ .Content }}</div>
-
-      <footer class="note-end">
-        {{- with .Params.tags }}
-        <p class="key">Temas de esta nota</p>
-        <div class="topics">
-          {{- range . }}
-          {{- $tag := . }}
-          {{- with site.GetPage (printf "/tags/%s" (. | urlize)) }}
-          <a class="topic" href="{{ .RelPermalink }}">{{ $tag | humanize }}</a>
-          {{- else }}<span class="topic">{{ . | humanize }}</span>{{ end }}
-          {{- end }}
-        </div>
-        {{- end }}
-        {{- with .Params.learning_level }}<p class="note-level">Nivel {{ . }}</p>{{ end }}
-        <a class="arrow-link" href="https://wa.me/?text={{ $shareText | urlquery }}" target="_blank" rel="noopener">Enviársela a alguien por WhatsApp</a>
-      </footer>
+  <aside class="note-tools" aria-label="Reacciones, lectura y enlaces para compartir">
+    <div class="note-tools-rail">
+      <div class="note-tools-engagement">
+        <button class="note-tool note-reaction" type="button" data-note-reaction data-reaction-base="{{ $base }}" aria-pressed="false" aria-label="Dar Me gusta. Puntaje de la nota {{ $base }}." title="Dar Me gusta · Puntaje de la nota" disabled>
+          {{ partial "note-icon.html" "heart" }}<span data-note-score>{{ $base }}</span>
+        </button>
+        <button class="note-tool note-audio" type="button" data-note-audio aria-pressed="false" aria-label="Escuchar la nota, duración estimada {{ $duration }}" title="Escuchar la nota" hidden>{{ partial "note-icon.html" "headphones" }}<span data-audio-duration>{{ $duration }}</span></button>
+      </div>
+      <div class="note-tools-sharing" role="group" aria-label="Compartir en redes">
+        <a class="note-tool" data-share-provider="whatsapp" data-share-whatsapp href="https://wa.me/?text={{ $shareText | urlquery }}" target="_blank" rel="noopener" aria-label="Compartir por WhatsApp" title="WhatsApp">{{ partial "note-icon.html" "whatsapp" }}</a>
+        <a class="note-tool" data-share-provider="x" href="https://twitter.com/intent/tweet?text={{ .Title | urlquery }}&url={{ .Permalink | urlquery }}" target="_blank" rel="noopener" aria-label="Compartir en X" title="X">{{ partial "note-icon.html" "x" }}</a>
+        <a class="note-tool" data-share-provider="instagram" data-share-instagram href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Copiar el enlace y abrir Instagram" title="Copiar y abrir Instagram">{{ partial "note-icon.html" "instagram" }}</a>
+        <a class="note-tool" data-share-provider="facebook" href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink | urlquery }}" target="_blank" rel="noopener" aria-label="Compartir en Facebook" title="Facebook">{{ partial "note-icon.html" "facebook" }}</a>
+        <a class="note-tool" data-share-provider="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url={{ .Permalink | urlquery }}" target="_blank" rel="noopener" aria-label="Compartir en LinkedIn" title="LinkedIn">{{ partial "note-icon.html" "linkedin" }}</a>
+        <button class="note-tool" type="button" data-share-provider="url" data-share-copy aria-label="Copiar el enlace de la nota" title="Copiar enlace" hidden>{{ partial "note-icon.html" "link" }}</button>
+      </div>
     </div>
+  </aside>
 
-    <aside class="note-sidebar" aria-label="Servicios de MR Agentes">
-      <div class="note-promo">
-        <p class="key">MR Agentes · Servicios</p>
-        <h2>La IA también puede trabajar en tu negocio.</h2>
-        <p>Automatizaciones y agentes para resolver tareas de todos los días.</p>
-        <a class="btn" href="{{ "/contacto/" | relURL }}">Contactanos</a>
+  <div class="note-main">
+    {{- with .Params.image }}
+    <figure class="note-figure">
+      {{ partial "note-image.html" (dict "page" $ "large" 1200 "small" 640 "sizes" "(min-width: 78rem) 48rem, (min-width: 62rem) 58vw, 100vw" "loading" "eager" "priority" true) }}
+      <figcaption>{{ $.Params.image_caption | default $.Params.image_alt | default $.Title }}</figcaption>
+    </figure>
+    {{- end }}
+
+    {{- with .Params.summary_points }}
+    <section class="note-summary" aria-labelledby="note-summary-title">
+      <h2 id="note-summary-title">{{ partial "note-icon.html" "bolt" }} En resumen</h2>
+      <ul>{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
+    </section>
+    {{- end }}
+
+    {{- if $hasToc }}
+    <details class="note-contents">
+      <summary>{{ partial "note-icon.html" "list" }} En esta nota</summary>
+      <div class="note-toc-links">{{ $toc }}</div>
+    </details>
+    {{- end }}
+
+    <div class="prose note-prose" data-note-text>{{ .Content }}</div>
+    <footer class="note-end">
+      {{- with .Params.tags }}
+      <p class="key">Temas de esta nota</p>
+      <div class="topics">
+        {{- range . }}
+        {{- $tag := . }}
+        {{- with site.GetPage (printf "/tags/%s" (. | urlize)) }}
+        <a class="topic" href="{{ .RelPermalink }}">{{ $tag | humanize }}</a>
+        {{- else }}<span class="topic">{{ . | humanize }}</span>{{ end }}
+        {{- end }}
       </div>
-      <div class="note-sidebar-about">
-        <p class="key">Detrás de estas notas</p>
-        <p>Una mirada práctica sobre inteligencia artificial y automatización, desde Gálvez, Santa Fe.</p>
-        <a href="{{ "/nosotros/" | relURL }}">Conocé MR Agentes →</a>
-      </div>
-    </aside>
+      {{- end }}
+      {{- with .Params.learning_level }}<p class="note-level">Nivel {{ . }}</p>{{ end }}
+    </footer>
   </div>
 
-  {{- $related := where (where site.RegularPages "Section" "notas") "Permalink" "!=" .Permalink -}}
-  {{- with .Params.tags }}{{ $related = where $related ".Params.tags" "intersect" . }}{{ end -}}
-  {{- with first 3 $related.ByDate.Reverse }}
-  <section class="note-related col-plate" aria-labelledby="note-related-title">
-    <div class="note-related-head">
-      <h2 id="note-related-title">Seguí leyendo</h2>
-      <a class="arrow-link" href="{{ "/notas/" | relURL }}">Todas las notas</a>
+  <aside class="note-sidebar" aria-label="Más de MR Agentes">
+    <div class="note-promo">
+      <p class="key">MR Agentes</p>
+      <h2>La IA también puede trabajar en tu negocio.</h2>
+      <p>Automatizaciones y agentes para resolver tareas de todos los días.</p>
+      <a class="btn" href="{{ "/contacto/" | relURL }}">Contactanos {{ partial "note-icon.html" "up-right" }}</a>
     </div>
-    <div class="note-related-grid">
-      {{- range . }}
-      <article class="latest-note">
-        <a class="latest-note-link" href="{{ .RelPermalink }}">
-          {{- if .Params.image }}
-          {{ partial "note-image.html" (dict "page" . "large" 640 "small" 320 "sizes" "(min-width: 62rem) 33vw, (min-width: 42rem) 50vw, 100vw" "loading" "lazy" "priority" false) }}
-          {{- else }}<span class="latest-note-placeholder" aria-hidden="true">MR Agentes<span>IA · Automatización</span></span>{{ end }}
-          <p class="latest-note-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02.01.2006" }}</time></p>
-          <h3>{{ .Title }}</h3>
-          <p class="latest-note-summary">{{ .Description | default .Summary | plainify | truncate 140 }}</p>
-        </a>
-      </article>
-      {{- end }}
-    </div>
-  </section>
-  {{- end }}
+
+    {{- if $hasToc }}
+    <section class="note-toc-card" aria-labelledby="note-toc-title">
+      <h2 id="note-toc-title">{{ partial "note-icon.html" "list" }} En esta nota</h2>
+      <div class="note-toc-links">{{ $toc }}</div>
+    </section>
+    {{- end }}
+
+    {{- with first 2 $related.ByDate.Reverse }}
+    <section class="note-related" aria-labelledby="note-related-title">
+      <div class="note-related-head">
+        <h2 id="note-related-title">Notas relacionadas</h2>
+        <a href="{{ "/notas/" | relURL }}">Ver todas {{ partial "note-icon.html" "up-right" }}</a>
+      </div>
+      <div class="note-related-grid">
+        {{- range . }}
+        <article class="note-related-item">
+          <a href="{{ .RelPermalink }}">
+            {{- if .Params.image }}
+            {{ partial "note-image.html" (dict "page" . "large" 256 "small" 128 "sizes" "104px" "loading" "lazy" "priority" false) }}
+            {{- else }}<span class="note-related-placeholder" aria-hidden="true">MR Agentes</span>{{ end }}
+            <div>
+              {{- with .Params.tags }}{{ $tag := index . 0 }}<span class="note-related-tag">{{ if eq (lower $tag) "ia" }}IA{{ else }}{{ $tag | humanize }}{{ end }}</span>{{ end }}
+              <h3>{{ .Title }}</h3>
+              <p><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_medium" }}</time><span aria-hidden="true"> · </span>{{ math.Max 1 (math.Ceil (div (float .WordCount) 200)) }} min</p>
+            </div>
+          </a>
+        </article>
+        {{- end }}
+      </div>
+    </section>
+    {{- end }}
+  </aside>
 </article>
 
+{{- with resources.Get "js/note-reading.js" }}
+  {{- $script := . | minify | fingerprint "sha256" }}
+<script type="module" src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+{{- end }}
 {{ partial "closer.html" . }}
 {{ end }}

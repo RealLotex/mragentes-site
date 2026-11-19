@@ -32,8 +32,13 @@ def test_note_opens_with_headline_metadata_assigned_image_and_share_controls(tmp
     assert "srcset=" in note and "fetchpriority=" in note
     preferred_source = 'href="https://www.google.com/preferences/source?q=mragentes.com.ar"'
     assert note.count(preferred_source) == 1
-    assert note.index('</header>', note.index('class="note-head')) < note.index(preferred_source)
+    assert note.index('class="note-actions"') < note.index(preferred_source) < note.index("data-share-url=")
     assert note.index(preferred_source) < note.index('<figure class="note-figure">')
+    assert 21 <= int(re.search(r'data-reaction-base="(\d+)"', note)[1]) <= 29
+    assert 'data-note-audio' in note and re.search(r'data-audio-duration>\d{2}:\d{2}<', note)
+    assert set(re.findall(r'data-share-provider="([^"]+)"', note)) == {
+        "whatsapp", "x", "instagram", "facebook", "linkedin", "url",
+    }
     assert note.index("<figcaption>") < note.index("Texto de la nota.")
     for source in re.findall(r'(/note-images/[^\s\"]+\.webp)', note):
         assert (tmp_path / "public" / source.lstrip("/")).is_file()
@@ -90,6 +95,7 @@ def test_notes_credit_marcos_with_portrait_and_person_schema(tmp_path: Path) -> 
     byline = note.split('class="note-author"', 1)[1].split("</a>", 1)[0]
     assert "<span>MR Agentes</span>" in byline
     assert "Marcos Rosich · responsable editorial" in byline
+    assert re.search(r'src="/authors/marcos-rosich[^"]*\.webp"', byline)
     assert 'href="https://mragentes.com.ar/nosotros/#criterio-editorial"' in byline
     graph = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', note).group(1))["@graph"]
     article = next(node for node in graph if node["@type"] == "NewsArticle")
@@ -129,5 +135,8 @@ def test_notes_credit_marcos_with_portrait_and_person_schema(tmp_path: Path) -> 
 def test_note_promo_has_one_contact_button_without_duplicate_link(tmp_path: Path) -> None:
     _build(tmp_path, [("latest", "2020-01-02", "")])
     promo = _note(tmp_path).split('class="note-promo"', 1)[1].split("</div>", 1)[0]
-    assert re.findall(r'<a\b[^>]*href="([^"]+)"[^>]*>(.*?)</a>', promo) == [("/contacto/", "Contactanos")]
+    links = re.findall(r'<a\b[^>]*href="([^"]+)"[^>]*>(.*?)</a>', promo, flags=re.S)
+    assert [(url, re.sub(r"<[^>]+>", "", label).strip()) for url, label in links] == [
+        ("/contacto/", "Contactanos")
+    ]
     assert 'class="btn"' in promo

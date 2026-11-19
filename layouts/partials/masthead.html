@@ -17,6 +17,13 @@
       {{- end }}
     </nav>
 
+    {{- if and .IsPage (eq .Section "notas") }}
+    <div class="note-masthead-actions">
+      <a class="note-masthead-search" href="{{ "/notas/#q" | relURL }}" aria-label="Buscar notas">{{ partial "note-icon.html" "search" }}</a>
+      <a class="note-masthead-talk" href="{{ "/contacto/" | relURL }}">Hablemos {{ partial "note-icon.html" "up-right" }}</a>
+    </div>
+    {{- end }}
+
     {{- /* Nace oculto: sin JavaScript el <nav> queda visible en el flujo y un
            botón que no hace nada sólo confunde. site.js lo revela. */ -}}
     <button class="menu-btn" type="button" data-menu-btn hidden
