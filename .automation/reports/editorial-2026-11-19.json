@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-11-19",
+  "status": "prepared",
+  "local_date": "2026-11-19",
+  "created_at": "2026-11-19T12:00:08.127299Z",
+  "branch": "automation/editorial/2026-11-19",
+  "note_slug": "anthropic-sale-a-bolsa-y-disputa-el-record-de-spacex",
+  "selected_news_ids": [
+    "news-v1-d05c08207301f444"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-11-19-anthropic-sale-a-bolsa-y-disputa-el-record-de-spacex.json",
+    "note": "content/notas/anthropic-sale-a-bolsa-y-disputa-el-record-de-spacex.md",
+    "cover": "static/images/stock/anthropic-sale-a-bolsa-y-disputa-el-record-de-spacex.jpg",
+    "announcement": "static/images/social/notes/anthropic-sale-a-bolsa-y-disputa-el-record-de-spacex.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
