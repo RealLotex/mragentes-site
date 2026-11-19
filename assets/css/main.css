@@ -2324,6 +2324,7 @@ a.topic:hover { border-color: var(--minio); color: var(--minio-ink); background:
 
 .note-layout { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: var(--s-5); margin-top: var(--s-4); align-items: start; }
 .note-main { min-width: 0; }
+.note-preferred-source { margin-bottom: var(--s-3); }
 .note-figure img { width: 100%; height: auto; background: var(--bone-2); }
 .note-figure figcaption { margin-top: var(--s-2); padding-left: var(--s-2); border-left: 2px solid var(--minio); font-family: var(--f-display); font-size: var(--t-sm); color: var(--ink-55); line-height: 1.5; }
 .note-contents { margin-top: var(--s-4); padding-block: var(--s-3); border-block: var(--hair) solid var(--rule); }
