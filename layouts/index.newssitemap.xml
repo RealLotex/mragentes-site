@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+{{- $news := where (where site.RegularPages "Section" "notas") "Params.news" true -}}
+{{- $recent := where $news "Date" "ge" (now.AddDate 0 0 -2) }}
+{{- range first 1000 $recent.ByDate.Reverse }}
+  <url>
+    <loc>{{ .Permalink | htmlEscape }}</loc>
+    <news:news>
+      <news:publication>
+        <news:name>{{ site.Title | htmlEscape }}</news:name>
+        <news:language>{{ site.Language.Lang }}</news:language>
+      </news:publication>
+      <news:publication_date>{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</news:publication_date>
+      <news:title>{{ .Title | plainify | htmlEscape }}</news:title>
+    </news:news>
+  </url>
+{{- end }}
+</urlset>

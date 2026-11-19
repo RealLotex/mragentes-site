@@ -84,6 +84,14 @@ defaultContentLanguage = "es"
   [outputFormats.RSS]
     mediatype = "application/rss+xml"
     baseName = "index"
+  [outputFormats.NewsSitemap]
+    mediaType = "application/xml"
+    baseName = "sitemap-news"
+    isPlainText = true
+    notAlternative = true
+
+[outputs]
+  home = ["HTML", "RSS", "NewsSitemap"]
 
 [caches]
   [caches.getjson]

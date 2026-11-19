@@ -47,16 +47,16 @@
   {{- $graph = $graph | append $site -}}
 {{- end -}}
 
-{{- if eq .Section "notas" -}}
+{{- if and .IsPage (eq .Section "notas") -}}
   {{- $author := partial "note-author.html" . -}}
   {{- $article := dict
-    "@type" "BlogPosting"
+    "@type" (cond (eq .Params.news true) "NewsArticle" "BlogPosting")
     "@id" (printf "%s#nota" .Permalink)
     "headline" (.Title | plainify)
     "description" (.Description | plainify)
     "url" .Permalink
-    "datePublished" (.Date.Format "2006-01-02T15:04:05-03:00")
-    "dateModified" (.Lastmod.Format "2006-01-02T15:04:05-03:00")
+    "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+    "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
     "inLanguage" "es-AR"
     "wordCount" .WordCount
     "isAccessibleForFree" true

@@ -9,10 +9,10 @@ export async function createPushClientHarness({
   platform = "Linux x86_64",
   maxTouchPoints = 0,
   standalone = false,
-  notificationPermission = "default",
   requestPermissionResult = "granted",
   requestPermissionError = null,
   subscription = null,
+  notificationPermission = subscription ? "granted" : "default",
   registerError = null,
   subscribeError = null,
   fetchImpl,
@@ -66,6 +66,7 @@ export async function createPushClientHarness({
 
   let currentSubscription = subscription;
   const registration = {
+    active: {},
     pushManager: {
       async getSubscription() {
         return currentSubscription;
@@ -84,6 +85,9 @@ export async function createPushClientHarness({
     },
   };
   const serviceWorker = {
+    async getRegistration() {
+      return currentSubscription ? registration : undefined;
+    },
     async register(url, options) {
       calls.register.push({ url, options });
       if (registerError) throw registerError;
@@ -131,7 +135,7 @@ export async function createPushClientHarness({
     dispatchReady() {
       window.document.dispatchEvent(new window.Event("DOMContentLoaded"));
     },
-    async flush(turns = 8) {
+    async flush(turns = 24) {
       for (let index = 0; index < turns; index += 1) await Promise.resolve();
     },
     close() {

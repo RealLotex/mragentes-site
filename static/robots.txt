@@ -50,4 +50,4 @@ Allow: /
 Crawl-delay: 5
 
 Sitemap: https://mragentes.com.ar/sitemap.xml
-Sitemap: https://mragentes.com.ar/notas/feed.xml
+Sitemap: https://mragentes.com.ar/sitemap-news.xml

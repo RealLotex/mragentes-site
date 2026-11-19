@@ -61,7 +61,7 @@ describe("Invitación para activar avisos", () => {
   test("[PUSH-PROMPT-001] aparece después de leer sin pedir permiso ni mover el foco", async () => {
     const h = await harness();
     h.footer.focus();
-    await vi.advanceTimersByTimeAsync(9_999);
+    await vi.advanceTimersByTimeAsync(1_499);
     expect(h.panel.hidden).toBe(true);
     await vi.advanceTimersByTimeAsync(1);
     expect(h.panel.hidden).toBe(false);
@@ -109,15 +109,23 @@ describe("Invitación para activar avisos", () => {
     const network = new Promise((resolve) => { release = resolve; });
     const h = await createPushClientHarness({ readyState: "loading", fetchImpl: () => network });
     closed.push(() => h.close());
+    const serviceWorker = h.window.navigator.serviceWorker;
+    let activateWorker;
+    serviceWorker.ready = new Promise((resolve) => { activateWorker = resolve; });
+    h.registration.active = null;
     const view = await mount(h.window);
     h.dispatchReady();
     await h.flush();
-    await vi.advanceTimersByTimeAsync(10_000);
+    await vi.advanceTimersByTimeAsync(1_500);
     expect(view.panel.hidden).toBe(false);
     expect(h.calls.permission).toHaveLength(0);
+    expect(h.calls.register).toHaveLength(0);
     view.activate.click();
     await h.flush();
     expect(h.calls.permission).toHaveLength(1);
+    expect(h.calls.subscribe).toHaveLength(0);
+    activateWorker(h.registration);
+    await h.flush(16);
     expect(h.calls.subscribe).toHaveLength(1);
     expect(view.activate.disabled).toBe(true);
     expect(view.activate.querySelector("svg")).not.toBeNull();

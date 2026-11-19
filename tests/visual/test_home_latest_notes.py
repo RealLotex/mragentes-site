@@ -20,6 +20,7 @@ def _build(tmp_path: Path, notes: list[tuple[str, str, str]], body: str = "Texto
     (tmp_path / "content/notas").mkdir(parents=True)
     shutil.copyfile(ROOT / "hugo.toml", tmp_path / "hugo.toml")
     shutil.copyfile(ROOT / "layouts/index.html", tmp_path / "layouts/index.html")
+    shutil.copyfile(ROOT / "layouts/index.newssitemap.xml", tmp_path / "layouts/index.newssitemap.xml")
     shutil.copyfile(ROOT / "layouts/partials/colophon.html", tmp_path / "layouts/partials/colophon.html")
     shutil.copyfile(ROOT / "layouts/partials/masthead.html", tmp_path / "layouts/partials/masthead.html")
     shutil.copyfile(ROOT / "layouts/partials/schema.html", tmp_path / "layouts/partials/schema.html")
