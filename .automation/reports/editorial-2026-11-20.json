@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-11-20",
+  "status": "prepared",
+  "local_date": "2026-11-20",
+  "created_at": "2026-11-20T08:05:58.542427Z",
+  "branch": "automation/editorial/2026-11-20",
+  "note_slug": "kira-lanza-cuatro-agentes-de-ia-para-preparar-y-rastrear-pagos-internacionales",
+  "selected_news_ids": [
+    "news-v1-be692bb340589612"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-11-20-kira-lanza-cuatro-agentes-de-ia-para-preparar-y-rastrear-pagos-internacionales.json",
+    "note": "content/notas/kira-lanza-cuatro-agentes-de-ia-para-preparar-y-rastrear-pagos-internacionales.md",
+    "cover": "static/images/stock/kira-lanza-cuatro-agentes-de-ia-para-preparar-y-rastrear-pagos-internacionales.png",
+    "announcement": "static/images/social/notes/kira-lanza-cuatro-agentes-de-ia-para-preparar-y-rastrear-pagos-internacionales.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}

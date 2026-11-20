@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-11-20:kira-lanza-cuatro-agentes-de-ia-para-preparar-y-rastrear-pagos-internacionales",
+  "status": "prepared",
+  "local_date": "2026-11-20",
+  "created_at": "2026-11-20T08:05:58.542427Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/kira-lanza-cuatro-agentes-de-ia-para-preparar-y-rastrear-pagos-internacionales.md",
+      "sha256": "a31ff8bdbcfb4fb9191ee7979e01994045be3650aec98294c1ba58ced5ae1823"
+    },
+    "asset": {
+      "path": "static/images/stock/kira-lanza-cuatro-agentes-de-ia-para-preparar-y-rastrear-pagos-internacionales.png",
+      "sha256": "c9a18bfbc34b44f6f2fe7353327e8241bb009dd343ecdaa2821f09588207dbd5"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/kira-lanza-cuatro-agentes-de-ia-para-preparar-y-rastrear-pagos-internacionales.jpg",
+      "sha256": "6752000f0227c0c1d18cf81259fd6cf18002a5661dc6a5a29d54aa66803fe16c"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "8b42755d58ac932a46c71d2c92bba76884689ba26f8d38cd60897517299c17cd"
+    }
+  },
+  "sources": [
+    "https://kirafin.ai/news/ai-agent-suite",
+    "https://www.latamfintech.co/articles/fintech-kira-lanza-cuatro-agentes-de-ia-para-automatizar-operaciones-de-pagos-internacionales-en-latam",
+    "https://www.latamfintech.co/articles/fintech-kira-lanza-agentic-pobo-una-solucion-para-realizar-pagos-en-el-exterior-a-nombre-de-terceros-mediante-agentes-de-ia",
+    "https://kirafin.ai/news/agentic-pobo",
+    "https://kirafin.ai/terms-conditions",
+    "https://www.diariobitcoin.com/empresas/kira-lanza-agentes-de-ia-para-pagos-internacionales-en-america-latina/"
+  ]
+}

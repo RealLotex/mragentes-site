@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 43,
-  "updated_at": "2026-11-19T12:00:08.127299Z",
+  "revision": 44,
+  "updated_at": "2026-11-20T08:05:58.542427Z",
   "items": [
     {
       "schema_version": 1,
@@ -1377,6 +1377,31 @@
       "consumed_by": "anthropic-sale-a-bolsa-y-disputa-el-record-de-spacex",
       "consumed_at": "2026-11-19T12:00:08.127299Z",
       "id": "news-v1-d05c08207301f444"
+    },
+    {
+      "schema_version": 1,
+      "title": "Kira lanza cuatro agentes de IA para preparar y rastrear pagos internacionales",
+      "canonical_url": "https://kirafin.ai/news/ai-agent-suite",
+      "source": "Kira",
+      "entity": "Kira",
+      "published_at": "2026-11-18T12:00:00Z",
+      "discovered_at": "2026-11-20T08:05:58.542427Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://kirafin.ai/news/ai-agent-suite",
+          "claim": "Kira, con clientes en Argentina, lanzó agentes que revisan documentos, rastrean giros y concilian pagos. La aprobación queda en manos de analistas."
+        }
+      ],
+      "tags": [
+        "ia",
+        "agentes",
+        "fintech",
+        "automatización"
+      ],
+      "consumed_by": "kira-lanza-cuatro-agentes-de-ia-para-preparar-y-rastrear-pagos-internacionales",
+      "consumed_at": "2026-11-20T08:05:58.542427Z",
+      "id": "news-v1-be692bb340589612"
     }
   ]
 }
