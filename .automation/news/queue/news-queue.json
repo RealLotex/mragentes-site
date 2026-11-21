@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 44,
-  "updated_at": "2026-11-20T08:05:58.542427Z",
+  "revision": 45,
+  "updated_at": "2026-11-21T08:02:47.400896Z",
   "items": [
     {
       "schema_version": 1,
@@ -1402,6 +1402,32 @@
       "consumed_by": "kira-lanza-cuatro-agentes-de-ia-para-preparar-y-rastrear-pagos-internacionales",
       "consumed_at": "2026-11-20T08:05:58.542427Z",
       "id": "news-v1-be692bb340589612"
+    },
+    {
+      "schema_version": 1,
+      "title": "Globant duplica el ritmo de ingresos de sus equipos de IA y muestra qué hizo con YPF",
+      "canonical_url": "https://investors.globant.com/2026-11-19-Globant-Reports-2026-Third-Quarter-Financial-Results",
+      "source": "Globant Investor Relations",
+      "entity": "Globant Investor Relations",
+      "published_at": "2026-11-19T12:00:00Z",
+      "discovered_at": "2026-11-21T08:02:47.400896Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://investors.globant.com/2026-11-19-Globant-Reports-2026-Third-Quarter-Financial-Results",
+          "claim": "Globant informó que sus equipos de IA pasaron de US$52,8 a US$106,6 millones a ritmo anual. La app de YPF muestra qué trabajo hacen."
+        }
+      ],
+      "tags": [
+        "ia",
+        "argentina",
+        "globant",
+        "ypf",
+        "automatización"
+      ],
+      "consumed_by": "globant-duplica-el-ritmo-de-ingresos-de-sus-equipos-de-ia-y-muestra-que-hizo-con-ypf",
+      "consumed_at": "2026-11-21T08:02:47.400896Z",
+      "id": "news-v1-91c7c8f5864046a7"
     }
   ]
 }
