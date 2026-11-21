@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-11-21",
+  "status": "prepared",
+  "local_date": "2026-11-21",
+  "created_at": "2026-11-21T08:02:47.400896Z",
+  "branch": "automation/editorial/2026-11-21",
+  "note_slug": "globant-duplica-el-ritmo-de-ingresos-de-sus-equipos-de-ia-y-muestra-que-hizo-con-ypf",
+  "selected_news_ids": [
+    "news-v1-91c7c8f5864046a7"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-11-21-globant-duplica-el-ritmo-de-ingresos-de-sus-equipos-de-ia-y-muestra-que-hizo-con-ypf.json",
+    "note": "content/notas/globant-duplica-el-ritmo-de-ingresos-de-sus-equipos-de-ia-y-muestra-que-hizo-con-ypf.md",
+    "cover": "static/images/stock/globant-duplica-el-ritmo-de-ingresos-de-sus-equipos-de-ia-y-muestra-que-hizo-con-ypf.png",
+    "announcement": "static/images/social/notes/globant-duplica-el-ritmo-de-ingresos-de-sus-equipos-de-ia-y-muestra-que-hizo-con-ypf.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}

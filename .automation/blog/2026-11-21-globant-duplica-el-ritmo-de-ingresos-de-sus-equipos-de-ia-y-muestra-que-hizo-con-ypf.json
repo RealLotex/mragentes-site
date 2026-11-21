@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-11-21:globant-duplica-el-ritmo-de-ingresos-de-sus-equipos-de-ia-y-muestra-que-hizo-con-ypf",
+  "status": "prepared",
+  "local_date": "2026-11-21",
+  "created_at": "2026-11-21T08:02:47.400896Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/globant-duplica-el-ritmo-de-ingresos-de-sus-equipos-de-ia-y-muestra-que-hizo-con-ypf.md",
+      "sha256": "d37443ae233c542a8f67214888e0151842707eaf5be3a960f4c5dad59bb658fd"
+    },
+    "asset": {
+      "path": "static/images/stock/globant-duplica-el-ritmo-de-ingresos-de-sus-equipos-de-ia-y-muestra-que-hizo-con-ypf.png",
+      "sha256": "a3d53d387c413e6cebee6ab60808e9026fa1cbd62e31238f121e473fce9c4be2"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/globant-duplica-el-ritmo-de-ingresos-de-sus-equipos-de-ia-y-muestra-que-hizo-con-ypf.jpg",
+      "sha256": "24a8654b9ec6404458d2698d4f52e0be4d42924ff022c9cb6eaf9b21fe6257cf"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "4d25ea9a5badba745ccb106027264dd859bfd517ac4b574b1f4558f9c1eab75c"
+    }
+  },
+  "sources": [
+    "https://investors.globant.com/2026-11-19-Globant-Reports-2026-Third-Quarter-Financial-Results",
+    "https://www.globant.com/earnings-call/shareholder-letter-q3-2026",
+    "https://www.sec.gov/Archives/edgar/data/1557860/000110465926130143/tm2630201d1_ex99-1.htm",
+    "https://www.globant.com/es/news/globant-app-ypf-alianza-compra-acciones",
+    "https://app.ypf.com/preguntas-frecuentes-invertir.html",
+    "https://www.globant.com/news/globant-introduces-glob-ai-reinventing-technology-services-ai-era",
+    "https://www.lanacion.com.ar/economia/negocios/globant-acelero-su-apuesta-por-la-inteligencia-artificial-pero-sus-ingresos-cayeron-en-el-trimestre-nid20112026/"
+  ]
+}
