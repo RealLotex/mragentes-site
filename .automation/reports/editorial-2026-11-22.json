@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-11-22",
+  "status": "prepared",
+  "local_date": "2026-11-22",
+  "created_at": "2026-11-22T08:08:17.718578Z",
+  "branch": "automation/editorial/2026-11-22",
+  "note_slug": "como-usa-buenos-aires-la-ia-para-controlar-si-se-vacian-los-contenedores",
+  "selected_news_ids": [
+    "news-v1-4980fa8a0529eb78"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-11-22-como-usa-buenos-aires-la-ia-para-controlar-si-se-vacian-los-contenedores.json",
+    "note": "content/notas/como-usa-buenos-aires-la-ia-para-controlar-si-se-vacian-los-contenedores.md",
+    "cover": "static/images/stock/como-usa-buenos-aires-la-ia-para-controlar-si-se-vacian-los-contenedores.png",
+    "announcement": "static/images/social/notes/como-usa-buenos-aires-la-ia-para-controlar-si-se-vacian-los-contenedores.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 45,
-  "updated_at": "2026-11-21T08:02:47.400896Z",
+  "revision": 46,
+  "updated_at": "2026-11-22T08:08:17.718578Z",
   "items": [
     {
       "schema_version": 1,
@@ -1428,6 +1428,32 @@
       "consumed_by": "globant-duplica-el-ritmo-de-ingresos-de-sus-equipos-de-ia-y-muestra-que-hizo-con-ypf",
       "consumed_at": "2026-11-21T08:02:47.400896Z",
       "id": "news-v1-91c7c8f5864046a7"
+    },
+    {
+      "schema_version": 1,
+      "title": "Cómo usa Buenos Aires la IA para controlar si se vacían los contenedores",
+      "canonical_url": "https://noticiasargentinas.com/sociedad/la-ciudad-implemento-una-plataforma-con-ia-para-controlar-la-recoleccion-de-residuos_a6afde3da4f169fd00c3e84e6",
+      "source": "Noticias Argentinas",
+      "entity": "Noticias Argentinas",
+      "published_at": "2026-11-18T12:00:00Z",
+      "discovered_at": "2026-11-22T08:08:17.718578Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://noticiasargentinas.com/sociedad/la-ciudad-implemento-una-plataforma-con-ia-para-controlar-la-recoleccion-de-residuos_a6afde3da4f169fd00c3e84e6",
+          "claim": "La Ciudad cruza cámaras, GPS y señales de los camiones recolectores. Así puede revisar qué pasó en una parada y avisar a la empresa de limpieza."
+        }
+      ],
+      "tags": [
+        "ia",
+        "argentina",
+        "visión computacional",
+        "automatización",
+        "residuos"
+      ],
+      "consumed_by": "como-usa-buenos-aires-la-ia-para-controlar-si-se-vacian-los-contenedores",
+      "consumed_at": "2026-11-22T08:08:17.718578Z",
+      "id": "news-v1-4980fa8a0529eb78"
     }
   ]
 }
