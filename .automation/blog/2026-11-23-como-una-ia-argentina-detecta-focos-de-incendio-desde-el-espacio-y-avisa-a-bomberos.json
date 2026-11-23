@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-11-23:como-una-ia-argentina-detecta-focos-de-incendio-desde-el-espacio-y-avisa-a-bomberos",
+  "status": "prepared",
+  "local_date": "2026-11-23",
+  "created_at": "2026-11-23T08:02:29.023267Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/como-una-ia-argentina-detecta-focos-de-incendio-desde-el-espacio-y-avisa-a-bomberos.md",
+      "sha256": "6e7c18fc05d64a4b44fd52e34f93bb92316032b10363dce2183d26995ebe8262"
+    },
+    "asset": {
+      "path": "static/images/stock/como-una-ia-argentina-detecta-focos-de-incendio-desde-el-espacio-y-avisa-a-bomberos.png",
+      "sha256": "c98edd46cb64267c2057f6ff8aba91b5ba673af4a2ea92c2e0d695d459522f68"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/como-una-ia-argentina-detecta-focos-de-incendio-desde-el-espacio-y-avisa-a-bomberos.jpg",
+      "sha256": "837fe020592e61038ad55d92efeda04eb264bfcae710992202fd10245d0b3c65"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "c25cc10a04d06b92208bca1e864f4dc02b9114700871536ed255dc97a7c1c4b4"
+    }
+  },
+  "sources": [
+    "https://www.lanacion.com.ar/economia/campo/antes-que-la-nasa-los-principes-de-gales-compartieron-la-historia-del-argentino-que-creo-un-sistema-nid19112026/",
+    "https://earthshotprize.org/winners-finalists/satellites-on-fire/",
+    "https://earthshotprize.org/news/2026-earthshot-prize-winners-crowned/",
+    "https://bichosdecampo.com/satellites-on-fire-con-17-anos-crearon-una-app-que-detecta-focos-de-incendio-en-tiempo-real/",
+    "https://repositorio.smn.gob.ar/bitstream/handle/20.500.12160/2884/Nota_Tecnica_SMN_2024-186.pdf",
+    "https://www.satellitesonfire.com/case-studies/la-pampa"
+  ]
+}

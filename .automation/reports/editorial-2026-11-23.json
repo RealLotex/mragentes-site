@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-11-23",
+  "status": "prepared",
+  "local_date": "2026-11-23",
+  "created_at": "2026-11-23T08:02:29.023267Z",
+  "branch": "automation/editorial/2026-11-23",
+  "note_slug": "como-una-ia-argentina-detecta-focos-de-incendio-desde-el-espacio-y-avisa-a-bomberos",
+  "selected_news_ids": [
+    "news-v1-76be6ceeeb96cbca"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-11-23-como-una-ia-argentina-detecta-focos-de-incendio-desde-el-espacio-y-avisa-a-bomberos.json",
+    "note": "content/notas/como-una-ia-argentina-detecta-focos-de-incendio-desde-el-espacio-y-avisa-a-bomberos.md",
+    "cover": "static/images/stock/como-una-ia-argentina-detecta-focos-de-incendio-desde-el-espacio-y-avisa-a-bomberos.png",
+    "announcement": "static/images/social/notes/como-una-ia-argentina-detecta-focos-de-incendio-desde-el-espacio-y-avisa-a-bomberos.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
