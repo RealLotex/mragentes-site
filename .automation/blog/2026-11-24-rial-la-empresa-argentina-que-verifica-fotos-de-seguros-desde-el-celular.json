@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-11-24:rial-la-empresa-argentina-que-verifica-fotos-de-seguros-desde-el-celular",
+  "status": "prepared",
+  "local_date": "2026-11-24",
+  "created_at": "2026-11-24T08:06:18.220623Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/rial-la-empresa-argentina-que-verifica-fotos-de-seguros-desde-el-celular.md",
+      "sha256": "5ba64737033d88f974bb1d7ad76be6d26945dca642f3836cdf58b64e8f7b7b99"
+    },
+    "asset": {
+      "path": "static/images/stock/rial-la-empresa-argentina-que-verifica-fotos-de-seguros-desde-el-celular.png",
+      "sha256": "b6020a1cffbdcba4d3c6cd95850248d9bd9d446f790456e4b24c05596c9a4e51"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/rial-la-empresa-argentina-que-verifica-fotos-de-seguros-desde-el-celular.jpg",
+      "sha256": "19735ef1c5035246646306ebf5df7bf809f7178f63c13667cf6998e0fb7aeea7"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "3813bdf41256b6eb0c36cc5036728408a2116e3b6271299c452da28b2a2ab0cb"
+    }
+  },
+  "sources": [
+    "https://www.itsitio.com/ar/inteligencia-artificial/real-o-sintetica-la-argentina-que-creo-una-tecnologia-para-verificar-imagenes-en-la-era-de-la-ia-y-desembarco-en-silicon-valley/",
+    "https://www.rial.io/",
+    "https://www.rial.io/guides/photo-verification-api",
+    "https://spec.c2pa.org/specifications/specifications/2.4/explainer/Explainer.html",
+    "https://www.camarainsurtech.com.ar/novedades/insurtech-meetday-2026",
+    "https://www.drapercygnus.vc/startups/rial"
+  ]
+}
