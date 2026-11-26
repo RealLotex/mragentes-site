@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-11-26",
+  "status": "prepared",
+  "local_date": "2026-11-26",
+  "created_at": "2026-11-26T08:04:59.621881Z",
+  "branch": "automation/editorial/2026-11-26",
+  "note_slug": "magnar-rozo-los-28-000-documentos-legales-al-mes-en-argentina-como-se-usa-su-ia",
+  "selected_news_ids": [
+    "news-v1-f428b41c41e5f971"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-11-26-magnar-rozo-los-28-000-documentos-legales-al-mes-en-argentina-como-se-usa-su-ia.json",
+    "note": "content/notas/magnar-rozo-los-28-000-documentos-legales-al-mes-en-argentina-como-se-usa-su-ia.md",
+    "cover": "static/images/stock/magnar-rozo-los-28-000-documentos-legales-al-mes-en-argentina-como-se-usa-su-ia.png",
+    "announcement": "static/images/social/notes/magnar-rozo-los-28-000-documentos-legales-al-mes-en-argentina-como-se-usa-su-ia.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
