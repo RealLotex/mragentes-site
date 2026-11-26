@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 49,
-  "updated_at": "2026-11-25T08:04:40.004782Z",
+  "revision": 50,
+  "updated_at": "2026-11-26T08:04:59.621881Z",
   "items": [
     {
       "schema_version": 1,
@@ -1531,6 +1531,32 @@
       "consumed_by": "kaszek-reune-us-650-millones-para-startups-que-cambia-para-las-que-desarrollan-ia",
       "consumed_at": "2026-11-25T08:04:40.004782Z",
       "id": "news-v1-19def8129ef15b8f"
+    },
+    {
+      "schema_version": 1,
+      "title": "Magnar rozó los 28.000 documentos legales al mes en Argentina. Cómo se usa su IA",
+      "canonical_url": "https://www.itsitio.com/ar/inteligencia-artificial/se-triplica-el-uso-de-la-ia-en-el-ambito-legal-en-argentina/",
+      "source": "ITSitio",
+      "entity": "ITSitio",
+      "published_at": "2026-11-25T12:00:00Z",
+      "discovered_at": "2026-11-26T08:04:59.621881Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.itsitio.com/ar/inteligencia-artificial/se-triplica-el-uso-de-la-ia-en-el-ambito-legal-en-argentina/",
+          "claim": "La plataforma chilena informó que casi triplicó su volumen entre julio y octubre. Así ayuda a buscar fallos y volver a las fuentes originales."
+        }
+      ],
+      "tags": [
+        "ia",
+        "argentina",
+        "derecho",
+        "automatizacion",
+        "documentos"
+      ],
+      "consumed_by": "magnar-rozo-los-28-000-documentos-legales-al-mes-en-argentina-como-se-usa-su-ia",
+      "consumed_at": "2026-11-26T08:04:59.621881Z",
+      "id": "news-v1-f428b41c41e5f971"
     }
   ]
 }

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-11-26:magnar-rozo-los-28-000-documentos-legales-al-mes-en-argentina-como-se-usa-su-ia",
+  "status": "prepared",
+  "local_date": "2026-11-26",
+  "created_at": "2026-11-26T08:04:59.621881Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/magnar-rozo-los-28-000-documentos-legales-al-mes-en-argentina-como-se-usa-su-ia.md",
+      "sha256": "8c3e061927d1e1029084742aafc964b0ee95db1c6703ec6ddcf66f3c99e03006"
+    },
+    "asset": {
+      "path": "static/images/stock/magnar-rozo-los-28-000-documentos-legales-al-mes-en-argentina-como-se-usa-su-ia.png",
+      "sha256": "7b1053e68a1fe142c31e12b29677e43752a641fc99c8b40543ca191219a30793"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/magnar-rozo-los-28-000-documentos-legales-al-mes-en-argentina-como-se-usa-su-ia.jpg",
+      "sha256": "b33ce1e9bbf12027a8deb10d6163f6230ced24ab5c38587e6d8c217fa9578f87"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "0242369bece67efd02196da85a0daf0cfbadda3d512b5955ad5624f5e7245565"
+    }
+  },
+  "sources": [
+    "https://www.itsitio.com/ar/inteligencia-artificial/se-triplica-el-uso-de-la-ia-en-el-ambito-legal-en-argentina/",
+    "https://mercado.com.ar/tecnologia/magnar-el-volumen-de-documentos-legales-procesados-con-ia-en-argentina-se-triplico",
+    "https://inteligenciaargentina.ar/inteligencia-artificial/los-documentos-legales-procesados-con-ia-en-argentina-casi-se-triplicaron-desde-julio-segun-magnar",
+    "https://beccarvarela.com/novedades/beccar-varela-apuesta-por-la-innovacion-legal-e-invierte-en-la-plataforma-de-ia-magnar/",
+    "https://www.magnar.ai/ar",
+    "https://plataforma-ia.jusrionegro.gov.ar/index-texto.html"
+  ]
+}
