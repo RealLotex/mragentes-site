@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "editorial:2026-11-27",
+  "status": "prepared",
+  "local_date": "2026-11-27",
+  "created_at": "2026-11-27T08:02:00.091281Z",
+  "branch": "automation/editorial/2026-11-27",
+  "note_slug": "avansys-la-ia-cordobesa-que-convierte-fotos-de-dron-en-mapas-de-malezas",
+  "selected_news_ids": [
+    "news-v1-765abd790de27fde"
+  ],
+  "artifacts": {
+    "manifest": ".automation/blog/2026-11-27-avansys-la-ia-cordobesa-que-convierte-fotos-de-dron-en-mapas-de-malezas.json",
+    "note": "content/notas/avansys-la-ia-cordobesa-que-convierte-fotos-de-dron-en-mapas-de-malezas.md",
+    "cover": "static/images/stock/avansys-la-ia-cordobesa-que-convierte-fotos-de-dron-en-mapas-de-malezas.png",
+    "announcement": "static/images/social/notes/avansys-la-ia-cordobesa-que-convierte-fotos-de-dron-en-mapas-de-malezas.jpg",
+    "queue": ".automation/news/queue/news-queue.json"
+  },
+  "validation": {
+    "local_guards": "green",
+    "ci": "pending"
+  },
+  "external_effects": "pending protected merge and deployment"
+}
