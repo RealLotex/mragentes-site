@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-11-27:avansys-la-ia-cordobesa-que-convierte-fotos-de-dron-en-mapas-de-malezas",
+  "status": "prepared",
+  "local_date": "2026-11-27",
+  "created_at": "2026-11-27T08:02:00.091281Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/avansys-la-ia-cordobesa-que-convierte-fotos-de-dron-en-mapas-de-malezas.md",
+      "sha256": "06c0d0a1e5b4434c546fd31595554671e9490d1bb2e006b0a8020272514d5648"
+    },
+    "asset": {
+      "path": "static/images/stock/avansys-la-ia-cordobesa-que-convierte-fotos-de-dron-en-mapas-de-malezas.png",
+      "sha256": "58e7d90bce2bc244d7d360179eef2f05b35af2bd21533e8f73e662369b47e302"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/avansys-la-ia-cordobesa-que-convierte-fotos-de-dron-en-mapas-de-malezas.jpg",
+      "sha256": "bfbe58e5bb345e8799ab2f372725cee722744ba44d1d516e1d266dc3c7c0395b"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "fda695413f71d0850e3b70eea55ba5dad190da10e74422c73feef18c01485c46"
+    }
+  },
+  "sources": [
+    "https://www.contenidoscrea.org.ar/agricultura/demoday-innovacion-crealab-2026-cinco-startups-presentaron-sus-soluciones-el-agro-n5328736",
+    "https://app.avansys.com.ar/caso-zoom-agricultura",
+    "https://cancilleria.gob.ar/es/nuevas-tecnologias/next-from-argentina/avansys",
+    "https://elagroonline.com/como-cargar-credito-a-un-telefono-asi-funciona-avansys-que-procesa-imagenes-de-drones-con-ia-y-arma-mapas-de-malezas/",
+    "https://www.argentina.gob.ar/noticias/mapas-de-prescripciones-con-drones",
+    "https://www.argentina.gob.ar/sites/default/files/2024/07/boletin_vol_5_nro_3_0.pdf"
+  ]
+}
