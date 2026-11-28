@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "run_id": "blog:2026-11-28:awam-la-ia-argentina-que-conecta-los-pedidos-de-whatsapp-con-el-stock-del-local",
+  "status": "prepared",
+  "local_date": "2026-11-28",
+  "created_at": "2026-11-28T08:00:04.139634Z",
+  "artifacts": {
+    "note": {
+      "path": "content/notas/awam-la-ia-argentina-que-conecta-los-pedidos-de-whatsapp-con-el-stock-del-local.md",
+      "sha256": "c0433f410c34b9e1c136c69d0ef0866670e341e595e963155f80bce53af42f4e"
+    },
+    "asset": {
+      "path": "static/images/stock/awam-la-ia-argentina-que-conecta-los-pedidos-de-whatsapp-con-el-stock-del-local.png",
+      "sha256": "040717dd4e9ecea70aff285d8bd8ace1b910ff90777515a9a5b21bb731758542"
+    },
+    "announcement": {
+      "path": "static/images/social/notes/awam-la-ia-argentina-que-conecta-los-pedidos-de-whatsapp-con-el-stock-del-local.jpg",
+      "sha256": "975cb0f76a46024c00c812fb86db39f5af8c45f9f666422fb9514e012807ed77"
+    },
+    "queue": {
+      "path": ".automation/news/queue/news-queue.json",
+      "sha256": "9796e27cc065f5058ee0308ce22c6d9f628ada0d8297c3c9c6146ceb519ed020"
+    }
+  },
+  "sources": [
+    "https://www.rionegro.com.ar/economia/tienen-20-anos-una-prima-los-presento-en-la-facultad-y-fundaron-una-startup-con-ia-para-gestion-comercial-integral/?amp=1",
+    "https://eldebate.com.ar/zarate-produce-talento-fran-lebrero-el-joven-de-21-anos-que-desarrolla-inteligencia-artificial-y-ya-llega-a-87-comercios/",
+    "https://www.awam.lat/como-funciona/atencion-con-ia",
+    "https://www.awam.lat/como-funciona/ventas-stock-y-caja",
+    "https://www.awam.lat/docs/publicar-en-varias-cuentas",
+    "https://www.awam.lat/docs/conectar-tienda-nube"
+  ]
+}
