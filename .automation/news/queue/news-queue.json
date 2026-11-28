@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": 51,
-  "updated_at": "2026-11-27T08:02:00.091281Z",
+  "revision": 52,
+  "updated_at": "2026-11-28T08:00:04.139634Z",
   "items": [
     {
       "schema_version": 1,
@@ -1583,6 +1583,32 @@
       "consumed_by": "avansys-la-ia-cordobesa-que-convierte-fotos-de-dron-en-mapas-de-malezas",
       "consumed_at": "2026-11-27T08:02:00.091281Z",
       "id": "news-v1-765abd790de27fde"
+    },
+    {
+      "schema_version": 1,
+      "title": "AWAM, la IA argentina que conecta los pedidos de WhatsApp con el stock del local",
+      "canonical_url": "https://www.rionegro.com.ar/economia/tienen-20-anos-una-prima-los-presento-en-la-facultad-y-fundaron-una-startup-con-ia-para-gestion-comercial-integral/?amp=1",
+      "source": "Diario Río Negro",
+      "entity": "Diario Río Negro",
+      "published_at": "2026-11-28T12:00:00Z",
+      "discovered_at": "2026-11-28T08:00:04.139634Z",
+      "status": "consumed",
+      "evidence": [
+        {
+          "url": "https://www.rionegro.com.ar/economia/tienen-20-anos-una-prima-los-presento-en-la-facultad-y-fundaron-una-startup-con-ia-para-gestion-comercial-integral/?amp=1",
+          "claim": "Nació en un negocio de ropa de Flores. Así arma pedidos con el catálogo, actualiza las existencias y deriva consultas al equipo."
+        }
+      ],
+      "tags": [
+        "ia",
+        "argentina",
+        "pymes",
+        "whatsapp",
+        "automatizacion"
+      ],
+      "consumed_by": "awam-la-ia-argentina-que-conecta-los-pedidos-de-whatsapp-con-el-stock-del-local",
+      "consumed_at": "2026-11-28T08:00:04.139634Z",
+      "id": "news-v1-249d5d1b46816f28"
     }
   ]
 }
